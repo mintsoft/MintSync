@@ -1,0 +1,9 @@
+aes.js:		http://www.fourmilab.ch/javascrypt/
+jquery.js:	http://www.jquery.com
+sha(1|256|512)?.js:		http://sourceforge.net/projects/jssha/files/
+base64_decode.js		http://phpjs.org/functions/base64_decode:357
+utf8_decode.js			http://phpjs.org/functions/utf8_decode:576
+
+AES:				http://www.movable-type.co.uk/scripts/aes.html
+
+Reseeded psuedoRandomNumbers: http://stackoverflow.com/questions/4083204/secure-random-numbers-in-javascript
