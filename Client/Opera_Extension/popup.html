@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 
+'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+  <head>
+	<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' lang='en-gb' />
+  	<title>MintSync</title>
+	<link rel="stylesheet" href="css/common.css" type="text/css" />
+	<link rel="stylesheet" href="css/popup.css" type="text/css" />
+	<script type="text/javascript" src='js/jquery.js'></script>
+	<script type="text/javascript" src='js/popup.js'></script>
+	
+	<script type="text/javascript" src="js/sha.js"></script>
+	<script type="text/javascript" src="js/AES.js"></script>
+	
+	<script type="text/javascript" src="js/php_js/utf8_decode.js"></script>
+	<script type="text/javascript" src="js/php_js/utf8_encode.js"></script>
+	<script type="text/javascript" src="js/php_js/base64_decode.js"></script>
+	<script type="text/javascript" src="js/php_js/base64_encode.js"></script>
+	
+	<script type="text/javascript" src="js/MintCryptoWrapper.js"></script>
+	<script type="text/javascript" src="js/MintSync.js"></script>
+  </head>
+  <body>
+	  <fieldset>
+			<legend>Retrieve</legend>
+			<form action='#' onsubmit='getPasswords(this); return false;'>
+				<p><label>URL/Domain:</label> <input type='text' name='domain' id='domainInput' /></p>
+				<p><input type='submit'/></p>
+			</form>
+			<pre id='preoutput'>
+			</pre>
+		</fieldset>
+		
+		<fieldset>
+			<legend>Save</legend>
+			<form action='#' onsubmit='setPassword(this); return false;'>
+				<p><label>URL/Domain:</label> <input type='text' name='domainName' id='domainName' /></p>
+				<p><label>Input Pass:</label> <input type='text' name='inputPassword' id='inputPassword' /></p>
+				<p><input type='submit'/></p>
+			</form>
+			<pre id='preoutputSave'>
+			</pre>
+		</fieldset>
+  </body>
+</html>

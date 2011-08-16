@@ -1,0 +1,66 @@
+
+/** Main Container **/
+#mint_optionsContainer 
+{
+	width: 50em;
+	margin-top: 4ex;
+	margin-bottom: 4ex;
+	margin-left: auto;
+	margin-right: auto;
+	background: #fcfcfc;
+	padding: 2ex;
+	box-shadow: 2px 2px 10px #666;
+	border-radius: 5px;
+}
+
+/* headings */
+h1 {
+	margin-top: 0.25ex;
+}
+/** Logo **/
+h1 img 
+{
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+a img {
+	vertical-align: baseline;
+}
+
+/** Save Button **/
+#saveContainer
+{
+	text-align: center;
+}
+
+h1,h2,h3,h4,h5, label {
+	text-shadow: rgba(0,0,0,0.2) 1px -1px 2px;
+}
+
+h2 {
+	margin: 2ex 0ex;
+}
+
+/* Labels  and Inputs */
+label {
+	display: inline-block;
+	width: 10em;
+	font-weight: bold;
+}
+
+ul.options {
+	margin-left: 2em;
+	margin-bottom: 4ex;
+}
+
+ul.options li {
+	height: 5ex;
+	line-height: 5ex;
+	margin-bottom: 1ex;
+}
+
+.disabled {
+	color: #666;
+	font-style: italic;
+}

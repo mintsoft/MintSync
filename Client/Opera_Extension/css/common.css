@@ -1,0 +1,66 @@
+/* Reset All */
+* {
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+	background: none;
+	color: inherit;
+}
+
+/* Set background and font */
+body {
+	font-family: Sans-Serif;
+	font-size: small;
+	background-color: #eee;
+	color: #111;
+}
+
+/** Remove Bulletpoints */
+#prefform, #prefform ul{
+	list-style:none;
+}
+
+/* Remargin p's */
+p {
+	margin: 1em;
+}
+
+a:visited, a:link
+{
+	color: inherit;
+}
+
+input {
+	background: #eee;
+	border: 1px solid #eee;
+	padding: 1ex 2ex;
+	border-radius: 5px;
+	box-shadow: inset 1px 1px 2px #666;
+	color: #666;
+}
+
+input[type='text'] {
+	width: 30em;
+}
+
+input[type='checkbox'] {
+	border-radius: 0px;
+	padding: 0px;
+	border: 1px solid #ddd;
+}
+
+input[type='radio'] {
+	margin-left: 2em;
+}
+input[type='radio']:nth-of-type(1) {
+	margin-left: 0px;
+}
+
+input[type='text']:focus, input[type='submit'], button, input[type='button'] {
+	color: #111;
+}	
+
+input[type='submit'], button, input[type='button'] {
+	border: 0px;
+	box-shadow: 1px 1px 5px #666;
+}

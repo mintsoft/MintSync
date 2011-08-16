@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 
+'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+	<head>
+		<title>MintSync</title>
+		<link rel="stylesheet" href="css/common.css" type="text/css" />
+		<link rel="stylesheet" href="css/options.css" type="text/css" />
+		<script type='text/javascript' src='js/jquery.js'></script>
+		<script type="text/javascript" src='js/options.js'></script>
+	</head>
+	
+	<body>
+		<div id='mint_optionsContainer'>
+			<h1><img id='logo' src='img/icon.png' alt='Icon' title='MintSync Logo' /> MintSync</h1>
+			<h2>Select Options Below:</h2>
+			
+			<form id="prefform" onsubmit="return false;">
+				<ul class='options'>
+					<li><label for='serverURL'>Server URL</label><input type='text' name='ServerURL' id='ServerURL'/></li>
+					<li><label for='SavePass'>Save Password</label> 
+						<input type='radio' name='SavePass' id='SavePassN' value='0'   	/> Never
+						<input type='radio' name='SavePass' id='SavePassY' value='1'   	/> Permanently
+						<input type='radio' name='SavePass' id='SavePassS' value='0.5'		/> Session Only
+					</li>
+					<li><label for='CipherAES'>Cipher</label>
+						<input type='radio' name='Cipher' id='CipherAES' value='aes'  	/> AES
+						<input type='radio' name='Cipher' id='Cipher3DES' value='3des' disabled='disabled' 	/> <span class='disabled'>3DES </span>
+					</li>
+					<li><label for='KeyLength256'>Key Length (Bits)</label>
+						<input type='radio' name='KeyLength' id='KeyLength256' value='256'  	/> 256
+						<input type='radio' name='KeyLength' id='KeyLength128' value='128'  	disabled='disabled' /> <span class='disabled'>128</span>
+						<input type='radio' name='KeyLength' id='KeyLength168' value='168'  	disabled='disabled' /> <span class='disabled'>168</span>
+						<input type='radio' name='KeyLength' id='KeyLength112' value='112'  	disabled='disabled' /> <span class='disabled'>112</span>
+					</li>
+				
+				</ul>
+				<div id='saveContainer'>
+					<input type="button" value="Save" onclick="savePrefs();" />
+				</div>
+				
+			</form>
+		</div>
+	</body>
+</html>

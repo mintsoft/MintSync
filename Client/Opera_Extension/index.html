@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 
+'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+  <head>
+    <script type="text/javascript">
+       window.addEventListener("load", function(){
+        var theButton;
+        var ToolbarUIItemProperties = {
+          title: "MintSync",
+		  icon: "img/button_icon.png",
+          popup: {
+            href: "popup.html",
+            width: 600,
+            height: 400
+          }
+        }
+        theButton = opera.contexts.toolbar.createItem(ToolbarUIItemProperties);
+        opera.contexts.toolbar.addItem(theButton);
+		
+		//add connection to popup for currentURL sending
+		opera.extension.onconnect = function(event) {
+			try {
+				event.source.postMessage(opera.extension.tabs.getFocused().url);
+			}
+			catch(error) {
+				//ignore it for now
+			}
+		}
+		
+      }, false);
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
