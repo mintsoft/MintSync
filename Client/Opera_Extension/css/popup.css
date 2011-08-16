@@ -1,0 +1,99 @@
+
+/** Main Container **/
+#popupContainer {
+/*
+	margin-top:1ex;
+	margin-bottom: 1ex;
+	margin-left: 1ex;
+	margin-right: 1ex;
+*/
+	position: absolute;
+	top: 	7px;
+	left:	7px;
+	right:	8px;
+	bottom:	8px;
+	
+	padding: 1ex;
+	
+	background-color: #eee;
+	box-shadow: 2px 2px 10px #666;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	overflow-x: hidden;
+	
+}
+
+* {
+	font-size: x-small;
+}
+
+body {
+	background: #ffffff;
+}
+
+/* headings */
+h1 {
+	margin-top: 0.25ex;
+}
+/** Logo **/
+h1 img 
+{
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+a img {
+	vertical-align: baseline;
+}
+
+/** Save Button **/
+#saveContainer
+{
+	text-align: center;
+}
+
+h1,h2,h3,h4,h5, label, legend {
+	text-shadow: rgba(0,0,0,0.2) 1px -1px 2px;
+}
+
+h2 {
+	margin: 2ex 0ex;
+}
+
+legend {
+	margin-left: 0.5em;
+	font-size: 140%;
+	font-weight: bold;
+}
+
+/* Labels  and Inputs */
+label {
+	display: inline-block;
+	width: 10em;
+	font-weight: bold;
+}
+
+ul.options {
+	margin-left: 2em;
+	margin-bottom: 4ex;
+}
+
+ul.options li {
+	height: 5ex;
+	line-height: 5ex;
+	margin-bottom: 1ex;
+}
+
+.disabled {
+	color: #666;
+	font-style: italic;
+}
+
+input[type='text'] {
+	width: 20em;
+}
+
+input {
+	background: #fff;
+	border: 1px solid #eee;
+}

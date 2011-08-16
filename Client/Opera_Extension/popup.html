@@ -21,7 +21,8 @@
 	<script type="text/javascript" src="js/MintSync.js"></script>
   </head>
   <body>
-	  <fieldset>
+	<div id='popupContainer'>
+		<fieldset>
 			<legend>Retrieve</legend>
 			<form action='#' onsubmit='getPasswords(this); return false;'>
 				<p><label>URL/Domain:</label> <input type='text' name='domain' id='domainInput' /></p>
@@ -41,5 +42,6 @@
 			<pre id='preoutputSave'>
 			</pre>
 		</fieldset>
+	</div>
   </body>
 </html>
