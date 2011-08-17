@@ -37,6 +37,9 @@ function MintSync() {
 		});
 		
 	},
+	/**
+		Performs the AJAX request saving the password
+	*/
 	this.setPassword = function(Domain,Credentials,rowSalt) {
 	
 		//$("#preoutputSave").text("Sent To Webserver:\n"+"Domain: '" +Domain+"'\nCredentials: '"+Credentials+"'\nRowSalt: '"+rowSalt+"'");
@@ -140,21 +143,32 @@ function getPasswords(domainName) {
 //		outputStr = "Received From Webserver:\n"+data+"\n\n";
 		
 		parsedObject = $.parseJSON(data);
-		if(parsedObject.status=="ok")
+		switch(parsedObject.status)
 		{
-			base64decoded = base64_decode(parsedObject.data.Credentials);
-			passwordHash = $MS.getPasswordHash();
+			case "ok":
 			
-			key = passwordHash+""+parsedObject.data.Salt;
+				base64decoded = base64_decode(parsedObject.data.Credentials);
+				passwordHash = $MS.getPasswordHash();
+			
+				key = passwordHash+""+parsedObject.data.Salt;
 
-			decryptedJSON = $MC.Decrypt_strings(base64decoded,key,"AES",256);
+				decryptedJSON = $MC.Decrypt_strings(base64decoded,key,"AES",256);
+				
+				outputStr+= "Decrypted Credentials:\n"+decryptedJSON+"\n";
+				
+			break;
+			case "not-found":
 			
-			outputStr+= "Decrypted Credentials:\n"+decryptedJSON+"\n";
+				outputStr = "URL not found.";
+				
+			break;
+			case "failed":
 			
-		}
-		else
-		{
-			alert("ERROR:\n"+data);
+				outputStr = "Error, Retrieval Failed.";
+				
+			break;
+			default:
+			
 		}
 		$('#preoutput').text(outputStr);
 	});

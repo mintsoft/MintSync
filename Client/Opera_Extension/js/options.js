@@ -15,7 +15,7 @@ $(document).ready(function(){
 });
 
 /** Set Save Preferences */
-function savePrefs(){
+function savePrefs() {
 	widget.preferences["ServerURL"] 	= $("#ServerURL").val();
 	widget.preferences["SavePassword"]	= $("input[type=radio][name=SavePass]:checked").val();
 	widget.preferences["Cipher"] 		= $("input[type=radio][name=Cipher]:checked").val();

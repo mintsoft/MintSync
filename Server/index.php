@@ -65,7 +65,7 @@ switch($action)
 		if(isset($rows[0]))
 			echo json_encode(array("status"=>"ok", "data"=> $rows[0]));
 		else 
-			echo json_encode(array("status"=>"failed"));
+			echo json_encode(array("status"=>"not-found"));
 		
 }
 
