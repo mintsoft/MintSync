@@ -97,3 +97,11 @@ input {
 	background: #fff;
 	border: 1px solid #eee;
 }
+
+#loadingDiv {
+	text-align: center;
+}
+
+#loadingDiv span {
+	display: block;
+}

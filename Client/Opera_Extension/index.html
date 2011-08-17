@@ -4,16 +4,17 @@
   <head>
     <script type="text/javascript">
        window.addEventListener("load", function(){
-        var theButton;
-        var ToolbarUIItemProperties = {
-          title: "MintSync",
-		  icon: "img/button_icon.png",
-          popup: {
-            href: "popup.html",
-            width: 380,
-            height: 380
-          }
-        }
+        var theButton,
+			ToolbarUIItemProperties = {
+				title: "MintSync",
+				icon: "img/button_icon.png",
+				popup: {
+					href: "popup.html",
+					width: 380,
+					height: 380
+				}
+			};
+			
         theButton = opera.contexts.toolbar.createItem(ToolbarUIItemProperties);
         opera.contexts.toolbar.addItem(theButton);
 		
@@ -24,6 +25,7 @@
 			}
 			catch(error) {
 				//ignore it for now
+				alert("There was an error with the Opera Extension OnConnect callback:"+error);
 			}
 		}
 		

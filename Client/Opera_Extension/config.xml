@@ -6,6 +6,7 @@
 	<access origin="*"/>
 	<preference name = "ServerURL" 		value = "https://set-alt.home/code/MintSync/Server/"	readonly = "false"/>
 	<preference name = "SavePassword" 	value = "0"		readonly = "false"/>
+	<preference name = "AutoFetch"	 	value = "0"		readonly = "false"/>
 	<preference name = "Cipher" 			value = "aes"	readonly = "false"/>
 	<preference name = "KeyLength" 		value = "256" 	readonly = "false"/>
 </widget>

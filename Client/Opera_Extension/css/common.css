@@ -64,3 +64,8 @@ input[type='submit'], button, input[type='button'] {
 	border: 0px;
 	box-shadow: 1px 1px 5px #666;
 }
+
+/** Hidden from display **/
+.hidden {
+	display: none;
+}

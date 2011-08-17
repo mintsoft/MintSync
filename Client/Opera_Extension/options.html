@@ -18,9 +18,13 @@
 				<ul class='options'>
 					<li><label for='serverURL'>Server URL</label><input type='text' name='ServerURL' id='ServerURL'/></li>
 					<li><label for='SavePass'>Save Password</label> 
-						<input type='radio' name='SavePass' id='SavePassN' value='0'   	/> Never
+						<input type='radio' name='SavePass' id='SavePassN' value='0'   	/> Not At All
 						<input type='radio' name='SavePass' id='SavePassY' value='1'   	/> Permanently
-						<input type='radio' name='SavePass' id='SavePassS' value='0.5'		/> Session Only
+						<input type='radio' name='SavePass' id='SavePassS' value='0.5'		/> Per Pop-up Dialog
+					</li>
+					<li><label for='AutoFetch'>Auto-Retrieve?</label> 
+						<input type='radio' name='AutoFetch' id='AutoFetch' value='1'   	/> Yes
+						<input type='radio' name='AutoFetch' id='AutoFetch' value='0'   	/> No!
 					</li>
 					<li><label for='CipherAES'>Cipher</label>
 						<input type='radio' name='Cipher' id='CipherAES' value='aes'  	/> AES

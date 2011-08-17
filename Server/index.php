@@ -5,7 +5,11 @@ require_once 'config.php';
 $domain = ""; 
 $returnValues = array();
 
-switch($_GET['action'])
+$action = "retrieve";
+if(isset($_GET['action']))
+	$action = $_GET['action'];
+	
+switch($action)
 {
 	case "save":
 		
@@ -32,7 +36,13 @@ switch($_GET['action'])
 			$stmt->bindValue(":credentials", $_REQUEST['Credentials']);
 			$stmt->execute();
 		
-			echo json_encode($_REQUEST);
+			$stmt = $db->prepare("SELECT * FROM auth WHERE URL=:url");
+			$stmt->bindValue(":url", strtolower($_REQUEST['URL']), PDO::PARAM_STR );
+			$stmt->execute();
+		
+			$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+			echo json_encode($rows[0]);
 		}
 		
 	break;
@@ -41,7 +51,7 @@ switch($_GET['action'])
 	default:
 		if(isset($_REQUEST['URL']))
 			$domain = strtolower($_REQUEST['URL']);
-			
+
 		$db = new PDO('sqlite:'.PASSWORD_DATABASE);
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		
@@ -51,7 +61,12 @@ switch($_GET['action'])
 		
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-		echo json_encode($rows[0]);
+		
+		if(isset($rows[0]))
+			echo json_encode(array("status"=>"ok", "data"=> $rows[0]));
+		else 
+			echo json_encode(array("status"=>"failed"));
+		
 }
 
 ?>

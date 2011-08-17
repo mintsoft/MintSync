@@ -11,6 +11,7 @@ $(document).ready(function(){
 	$('input[name="SavePass"][value="'+widget.preferences["SavePassword"]+'"]').prop('checked', true);
 	$('input[name="Cipher"][value="'+widget.preferences["Cipher"]+'"]').prop('checked', true);
 	$('input[name="KeyLength"][value="'+widget.preferences["KeyLength"]+'"]').prop('checked', true);
+	$('input[name="AutoFetch"][value="'+widget.preferences["AutoFetch"]+'"]').prop('checked', true);
 });
 
 /** Set Save Preferences */
@@ -19,5 +20,11 @@ function savePrefs(){
 	widget.preferences["SavePassword"]	= $("input[type=radio][name=SavePass]:checked").val();
 	widget.preferences["Cipher"] 		= $("input[type=radio][name=Cipher]:checked").val();
 	widget.preferences["KeyLength"] 	= $("input[type=radio][name=KeyLength]:checked").val();
+	widget.preferences["AutoFetch"]		= $("input[type=radio][name=AutoFetch]:checked").val();
+	
+	if(widget.preferences["SavePassword"]!=1)
+	{
+		widget.preferences["SavedPassword"]=undefined;
+	}
 }
 	
