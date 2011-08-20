@@ -18,6 +18,7 @@
 	
 	<script type="text/javascript" src="js/MintCryptoWrapper.js"></script>
 	<script type="text/javascript" src="js/MintSync.js"></script>
+	<script type="text/javascript" src="js/json2.js"></script>
 
 	<script type="text/javascript" src='js/popup.js'></script>
   </head>
@@ -31,9 +32,25 @@
 			</div>
 			<pre id='preoutput'>
 			</pre>
-
 			<div id='fetchDiv'>
-				<form action='#' onsubmit='getPasswords($("#domainInput").val()); return false;'>
+				<div id='retrieveOutput' class='hidden' >
+					<table class='results'>
+						<thead>
+							<tr>
+								<th>Key</th>
+								<th>Value</th>
+							</tr>
+						</thead>
+						<tfoot>
+							<tr>
+							</tr>
+						</tfoot>
+						<tbody>
+						</tbody>
+					</table>
+				</div>	
+				
+				<form action='javascript:void(0);' onsubmit='getPasswords($("#domainInput").val()); return false;'>
 <!--					<p><label>URL/Domain:</label> <input type='text' name='domain' id='domainInput' /></p>			-->
 					<p><input type='hidden' name='domain' id='domainInput' /><input type='submit' value='Retrieve'/></p>
 				</form>
@@ -44,8 +61,19 @@
 			<legend>Save</legend>
 			<form action='#' onsubmit='setPassword(this); return false;'>
 				<p><label>URL/Domain:</label> <input type='text' name='domainName' id='domainName' /></p>
-				<p><label>Credentials:</label> <input type='text' name='inputPassword' id='inputPassword' /></p>
-				<p><input type='submit'/></p>
+				<p><label>Credentials:</label> <span class='mini-instructions'>Right Click to Generate</span></p>
+				<div id='inputPassContainer'>
+				</div>
+				<p> <img src='img/add.png' alt='Add Pair' onclick='addPair(); return false' class='jsAction' /></p>
+				<!-- the template used for the new rows: -->
+				<div id='rowTemplate' class='hidden' >
+					<p> 
+						<input type='text' name='inputPassName' class='inputLabel'/> 
+						<input type='text' name='inputPassValue' class='inputPass' />
+						<img src='img/del.png' alt='Delete Pair' onclick='delPair(this); return false' class='jsAction' />
+					</p>
+				</div>
+				<p><input type='submit'/><input type='checkbox' name='force' id='canForceWrite' /><span class='mini-instructions'>Allow Overwrite</span></p>
 			</form>
 			<pre id='preoutputSave'>
 			</pre>

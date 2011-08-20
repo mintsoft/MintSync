@@ -90,7 +90,18 @@ ul.options li {
 }
 
 input[type='text'] {
-	width: 20em;
+	width: 18em;
+}
+
+input[type='checkbox'] {
+	margin-left: 10ex;
+}
+input.inputLabel {
+	width: 8em !important;
+}
+
+input.inputPass {
+	width: 16em !important;
 }
 
 input {
@@ -98,10 +109,56 @@ input {
 	border: 1px solid #eee;
 }
 
+.mini-instructions {
+	opacity: 0.5;
+	font-size: smaller;
+	margin-left: 2ex;
+}
+/** Loading Stuff **/
 #loadingDiv {
 	text-align: center;
 }
 
 #loadingDiv span {
 	display: block;
+}
+
+/** icons that do things **/
+img.jsAction {
+	cursor: pointer;
+}
+
+div#retrieveOutput {
+	padding: 2ex 2em;
+}	
+
+/** Results Table */
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+table.results td {
+	font-family: monospace;
+	padding: 0.5ex 1ex;
+}
+table.results tr:nth-child(even) {
+	background: rgba(10,10,10,0.1);
+}
+table.results tr:nth-child(odd) {
+	background: rgba(255,255,255,0.5);
+}
+table.results thead th {
+	background: -o-linear-gradient(rgba(10,10,10,0.8),rgba(10,10,10,0.7));
+	color: rgba(240,240,240,1);
+	text-shadow: rgba(255,255,255,0.2) 1px -1px 2px;
+}
+table.results tbody input {
+	display: block;
+	width: 25em !important;
+	height: auto 	!important;
+	margin: 0px auto !important;
+	padding: 0px 1ex !important;
+	font-family: monospace;
+	border-radius: 3px;
+	
 }

@@ -6,8 +6,8 @@ $domain = "";
 $returnValues = array();
 
 $action = "retrieve";
-if(isset($_GET['action']))
-	$action = $_GET['action'];
+if(isset($_REQUEST['action']))
+	$action = $_REQUEST['action'];
 	
 switch($action)
 {
@@ -23,26 +23,45 @@ switch($action)
 			$stmt->execute();
 		
 			$row = $stmt->fetch(PDO::FETCH_ASSOC);
-			if((int)$row['Freq']>0)
+			if((int)$row['Freq']>0 && empty($_REQUEST['force']))
 			{
 				echo "ERROR";
 				exit();
 			}
+			elseif(!empty($_REQUEST['force']))
+			{
+				$stmt = $db->prepare("UPDATE auth SET URL=:url, Salt=:salt, Credentials=:credentials;");
 			
-			$stmt = $db->prepare("INSERT INTO auth(URL,Salt,Credentials) VALUES(:url,:salt,:credentials)");
-		
-			$stmt->bindValue(":url", strtolower($_REQUEST['URL']));
-			$stmt->bindValue(":salt", $_REQUEST['rowSalt']);
-			$stmt->bindValue(":credentials", $_REQUEST['Credentials']);
-			$stmt->execute();
-		
-			$stmt = $db->prepare("SELECT * FROM auth WHERE URL=:url");
-			$stmt->bindValue(":url", strtolower($_REQUEST['URL']), PDO::PARAM_STR );
-			$stmt->execute();
-		
-			$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		
-			echo json_encode($rows[0]);
+				$stmt->bindValue(":url", strtolower($_REQUEST['URL']));
+				$stmt->bindValue(":salt", $_REQUEST['rowSalt']);
+				$stmt->bindValue(":credentials", $_REQUEST['Credentials']);
+				$stmt->execute();
+			
+				$stmt = $db->prepare("SELECT * FROM auth WHERE URL=:url");
+				$stmt->bindValue(":url", strtolower($_REQUEST['URL']), PDO::PARAM_STR );
+				$stmt->execute();
+			
+				$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			
+				echo json_encode($rows[0]);
+			}
+			else
+			{
+				$stmt = $db->prepare("INSERT INTO auth(URL,Salt,Credentials) VALUES(:url,:salt,:credentials)");
+			
+				$stmt->bindValue(":url", strtolower($_REQUEST['URL']));
+				$stmt->bindValue(":salt", $_REQUEST['rowSalt']);
+				$stmt->bindValue(":credentials", $_REQUEST['Credentials']);
+				$stmt->execute();
+			
+				$stmt = $db->prepare("SELECT * FROM auth WHERE URL=:url");
+				$stmt->bindValue(":url", strtolower($_REQUEST['URL']), PDO::PARAM_STR );
+				$stmt->execute();
+			
+				$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			
+				echo json_encode($rows[0]);
+			}
 		}
 		
 	break;

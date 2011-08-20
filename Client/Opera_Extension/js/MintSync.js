@@ -40,13 +40,13 @@ function MintSync() {
 	/**
 		Performs the AJAX request saving the password
 	*/
-	this.setPassword = function(Domain,Credentials,rowSalt) {
+	this.setPassword = function(Domain,Credentials,rowSalt,force) {
 	
 		//$("#preoutputSave").text("Sent To Webserver:\n"+"Domain: '" +Domain+"'\nCredentials: '"+Credentials+"'\nRowSalt: '"+rowSalt+"'");
 	
 		$.ajax({
 			type: "POST",
-			data: {URL:Domain,Credentials:Credentials,rowSalt:rowSalt},
+			data: {"URL":Domain,"Credentials":Credentials,"rowSalt":rowSalt,"force":force},
 			url:this.getServerURL()+"?action=save",
 			beforeSend: function(jq,settings) {
 			},
@@ -75,7 +75,7 @@ function MintSync() {
 		hash  = shaObj.getHash("SHA-512", "HEX");
 				
 		return hash;
-	}	
+	},	
 	/**
 		Returns a string type that contains a hex representation of 
 			the password hash (SHA-512);
@@ -84,7 +84,7 @@ function MintSync() {
 				could this be saved server-side?
 	*/
 	this.getPasswordHash = function() {
-
+		
 		if(widget.preferences["SavePassword"]==1)
 		{
 			if(!widget.preferences["SavedPassword"])
@@ -128,66 +128,32 @@ function MintSync() {
 		}
 		
 		return salt;
-	}
+	},
+	/**
+	Generates a random password string
+	*/
+	this.generatePassword = function(length) {
+		var sourceSet = { 	"num"	: "1234567890", 
+							"alpha"	: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+							"punc1"	: ";'#,./[]-=\\",
+							"punc2"	: "`~!@$%^&*()_+{}|:\"<>?",
+						 },
+			password="",
+			sourceString="";
+		
+		//TODO: build	sourceString from preferences here
+		sourceString = sourceSet.num+""+sourceSet.alpha+""+sourceSet.punc1+""+sourceSet.punc2;
+		
+		for(var x=0;x<length;++x)
+		{
+			var index = Math.floor(Math.random()*sourceString.length);
+			password+= sourceString.substr(index,1);
+		}
+		
+		return password;
+	},
+	
+	//placeholder for the last element
+	this.empty=null
 };
 $MS = new MintSync();
-
-/** Global Function Handlers **/
-function getPasswords(domainName) {
-	$MS.getPasswords(domainName, function(data){
-		var outputStr = "",
-			decryptedJSON = "",
-			key = "",
-			base64decoded="";
-		
-//		outputStr = "Received From Webserver:\n"+data+"\n\n";
-		
-		parsedObject = $.parseJSON(data);
-		switch(parsedObject.status)
-		{
-			case "ok":
-			
-				base64decoded = base64_decode(parsedObject.data.Credentials);
-				passwordHash = $MS.getPasswordHash();
-			
-				key = passwordHash+""+parsedObject.data.Salt;
-
-				decryptedJSON = $MC.Decrypt_strings(base64decoded,key,"AES",256);
-				
-				outputStr+= "Decrypted Credentials:\n"+decryptedJSON+"\n";
-				
-			break;
-			case "not-found":
-			
-				outputStr = "URL not found.";
-				
-			break;
-			case "failed":
-			
-				outputStr = "Error, Retrieval Failed.";
-				
-			break;
-			default:
-			
-		}
-		$('#preoutput').text(outputStr);
-	});
-}
-
-/**
-	
-*/
-function setPassword() {
-	var domainName=$("#domainName").val(),
-		Credentials = $("#inputPassword").val(),
-		RowSalt = $MS.generateRowSalt(),
-		encryptedData = "",
-		encryptionKey = "",
-		passwordHash = $MS.getPasswordHash();
-	
-	encryptionKey = passwordHash+""+RowSalt;
-	
-	encryptedData = base64_encode($MC.Encrypt_strings(Credentials,encryptionKey,"AES",256));
-	
-	$MS.setPassword(domainName,encryptedData,RowSalt);
-}
