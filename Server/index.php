@@ -30,7 +30,7 @@ switch($action)
 			}
 			elseif(!empty($_REQUEST['force']))
 			{
-				$stmt = $db->prepare("UPDATE auth SET URL=:url, Salt=:salt, Credentials=:credentials;");
+				$stmt = $db->prepare("UPDATE auth SET Salt=:salt, Credentials=:credentials WHERE URL=:url;");
 			
 				$stmt->bindValue(":url", strtolower($_REQUEST['URL']));
 				$stmt->bindValue(":salt", $_REQUEST['rowSalt']);
