@@ -1,28 +1,8 @@
 
 /** Main Container **/
 #popupContainer {
-/*
-	margin-top:1ex;
-	margin-bottom: 1ex;
-	margin-left: 1ex;
-	margin-right: 1ex;
-*/
-/*
-	position: absolute;
-	top: 	7px;
-	left:	7px;
-	right:	8px;
-	bottom:	8px;
-*/	
-/*	padding: 1ex;
-*/	
 	border-radius: 5px;
-/*
-	border: 1px solid #ccc;
-	box-shadow: 2px 2px 10px #666;
-*/
 	overflow-x: hidden;
-	
 }
 
 * {
@@ -37,8 +17,7 @@ h1 {
 	margin-top: 0.25ex;
 }
 /** Logo **/
-h1 img 
-{
+h1 img {
 	vertical-align: text-bottom;
 	margin-right: 0.5em;
 }
@@ -48,8 +27,7 @@ a img {
 }
 
 /** Save Button **/
-#saveContainer
-{
+#saveContainer {
 	text-align: center;
 }
 
@@ -110,10 +88,15 @@ input {
 	border: 1px solid #eee;
 }
 
+#inputPassContainer input {
+	font-family: monospace;
+}
+
 .mini-instructions {
 	opacity: 0.5;
 	font-size: smaller;
 	margin-left: 2ex;
+	text-shadow: none;
 }
 
 /** Internal Scrolling **/
@@ -201,18 +184,18 @@ table.results thead th {
 }
 table.results tbody input {
 	display: block;
-	width: 25em !important;
+	width: 20em !important;
 	height: auto 	!important;
 	margin: 0px auto !important;
-	padding: 0px 1ex !important;
+	padding: 0.5ex 1ex !important;
 	font-family: monospace;
 	border-radius: 3px;
+	box-shadow: inset 1px 1px 1px #666;
 }
 
 /**
 	Tab Bar 
 */
-
 ul#tabBar {
 	list-style: none;
 	padding: 0em 1em;
@@ -232,12 +215,13 @@ ul#tabBar {
 	text-align: center;
 	position: relative;
 	top: 1px;
+	
+	cursor: pointer;
 }
 #tabBar li.current {
 	font-weight: bold;
 	border-color: #aaa;
 	border-bottom-color: #ececec;	/* must match bg colour */
-/*	background: #ececec;	*/
 	background-image: -o-linear-gradient(top, rgba(255,255,255,0.3) 0%, #ececec 90%);
 }
 #tabContent {

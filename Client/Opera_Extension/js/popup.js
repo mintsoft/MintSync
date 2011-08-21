@@ -18,28 +18,6 @@ window.addEventListener("load", function() {
 	
 },false);
 
-/** Extend jQuery Object:
-	http://stackoverflow.com/questions/1184624/serialize-form-to-json-with-jquery
-**/
-
-$.fn.serializeObject = function()
-{
-    var o = {};
-    var a = this.serializeArray();
-    $.each(a, function() {
-        if (o[this.name] !== undefined) {
-            if (!o[this.name].push) {
-                o[this.name] = [o[this.name]];
-            }
-            o[this.name].push(this.value || '');
-        } else {
-            o[this.name] = this.value || '';
-        }
-    });
-    return o;
-};
-
-
 /** Global Function Handlers **/
 
 /** 
@@ -139,7 +117,7 @@ function getPasswords(domainName) {
 			default:
 			
 		}
-		$('#preoutput').text(outputStr);
+		//$('#preoutput').text(outputStr);
 	});
 }
 

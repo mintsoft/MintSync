@@ -136,13 +136,17 @@ function MintSync() {
 		var sourceSet = { 	"num"	: "1234567890", 
 							"alpha"	: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
 							"punc1"	: ";'#,./[]-=\\",
-							"punc2"	: "`~!@$%^&*()_+{}|:\"<>?",
+							"punc2"	: "`~@$%^&*()_+{}|:\"<>!?",
 						 },
 			password="",
 			sourceString="";
 		
-		//TODO: build	sourceString from preferences here
-		sourceString = sourceSet.num+""+sourceSet.alpha+""+sourceSet.punc1+""+sourceSet.punc2;
+		//build	sourceString from preferences
+		sourceString = sourceSet.alpha;
+		
+		sourceString += widget.preferences["passwordStrengthNum"]=="true"	?sourceSet.num:"";
+		sourceString += widget.preferences["passwordStrengthPunc1"]=="true"	?sourceSet.punc1:"";
+		sourceString += widget.preferences["passwordStrengthPunc2"]=="true"	?sourceSet.punc2:"";
 		
 		for(var x=0;x<length;++x)
 		{

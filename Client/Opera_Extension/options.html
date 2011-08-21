@@ -36,7 +36,12 @@
 						<input type='radio' name='KeyLength' id='KeyLength168' value='168'  	disabled='disabled' /> <span class='disabled'>168</span>
 						<input type='radio' name='KeyLength' id='KeyLength112' value='112'  	disabled='disabled' /> <span class='disabled'>112</span>
 					</li>
-				
+					<li><label for='passwordStrengthNum'>Password Strength</label>
+						<input type='checkbox' name='passwordStrengthNum' id='passwordStrengthNum'  	/> Digits
+						<input type='checkbox' name='passwordStrengthPunc1' id='passwordStrengthPunc1' 	/> Punctuation
+						<input type='checkbox' name='passwordStrengthPunc2' id='passwordStrengthPunc2' 	/> More Punctuation
+						
+					</li>
 				</ul>
 				<div id='saveContainer'>
 					<input type="button" value="Save" onclick="savePrefs();" />
