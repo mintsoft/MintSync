@@ -190,3 +190,13 @@ function rehidePassword(thisOne)
 {
 	thisOne.type="password";
 }
+
+/** jQuery Entry Point **/
+$(document).ready(function(){
+
+	$("#tabBar").tabs("#tabContent > fieldset");
+	
+	//create a credentials box by default:
+	addPair();
+	
+});

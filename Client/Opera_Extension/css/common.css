@@ -11,8 +11,8 @@
 body {
 	font-family: "trebuchet ms",Sans-Serif;
 	font-size: small;
-	background-color: #eee;
 	color: #111;
+	background: white;
 }
 
 /** Remove Bulletpoints */
@@ -22,7 +22,7 @@ body {
 
 /* Remargin p's */
 p {
-	margin: 1em;
+	margin: 1ex 1em;
 }
 
 a:visited, a:link
