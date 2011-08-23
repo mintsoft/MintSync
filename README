@@ -31,6 +31,14 @@ In no particular order:
  - Add user instructions
  - Form robot system, possibly have to alter how the data is captured and inject script 
 	to capture onsubmit on forms or something
+ - Review AES256 implementation and check the quality of it, especially PRNG/random seeding where used
+ - Potential parallel encryption, data encrypted by multiple algorithms and saved so if the user is
+	using a less powerful workstation next time, they can decrypt with a less computationally expensive
+	algorithm at the sacrifice of security
+
+ 
+N.B. If entropy is need anywhere: 
+	reimplement with a custom entroy gatherer; inject into every page and gather entropy from the entire browser session?
  
 Licensing
 =========
@@ -230,7 +238,7 @@ utf8_decode.js			http://phpjs.org/functions/utf8_decode:576
 	 * OTHER DEALINGS IN THE SOFTWARE.
 	 */ 
 
-AES:					http://www.movable-type.co.uk/scripts/aes.html
+AES:	http://www.movable-type.co.uk/scripts/aes.html
 	http://creativecommons.org/licenses/by/3.0/
 	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 	/*  AES implementation in JavaScript (c) Chris Veness 2005-2011                                   */
