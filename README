@@ -3,6 +3,35 @@ MintSync - Mintsoft (Rob Emery) 2011
 
 Eventually, this will be a multi-browser extension and server component secure password storage solution with all data decrypted clientside only.
 
+To-Do List
+==========
+
+In no particular order:
+
+ - User Authentication 
+	- Hash exchange?
+		-Implications for "remembering" password
+	- Basic auth or integrated in?
+	-If Opera ever supports SSO Style Kerberos/NTLM then NTLM auth?
+ - Better Error Handling
+ - Better User Feedback
+ - Delete URLS
+ - Optional domain rather than URL matching (wildcards perhaps)
+ - Master password changing
+ - "Backup database" option, CSV export or something
+ - "Backup" local encryption keys & Salt if applicable
+ - Rename "key" and "value" into something more user friendly
+ - Think of a way to do something more interesting with the state of the form
+	is there an extension "always on top" option or something similiar?	
+ - Alternative way to indicate desire for generated passwords, middle button? or configurable perhaps
+ - Tidy up animations & stuff to make things attractive
+ - Figure out where I found the icons and attribute or replace them
+ - Reset Allow Overwrite when the Submit request has returned
+ - Add confirmation to the allow overwrite
+ - Add user instructions
+ - Form robot system, possibly have to alter how the data is captured and inject script 
+	to capture onsubmit on forms or something
+ 
 Licensing
 =========
 This is released under the Apache 2.0 Licence:
@@ -20,7 +49,7 @@ This is released under the Apache 2.0 Licence:
 	   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
-	   
+		
 Libraries and Attributions
 ===========================
 

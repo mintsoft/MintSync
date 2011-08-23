@@ -14,25 +14,27 @@ function MintSync() {
 	/*
 		Retrieve passwords for the passed domain
 	*/
-	this.getPasswords = function(Domain, callback) {
+	this.getPasswords = function(Domain, callbacks) {
 			
 		$.ajax({
 			type: "POST",
 			data: {URL:Domain},
 			url:this.getServerURL()+"?action=retrieve",
 			beforeSend: function(jq,settings) {
-				$("#fetchDiv").hide(0);
-				$("#loadingDiv").show(0);
+				if(callbacks.beforeSend != undefined)
+					callbacks.beforeSend();
 			},
 			complete: function(jq,textStatus) {
-				$("#loadingDiv").hide(0);
-				$("#fetchDiv").show(0);
+				if(callbacks.complete != undefined)
+					callbacks.complete();
 			},
 			error: function(jq,textStatus,errorThrown) {
-				alert("An Error Occurred:" + textStatus + "\n" + errorThrown);
+				if(callbacks.error != undefined)
+					callbacks.error(textStatus,errorThrown);
 			},
 			success: function(data,textStatus,jq) {
-				callback(data);
+				if(callbacks.success != undefined)
+					callbacks.success(data);
 			}
 		});
 		
@@ -40,7 +42,7 @@ function MintSync() {
 	/**
 		Performs the AJAX request saving the password
 	*/
-	this.setPassword = function(Domain,Credentials,rowSalt,force) {
+	this.setPassword = function(Domain,Credentials,rowSalt,force,callbacks) {
 	
 		//$("#preoutputSave").text("Sent To Webserver:\n"+"Domain: '" +Domain+"'\nCredentials: '"+Credentials+"'\nRowSalt: '"+rowSalt+"'");
 	
@@ -53,10 +55,12 @@ function MintSync() {
 			complete: function(jq,textStatus) {
 			},
 			error: function(jq,textStatus,errorThrown) {
-				alert("An Error Occurred:" + textStatus + "\n" + errorThrown);
+				if(callbacks.error != undefined)
+					callbacks.error(textStatus,errorThrown);
 			},
 			success: function(data,textStatus,jq) {
-				$("#preoutputSave").text($("#preoutputSave").text()+"\nWebserver Returned:"+data);
+				if(callbacks.success != undefined)
+					callbacks.success(data);
 			}
 		});
 		

@@ -25,7 +25,13 @@ switch($action)
 			$row = $stmt->fetch(PDO::FETCH_ASSOC);
 			if((int)$row['Freq']>0 && empty($_REQUEST['force']))
 			{
-				echo "ERROR";
+				echo json_encode(array(
+									"status"=>"fail",
+									"action"=>"insert",
+									"data"=>array(
+										"reason"=>"Record already exists"
+									)
+								));
 				exit();
 			}
 			elseif(!empty($_REQUEST['force']))
@@ -43,7 +49,11 @@ switch($action)
 			
 				$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			
-				echo json_encode($rows[0]);
+				echo json_encode(array(
+									"status"=>"ok",
+									"action"=>"update",
+									"data"=>array()
+								));
 			}
 			else
 			{
@@ -60,7 +70,11 @@ switch($action)
 			
 				$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			
-				echo json_encode($rows[0]);
+				echo json_encode(array(
+									"status"=>"ok",
+									"action"=>"insert",
+									"data"=>array()
+								));
 			}
 		}
 		
@@ -82,9 +96,20 @@ switch($action)
 
 		
 		if(isset($rows[0]))
-			echo json_encode(array("status"=>"ok", "data"=> $rows[0]));
+			echo json_encode(array(
+						"status"=>"ok", 
+						"action"=>"retrieve",
+						"data"=> $rows[0]
+					));
+				
 		else 
-			echo json_encode(array("status"=>"not-found"));
+			echo json_encode(array(
+						"status"=>"fail",
+						"action"=>"retrieve",
+						"data" => array(
+							"reason"=>"URL was not found"
+							)
+					));
 		
 }
 

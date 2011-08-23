@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <widget xmlns="http://www.w3.org/ns/widgets" id="http://mintsoft.net/MintSync" >
-	<name>MintSync - v0.1</name>
+	<name>MintSync - v0.2</name>
 	<description>Secure client-side decrypted password storage</description>
 	<author href="yourURL" email="rob@mintsoft.net">Rob Emery</author>
 	<access origin="*"/>
