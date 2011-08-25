@@ -7,12 +7,19 @@ window.addEventListener("load", function() {
 		return;
 		
 	opera.extension.onmessage = function(event) {
-		document.getElementById("domainInput").value = event.data;
-		document.getElementById("domainName").value = event.data;
-		
-		if($MS.getAutoFetch()==1)
-		{
-			getPasswords(event.data);
+		var data = event.data;
+		switch (data.action) {
+			case "click":
+				document.getElementById("domainInput").value = data.url;
+				document.getElementById("domainName").value = data.url;
+				
+				if($MS.getAutoFetch()==1)
+				{
+					getPasswords(data.url);
+				}
+			break;
+			default:
+			break;
 		}
 	}
 	
@@ -182,7 +189,6 @@ function setPassword() {
 		},
 		success: function(data) {
 			var parsedResult = $.parseJSON(data);
-			//$("#saveOutput").text($("#saveOutput").text()+"\nWebserver Returned:"+data);
 			
 			switch(parsedResult.status)
 			{
@@ -195,6 +201,9 @@ function setPassword() {
 				default:
 					$("#saveOutput").text("An unknown state has been reached: "+data);
 			}
+			
+			//uncheck the overwrite box
+			$("#canForceWrite").attr("checked",false);
 		},
 		zzz: function(){}
 	});

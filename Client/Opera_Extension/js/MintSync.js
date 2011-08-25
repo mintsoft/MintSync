@@ -39,6 +39,34 @@ function MintSync() {
 		});
 		
 	},
+	/*
+		Retrieve passwords for the passed domain
+	*/
+	this.checkIfPasswordsExist = function(Domain,callbacks) {
+			
+		$.ajax({
+			type: "POST",
+			data: {URL:Domain},
+			url:this.getServerURL()+"?action=check",
+			beforeSend: function(jq,settings) {
+				if(callbacks.beforeSend != undefined)
+					callbacks.beforeSend();
+			},
+			complete: function(jq,textStatus) {
+				if(callbacks.complete != undefined)
+					callbacks.complete();
+			},
+			error: function(jq,textStatus,errorThrown) {
+				if(callbacks.error != undefined)
+					callbacks.error(textStatus,errorThrown);
+			},
+			success: function(data,textStatus,jq) {
+				if(callbacks.success != undefined)
+					callbacks.success(data);
+			}
+		});
+		
+	},
 	/**
 		Performs the AJAX request saving the password
 	*/
@@ -115,7 +143,13 @@ function MintSync() {
 	this.getAutoFetch = function(){
 		return widget.preferences["AutoFetch"];
 	},
-	
+	/** 
+		Returns whether or not the user wants to be notified when 
+		there is a password on the page or not
+	**/
+	this.getNotify = function(){
+		return widget.preferences["Notify"]=="1";
+	},
 	/**
 	Generates a random salt string
 	*/

@@ -9,12 +9,22 @@ $action = "retrieve";
 if(isset($_REQUEST['action']))
 	$action = $_REQUEST['action'];
 	
+$db = new PDO('sqlite:'.PASSWORD_DATABASE);
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+//do logging if enabled
+if(LOG_ALL_REQUESTS)	
+{
+	
+	$stmt = $db->prepare("INSERT INTO AccessLog(Timestamp,RemoteIP,Request) VALUES(strftime('%s','now'),:IP,:request);");
+	$stmt->bindValue(":IP",ip2long($_SERVER['REMOTE_ADDR']));
+	$stmt->bindValue(":request",var_export($_REQUEST,true));
+	$stmt->execute();
+}
+
 switch($action)
 {
 	case "save":
-		
-		$db = new PDO('sqlite:'.PASSWORD_DATABASE);
-		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 		if(isset($_REQUEST['URL']) && isset($_REQUEST['rowSalt']) && isset($_REQUEST['Credentials']))
 		{
@@ -34,7 +44,7 @@ switch($action)
 								));
 				exit();
 			}
-			elseif(!empty($_REQUEST['force']))
+			elseif((int)$row['Freq']>0 && !empty($_REQUEST['force']))
 			{
 				$stmt = $db->prepare("UPDATE auth SET Salt=:salt, Credentials=:credentials WHERE URL=:url;");
 			
@@ -80,14 +90,39 @@ switch($action)
 		
 	break;
 
+	case "check":
+		if(isset($_REQUEST['URL']))
+			$domain = strtolower($_REQUEST['URL']);
+		
+		$stmt = $db->prepare("SELECT COUNT(*) num FROM auth WHERE URL=:url");
+		$stmt->bindValue(":url",	$domain, PDO::PARAM_STR );
+		$stmt->execute();
+		
+		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		
+		if(isset($rows[0]))
+			echo json_encode(array(
+						"status"=>"ok", 
+						"action"=>"check",
+						"data"=> $rows[0]['num']
+					));
+				
+		else 
+			echo json_encode(array(
+						"status"=>"fail",
+						"action"=>"check",
+						"data" => array(
+							"reason"=>"An Unexpected Error Occurred"
+							)
+					));
+	break;
+	
 	case "retrieve":
 	default:
 		if(isset($_REQUEST['URL']))
 			$domain = strtolower($_REQUEST['URL']);
 
-		$db = new PDO('sqlite:'.PASSWORD_DATABASE);
-		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		
 		$stmt = $db->prepare("SELECT * FROM auth WHERE URL=:url");
 		$stmt->bindValue(":url",	$domain, PDO::PARAM_STR );
 		$stmt->execute();

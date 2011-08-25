@@ -23,10 +23,10 @@ In no particular order:
  - Rename "key" and "value" into something more user friendly
  - Think of a way to do something more interesting with the state of the form
 	is there an extension "always on top" option or something similiar?	
+	possibly store information in the background process?
  - Alternative way to indicate desire for generated passwords, middle button? or configurable perhaps
  - Tidy up animations & stuff to make things attractive
  - Figure out where I found the icons and attribute or replace them
- - Reset Allow Overwrite when the Submit request has returned
  - Add confirmation to the allow overwrite
  - Add user instructions
  - Form robot system, possibly have to alter how the data is captured and inject script 
@@ -35,11 +35,21 @@ In no particular order:
  - Potential parallel encryption, data encrypted by multiple algorithms and saved so if the user is
 	using a less powerful workstation next time, they can decrypt with a less computationally expensive
 	algorithm at the sacrifice of security
-
+ - Master "view all passwords" page with the ability to update URLs?
  
 N.B. If entropy is need anywhere: 
 	reimplement with a custom entroy gatherer; inject into every page and gather entropy from the entire browser session?
- 
+
+	
+Done List
+=========
+ - Reset Allow Overwrite when the Submit request has returned
+ - Highting pages with stored credentials
+		Not done: keep local cache to prevent rediculous levels of AJAX?
+	Probably best to do this with badge textContent: http://dev.opera.com/articles/view/opera-extensions-buttons-badges-and-popups/#display_badge
+ - Fix bug with force override, if the URL doesn't exist then it returns that it's completed successfully even though it's done nothing
+ - Audit Trail stored server side for requests
+
 Licensing
 =========
 This is released under the Apache 2.0 Licence:
