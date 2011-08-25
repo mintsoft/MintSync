@@ -1,0 +1,15 @@
+
+19:54 25/08/2011
+================
+Client
+------
+Created Changelog file
+Unticked Force update when the AJAX save request returns
+Added Option for indicate if password is available
+Implemented optional notification if password is available
+
+Server
+------
+Implemented new server verb: "check"
+Addressed Bug with "allow override" and saving if the URL doesn't exist
+Implemented optional serverside logging
