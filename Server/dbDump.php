@@ -10,6 +10,6 @@ $stmt->execute();
 
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 echo "<pre>";
-var_dump($rows);
+echo htmlentities(print_r($rows,true));
 echo "</pre>";
 ?>

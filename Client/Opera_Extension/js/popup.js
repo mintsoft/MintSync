@@ -1,4 +1,6 @@
 /** Popup specific JS in this file */
+//is the control key down?
+var ctrlDown = false;
 
 //insert the currently selected tab into the box by default
 
@@ -56,8 +58,8 @@ function addPair()
 	target.appendChild(tmpObj);
 	
 	//add click handler
+	var passwordLength = 16; 		//TODO: get this from preferences
 	$(tmpObj).find("input[name='inputPassValue']").mousedown(function(event){
-		var passwordLength = 16; 		//TODO: get this from preferences
 		if(event.which == 3 && $(this).val()=="" ) 	//right click
 		{
 			event.preventDefault();
@@ -65,7 +67,19 @@ function addPair()
 			return false;
 		}
 		return true;
+	}).keyup(function(e) {
+		if(e.which == 17)
+			ctrlDown = false;
+	}).keydown(function(e) {
+		if(e.which == 17)
+			ctrlDown=true;
+		else if(ctrlDown == true && e.which == 71) {		//ctrl+g
+			event.preventDefault();
+			$(this).val($MS.generatePassword(passwordLength));
+			return false;
+		}
 	});
+	
 }
 
 /**

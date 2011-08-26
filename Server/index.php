@@ -13,9 +13,8 @@ $db = new PDO('sqlite:'.PASSWORD_DATABASE);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 //do logging if enabled
-if(LOG_ALL_REQUESTS)	
+if(LOGGING && !(isset($LOGLEVEL[$action]) && $LOGLEVEL[$action]==false))		//if log level is undefined, then assume we wish to log
 {
-	
 	$stmt = $db->prepare("INSERT INTO AccessLog(Timestamp,RemoteIP,Request) VALUES(strftime('%s','now'),:IP,:request);");
 	$stmt->bindValue(":IP",ip2long($_SERVER['REMOTE_ADDR']));
 	$stmt->bindValue(":request",var_export($_REQUEST,true));

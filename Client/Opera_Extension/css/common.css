@@ -69,3 +69,67 @@ input[type='submit'], button, input[type='button'] {
 .hidden {
 	display: none;
 }
+
+/*Table Handling for Popup and matrix */
+/** Results Table */
+table {
+/*
+	border-collapse: collapse;
+	border: 1px solid rgba(160,160,160,0.8);
+*/
+
+	border-spacing: 0px;
+	box-shadow: 1px 1px 2px #666;
+	
+	background: none;
+	width: 100%;
+	
+	border-radius:3px;	
+}
+
+table thead tr th:first-child {
+	border-top-left-radius:3px
+}
+
+table thead tr th:last-child {
+	border-top-right-radius:3px
+}
+table tr:last-child td:first-child {
+	border-bottom-left-radius:3px
+}
+	
+table tr:last-child td:last-child {
+	border-bottom-right-radius:3px
+}
+	
+table td {
+	font-family: monospace;
+}
+
+table thead th, table td {
+	padding: 0.5ex 1ex;
+}
+table tbody tr:nth-child(even) {
+/*	background: rgba(128,128,128,0.2);	*/
+	background-image: -o-linear-gradient(top,rgba(192,192,192,0.45) 0%, rgba(128,128,128,0.2) 15%, rgba(128,128,128,0.2) 85%, rgba(192,192,192,0.45) 100%);
+	
+}
+table tbody tr:nth-child(odd) {	/* Light Rows*/
+/*	background: rgba(192,192,192,0.2);	*/
+	background-image: -o-linear-gradient(top,rgba(192,192,192,0.45) 0%, rgba(255,255,255,0.9) 15%, rgba(255,255,255,0.9) 85%, rgba(192,192,192,0.45) 100%);
+}
+table thead th {
+	background: -o-linear-gradient(rgba(10,10,10,0.8),rgba(10,10,10,0.7));
+	color: rgba(240,240,240,1);
+	text-shadow: rgba(255,255,255,0.2) 1px -1px 2px;
+}
+table tbody input {
+	display: block;
+	width: 20em !important;
+	height: auto 	!important;
+	margin: 0px auto !important;
+	padding: 0.5ex 1ex !important;
+	font-family: monospace;
+	border-radius: 3px;
+	box-shadow: inset 1px 1px 1px #666;
+}

@@ -1,3 +1,19 @@
+19:40 26/08/2011
+================
+
+
+Client
+------
+Forced the button's green text to not be displayed if notification is off (fixing the affiliated bug)
+Added ctrl+g for generate password
+Created Password Matrix pages - functionality still to be implemented
+
+
+Server
+------
+Implemented verb-specific logging options
+Altered dbDump file to htmlentities
+
 
 19:54 25/08/2011
 ================
