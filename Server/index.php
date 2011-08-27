@@ -88,7 +88,56 @@ switch($action)
 		}
 		
 	break;
-
+	
+	case "rename":
+		
+		if(empty($_REQUEST['newURL']) || empty($_REQUEST['ID']) || $_REQUEST['newURL']==="null") 
+		{
+			echo json_encode(array(
+									"status"=>"fail",
+									"action"=>"rename",
+									"data"=>array (
+										"reason"=>"Required data was missing"
+									)
+								));
+			exit();
+		}
+		
+		$stmt = $db->prepare("UPDATE auth SET URL=:newURL WHERE ID=:ID;");
+		
+		$stmt->bindValue(":newURL",$_REQUEST['newURL'],PDO::PARAM_STR);
+		$stmt->bindValue(":ID",$_REQUEST['ID'],PDO::PARAM_INT);
+		
+		$stmt->execute();
+		
+		$stmt = $db->prepare("SELECT * FROM auth WHERE URL=:url AND ID=:ID");
+		$stmt->bindValue(":url", strtolower($_REQUEST['newURL']), PDO::PARAM_STR );
+		$stmt->bindValue(":ID", strtolower($_REQUEST['ID']), PDO::PARAM_INT );
+		$stmt->execute();
+	
+		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		if(isset($rows[0]))
+		{	
+			echo json_encode(array(
+							"status"=>"ok",
+							"action"=>"rename",
+							"data"=>array()
+						));
+		}
+		else
+		{
+			echo json_encode(array(
+							"status"=>"fail",
+							"action"=>"rename",
+							"data"=>array (
+								"reason" => "SELECT After UPDATE failed, check the database for integrity!" 
+							)
+						));
+		}
+		
+	break;
+	
 	case "check":
 		if(isset($_REQUEST['URL']))
 			$domain = strtolower($_REQUEST['URL']);
@@ -113,6 +162,30 @@ switch($action)
 						"action"=>"check",
 						"data" => array(
 							"reason"=>"An Unexpected Error Occurred"
+							)
+					));
+	break;
+	
+	case "list":
+
+		$stmt = $db->prepare("SELECT ID, URL FROM auth;");
+		$stmt->execute();
+		
+		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		if(isset($rows[0]))
+			echo json_encode(array(
+						"status"=>"ok", 
+						"action"=>"list",
+						"data"=> $rows
+					));
+				
+		else 
+			echo json_encode(array(
+						"status"=>"fail",
+						"action"=>"list",
+						"data" => array(
+							"reason"=>"No Records Found"
 							)
 					));
 	break;

@@ -7,6 +7,9 @@ $LOGLEVEL = array(
 				"retrieve"	=>	true,
 				"save"		=>	true,
 				"check"		=>	false,
+				"list"		=>  true,
+				"rename"	=>	true,
+				
 				
 				"zz"		=>	false	//placeholder for the last element
 			);

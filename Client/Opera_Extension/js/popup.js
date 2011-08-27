@@ -110,27 +110,13 @@ function getPasswords(domainName) {
 				key = "",
 				base64decoded="",
 				innerHTML="";
-			
-	//		outputStr = "Received From Webserver:\n"+data+"\n\n";
-			
+						
 			parsedObject = $.parseJSON(data);
 			switch(parsedObject.status)
 			{
 				case "ok":
 				
-					base64decoded = base64_decode(parsedObject.data.Credentials);
-					passwordHash = $MS.getPasswordHash();
-				
-					key = passwordHash+""+parsedObject.data.Salt;
-
-					decryptedJSON = $MC.Decrypt_strings(base64decoded,key,"AES",256);
-					
-					//outputStr+= "Decrypted Credentials:\n"+decryptedJSON+"\n";
-					
-					$("#retrieveOutput tbody").html("");
-					
-					//create table containing credentials
-					credentialsObj = $.parseJSON(decryptedJSON);
+					credentialsObj = $MC.decodeAndDecrypt(parsedObject.data.Credentials)
 					
 					for(var index in credentialsObj) {
 						//this is done like this to ensure that the values don't screw up the HTML
@@ -170,10 +156,7 @@ function setPassword() {
 	var domainName=$("#domainName").val(),
 		RowSalt = $MS.generateRowSalt(),
 		encryptedData = "",
-		encryptionKey = "",
 		CredentialsObj = new Object(),
-		Credentials = "",
-		passwordHash = $MS.getPasswordHash(),
 		force = false;
 	
 	//build JS Object to JSON
@@ -186,15 +169,9 @@ function setPassword() {
 		CredentialsObj[name]=password;
 	});
 	
-	//Generate JSON String
-	Credentials = JSON.stringify(CredentialsObj);
-
-	encryptionKey = passwordHash+""+RowSalt;
-	encryptedData = base64_encode($MC.Encrypt_strings(Credentials,encryptionKey,"AES",256));
-	
-	Credentials = "";
+	encryptedData = $MC.encodeAndEncrypt(CredentialsObj,RowSalt);
 	CredentialsObj = new Object();
-	
+
 	//check is overwrites are allowed (force)
 	force = $("#canForceWrite:checked").val();
 	$MS.setPassword(domainName,encryptedData,RowSalt,force,{
@@ -221,15 +198,4 @@ function setPassword() {
 		},
 		zzz: function(){}
 	});
-}
-
-/* Reveals the password selected */
-function revealPassword(thisOne)
-{
-	thisOne.type="text";
-}
-/* hides the password selected */
-function rehidePassword(thisOne)
-{
-	thisOne.type="password";
 }

@@ -67,6 +67,33 @@ function MintSync() {
 		});
 		
 	},
+	/*
+		Retrieve passwords for the passed domain
+	*/
+	this.listURLS = function(callbacks) {
+			
+		$.ajax({
+			type: "POST",
+			url:this.getServerURL()+"?action=list",
+			beforeSend: function(jq,settings) {
+				if(callbacks.beforeSend != undefined)
+					callbacks.beforeSend();
+			},
+			complete: function(jq,textStatus) {
+				if(callbacks.complete != undefined)
+					callbacks.complete();
+			},
+			error: function(jq,textStatus,errorThrown) {
+				if(callbacks.error != undefined)
+					callbacks.error(textStatus,errorThrown);
+			},
+			success: function(data,textStatus,jq) {
+				if(callbacks.success != undefined)
+					callbacks.success(data);
+			}
+		});
+		
+	},
 	/**
 		Performs the AJAX request saving the password
 	*/
@@ -78,6 +105,30 @@ function MintSync() {
 			type: "POST",
 			data: {"URL":Domain,"Credentials":Credentials,"rowSalt":rowSalt,"force":force},
 			url:this.getServerURL()+"?action=save",
+			beforeSend: function(jq,settings) {
+			},
+			complete: function(jq,textStatus) {
+			},
+			error: function(jq,textStatus,errorThrown) {
+				if(callbacks.error != undefined)
+					callbacks.error(textStatus,errorThrown);
+			},
+			success: function(data,textStatus,jq) {
+				if(callbacks.success != undefined)
+					callbacks.success(data);
+			}
+		});
+		
+	},	
+	/**
+		Performs the AJAX request renaming the URL with the ID passed
+	*/
+	this.renameURL = function(ID,newDomain,callbacks) {
+	
+		$.ajax({
+			type: "POST",
+			data: {"ID":ID,"newURL":newDomain},
+			url:this.getServerURL()+"?action=rename",
 			beforeSend: function(jq,settings) {
 			},
 			complete: function(jq,textStatus) {

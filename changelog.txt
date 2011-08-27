@@ -1,7 +1,27 @@
+
+08:08 27/08/2011
+================
+Client
+------
+Implemented display of URLS on password matrix
+Refactored object encryption/decryption into the MintCrypto wrapper
+Created globalfunctions.js to hold self-contained functions that are required in multiple places
+Implemented password matrix retrieval
+Preliminary implementation of the matrix filtering - this is slow, but it'll suffice for now
+Removed text-shadow from the password matrix page as it was making things incredibly slow
+Added doubleclick handler to call renameURL method in MintSync object
+Added make proportional to width button (|<->|) to password matrix page
+Added bin icon to the password matrix to implement deletion at some point
+Fixed issue with the table body being appended to multiple times with multiple clicks
+Added large loading icon to the password matrix
+
+Server
+------
+Implemented new verb "list" - returns all URLS
+Implemented new verb "rename" - renames the URL with the correct ID to the newURL
+
 19:40 26/08/2011
 ================
-
-
 Client
 ------
 Forced the button's green text to not be displayed if notification is off (fixing the affiliated bug)
