@@ -21,12 +21,12 @@ Polish
 	is there an extension "always on top" option or something similiar?	
 	possibly store information in the background process?
  - Configurable password generation length
-
+ - Address performance issues with password matrix filtering
+ 
 Features
 =============
  - Optional domain rather than URL matching (wildcards perhaps)
- - Master "view all passwords" page with the ability to update URLs?
-	And ability to delete URLS
+ - Implement the ability to delete URLS
  - User Authentication 
 	- Hash exchange?
 		-Implications for "remembering" password
@@ -68,6 +68,7 @@ Done List!
  - Audit Trail stored server side for requests
  - alter notify on page status leaves the button in whatever state it was in when you disabled it, text should be removed
 	Fixed in the background process instead
+ - Master "view all passwords" page with the ability to update URLs?
 
 
 Licensing
