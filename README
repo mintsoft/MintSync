@@ -26,7 +26,6 @@ Polish
 Features
 =============
  - Optional domain rather than URL matching (wildcards perhaps)
- - Implement the ability to delete URLS
  - User Authentication 
 	- Hash exchange?
 		-Implications for "remembering" password
@@ -69,6 +68,7 @@ Done List!
  - alter notify on page status leaves the button in whatever state it was in when you disabled it, text should be removed
 	Fixed in the background process instead
  - Master "view all passwords" page with the ability to update URLs?
+ - Implement the ability to delete URLS
 
 
 Licensing

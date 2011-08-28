@@ -22,11 +22,11 @@ function MintSync() {
 			url:this.getServerURL()+"?action=retrieve",
 			beforeSend: function(jq,settings) {
 				if(callbacks.beforeSend != undefined)
-					callbacks.beforeSend();
+					callbacks.beforeSend(jq,settings);
 			},
 			complete: function(jq,textStatus) {
 				if(callbacks.complete != undefined)
-					callbacks.complete();
+					callbacks.complete(jq,textStatus);
 			},
 			error: function(jq,textStatus,errorThrown) {
 				if(callbacks.error != undefined)
@@ -50,11 +50,11 @@ function MintSync() {
 			url:this.getServerURL()+"?action=check",
 			beforeSend: function(jq,settings) {
 				if(callbacks.beforeSend != undefined)
-					callbacks.beforeSend();
+					callbacks.beforeSend(jq,settings);
 			},
 			complete: function(jq,textStatus) {
 				if(callbacks.complete != undefined)
-					callbacks.complete();
+					callbacks.complete(jq,textStatus);
 			},
 			error: function(jq,textStatus,errorThrown) {
 				if(callbacks.error != undefined)
@@ -77,11 +77,11 @@ function MintSync() {
 			url:this.getServerURL()+"?action=list",
 			beforeSend: function(jq,settings) {
 				if(callbacks.beforeSend != undefined)
-					callbacks.beforeSend();
+					callbacks.beforeSend(jq,settings);
 			},
 			complete: function(jq,textStatus) {
 				if(callbacks.complete != undefined)
-					callbacks.complete();
+					callbacks.complete(jq,textStatus);
 			},
 			error: function(jq,textStatus,errorThrown) {
 				if(callbacks.error != undefined)
@@ -106,8 +106,12 @@ function MintSync() {
 			data: {"URL":Domain,"Credentials":Credentials,"rowSalt":rowSalt,"force":force},
 			url:this.getServerURL()+"?action=save",
 			beforeSend: function(jq,settings) {
+				if(callbacks.beforeSend != undefined)
+					callbacks.beforeSend(jq.settings);
 			},
 			complete: function(jq,textStatus) {
+				if(callbacks.complete != undefined)
+					callbacks.complete(jq,textStatus);
 			},
 			error: function(jq,textStatus,errorThrown) {
 				if(callbacks.error != undefined)
@@ -120,6 +124,31 @@ function MintSync() {
 		});
 		
 	},	
+	/** removes the password with the request ID */
+	
+	this.removePasswords = function(ID,url,callbacks) {
+		$.ajax({
+			type: "POST",
+			data: {"ID":ID,"URL":url},
+			url:this.getServerURL()+"?action=remove",
+			beforeSend: function(jq,settings) {
+				if(callbacks.beforeSend != undefined)
+					callbacks.beforeSend(jq,settings);
+			},
+			complete: function(jq,textStatus) {
+				if(callbacks.complete != undefined)
+					callbacks.complete(jq,textStatus);
+			},
+			error: function(jq,textStatus,errorThrown) {
+				if(callbacks.error != undefined)
+					callbacks.error(textStatus,errorThrown);
+			},
+			success: function(data,textStatus,jq) {
+				if(callbacks.success != undefined)
+					callbacks.success(data);
+			}
+		});
+	},
 	/**
 		Performs the AJAX request renaming the URL with the ID passed
 	*/
@@ -130,8 +159,12 @@ function MintSync() {
 			data: {"ID":ID,"newURL":newDomain},
 			url:this.getServerURL()+"?action=rename",
 			beforeSend: function(jq,settings) {
+				if(callbacks.beforeSend != undefined)
+					callbacks.beforeSend(jq,settings);
 			},
 			complete: function(jq,textStatus) {
+				if(callbacks.complete != undefined)
+					callbacks.complete(jq,textStatus);
 			},
 			error: function(jq,textStatus,errorThrown) {
 				if(callbacks.error != undefined)

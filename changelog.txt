@@ -1,3 +1,15 @@
+10:53 28/08/2011
+================
+
+Client
+------
+Implemented URL removal with rudimentary confirmation
+Commented out CSS that was causing errors cluttering the console
+
+Server
+------
+Implemented new verb "remove"
+
 
 08:08 27/08/2011
 ================

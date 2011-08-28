@@ -9,7 +9,7 @@ $LOGLEVEL = array(
 				"check"		=>	false,
 				"list"		=>  true,
 				"rename"	=>	true,
-				
+				"remove"	=>	true,
 				
 				"zz"		=>	false	//placeholder for the last element
 			);

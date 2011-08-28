@@ -190,6 +190,31 @@ switch($action)
 					));
 	break;
 	
+	case "remove":
+	
+		if(empty($_REQUEST['ID']))
+		{
+			echo json_encode(array(
+					"status"=>"fail", 
+					"action"=>"remove",
+					"data"=> array(
+						"reason" => "A piece of information is missing: ID"
+					)
+				));
+			exit();
+		}
+		$stmt = $db->prepare("DELETE FROM auth WHERE ID=:id;");
+		$stmt->bindValue(":id",$_REQUEST['ID']);
+		$stmt->execute();
+
+		echo json_encode(array(
+					"status"=>"ok", 
+					"action"=>"remove",
+					"data"=> 1
+				));
+		
+	break;
+	
 	case "retrieve":
 	default:
 		if(isset($_REQUEST['URL']))

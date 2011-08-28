@@ -71,6 +71,7 @@ $(document).ready(function(){
 		clearTimeout(keyTimer);
 		keyTimer = setTimeout(doListFiltering,400);	//TODO: get the duration from a preference
 	});
+
 });
 
 
@@ -99,7 +100,7 @@ function updatePasswordMatrix(sourceArray)
 
 		target.appendChild(tmpObj);
 		
-		//add click handler
+		//add click handler to the H3
 		$(tmpObj).find("h3").single_double_click(function(event){
 			event.preventDefault();
 			//single Click
@@ -141,6 +142,43 @@ function updatePasswordMatrix(sourceArray)
 			
 			return false;
 		},200);
+		
+		//add click handler to the bin icon to handle deletion/removal
+		$(tmpObj).find("p.binIcon img.bin").click(function(){
+			var id	= $(this).parent().siblings().find("input[name='ID']").val(),
+				url	= $(this).parent().siblings("h3").text(),
+				srcImg = this;
+			
+			if(!confirm("Are you sure you wish to delete: "+url+"?\n\nOnce deleted, this cannot be recovered"))
+				return false;
+			
+			$MS.removePasswords(id,url,{
+				beforeSend: function() {
+					
+				},
+				success: function(data,textStatus) {
+					console.log(data);
+					var parsedObj = $.parseJSON(data);	
+					switch(parsedObj.status)
+					{
+						case "ok":
+							//remove the entire li
+							$(srcImg).parent().parent().remove();
+							
+						break;
+						default:
+							alert("There was an error, see the error console for more information");
+							console.log("There was an error with removePasswords: "+data);
+					}
+				},
+				error: function() {
+					
+				},
+				complete: function(status) {
+				}
+			});
+			
+		});
 	}
 	
 	$(target).fadeIn(0);
