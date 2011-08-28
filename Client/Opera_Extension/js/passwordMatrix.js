@@ -102,13 +102,19 @@ function updatePasswordMatrix(sourceArray)
 		
 		//add click handler to the H3
 		$(tmpObj).find("h3").single_double_click(function(event){
+			/**
+				single Click - show/hide URLS
+			*/
 			event.preventDefault();
-			//single Click
-			showPasswordsForURL(this);
+			
+			togglePasswordsForURL(this);
 		},
 		function(event){
+			/**
+				double Click - Edit URL
+			*/
 			var objClicked = this;	//this is used in the callback context later
-			//double Click - change h3 into an input box
+			
 			event.preventDefault();
 			
 			//TODO: replace prompt with something better
@@ -187,48 +193,57 @@ function updatePasswordMatrix(sourceArray)
 /**
 	AJAX's the passwords for the clicked URL 
 */
-function showPasswordsForURL(srcH3)
+function togglePasswordsForURL(srcH3)
 {
-	$MS.getPasswords($(srcH3).text(),{
-		beforeSend: function() {},
-		complete: function(jq,textStatus,errorThrown) {},
-		success: function(data,textStatus,jq) {
-			
-			parsedObject = $.parseJSON(data);
-			switch(parsedObject.status)
-			{
-				case "ok":
-					credentialsObj = $MC.decodeAndDecrypt(parsedObject.data.Credentials)
-					//object of key-value pairs
-					var table = $(srcH3).parent().find("table"),
-						tableBody = table.find("tbody");
-					
-					tableBody.empty();
-					
-					for(index in credentialsObj)
-					{
-						tableBody.append(
-							$("<tr>").append(
-								$("<td>").text(index),
-								$("<td>").append(
-									$("<input type='password' onfocus='revealPassword(this);' onblur='rehidePassword(this);'>").val(credentialsObj[index])
-								)
-							)
-						);
-					}
-					
-					$(srcH3).parent().find(".dropDownContent").slideDown(0);
-					
-				break;
-				default:
-					console.log("An Error Has Occurred with the data:"+parsedObject);
+	if($(srcH3).hasClass('expanded'))
+	{
+		$(srcH3).siblings("div.dropDownContent").hide();
+		$(srcH3).removeClass('expanded');
+	}
+	else
+	{
+		$MS.getPasswords($(srcH3).text(),{
+			beforeSend: function() {},
+			complete: function(jq,textStatus,errorThrown) {},
+			success: function(data,textStatus,jq) {
 				
+				parsedObject = $.parseJSON(data);
+				switch(parsedObject.status)
+				{
+					case "ok":
+						credentialsObj = $MC.decodeAndDecrypt(parsedObject.data.Credentials)
+						//object of key-value pairs
+						var table = $(srcH3).parent().find("table"),
+							tableBody = table.find("tbody");
+						
+						tableBody.empty();
+						
+						for(index in credentialsObj)
+						{
+							tableBody.append(
+								$("<tr>").append(
+									$("<td>").text(index),
+									$("<td>").append(
+										$("<input type='password' onfocus='revealPassword(this);' onblur='rehidePassword(this);'>").val(credentialsObj[index])
+									)
+								)
+							);
+						}
+						
+						$(srcH3).parent().find(".dropDownContent").slideDown(0);
+						$(srcH3).addClass('expanded');
+						
+					break;
+					default:
+						console.log("An Error Has Occurred with the data:"+parsedObject);
+					
+				}
+			},
+			error: function(jq,textStatus,errorThrown){
+				console.log("An unexpected error has occurred ("+textStatus+"): " + errorThrown);
 			}
-		},
-		error: function(jq,textStatus,errorThrown){
-			console.log("An unexpected error has occurred ("+textStatus+"): " + errorThrown);
-		}
-	});
+		});
+	}
 }
 
 
@@ -240,11 +255,11 @@ function doListFiltering(){
 	if(stringValue!== "")
 	{		
 		//filter based on stringValue
-		$("#PasswordList li").hide(0);
-		$("#PasswordList li h3:contains('"+stringValue+"')").parent().show(0);
+		$("#PasswordList li").hide();
+		$("#PasswordList li h3:contains('"+stringValue+"')").parent().show();
 	}
 	else
 	{
-		$("#PasswordList li").show(0);
+		$("#PasswordList li").show();
 	}
 }

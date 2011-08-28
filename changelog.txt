@@ -1,14 +1,22 @@
+************************************
+MintSync (working title) Changelog
+************************************
+
 10:53 28/08/2011
 ================
-
 Client
 ------
 Implemented URL removal with rudimentary confirmation
 Commented out CSS that was causing errors cluttering the console
+Added ability to rehide passwords on the password matrix
+Altered the InjectedJS to post a message to the background process with the current URL
+Added option to store the password in the background process for per-browser-session password storage
+Fixed bug in popup if the credentials are fetched more than once
 
 Server
 ------
 Implemented new verb "remove"
+Refactored the server to make space for a user interface
 
 
 08:08 27/08/2011

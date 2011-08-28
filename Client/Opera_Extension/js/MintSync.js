@@ -19,7 +19,7 @@ function MintSync() {
 		$.ajax({
 			type: "POST",
 			data: {URL:Domain},
-			url:this.getServerURL()+"?action=retrieve",
+			url:this.getServerURL()+"?AJAX=true&action=retrieve",
 			beforeSend: function(jq,settings) {
 				if(callbacks.beforeSend != undefined)
 					callbacks.beforeSend(jq,settings);
@@ -47,7 +47,7 @@ function MintSync() {
 		$.ajax({
 			type: "POST",
 			data: {URL:Domain},
-			url:this.getServerURL()+"?action=check",
+			url:this.getServerURL()+"?AJAX=true&action=check",
 			beforeSend: function(jq,settings) {
 				if(callbacks.beforeSend != undefined)
 					callbacks.beforeSend(jq,settings);
@@ -74,7 +74,7 @@ function MintSync() {
 			
 		$.ajax({
 			type: "POST",
-			url:this.getServerURL()+"?action=list",
+			url:this.getServerURL()+"?AJAX=true&action=list",
 			beforeSend: function(jq,settings) {
 				if(callbacks.beforeSend != undefined)
 					callbacks.beforeSend(jq,settings);
@@ -104,7 +104,7 @@ function MintSync() {
 		$.ajax({
 			type: "POST",
 			data: {"URL":Domain,"Credentials":Credentials,"rowSalt":rowSalt,"force":force},
-			url:this.getServerURL()+"?action=save",
+			url:this.getServerURL()+"?AJAX=true&action=save",
 			beforeSend: function(jq,settings) {
 				if(callbacks.beforeSend != undefined)
 					callbacks.beforeSend(jq.settings);
@@ -130,7 +130,7 @@ function MintSync() {
 		$.ajax({
 			type: "POST",
 			data: {"ID":ID,"URL":url},
-			url:this.getServerURL()+"?action=remove",
+			url:this.getServerURL()+"?AJAX=true&action=remove",
 			beforeSend: function(jq,settings) {
 				if(callbacks.beforeSend != undefined)
 					callbacks.beforeSend(jq,settings);
@@ -157,7 +157,7 @@ function MintSync() {
 		$.ajax({
 			type: "POST",
 			data: {"ID":ID,"newURL":newDomain},
-			url:this.getServerURL()+"?action=rename",
+			url:this.getServerURL()+"?AJAX=true&action=rename",
 			beforeSend: function(jq,settings) {
 				if(callbacks.beforeSend != undefined)
 					callbacks.beforeSend(jq,settings);
@@ -194,7 +194,7 @@ function MintSync() {
 	},	
 	/**
 		Returns a string type that contains a hex representation of 
-			the password hash (SHA-512);
+			the password hash (SHA-512), this is the MASTER Key
 			
 			This *should* be salted really, however the salt would have to be saved
 				could this be saved server-side?
@@ -207,6 +207,21 @@ function MintSync() {
 				widget.preferences["SavedPassword"] = this.requestPassword();
 				
 			return widget.preferences["SavedPassword"];
+		}
+		else if (widget.preferences["SavePassword"]==0.8)
+		{
+			var passwd;
+			//get the password from the background process
+			passwd = opera.extension.bgProcess.mintSyncGlobals.passwd;
+			if(passwd==undefined)
+			{
+				passwd = this.requestPassword();
+				//set the password in the background process
+				opera.extension.bgProcess.mintSyncGlobals.passwd = passwd;
+			}
+			
+			return passwd;
+				
 		}
 		else if (widget.preferences["SavePassword"]==0.5)
 		{

@@ -117,7 +117,7 @@ function getPasswords(domainName) {
 				case "ok":
 				
 					credentialsObj = $MC.decodeAndDecrypt(parsedObject.data.Credentials)
-					
+					$("#retrieveOutput tbody").empty();
 					for(var index in credentialsObj) {
 						//this is done like this to ensure that the values don't screw up the HTML
 						// if they contain any special characters (<> etc)
