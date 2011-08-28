@@ -30,6 +30,13 @@ a:visited, a:link
 	color: inherit;
 }
 
+.mini-instructions {
+	opacity: 0.5;
+	font-size: smaller;
+	margin-left: 2ex;
+	text-shadow: none;
+}
+
 input {
 	background: #eee;
 	border: 1px solid #eee;
@@ -132,4 +139,8 @@ table tbody input {
 	font-family: monospace;
 	border-radius: 3px;
 	box-shadow: inset 1px 1px 1px #666;
+}
+
+table.results tr td:nth-child(1) {
+	width: 40%;
 }

@@ -100,13 +100,6 @@ input {
 	font-family: monospace;
 }
 
-.mini-instructions {
-	opacity: 0.5;
-	font-size: smaller;
-	margin-left: 2ex;
-	text-shadow: none;
-}
-
 /** Internal Scrolling **/
 #inputPassContainer {
 	max-height: 98px;

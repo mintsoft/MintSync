@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <widget xmlns="http://www.w3.org/ns/widgets" id="http://mintsoft.net/MintSync" >
-	<name>MintSync - v0.2</name>
+	<name>MintSync - v0.4</name>
 	<description>Secure client-side decrypted password storage</description>
 	<author href="yourURL" email="rob@mintsoft.net">Rob Emery</author>
 	<access origin="*"/>
-	<preference name = "ServerURL" 				value = "https://set-alt.home/code/MintSync/Server/"	readonly = "false"/>
-	<preference name = "SavePassword" 			value = "0"		readonly = "false"/>
-	<preference name = "Notify"	 				value = "1"		readonly = "false"/>
-	<preference name = "AutoFetch"	 			value = "0"		readonly = "false"/>
-	<preference name = "Cipher" 					value = "aes"	readonly = "false"/>
-	<preference name = "KeyLength" 				value = "256" 	readonly = "false"/>
-	<preference name = "passwordStrengthNum"		value = "true" readonly = "false" />
-	<preference name = "passwordStrengthPunc1"	value = "true" readonly = "false" />
-	<preference name = "passwordStrengthPunc2"	value = "true" readonly = "false" />
+	<preference name = "ServerURL" 					value = "https://set-alt.home/code/MintSync/Server/"	readonly = "false"/>
+	<preference name = "SavePassword" 				value = "0"		readonly = "false"/>
+	<preference name = "Notify"	 					value = "1"		readonly = "false"/>
+	<preference name = "NotifySource"	 				value = "ajax"	readonly = "false"/>
+	<preference name = "NotifySourceUpdatePeriod"	value = "5"		readonly = "false"/>
+	<preference name = "AutoFetch"	 				value = "0"		readonly = "false"/>
+	<preference name = "Cipher" 						value = "aes"	readonly = "false"/>
+	<preference name = "KeyLength" 					value = "256" 	readonly = "false"/>
+	<preference name = "passwordStrengthNum"			value = "true" readonly = "false" />
+	<preference name = "passwordStrengthPunc1"		value = "true" readonly = "false" />
+	<preference name = "passwordStrengthPunc2"		value = "true" readonly = "false" />
 </widget>
 
 

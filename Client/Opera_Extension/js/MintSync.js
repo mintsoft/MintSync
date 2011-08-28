@@ -5,12 +5,7 @@ jQuery.support.cors = true;
 	MintSync Object
 */
 function MintSync() {
-	/*
-		Get the Server's base URL
-	*/
-	this.getServerURL = function(){
-		return widget.preferences["ServerURL"];
-	}
+	
 	/*
 		Retrieve passwords for the passed domain
 	*/
@@ -98,9 +93,7 @@ function MintSync() {
 		Performs the AJAX request saving the password
 	*/
 	this.setPassword = function(Domain,Credentials,rowSalt,force,callbacks) {
-	
-		//$("#preoutputSave").text("Sent To Webserver:\n"+"Domain: '" +Domain+"'\nCredentials: '"+Credentials+"'\nRowSalt: '"+rowSalt+"'");
-	
+
 		$.ajax({
 			type: "POST",
 			data: {"URL":Domain,"Credentials":Credentials,"rowSalt":rowSalt,"force":force},
@@ -183,10 +176,10 @@ function MintSync() {
 	*/
 	this.requestPassword = function() {
 		var 	password="",
-				shaObj,// = new jsSHA(, "ASCII"),
-				hash;// = shaObj.getHash("SHA-512", "HEX");
+				shaObj,
+				hash;
 		
-		password=prompt("Enter Your Password","myverysecurepassword");
+		password=prompt("Enter Your Master Password","myverysecurepassword");
 		shaObj = new jsSHA(password, "ASCII");
 		hash  = shaObj.getHash("SHA-512", "HEX");
 				
@@ -250,6 +243,12 @@ function MintSync() {
 		return widget.preferences["Notify"]=="1";
 	},
 	/**
+		Get the Server's base URL
+	*/
+	this.getServerURL = function(){
+		return widget.preferences["ServerURL"];
+	},
+	/**
 	Generates a random salt string
 	*/
 	this.generateRowSalt = 	function() {
@@ -281,9 +280,9 @@ function MintSync() {
 		//build	sourceString from preferences
 		sourceString = sourceSet.alpha;
 		
-		sourceString += widget.preferences["passwordStrengthNum"]=="true"	?sourceSet.num:"";
-		sourceString += widget.preferences["passwordStrengthPunc1"]=="true"	?sourceSet.punc1:"";
-		sourceString += widget.preferences["passwordStrengthPunc2"]=="true"	?sourceSet.punc2:"";
+		sourceString += widget.preferences["passwordStrengthNum"]	 == "true"	?sourceSet.num:"";
+		sourceString += widget.preferences["passwordStrengthPunc1"] == "true"	?sourceSet.punc1:"";
+		sourceString += widget.preferences["passwordStrengthPunc2"] == "true"	?sourceSet.punc2:"";
 		
 		for(var x=0;x<length;++x)
 		{

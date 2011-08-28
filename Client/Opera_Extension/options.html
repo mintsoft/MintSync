@@ -30,6 +30,13 @@
 						<input type='radio' name='Notify' id='Notify1' value='1'   	/> <label for='Notify1'>Yes</label>
 						<input type='radio' name='Notify' id='Notify0' value='0'   	/> <label for='Notify0'>No!</label>
 					</li>
+					<li><span class='bigLabel'>Notification Source</span> 
+						<input type='radio' name='NotifySource' id='NotifyAJAX' value='ajax'   	/> <label for='NotifyAJAX'>Live AJAX Data</label>
+						<input type='radio' name='NotifySource' id='NotifyCache' value='cache'   /> <label for='NotifyCache'>Local Cache</label>
+					</li>
+					<li><span class='bigLabel'>Update Period</span> 
+						<input type='number' name='NotifySourceUpdatePeriod' id='NotifySourceUpdatePeriod' min='1' max='360' step='1'/> <label for='NotifySourceUpdatePeriod'>Minutes</label>
+					</li>
 					<li><span class='bigLabel'>Cipher</span>
 						<input type='radio' name='Cipher' id='CipherAES' value='aes'  	/> <label for='CipherAES'>AES</label>
 						<input type='radio' name='Cipher' id='Cipher3DES' value='3des' disabled='disabled' 	/> <span class='disabled'><label for='Cipher3DES'>3DES</label> </span>
@@ -44,7 +51,6 @@
 						<input type='checkbox' name='passwordStrengthNum' id='passwordStrengthNum'  	/> <label for='passwordStrengthNum'>Digits</label>
 						<input type='checkbox' name='passwordStrengthPunc1' id='passwordStrengthPunc1' /> <label for='passwordStrengthPunc1'>Punctuation</label>
 						<input type='checkbox' name='passwordStrengthPunc2' id='passwordStrengthPunc2' /> <label for='passwordStrengthPunc2'>More Punctuation</label>
-						
 					</li>
 				</ul>
 				<div id='saveContainer'>

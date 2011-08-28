@@ -30,6 +30,9 @@ Polish
  - Put together an FAQ/QIWA document
  - Better handling for incorrect passwords - as in actually tell them!
  - Separate the perferences from other objects to make it easier to port
+ - Write up guide for SSL-Client Certificates - (see http://www.vanemery.com/Linux/Apache/apache-SSL.html) 
+ - Tidy Up Options page
+ - AJAX indicators: when the local cache is updated, on the password matrix page
  
 Features
 =============
@@ -47,14 +50,9 @@ Features
 	- store the salt server side for "cloudness" ?
 	- "Backup" local encryption keys & Salt if applicable
  - Master password changing
- 
-N.B. If entropy is need anywhere: 
-	reimplement with a custom entroy gatherer; inject into every page and gather entropy from the entire browser session?
 
 Wish-List
 ================
- - Feedback from pre-alpha tester 
-	wants a local cache maintained of urls with polling to update
  - "Server Settings" page for config and backup
  - Copy and tweak the proof of concept page and add it as a server-user interface
  - Potential parallel encryption, data encrypted by multiple algorithms and saved so if the user is
@@ -78,6 +76,8 @@ Done List!
  - Master "view all passwords" page with the ability to update URLs?
  - Implement the ability to delete URLS
  - Need to add handler to update the notification when the URL on the tab changes not just on tabfocus
+ - Feedback from pre-alpha tester 
+	wants a local cache maintained of urls with polling to update
 
 
 Licensing

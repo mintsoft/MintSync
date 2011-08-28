@@ -2,8 +2,45 @@
 
 /** Persistant variables for browserSession */
 var mintSyncGlobals = {
-	'passwd': undefined
+	'passwd': undefined,
+	'cacheTimer': undefined,
+	'urlCache': []
 };
+
+/**
+	Callback executed by the AJAX request, 	
+*/
+function mint_handleNotificationIcon(data,theButton)
+{
+	var parsedResult = data;	//already an object
+	if(typeof data=="string")	//JSON that needs parsing
+		parsedResult = $.parseJSON(data);
+	
+	switch(parsedResult.status)
+	{
+		case "ok":
+			if(parsedResult.data>0)
+			{
+				theButton.badge.textContent=" * ";
+				theButton.badge.backgroundColor='#00D100';
+			}
+			else
+			{
+				theButton.badge.textContent="";
+				theButton.badge.backgroundColor='#cccccc';
+			}
+		break;
+		case "fail":
+			theButton.badge.textContent="!";
+			theButton.badge.backgroundColor='#FFFF00';
+			console.log("Failed: "+parsedResult.data.reason);
+		break;
+		default:
+			theButton.badge.textContent="X!";
+			theButton.badge.backgroundColor='#DD0000';
+			console.log("An unknown state has been reached: "+data);
+	}
+}
 
 /**
 	Function to perform the notification on the button if enabled
@@ -12,39 +49,33 @@ function mint_handleNotify(URL,theButton)
 {
 	if($MS.getNotify())
 	{
-		$MS.checkIfPasswordsExist(URL,{
-			error: function(textStatus,errorThrown) {
-				console.log("An AJAX Error Occurred:" + textStatus + "\n" + errorThrown);
-			},
-			success: function(data) {
-				var parsedResult = $.parseJSON(data);
+		switch(widget.preferences["NotifySource"])
+		{
+			case "cache":
 				
-				switch(parsedResult.status)
-				{
-					case "ok":
-						if(parsedResult.data>0)
-						{
-							theButton.badge.textContent=" * ";
-							theButton.badge.backgroundColor='#00D100';
-						}
-						else
-						{
-							theButton.badge.textContent="";
-							theButton.badge.backgroundColor='#cccccc';
-						}
-					break;
-					case "fail":
-						theButton.badge.textContent="!";
-						theButton.badge.backgroundColor='#FFFF00';
-						console.log("Failed: "+parsedResult.data.reason);
-					break;
-					default:
-						theButton.badge.textContent="X!";
-						theButton.badge.backgroundColor='#DD0000';
-						console.log("An unknown state has been reached: "+data);
-				}
-			}
-		});
+			//	console.log("Processing Notification Request from: cache");
+				
+				mint_handleNotificationIcon({
+					'status':'ok',
+					'data': ($.inArray(URL.toLowerCase(),mintSyncGlobals.urlCache)===-1)?0:1
+				},theButton);
+				
+			break;
+
+			case "ajax":
+			default:
+
+			//	console.log("Processing Notification Request from: AJAX");
+				
+				$MS.checkIfPasswordsExist(URL,{
+					error: function(textStatus,errorThrown) {
+						console.log("An AJAX Error Occurred:" + textStatus + "\n" + errorThrown);
+					},
+					success: function(data){
+						mint_handleNotificationIcon(data,theButton);
+					}
+				});
+		}
 	}
 	else
 	{	//reset to no notification visible
@@ -52,6 +83,35 @@ function mint_handleNotify(URL,theButton)
 		theButton.badge.backgroundColor='#cccccc';
 	}
 }
+
+/**
+	Function called by the timer and will update the local URL cache used by the notification icon
+*/
+function updateLocalURLCache()
+{
+	clearTimeout(mintSyncGlobals.cacheTimer);
+	//console.log("updating local cache");
+	
+	//fetch the list of URLS and keep them in a cache
+	$MS.listURLS({
+		success: function(data){
+			var parsedObj = $.parseJSON(data);
+			
+			mintSyncGlobals.urlCache = [];
+			
+			for(var x in parsedObj.data)
+			{
+				mintSyncGlobals.urlCache.push(parsedObj.data[x].URL.toLowerCase());
+			}
+		},
+		error: function(){
+			
+		},
+	});
+	
+	mintSyncGlobals.cacheTimer = setTimeout(updateLocalURLCache,60000*widget.preferences["NotifySourceUpdatePeriod"]);
+}
+
 
 /** Entry Point **/
 window.addEventListener("load", function(){
@@ -112,7 +172,27 @@ window.addEventListener("load", function(){
 			case "popup":
 
 			break;
+			
+			case "options":
+				if(event.data.action=='stopLocalCache')
+				{
+					clearTimeout(mintSyncGlobals.cacheTimer);
+					mintSyncGlobals.urlCache = [];
+				}
+				else if(event.data.action='startLocalCache')
+				{
+					updateLocalURLCache();		
+				}
+			break;
 		}
+	}
+	
+	//Optional NotifySource system,
+	// if the notifysource is configured to local cache, then maintain a local cache every x mins
+	if($MS.getNotify() && widget.preferences["NotifySource"]==="cache")
+	{
+		//updates the cache and retriggers the timeout
+		updateLocalURLCache();		
 	}
 	
 }, false);
