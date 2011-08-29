@@ -33,8 +33,11 @@ $(document).ready(function(){
 	//add variable width button
 	$("#variableWidth").click(function(){
 		containerWidthKey = 1-containerWidthKey;
-		$("#mint_matrixContainer").css({"width":containerWidth[containerWidthKey]});
 		
+		$('#mint_matrixContainer').animate({
+			width: containerWidth[containerWidthKey],
+			}, 'slow', 'swing');
+
 		tmp = varWidthButtonText;
 		varWidthButtonText=$("#variableWidth").text();
 		$("#variableWidth").text(tmp);

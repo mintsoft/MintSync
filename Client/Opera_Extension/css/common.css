@@ -16,7 +16,7 @@ body {
 }
 
 /** Remove Bulletpoints */
-#prefform, #prefform ul{
+ul{
 	list-style:none;
 }
 
@@ -28,6 +28,21 @@ p {
 a:visited, a:link
 {
 	color: inherit;
+}
+
+/** Main Container for options & fullscreen things **/
+.mint_mainContainer
+{
+	width: 50em;
+	min-width: 50em;
+	margin-top: 4ex;
+	margin-bottom: 4ex;
+	margin-left: auto;
+	margin-right: auto;
+	background: #fcfcfc;
+	padding: 2ex;
+	box-shadow: 2px 2px 10px #666;
+	border-radius: 5px;
 }
 
 .mini-instructions {

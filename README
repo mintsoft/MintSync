@@ -33,23 +33,25 @@ Polish
  - Write up guide for SSL-Client Certificates - (see http://www.vanemery.com/Linux/Apache/apache-SSL.html) 
  - Tidy Up Options page
  - AJAX indicators: when the local cache is updated, on the password matrix page
+ - Massively tidy up the server-user interface
  
 Features
 =============
+ - Master password changing
  - Optional domain rather than URL matching (wildcards perhaps)
+ 
  - User Authentication 
 	- Hash exchange?
 		-Implications for "remembering" password
 	- Basic auth or integrated in?
 	- If Opera ever supports SSO Style Kerberos/NTLM then NTLM auth?
+ 
  - Review AES256 implementation and check the quality of it, especially PRNG/random seeding where used
- - "Backup database" option, CSV export or something
-	Probably as part of the server "config/maintenance" page
+ 
  - Optional Master-Password salting 
 	- ability to add and change salt
 	- store the salt server side for "cloudness" ?
 	- "Backup" local encryption keys & Salt if applicable
- - Master password changing
 
 Wish-List
 ================
@@ -78,26 +80,9 @@ Done List!
  - Need to add handler to update the notification when the URL on the tab changes not just on tabfocus
  - Feedback from pre-alpha tester 
 	wants a local cache maintained of urls with polling to update
+ - "Backup database" option, CSV export or something
+	Probably as part of the server "config/maintenance" page
 
-
-Licensing
-=========
-This is released under the Apache 2.0 Licence:
-
-	Copyright 2011 Robert Emery
-
-	   Licensed under the Apache License, Version 2.0 (the "License");
-	   you may not use this file except in compliance with the License.
-	   You may obtain a copy of the License at
-
-		   http://www.apache.org/licenses/LICENSE-2.0
-
-	   Unless required by applicable law or agreed to in writing, software
-	   distributed under the License is distributed on an "AS IS" BASIS,
-	   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	   See the License for the specific language governing permissions and
-	   limitations under the License.
-		
 Libraries and Attributions
 ===========================
 

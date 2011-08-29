@@ -2,6 +2,21 @@
 MintSync (working title) Changelog
 ************************************
 
+14:08 29/08/2011
+================
+Moved licensing information into a LICENCE file
+
+Client
+------
+Added animation to the password matrix expanding option
+Refactored css to put styling on main containers in common.css
+
+Server
+------
+Added incredibly basic user interface to server component
+Implemented CSV export of encrypted passwords
+
+
 10:53 28/08/2011
 ================
 Client
