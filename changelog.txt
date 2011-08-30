@@ -2,6 +2,21 @@
 MintSync (working title) Changelog
 ************************************
 
+
+19:59 30/08/2011
+================
+
+Client
+------
+Refactored some of the JS and classes to make things smoother for the server UI styling
+Renamed and moved some options around
+
+Server
+------
+Added dbDump into the "ui"
+Added check to block requests not using HTTPS
+
+
 14:08 29/08/2011
 ================
 Moved licensing information into a LICENCE file

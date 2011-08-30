@@ -1,5 +1,6 @@
 /* Reset All */
-* {
+* 
+{
 	padding: 0px;
 	margin: 0px;
 	border: 0px;
@@ -8,7 +9,8 @@
 }
 
 /* Set background and font */
-body {
+body 
+{
 	font-family: "trebuchet ms",Sans-Serif;
 	font-size: small;
 	color: #111;
@@ -16,12 +18,14 @@ body {
 }
 
 /** Remove Bulletpoints */
-ul{
+ul
+{
 	list-style:none;
 }
 
 /* Remargin p's */
-p {
+p 
+{
 	margin: 1ex 1em;
 }
 
@@ -45,14 +49,16 @@ a:visited, a:link
 	border-radius: 5px;
 }
 
-.mini-instructions {
+.mini-instructions 
+{
 	opacity: 0.5;
 	font-size: smaller;
 	margin-left: 2ex;
 	text-shadow: none;
 }
 
-input {
+input 
+{
 	background: #eee;
 	border: 1px solid #eee;
 	padding: 1ex 2ex;
@@ -61,40 +67,48 @@ input {
 	color: #666;
 }
 
-input[type='text'] {
+input[type='text'] 
+{
 	width: 30em;
 }
 
-input[type='checkbox'] {
+input[type='checkbox'] 
+{
 	border-radius: 0px;
 	padding: 0px;
 	border: 1px solid #ddd;
 }
 
-input[type='radio'] {
-	margin-left: 2em;
+input[type='radio'] 
+{
+	margin-left: 1em;
 }
-input[type='radio']:nth-of-type(1) {
+input[type='radio']:nth-of-type(1) 
+{
 	margin-left: 0px;
 }
 
-input[type='text']:focus, input[type='submit'], button, input[type='button'] {
+input[type='text']:focus, input[type='submit'], button, input[type='button'] 
+{
 	color: #111;
 }	
 
-input[type='submit'], button, input[type='button'] {
+input[type='submit'], button, input[type='button'] 
+{
 	border: 0px;
 	box-shadow: 1px 1px 5px #666;
 }
 
 /** Hidden from display **/
-.hidden {
+.hidden 
+{
 	display: none;
 }
 
 /*Table Handling for Popup and matrix */
 /** Results Table */
-table {
+table 
+{
 /*
 	border-collapse: collapse;
 	border: 1px solid rgba(160,160,160,0.8);
@@ -104,48 +118,58 @@ table {
 	box-shadow: 1px 1px 2px #666;
 	
 	background: none;
-	width: 100%;
+	
 	
 	border-radius:3px;	
 }
 
-table thead tr th:first-child {
+table thead tr th:first-child 
+{
 	border-top-left-radius:3px
 }
 
-table thead tr th:last-child {
+table thead tr th:last-child 
+{
 	border-top-right-radius:3px
 }
-table tr:last-child td:first-child {
+table tr:last-child td:first-child 
+{
 	border-bottom-left-radius:3px
 }
 	
-table tr:last-child td:last-child {
+table tr:last-child td:last-child 
+{
 	border-bottom-right-radius:3px
 }
 	
-table td {
+table td 
+{
 	font-family: monospace;
 }
 
-table thead th, table td {
+table thead th, table td 
+{
 	padding: 0.5ex 1ex;
 }
-table tbody tr:nth-child(even), ul.zebra li:nth-child(odd) {
+table tbody tr:nth-child(even), ul.zebra li:nth-child(odd) 
+{
 /*	background: rgba(128,128,128,0.2);	*/
 	background-image: -o-linear-gradient(top,rgba(192,192,192,0.45) 0%, rgba(128,128,128,0.2) 15%, rgba(128,128,128,0.2) 85%, rgba(192,192,192,0.45) 100%);
 	
 }
-table tbody tr:nth-child(odd), ul.zebra li:nth-child(even) {	/* Light Rows*/
+table tbody tr:nth-child(odd), ul.zebra li:nth-child(even) 
+{	/* Light Rows*/
 /*	background: rgba(192,192,192,0.2);	*/
 	background-image: -o-linear-gradient(top,rgba(192,192,192,0.45) 0%, rgba(255,255,255,0.9) 15%, rgba(255,255,255,0.9) 85%, rgba(192,192,192,0.45) 100%);
 }
-table thead th {
+table thead th 
+{
 	background: -o-linear-gradient(rgba(10,10,10,0.8),rgba(10,10,10,0.7));
 	color: rgba(240,240,240,1);
 	text-shadow: rgba(255,255,255,0.2) 1px -1px 2px;
 }
-table tbody input {
+table tbody input 
+{
 	display: block;
 	width: 20em !important;
 	height: auto 	!important;
@@ -156,6 +180,59 @@ table tbody input {
 	box-shadow: inset 1px 1px 1px #666;
 }
 
-table.results tr td:nth-child(1) {
+table.results tr td:nth-child(1) 
+{
 	width: 40%;
+}
+
+/**
+ul's for password matrix and server user interface
+*/
+ul.styled
+{
+	border: 1px solid #aaa;
+	border-radius: 3px;
+	background: rgba(160,160,160,0.2);
+}
+
+ul.styled li 
+{
+	padding: 1ex 0ex;
+}
+
+ul.styled li>h3, ul.styled li>a, ul.styled li>span
+{
+	padding:0px;
+	margin: 0px;
+	text-overflow: ellipsis;
+	overflow-x: hidden;
+	white-space: nowrap;
+	margin-left: 1em;
+
+}
+
+ul.styled li .binIcon 
+{
+	float: right;
+	position: relative;
+	/* nice hacky positioning here */
+	top: 2px;
+	right: 5px;
+	cursor: pointer;
+}
+
+ul.styled li 
+{
+	border-bottom: 1px solid #aaa;
+}
+
+ul.styled li:last-of-type 
+{
+	border-bottom: 0px;
+}
+
+ul.styled li table 
+{
+	margin: 2ex auto 2ex auto;
+	width: 90%;
 }
