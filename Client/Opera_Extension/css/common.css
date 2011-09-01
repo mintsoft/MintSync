@@ -216,8 +216,7 @@ ul.styled li .binIcon
 	float: right;
 	position: relative;
 	/* nice hacky positioning here */
-	top: 2px;
-	right: 5px;
+	top: -1ex;
 	cursor: pointer;
 }
 

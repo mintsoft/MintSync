@@ -95,6 +95,15 @@ function delPair(fromHere)
 	Retrieve passwords for domain name
 */
 function getPasswords(domainName) {
+	domainName=$.trim(domainName);
+	if($.trim(domainName)=="")
+	{
+		$("#fetchErrorDiv").text("No URL entered, try refreshing the tab");
+		return;
+	}
+	
+	//clear the error text
+	$("#fetchErrorDiv").text("");
 	$MS.getPasswords(domainName, {
 		beforeSend: function(){
 			$("#fetchDiv").hide(0);
@@ -104,47 +113,39 @@ function getPasswords(domainName) {
 			$("#loadingDiv").hide(0);
 			$("#fetchDiv").show(0);
 		},
-		success : function(data){
+		success : function(requestdata){
 			var outputStr = "",
 				decryptedJSON = "",
 				key = "",
 				base64decoded="",
 				innerHTML="";
-						
-			parsedObject = $.parseJSON(data);
-			switch(parsedObject.status)
-			{
-				case "ok":
-				
-					credentialsObj = $MC.decodeAndDecrypt(parsedObject.data.Credentials)
-					$("#retrieveOutput tbody").empty();
-					for(var index in credentialsObj) {
-						//this is done like this to ensure that the values don't screw up the HTML
-						// if they contain any special characters (<> etc)
-						$("#retrieveOutput tbody").append(
-							$("<tr>").append(
-								$("<td>").text(index),
-								$("<td>").append(
-									$("<input type='password' onfocus='revealPassword(this);' onblur='rehidePassword(this);'>").val(credentialsObj[index])
-								)
+
+				credentialsObj = $MC.decodeAndDecrypt(requestdata.data.Credentials, requestdata.data.Salt)
+				$("#retrieveOutput tbody").empty();
+				for(var index in credentialsObj) {
+					//this is done like this to ensure that the values don't screw up the HTML
+					// if they contain any special characters (<> etc)
+					$("#retrieveOutput tbody").append(
+						$("<tr>").append(
+							$("<td>").text(index),
+							$("<td>").append(
+								$("<input type='password' onfocus='revealPassword(this);' readonly='readonly' onblur='rehidePassword(this);'>").val(credentialsObj[index])
 							)
-						);
-					}
-					$("#retrieveOutput").show(0);
-					
-				break;
-				case "fail":
-				
-					outputStr = parsedObject.data.reason;
-					
-				break;
-				default:
-				
-			}
-			//$('#preoutput').text(outputStr);
+						)
+					);
+				}
+				$("#retrieveOutput").show(0);
 		},
-		error: function(textStatus,errorThrown){
-			alert("An Error Occurred:" + textStatus + "\n" + errorThrown);
+		error: function(jq,textStatus,errorThrown){
+			if(jq.status==404)	//no password!
+			{
+				$("#fetchErrorDiv").text("No credentials were found for this URL");
+			}
+			else
+			{
+				$("#fetchErrorDiv").text("An undefined error has occurred, see the error console for more information");
+				console.log("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);
+			}
 		}
 	});
 }
@@ -153,7 +154,7 @@ function getPasswords(domainName) {
 	Send Credentials Data for Domain
 */
 function setPassword() {
-	var domainName=$("#domainName").val(),
+	var domainName=$.trim($("#domainName").val()),
 		RowSalt = $MS.generateRowSalt(),
 		encryptedData = "",
 		CredentialsObj = new Object(),
@@ -175,24 +176,19 @@ function setPassword() {
 	//check is overwrites are allowed (force)
 	force = $("#canForceWrite:checked").val();
 	$MS.setPassword(domainName,encryptedData,RowSalt,force,{
-		error: function(textStatus,errorThrown) {
-			alert("An AJAX Error Occurred:" + textStatus + "\n" + errorThrown);
-		},
-		success: function(data) {
-			var parsedResult = $.parseJSON(data);
-			
-			switch(parsedResult.status)
-			{
-				case "ok":
-					$("#saveOutput").text("Credentials Saved");
-				break;
-				case "fail":
-					$("#saveOutput").text("Save Failed: "+parsedResult.data.reason);
-				break;
-				default:
-					$("#saveOutput").text("An unknown state has been reached: "+data);
+		error: function(jq,textStatus,errorThrown) {
+			if(jq.status==409)
+			{	
+				$("#saveOutput").text("Save Failed: This URL Already exists");
 			}
-			
+			else
+			{
+				$("#saveOutput").text("An undefined error has occurred, see the error console for more information");
+				console.log("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);
+			}
+		},
+		success: function(requestdata) {
+			$("#saveOutput").text("Credentials Saved");
 			//uncheck the overwrite box
 			$("#canForceWrite").attr("checked",false);
 		},

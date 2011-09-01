@@ -2,6 +2,17 @@
 MintSync (working title) Changelog
 ************************************
 
+19:43 01/09/2011
+================
+
+Client
+------
+Altered Extension to work with the REST-like structure
+Improved error handling significantly
+
+Server
+------
+Changed the server to use a more REST like structure
 
 19:59 30/08/2011
 ================

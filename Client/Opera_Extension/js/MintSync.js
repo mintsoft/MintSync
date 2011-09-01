@@ -12,7 +12,7 @@ function MintSync() {
 	this.getPasswords = function(Domain, callbacks) {
 			
 		$.ajax({
-			type: "POST",
+			type: "GET",
 			data: {URL:Domain},
 			url:this.getServerURL()+"?AJAX=true&action=retrieve",
 			beforeSend: function(jq,settings) {
@@ -25,7 +25,7 @@ function MintSync() {
 			},
 			error: function(jq,textStatus,errorThrown) {
 				if(callbacks.error != undefined)
-					callbacks.error(textStatus,errorThrown);
+					callbacks.error(jq,textStatus,errorThrown);
 			},
 			success: function(data,textStatus,jq) {
 				if(callbacks.success != undefined)
@@ -40,7 +40,7 @@ function MintSync() {
 	this.checkIfPasswordsExist = function(Domain,callbacks) {
 			
 		$.ajax({
-			type: "POST",
+			type: "GET",
 			data: {URL:Domain},
 			url:this.getServerURL()+"?AJAX=true&action=check",
 			beforeSend: function(jq,settings) {
@@ -68,7 +68,7 @@ function MintSync() {
 	this.listURLS = function(callbacks) {
 			
 		$.ajax({
-			type: "POST",
+			type: "GET",
 			url:this.getServerURL()+"?AJAX=true&action=list",
 			beforeSend: function(jq,settings) {
 				if(callbacks.beforeSend != undefined)
@@ -108,7 +108,7 @@ function MintSync() {
 			},
 			error: function(jq,textStatus,errorThrown) {
 				if(callbacks.error != undefined)
-					callbacks.error(textStatus,errorThrown);
+					callbacks.error(jq,textStatus,errorThrown);
 			},
 			success: function(data,textStatus,jq) {
 				if(callbacks.success != undefined)
@@ -121,9 +121,8 @@ function MintSync() {
 	
 	this.removePasswords = function(ID,url,callbacks) {
 		$.ajax({
-			type: "POST",
-			data: {"ID":ID,"URL":url},
-			url:this.getServerURL()+"?AJAX=true&action=remove",
+			type: "DELETE",
+			url:this.getServerURL()+"?AJAX=true&action=remove&ID="+ID,
 			beforeSend: function(jq,settings) {
 				if(callbacks.beforeSend != undefined)
 					callbacks.beforeSend(jq,settings);
@@ -148,7 +147,7 @@ function MintSync() {
 	this.renameURL = function(ID,newDomain,callbacks) {
 	
 		$.ajax({
-			type: "POST",
+			type: "PUT",
 			data: {"ID":ID,"newURL":newDomain},
 			url:this.getServerURL()+"?AJAX=true&action=rename",
 			beforeSend: function(jq,settings) {

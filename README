@@ -14,7 +14,6 @@ In no particular order except where ordered:
 Polish
 ======
  - Add user instructions
- - Better Error Handling
  - Better User Feedback
  - Add confirmation to the allow overwrite
  - Tidy up animations & stuff to make things attractive
@@ -23,7 +22,6 @@ Polish
  - Think of a way to do something more interesting with the state of the form
 	is there an extension "always on top" option or something similiar?	
 	possibly store information in the background process?
- - Maybe even "store password for browser session" option
  - Configurable password generation length
  - Address performance issues with password matrix filtering
  - Put together a written description of how it works, detailing what is encrypted when, where and with what
@@ -34,6 +32,7 @@ Polish
  - Tidy Up Options page
  - AJAX indicators: when the local cache is updated, on the password matrix page
  - Massively tidy up the server-user interface
+ - Add Support for more consistent REST systems i.e. https://[irrelivent]/api/credentials/[ID]
  
 Features
 =============
@@ -53,6 +52,7 @@ Features
 	- store the salt server side for "cloudness" ?
 	- "Backup" local encryption keys & Salt if applicable
 
+
 Wish-List
 ================
  - "Server Settings" page for config and backup
@@ -66,6 +66,9 @@ Wish-List
 =====================================================================
 Done List!
 =====================================================================
+ - Maybe even "store password for browser session" option
+ - Better Error Handling
+ - Reimplement "server" using a more consistent REST paradigm
  - Alternative way to trigger password generation, middle button? or configurable perhaps
  - Reset Allow Overwrite when the Submit request has returned
  - Highting pages with stored credentials
@@ -273,3 +276,6 @@ AES:	http://www.movable-type.co.uk/scripts/aes.html
 json2.js:     http://www.JSON.org/json2.js
 
 jquery.tools.min.1.2.5.js: 		http://flowplayer.org/tools/
+
+REST utils:
+	http://www.gen-x-design.com/archives/create-a-rest-api-with-php/

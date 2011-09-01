@@ -53,16 +53,12 @@ $(document).ready(function(){
 			$("#matrixLoading").fadeOut(0);
 		},
 		error: function(jq,textStatus,errorThrown) {
-			Console.log("An error has occurred: "+textStatus,errorThrown);
+			alert("An error occurred whilst listing URLs, this is probably due to not having any saved credentials. See the error console for more information");
+			console.log("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
 		},
-		success: function(data,textStatus,jq) {
-			var parsedData = $.parseJSON(data);
-			
-			if(parsedData.status=="ok")
-			{
-				//create list of domains
-				updatePasswordMatrix(parsedData.data);
-			}
+		success: function(requestdata,textStatus,jq) {
+			//create list of domains
+			updatePasswordMatrix(requestdata.data);
 		},
 	});
 	
@@ -128,24 +124,15 @@ function updatePasswordMatrix(sourceArray)
 			$MS.renameURL(	$(this).parent().find("input[name='ID']").val(), newURL,	{
 					beforeSend: function() {},
 					complete: function() {},
-					success: function(data,textStatus,jq) {
-						var parsedObject = $.parseJSON(data);
-						
-						switch (parsedObject.status)
-						{
-							case "ok":
-								//update the record
-								$(objClicked).text(newURL);
-							break;
-							default:
-								alert("There was a serious error, see the error console");
-								console.log("You have reached an undefined state: "+data);
-						}
+					success: function(requestdata,textStatus,jq) {
+					
+						//update the record
+						$(objClicked).text(newURL);
 						
 					},
-					error: function(jq,textStatus,errorThrown){
-						alert("Error");
-						console.log("Error:"+textStatus+" : "+errorThrown);
+					error: function(jq,textStatus,errorThrown) {
+						alert("There was a serious error, see the error console");
+						console.log("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
 					}
 			});
 			
@@ -165,23 +152,16 @@ function updatePasswordMatrix(sourceArray)
 				beforeSend: function() {
 					
 				},
-				success: function(data,textStatus) {
-					console.log(data);
-					var parsedObj = $.parseJSON(data);	
-					switch(parsedObj.status)
-					{
-						case "ok":
-							//remove the entire li
-							$(srcImg).parent().parent().remove();
-							
-						break;
-						default:
-							alert("There was an error, see the error console for more information");
-							console.log("There was an error with removePasswords: "+data);
-					}
+				success: function(requestdata,textStatus) {
+					console.log(requestdata);
+
+					//remove the entire li
+					$(srcImg).parent().parent().remove();
+
 				},
-				error: function() {
-					
+				error: function(jq,textStatus,errorThrown) {
+					alert("There was an error, see the error console for more information");
+					console.log("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
 				},
 				complete: function(status) {
 				}
@@ -208,42 +188,34 @@ function togglePasswordsForURL(srcH3)
 		$MS.getPasswords($(srcH3).text(),{
 			beforeSend: function() {},
 			complete: function(jq,textStatus,errorThrown) {},
-			success: function(data,textStatus,jq) {
+			success: function(requestdata,textStatus,jq) {
+
+				credentialsObj = $MC.decodeAndDecrypt(requestdata.data.Credentials,requestdata.data.Salt)
+				//object of key-value pairs
+				var table = $(srcH3).parent().find("table"),
+					tableBody = table.find("tbody");
 				
-				parsedObject = $.parseJSON(data);
-				switch(parsedObject.status)
+				tableBody.empty();
+				
+				for(index in credentialsObj)
 				{
-					case "ok":
-						credentialsObj = $MC.decodeAndDecrypt(parsedObject.data.Credentials)
-						//object of key-value pairs
-						var table = $(srcH3).parent().find("table"),
-							tableBody = table.find("tbody");
-						
-						tableBody.empty();
-						
-						for(index in credentialsObj)
-						{
-							tableBody.append(
-								$("<tr>").append(
-									$("<td>").text(index),
-									$("<td>").append(
-										$("<input type='password' onfocus='revealPassword(this);' onblur='rehidePassword(this);'>").val(credentialsObj[index])
-									)
-								)
-							);
-						}
-						
-						$(srcH3).parent().find(".dropDownContent").slideDown(0);
-						$(srcH3).addClass('expanded');
-						
-					break;
-					default:
-						console.log("An Error Has Occurred with the data:"+parsedObject);
-					
+					tableBody.append(
+						$("<tr>").append(
+							$("<td>").text(index),
+							$("<td>").append(
+								$("<input type='password' onfocus='revealPassword(this);' readonly='readonly' onblur='rehidePassword(this);'>").val(credentialsObj[index])
+							)
+						)
+					);
 				}
+				
+				$(srcH3).parent().find(".dropDownContent").slideDown(0);
+				$(srcH3).addClass('expanded');
+
 			},
 			error: function(jq,textStatus,errorThrown){
-				console.log("An unexpected error has occurred ("+textStatus+"): " + errorThrown);
+				alert("An Error Has Occurred, see the error console for more information");
+				console.log("An unexpected error has occurred ("+jq.status+" "+textStatus+"): " + errorThrown);
 			}
 		});
 	}

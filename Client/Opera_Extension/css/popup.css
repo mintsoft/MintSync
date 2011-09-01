@@ -40,9 +40,9 @@ h2 {
 }
 
 /**
-	Save user notification
+	Save user notification and fetch errors
 */
-#saveOutput {
+#saveOutput, #fetchErrorDiv {
 	padding: 1em;
 	font-size: larger;
 }

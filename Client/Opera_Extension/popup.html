@@ -38,7 +38,6 @@
 					<span>Fetching...</span>
 					<span><img src='img/ajax_load.gif' alt='Loading...' /></span>
 				</div>
-				<pre id='preoutput'></pre>
 				<div id='fetchDiv'>
 					<div id='retrieveOutput' class='hidden' >
 						<table class='results'>
@@ -62,6 +61,8 @@
 					<form action='javascript:void(0);' onsubmit='getPasswords($("#domainInput").val()); return false;'>
 						<p><input type='hidden' name='domain' id='domainInput' /><input type='submit' value='Retrieve'/></p>
 					</form>
+				</div>
+				<div id='fetchErrorDiv'>
 				</div>
 			</fieldset>
 			
