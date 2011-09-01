@@ -122,6 +122,13 @@ function getPasswords(domainName) {
 
 				credentialsObj = $MC.decodeAndDecrypt(requestdata.data.Credentials, requestdata.data.Salt)
 				$("#retrieveOutput tbody").empty();
+
+				//also wipe out the save dialog and remove any boxes already there
+				$("#inputPassContainer img.saveBin").each(function(index,Element){
+					delPair(this);
+				});
+				
+				var counter=0;
 				for(var index in credentialsObj) {
 					//this is done like this to ensure that the values don't screw up the HTML
 					// if they contain any special characters (<> etc)
@@ -133,6 +140,12 @@ function getPasswords(domainName) {
 							)
 						)
 					);
+					
+					//also add this into the save dialog for easy updates
+					addPair();
+					$("#inputPassContainer input[name='inputPassName']").eq(counter).val(index);
+					$("#inputPassContainer input[name='inputPassValue']").eq(counter++).val(credentialsObj[index]);
+					
 				}
 				$("#retrieveOutput").show(0);
 		},

@@ -9,6 +9,9 @@ Client
 ------
 Altered Extension to work with the REST-like structure
 Improved error handling significantly
+Updated the popup to use password inputs
+update the popup to put retrieved credentials into the save/generate tab
+Shrank the input boxes slightly to make space for scrollbars if required
 
 Server
 ------

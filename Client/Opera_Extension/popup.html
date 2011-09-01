@@ -77,8 +77,8 @@
 					<div id='rowTemplate' class='hidden' >
 						<p> 
 							<input type='text' name='inputPassName' class='inputLabel'  /> 
-							<input type='text' name='inputPassValue' class='inputPass'  />
-							<img src='img/del.png' alt='Delete Pair' onclick='delPair(this); return false' class='jsAction' />
+							<input type='password' name='inputPassValue' class='inputPass' onfocus='revealPassword(this);' onblur='rehidePassword(this);' />
+							<img src='img/del.png' alt='Delete Pair' onclick='delPair(this); return false' class='jsAction saveBin' />
 						</p>
 					</div>
 					<p><input type='submit'/><input type='checkbox' name='force' id='canForceWrite' /><label for='canForceWrite'><span class='mini-instructions'>Allow Overwrite</span></label></p>
