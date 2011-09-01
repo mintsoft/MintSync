@@ -15,6 +15,7 @@
 	<preference name = "passwordStrengthNum"			value = "true" readonly = "false" />
 	<preference name = "passwordStrengthPunc1"		value = "true" readonly = "false" />
 	<preference name = "passwordStrengthPunc2"		value = "true" readonly = "false" />
+	<preference name = "GeneratedPasswordLength"	value = "16" 	readonly = "false" />
 </widget>
 
 

@@ -57,8 +57,9 @@ function addPair()
 	
 	target.appendChild(tmpObj);
 	
+	var passwordLength = $MS.getGeneratedPasswordLength();
+	
 	//add click handler
-	var passwordLength = 16; 		//TODO: get this from preferences
 	$(tmpObj).find("input[name='inputPassValue']").mousedown(function(event){
 		if(event.which == 3 && $(this).val()=="" ) 	//right click
 		{
@@ -172,6 +173,12 @@ function setPassword() {
 		encryptedData = "",
 		CredentialsObj = new Object(),
 		force = false;
+	
+	if(domainName=="")
+	{
+		$("#saveOutput").text("Error: No URL entered, no save has occurred");
+		return;
+	}
 	
 	//build JS Object to JSON
 	$("#inputPassContainer").children("p").each(function(index,Element){

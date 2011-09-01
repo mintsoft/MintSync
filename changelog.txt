@@ -12,6 +12,8 @@ Improved error handling significantly
 Updated the popup to use password inputs
 update the popup to put retrieved credentials into the save/generate tab
 Shrank the input boxes slightly to make space for scrollbars if required
+Added option to set the generated password length
+Added validation on URL content when saving
 
 Server
 ------

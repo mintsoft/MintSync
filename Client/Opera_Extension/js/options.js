@@ -15,6 +15,7 @@ $(document).ready(function(){
 	$('input[name="Notify"][value="'+widget.preferences["Notify"]+'"]').prop('checked', true);
 	$('input[name="NotifySource"][value="'+widget.preferences["NotifySource"]+'"]').prop('checked', true);
 	$("#NotifySourceUpdatePeriod").val(widget.preferences["NotifySourceUpdatePeriod"]);
+	$("#GeneratedPasswordLength").val(widget.preferences["GeneratedPasswordLength"]);
 
 	/* generation options */
 	$('#passwordStrengthNum').prop('checked',	widget.preferences["passwordStrengthNum"]=="true");
@@ -32,6 +33,7 @@ function savePrefs() {
 	widget.preferences["Notify"]		= $("input[type=radio][name=Notify]:checked").val();
 	widget.preferences["NotifySource"]	= $("input[type=radio][name=NotifySource]:checked").val();
 	widget.preferences["NotifySourceUpdatePeriod"] = $("#NotifySourceUpdatePeriod").val();
+	widget.preferences["GeneratedPasswordLength"] = $("#GeneratedPasswordLength").val();
 	
 	/* generation options */
 	widget.preferences["passwordStrengthNum"]		= $("#passwordStrengthNum").is(":checked");

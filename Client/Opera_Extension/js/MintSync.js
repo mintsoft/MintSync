@@ -248,6 +248,12 @@ function MintSync() {
 		return widget.preferences["ServerURL"];
 	},
 	/**
+		Returns the password length configured
+	*/
+	this.getGeneratedPasswordLength = function(){
+		return widget.preferences["GeneratedPasswordLength"];
+	},
+	/**
 	Generates a random salt string
 	*/
 	this.generateRowSalt = 	function() {
