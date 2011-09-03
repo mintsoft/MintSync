@@ -3,6 +3,7 @@
 /** Persistant variables for browserSession */
 var mintSyncGlobals = {
 	'passwd': undefined,
+	'authentication': undefined,
 	'cacheTimer': undefined,
 	'urlCache': []
 };
@@ -65,7 +66,7 @@ function mint_handleNotify(URL,theButton)
 			case "ajax":
 			default:
 
-			//	console.log("Processing Notification Request from: AJAX");
+				//console.log("Processing Notification Request from: AJAX");
 				
 				$MS.checkIfPasswordsExist(URL,{
 					error: function(textStatus,errorThrown) {

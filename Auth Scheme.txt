@@ -1,0 +1,7 @@
+BAsed on Amazon S3 authentication
+
+Authorisation: MintSync Username+"|"+Nonce+"|"+ Base64EncodedAuthString
+
+base64EncodedAuthString = SHA512.b64(
+		SHA512.hex(Password)+":"+Nonce
+	)

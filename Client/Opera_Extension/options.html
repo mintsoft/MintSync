@@ -16,7 +16,15 @@
 			<form id="prefform" onsubmit="return false;">
 				<ul class='options'>
 					<li><label for='ServerURL' class='bigLabel'>Server URL</label><input type='text' name='ServerURL' id='ServerURL'/></li>
-					<li><span class='bigLabel'>Save Password</span> 
+					
+					<li><span class='bigLabel'>Save Authentication</span> 
+						<input type='radio' name='SaveAuth' id='SaveAuthY' value='1'   	/> <label for='SaveAuthY'>Yes</label>
+						<input type='radio' name='SaveAuth' id='SaveAuthN' value='0'   	/> <label for='SaveAuthN'>No!</label>
+						<input type='radio' name='SaveAuth' id='SaveAuthS' value='0.5'		/> <label for='SaveAuthS'>Per Dialog Instance</label>
+						<input type='radio' name='SaveAuth' id='SaveAuthB' value='0.8'		/> <label for='SaveAuthB'>Per Browser Session</label>
+					</li>
+					
+					<li><span class='bigLabel'>Save Crypto Password</span> 
 						<input type='radio' name='SavePass' id='SavePassY' value='1'   	/> <label for='SavePassY'>Yes</label>
 						<input type='radio' name='SavePass' id='SavePassN' value='0'   	/> <label for='SavePassN'>No!</label>
 						<input type='radio' name='SavePass' id='SavePassS' value='0.5'		/> <label for='SavePassS'>Per Dialog Instance</label>
@@ -25,17 +33,21 @@
 					<li><span class='bigLabel'>Auto-Retrieve?</span> 
 						<input type='radio' name='AutoFetch' id='AutoFetch1' value='1'   	/> <label for='AutoFetch1'>Yes</label>
 						<input type='radio' name='AutoFetch' id='AutoFetch0' value='0'   	/> <label for='AutoFetch0'>No!</label>
+						<span class='mini-instructions' >Saved Authentication Recommended</span>
 					</li>
 					<li><span class='bigLabel'>Notify On Page?</span> 
 						<input type='radio' name='Notify' id='Notify1' value='1'   	/> <label for='Notify1'>Yes</label>
 						<input type='radio' name='Notify' id='Notify0' value='0'   	/> <label for='Notify0'>No!</label>
+						<span class='mini-instructions' >Requires Either Permanent or Browser Session Saved Authentication</span>
 					</li>
+					
 					<li><span class='bigLabel'>Notification Source</span> 
 						<input type='radio' name='NotifySource' id='NotifyAJAX' value='ajax'   	/> <label for='NotifyAJAX'>Live AJAX Data</label>
 						<input type='radio' name='NotifySource' id='NotifyCache' value='cache'   /> <label for='NotifyCache'>Local Cache</label>
 					</li>
 					<li><span class='bigLabel'>Update Period</span> 
 						<input type='number' name='NotifySourceUpdatePeriod' id='NotifySourceUpdatePeriod' min='1' max='360' step='1'/> <label for='NotifySourceUpdatePeriod'>Minutes</label>
+						<span class='mini-instructions' >Applies to Local Cache Only</span>
 					</li>
 					<li><span class='bigLabel'>Cipher</span>
 						<input type='radio' name='Cipher' id='CipherAES' value='aes'  	/> <label for='CipherAES'>AES</label>
@@ -51,9 +63,11 @@
 						<input type='checkbox' name='passwordStrengthNum' id='passwordStrengthNum'  	/> <label for='passwordStrengthNum'>Digits</label>
 						<input type='checkbox' name='passwordStrengthPunc1' id='passwordStrengthPunc1' /> <label for='passwordStrengthPunc1'>Punctuation</label>
 						<input type='checkbox' name='passwordStrengthPunc2' id='passwordStrengthPunc2' /> <label for='passwordStrengthPunc2'>More Punctuation</label>
+						<span class='mini-instructions' >All Activated is Highly Recommended</span>
 					</li>
 					<li><span class='bigLabel'>Password length</span> 
 						<input type='number' name='GeneratedPasswordLength' id='GeneratedPasswordLength' min='6' step='1'/> <label for='GeneratedPasswordLength'>Characters</label>
+						<span class='mini-instructions' >&ge;16 Characters Highly Recommended</span>
 					</li>
 				</ul>
 				<div id='saveContainer'>

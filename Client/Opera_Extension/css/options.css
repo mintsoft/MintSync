@@ -35,12 +35,12 @@ h2 {
 /* Labels  and Inputs */
 .bigLabel {
 	display: inline-block;
-	width: 10em;
+	width: 12em;
 	font-weight: bold;
 }
 
 ul.options {
-	margin-left: 2em;
+	margin-left: 0.5em;
 	margin-bottom: 4ex;
 }
 

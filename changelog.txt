@@ -2,6 +2,28 @@
 MintSync (working title) Changelog
 ************************************
 
+11:38 03/09/2011
+================
+
+Client
+------
+Implemented a form of digest authentication into client
+Fixed the SHA-Base64 implementation (added padding character definition on line 19)
+
+Server
+------
+Implemented first version of user authentication
+
+20:48 02/09/2011
+================
+Shifted ToDo List into Mantis
+
+Client
+------
+Shifted rowsaltlength definition into a function ready for user-configurability
+Added function ready to handle user authentication
+
+
 19:43 01/09/2011
 ================
 

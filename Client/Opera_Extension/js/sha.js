@@ -16,7 +16,7 @@
 	/* Number of Bits Per character (8 for ASCII, 16 for Unicode) */
 	var charSize = 8, 
 	/* base-64 pad character. "=" for strict RFC compliance */
-	b64pad = "", 
+	b64pad = "=", 
 	/* hex output format. 0 - lowercase; 1 - uppercase */
 	hexCase = 0, 
 

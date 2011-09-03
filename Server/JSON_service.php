@@ -1,6 +1,7 @@
 <?php 
 
 require_once 'REST_Helpers.php';
+require_once 'user_login.php';
 
 //check for HTTPs, if not then JSON an error
 if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS']==="off")	//off is the value when using IIS+ISAPI
@@ -13,6 +14,8 @@ if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS']==="off")	//off is the value whe
 								)
 							),412);
 }
+
+user_login::validate();
 
 $domain = ""; 
 $returnValues = array();

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <widget xmlns="http://www.w3.org/ns/widgets" id="http://mintsoft.net/MintSync" >
-	<name>MintSync - v0.4</name>
+	<name>MintSync - v0.5</name>
 	<description>Secure client-side decrypted password storage</description>
 	<author href="yourURL" email="rob@mintsoft.net">Rob Emery</author>
 	<access origin="*"/>
 	<preference name = "ServerURL" 					value = "https://set-alt.home/code/MintSync/Server/"	readonly = "false"/>
+	<preference name = "SaveAuthentication" 			value = "0.8"	readonly = "false"/>
 	<preference name = "SavePassword" 				value = "0"		readonly = "false"/>
 	<preference name = "Notify"	 					value = "1"		readonly = "false"/>
 	<preference name = "NotifySource"	 				value = "ajax"	readonly = "false"/>

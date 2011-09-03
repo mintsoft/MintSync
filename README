@@ -5,67 +5,10 @@ Eventually, this will be a multi-browser extension and server component secure p
 
 At current (2011-08-28) there is a warning on the Opera extensions-tabs pages warning about the API being overhauled, therefore it is expected that everything will break in a new release of Opera
 
-
-To-Do List
-==========
-
-In no particular order except where ordered:
-
-Polish
-======
- - Add user instructions
- - Better User Feedback
- - Add confirmation to the allow overwrite
- - Tidy up animations & stuff to make things attractive
- - Rename "key" and "value" into something more user friendly
- - Figure out where I found the icons and attribute or replace them
- - Think of a way to do something more interesting with the state of the form
-	is there an extension "always on top" option or something similiar?	
-	possibly store information in the background process?
- - Configurable password generation length
- - Address performance issues with password matrix filtering
- - Put together a written description of how it works, detailing what is encrypted when, where and with what
- - Put together an FAQ/QIWA document
- - Better handling for incorrect passwords - as in actually tell them!
- - Separate the perferences from other objects to make it easier to port
- - Write up guide for SSL-Client Certificates - (see http://www.vanemery.com/Linux/Apache/apache-SSL.html) 
- - Tidy Up Options page
- - AJAX indicators: when the local cache is updated, on the password matrix page
- - Massively tidy up the server-user interface
- - Add Support for more consistent REST systems i.e. https://[irrelivent]/api/credentials/[ID]
- 
-Features
-=============
- - Master password changing
- - Optional domain rather than URL matching (wildcards perhaps)
- 
- - User Authentication 
-	- Hash exchange?
-		-Implications for "remembering" password
-	- Basic auth or integrated in?
-	- If Opera ever supports SSO Style Kerberos/NTLM then NTLM auth?
- 
- - Review AES256 implementation and check the quality of it, especially PRNG/random seeding where used
- 
- - Optional Master-Password salting 
-	- ability to add and change salt
-	- store the salt server side for "cloudness" ?
-	- "Backup" local encryption keys & Salt if applicable
-
-
-Wish-List
-================
- - "Server Settings" page for config and backup
- - Copy and tweak the proof of concept page and add it as a server-user interface
- - Potential parallel encryption, data encrypted by multiple algorithms and saved so if the user is
-	using a less powerful workstation next time, they can decrypt with a less computationally expensive
-	algorithm at the sacrifice of security
- - Form robot system, possibly have to alter how the data is captured and inject script 
-	to capture onsubmit on forms or something
-
-=====================================================================
+=======================================================
 Done List!
-=====================================================================
+=======================================================
+ - Configurable password generation length
  - Maybe even "store password for browser session" option
  - Better Error Handling
  - Reimplement "server" using a more consistent REST paradigm

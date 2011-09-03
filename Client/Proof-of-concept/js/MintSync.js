@@ -54,7 +54,7 @@ function MintSync() {
 			
 		//TODO: implement this
 	*/
-	this.getPasswordHash = function() {
+	this.getEncryptionPasswordHash = function() {
 		
 		var 	shaObj = new jsSHA("myverysecurepassword", "ASCII"),
 				hash = shaObj.getHash("SHA-512", "HEX");
@@ -78,7 +78,7 @@ function getPasswords(form) {
 		
 		parsedObject = $.parseJSON(data);
 		base64decoded = base64_decode(parsedObject.Credentials);
-		passwordHash = $MS.getPasswordHash();
+		passwordHash = $MS.getEncryptionPasswordHash();
 		
 		key = passwordHash+""+parsedObject.Salt;
 
@@ -108,7 +108,7 @@ function setPassword() {
 		RowSalt = generateRowSalt(),
 		encryptedData = "",
 		encryptionKey = "",
-		passwordHash = $MS.getPasswordHash();
+		passwordHash = $MS.getEncryptionPasswordHash();
 	
 	encryptionKey = passwordHash+""+RowSalt;
 	

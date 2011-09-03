@@ -153,8 +153,6 @@ function updatePasswordMatrix(sourceArray)
 					
 				},
 				success: function(requestdata,textStatus) {
-					console.log(requestdata);
-
 					//remove the entire li
 					$(srcImg).parent().parent().remove();
 

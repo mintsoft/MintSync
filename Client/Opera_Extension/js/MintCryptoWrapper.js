@@ -29,7 +29,7 @@ function MintCrypto() {
 				decryptedJSON = "", 
 				credentialsObj = new Object();
 				
-		passwordHash = $MS.getPasswordHash()
+		passwordHash = $MS.getEncryptionPasswordHash()
 		key = passwordHash+""+rowSalt;
 		decryptedJSON = $MC.Decrypt_strings(base64decoded,key,"AES",256);
 		credentialsObj = $.parseJSON(decryptedJSON);
@@ -43,7 +43,7 @@ function MintCrypto() {
 		//Generate JSON String
 		
 		var Credentials = JSON.stringify(srcObject),
-			passwordHash = $MS.getPasswordHash(),
+			passwordHash = $MS.getEncryptionPasswordHash(),
 			encryptionKey = passwordHash+""+RowSalt,
 			encryptedData = base64_encode($MC.Encrypt_strings(Credentials,encryptionKey,"AES",256));
 		
