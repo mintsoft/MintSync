@@ -15,7 +15,7 @@ if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS']==="off")	//off is the value whe
 							),412);
 }
 
-user_login::validate();
+$userID = user_login::validate();
 
 $domain = ""; 
 $returnValues = array();
@@ -53,9 +53,10 @@ switch($request)
 //do logging if enabled
 if(LOGGING && !(isset($LOGLEVEL[$action]) && $LOGLEVEL[$action]==false))		//if log level is undefined, then assume we wish to log
 {
-	$stmt = $db->prepare("INSERT INTO AccessLog(Timestamp,RemoteIP,Request) VALUES(strftime('%s','now'),:IP,:request);");
+	$stmt = $db->prepare("INSERT INTO AccessLog(Timestamp,RemoteIP,Request,UserID) VALUES(strftime('%s','now'),:IP,:request,:userID);");
 	$stmt->bindValue(":IP",ip2long($_SERVER['REMOTE_ADDR']));
 	$stmt->bindValue(":request",$_SERVER['REQUEST_METHOD'].": ".var_export($_REQUEST,true).";".var_export($_PUT,true));
+	$stmt->bindValue(":userID",$userID);
 	$stmt->execute();
 }
 
@@ -65,8 +66,9 @@ switch($action)
 
 		if(isset($_REQUEST['URL']) && isset($_REQUEST['rowSalt']) && isset($_REQUEST['Credentials']))
 		{
-			$stmt = $db->prepare("SELECT COUNT(*) AS Freq FROM auth WHERE URL=:url");
+			$stmt = $db->prepare("SELECT COUNT(*) AS Freq FROM auth WHERE URL=:url AND userID=:userID;");
 			$stmt->bindValue(":url",strtolower($_REQUEST['URL']));
+			$stmt->bindValue(":userID",$userID);
 			$stmt->execute();
 		
 			$row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -82,15 +84,17 @@ switch($action)
 			}
 			elseif((int)$row['Freq']>0 && !empty($_REQUEST['force']))
 			{
-				$stmt = $db->prepare("UPDATE auth SET Salt=:salt, Credentials=:credentials WHERE URL=:url;");
+				$stmt = $db->prepare("UPDATE auth SET Salt=:salt, Credentials=:credentials WHERE URL=:url AND userID=:userID;");
 			
 				$stmt->bindValue(":url", strtolower($_REQUEST['URL']));
+				$stmt->bindValue(":userID", $userID);
 				$stmt->bindValue(":salt", $_REQUEST['rowSalt']);
 				$stmt->bindValue(":credentials", $_REQUEST['Credentials']);
 				$stmt->execute();
 			
-				$stmt = $db->prepare("SELECT * FROM auth WHERE URL=:url");
+				$stmt = $db->prepare("SELECT * FROM auth WHERE URL=:url AND userID=:userID;");
 				$stmt->bindValue(":url", strtolower($_REQUEST['URL']), PDO::PARAM_STR );
+				$stmt->bindValue(":userID", $userID);
 				$stmt->execute();
 			
 				$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -103,15 +107,17 @@ switch($action)
 			}
 			else
 			{
-				$stmt = $db->prepare("INSERT INTO auth(URL,Salt,Credentials) VALUES(:url,:salt,:credentials)");
+				$stmt = $db->prepare("INSERT INTO auth(URL,Salt,Credentials,userID) VALUES(:url,:salt,:credentials,:userID);");
 			
 				$stmt->bindValue(":url", strtolower($_REQUEST['URL']));
 				$stmt->bindValue(":salt", $_REQUEST['rowSalt']);
 				$stmt->bindValue(":credentials", $_REQUEST['Credentials']);
+				$stmt->bindValue(":userID", $userID);
 				$stmt->execute();
 			
-				$stmt = $db->prepare("SELECT * FROM auth WHERE URL=:url");
+				$stmt = $db->prepare("SELECT * FROM auth WHERE URL=:url AND userID=:userID");
 				$stmt->bindValue(":url", strtolower($_REQUEST['URL']), PDO::PARAM_STR );
+				$stmt->bindValue(":userID", $userID);
 				$stmt->execute();
 			
 				$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -138,8 +144,9 @@ switch($action)
 					)
 				),400);	//Bad Request
 		}
-		$stmt = $db->prepare("DELETE FROM auth WHERE ID=:id;");
+		$stmt = $db->prepare("DELETE FROM auth WHERE ID=:id AND userID=:userID;");
 		$stmt->bindValue(":id",$_REQUEST['ID']);
+		$stmt->bindValue(":userID",$userID);
 		$stmt->execute();
 
 		restTools::sendResponse(array(
@@ -163,16 +170,17 @@ switch($action)
 								),400);	//Bad Request
 		}
 		
-		$stmt = $db->prepare("UPDATE auth SET URL=:newURL WHERE ID=:ID;");
+		$stmt = $db->prepare("UPDATE auth SET URL=:newURL WHERE ID=:ID AND userID=:userID;");
 		
 		$stmt->bindValue(":newURL",$_PUT['newURL'],PDO::PARAM_STR);
 		$stmt->bindValue(":ID",$_PUT['ID'],PDO::PARAM_INT);
-		
+		$stmt->bindValue(":userID",$userID,PDO::PARAM_INT);
 		$stmt->execute();
 		
-		$stmt = $db->prepare("SELECT * FROM auth WHERE URL=:url AND ID=:ID");
+		$stmt = $db->prepare("SELECT * FROM auth WHERE URL=:url AND ID=:ID AND userID=:userID;");
 		$stmt->bindValue(":url", strtolower($_PUT['newURL']), PDO::PARAM_STR );
 		$stmt->bindValue(":ID", strtolower($_PUT['ID']), PDO::PARAM_INT );
+		$stmt->bindValue(":userID", $userID, PDO::PARAM_INT );
 		$stmt->execute();
 	
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -202,8 +210,9 @@ switch($action)
 		if(isset($_GET['URL']))
 			$domain = strtolower($_GET['URL']);
 		
-		$stmt = $db->prepare("SELECT COUNT(*) num FROM auth WHERE URL=:url");
+		$stmt = $db->prepare("SELECT COUNT(*) num FROM auth WHERE URL=:url AND userID=:userID;");
 		$stmt->bindValue(":url",	$domain, PDO::PARAM_STR );
+		$stmt->bindValue(":userID",	$userID);
 		$stmt->execute();
 		
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -228,7 +237,8 @@ switch($action)
 	
 	case "list":			//GET Request
 
-		$stmt = $db->prepare("SELECT ID, URL FROM auth;");
+		$stmt = $db->prepare("SELECT ID, URL FROM auth WHERE userID=:userID;");
+		$stmt->bindValue(":userID",$userID);
 		$stmt->execute();
 		
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -256,8 +266,9 @@ switch($action)
 		if(isset($_GET['URL']))
 			$domain = strtolower($_GET['URL']);
 
-		$stmt = $db->prepare("SELECT * FROM auth WHERE URL=:url");
+		$stmt = $db->prepare("SELECT * FROM auth WHERE URL=:url AND userID=:userID;");
 		$stmt->bindValue(":url",	$domain, PDO::PARAM_STR );
+		$stmt->bindValue(":userID",	$userID);
 		$stmt->execute();
 		
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);

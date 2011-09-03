@@ -326,8 +326,10 @@ function MintSync() {
 		else if (widget.preferences["SaveAuthentication"]==0.5)
 		{
 			//request password and store in global
-			if(this.rememberedAuthentication==undefined && prompt)
+			if(prompt && this.rememberedAuthentication==undefined)
 				this.rememberedAuthentication = this.requestAuthenticationDetails();
+			else if (!prompt && this.rememberedAuthentication==undefined)
+				return null;
 			
 			return this.rememberedAuthentication;
 		}

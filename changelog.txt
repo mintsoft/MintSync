@@ -13,6 +13,7 @@ Fixed the SHA-Base64 implementation (added padding character definition on line 
 Server
 ------
 Implemented first version of user authentication
+Altered Schema to include userID
 
 20:48 02/09/2011
 ================

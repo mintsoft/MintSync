@@ -11,10 +11,23 @@ function debugOut($str){
 }
 
 class user_login {
+
+	public static function getUserRow($username){
+		
+		$db = new PDO('sqlite:'.PASSWORD_DATABASE);
+		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		
+		$stmt = $db->prepare("SELECT * FROM User WHERE username=:username;");
+		$stmt->bindValue(":username",$username);
+		$stmt->execute();
+		
+		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		return($rows[0]);
+	}
+
 	public static function validate(){
 
-		$userID = 1;
-		
 		$headers = apache_request_headers();
 
 		list($method, $authHeader) = explode(" ",$headers['Authorization']);
@@ -28,10 +41,9 @@ class user_login {
 				//index 1 = rowSalt
 				//index 2 = authString
 				
-				//get password
-				$password = "pass";	//TODO: implement this from the database
-				$passhash = hash("sha512", $password,false);
-		
+				$rows = user_login::getUserRow($auth_components[0]);
+				$passhash = $rows['password'];
+					
 				$srcString = "{$passhash}:{$auth_components[1]}";				
 				$ourAuthStr = base64_encode(hash("sha512",$srcString,true));
 				if($ourAuthStr!==$auth_components[2])
@@ -44,7 +56,7 @@ class user_login {
 					),401);	//unauthorized
 				}
 				
-				return $userID;
+				return $rows['ID'];
 			break;
 			default:
 		}

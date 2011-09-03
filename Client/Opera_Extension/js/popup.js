@@ -38,6 +38,8 @@ $(document).ready(function(){
 	addPair();
 	$("input[name='inputPassName']").eq(0).val("Username");
 	$("input[name='inputPassName']").eq(1).val("Password");
+	
+	//check if there are credentials saved
 });
 
 /** Global Function Handlers **/
