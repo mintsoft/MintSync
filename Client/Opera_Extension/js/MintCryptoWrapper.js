@@ -22,32 +22,32 @@ function MintCrypto() {
 	/** 
 		Takes an base64encoded & encrypted JSON object and returns the decrypted object
 	*/
-	this.decodeAndDecrypt = function(encryptedObject,rowSalt){
+	this.decodeAndDecrypt = function(encryptedObject,rowSalt,callback){
 		var 	base64decoded = base64_decode(encryptedObject),
 				passwordHash = "", 
 				key = "", 
 				decryptedJSON = "", 
 				credentialsObj = new Object();
 				
-		passwordHash = $MS.getEncryptionPasswordHash()
-		key = passwordHash+""+rowSalt;
-		decryptedJSON = $MC.Decrypt_strings(base64decoded,key,"AES",256);
-		credentialsObj = $.parseJSON(decryptedJSON);
-		
-		return credentialsObj;
+		$MS.getEncryptionPasswordHash(function(passwordHash){
+			key = passwordHash+""+rowSalt;
+			decryptedJSON = $MC.Decrypt_strings(base64decoded,key,"AES",256);
+			credentialsObj = $.parseJSON(decryptedJSON);
+			callback(credentialsObj);
+		});
 	},
 	/**
 		Takes an object and a salt, JSONs the objected, encrypts it then BASE64 and returns the string
 	*/
-	this.encodeAndEncrypt = function(srcObject,RowSalt){
+	this.encodeAndEncrypt = function(srcObject,RowSalt,callback){
 		//Generate JSON String
+		var Credentials = JSON.stringify(srcObject);
 		
-		var Credentials = JSON.stringify(srcObject),
-			passwordHash = $MS.getEncryptionPasswordHash(),
+		$MS.getEncryptionPasswordHash(function(passwordHash){
 			encryptionKey = passwordHash+""+RowSalt,
 			encryptedData = base64_encode($MC.Encrypt_strings(Credentials,encryptionKey,"AES",256));
-		
-		return encryptedData;
+			callback(encryptedData);
+		});
 	}
 }
 

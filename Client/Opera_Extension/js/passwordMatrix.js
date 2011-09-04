@@ -30,6 +30,8 @@ jQuery.fn.single_double_click = function(single_click_callback, double_click_cal
 /** jQuery entry point */
 $(document).ready(function(){
 	
+	setupLightboxes();
+	
 	//add variable width button
 	$("#variableWidth").click(function(){
 		containerWidthKey = 1-containerWidthKey;
@@ -187,29 +189,28 @@ function togglePasswordsForURL(srcH3)
 			beforeSend: function() {},
 			complete: function(jq,textStatus,errorThrown) {},
 			success: function(requestdata,textStatus,jq) {
-
-				credentialsObj = $MC.decodeAndDecrypt(requestdata.data.Credentials,requestdata.data.Salt)
-				//object of key-value pairs
-				var table = $(srcH3).parent().find("table"),
-					tableBody = table.find("tbody");
-				
-				tableBody.empty();
-				
-				for(index in credentialsObj)
-				{
-					tableBody.append(
-						$("<tr>").append(
-							$("<td>").text(index),
-							$("<td>").append(
-								$("<input type='password' onfocus='revealPassword(this);' readonly='readonly' onblur='rehidePassword(this);'>").val(credentialsObj[index])
+				 $MC.decodeAndDecrypt(requestdata.data.Credentials,requestdata.data.Salt,function(credentialsObj){
+					//object of key-value pairs
+					var table = $(srcH3).parent().find("table"),
+						tableBody = table.find("tbody");
+					
+					tableBody.empty();
+					
+					for(index in credentialsObj)
+					{
+						tableBody.append(
+							$("<tr>").append(
+								$("<td>").text(index),
+								$("<td>").append(
+									$("<input type='password' onfocus='revealPassword(this);' readonly='readonly' onblur='rehidePassword(this);'>").val(credentialsObj[index])
+								)
 							)
-						)
-					);
-				}
-				
-				$(srcH3).parent().find(".dropDownContent").slideDown(0);
-				$(srcH3).addClass('expanded');
-
+						);
+					}
+					
+					$(srcH3).parent().find(".dropDownContent").slideDown(0);
+					$(srcH3).addClass('expanded');
+				 });
 			},
 			error: function(jq,textStatus,errorThrown){
 				alert("An Error Has Occurred, see the error console for more information");

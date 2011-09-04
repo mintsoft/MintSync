@@ -59,7 +59,7 @@ function mint_handleNotify(URL)
 {
 	if($MS.getNotify())
 	{
-		if($MS.getAuthenticationObject(false)===null)
+		if(!$MS.checkForSavedAuth())
 		{
 				mintSyncGlobals.theButton.badge.textContent=" ? ";
 				mintSyncGlobals.theButton.badge.color = '#CCCCCC';

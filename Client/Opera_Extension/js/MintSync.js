@@ -10,30 +10,32 @@ function MintSync() {
 		Retrieve passwords for the passed domain
 	*/
 	this.getPasswords = function(Domain, callbacks) {
-			
-		$.ajax({
-			type: "GET",
-			data: {URL:Domain},
-			url:this.getServerURL()+"?AJAX=true&action=retrieve",
-			beforeSend: function(jq,settings) {
-				//add the headers for the auth:
-				$MS.configureAuth(jq,settings,true);
-				
-				if(callbacks.beforeSend != undefined)
-					callbacks.beforeSend(jq,settings);
-			},
-			complete: function(jq,textStatus) {
-				if(callbacks.complete != undefined)
-					callbacks.complete(jq,textStatus);
-			},
-			error: function(jq,textStatus,errorThrown) {
-				if(callbacks.error != undefined)
-					callbacks.error(jq,textStatus,errorThrown);
-			},
-			success: function(data,textStatus,jq) {
-				if(callbacks.success != undefined)
-					callbacks.success(data);
-			}
+		
+		$MS.getAuthenticationObject(function(authObj){
+			$.ajax({
+				type: "GET",
+				data: {URL:Domain},
+				url:$MS.getServerURL()+"?AJAX=true&action=retrieve",
+				beforeSend: function(jq,settings) {
+					//add the headers for the auth:
+					$MS.configureAuth(jq,settings,authObj);
+					
+					if(callbacks.beforeSend != undefined)
+						callbacks.beforeSend(jq,settings);
+				},
+				complete: function(jq,textStatus) {
+					if(callbacks.complete != undefined)
+						callbacks.complete(jq,textStatus);
+				},
+				error: function(jq,textStatus,errorThrown) {
+					if(callbacks.error != undefined)
+						callbacks.error(jq,textStatus,errorThrown);
+				},
+				success: function(data,textStatus,jq) {
+					if(callbacks.success != undefined)
+						callbacks.success(data);
+				}
+			});
 		});
 		
 	},
@@ -41,39 +43,48 @@ function MintSync() {
 		Retrieve passwords for the passed domain
 	*/
 	this.checkIfPasswordsExist = function(Domain,callbacks) {
-			
-		$.ajax({
-			type: "GET",
-			data: {URL:Domain},
-			url:this.getServerURL()+"?AJAX=true&action=check",
-			beforeSend: function(jq,settings) {
-				//add the headers for the auth:
-				//returns false if there are no saved credentials
-				//so return false to cancel the request
-				if(!$MS.configureAuth(jq,settings,false))
-				{
-					//console.log("Check URL Request cancelled, no auth");
-					return false
+		
+		if(!$MS.checkForSavedAuth())
+		{
+			console.log("No Saved Authenticaiton, checkIfPasswordsExist cancelled");
+			return false;
+		}
+		
+		$MS.getAuthenticationObject(function(authObj){
+			console.log("getAuthObject Callback started - preajax");
+			$.ajax({
+				type: "GET",
+				data: {URL:Domain},
+				url:$MS.getServerURL()+"?AJAX=true&action=check",
+				beforeSend: function(jq,settings) {
+					//add the headers for the auth:
+					//returns false if there are no saved credentials
+					//so return false to cancel the request
+					if(!$MS.configureAuth(jq,settings,authObj))
+					{
+						//console.log("Check URL Request cancelled, no auth");
+						return false
+					}
+					//console.log("Check URL Request  sent, auth available");
+					if(callbacks.beforeSend != undefined)
+						callbacks.beforeSend(jq,settings);
+				},
+				complete: function(jq,textStatus) {
+				//console.log("Check URL Request  complete");
+					if(callbacks.complete != undefined)
+						callbacks.complete(jq,textStatus);
+				},
+				error: function(jq,textStatus,errorThrown) {
+				//console.log("Check URL Request  errors");
+					if(callbacks.error != undefined)
+						callbacks.error(textStatus,errorThrown);
+				},
+				success: function(data,textStatus,jq) {
+				//console.log("Check URL Request  success");
+					if(callbacks.success != undefined)
+						callbacks.success(data);
 				}
-				//console.log("Check URL Request  sent, auth available");
-				if(callbacks.beforeSend != undefined)
-					callbacks.beforeSend(jq,settings);
-			},
-			complete: function(jq,textStatus) {
-			//console.log("Check URL Request  complete");
-				if(callbacks.complete != undefined)
-					callbacks.complete(jq,textStatus);
-			},
-			error: function(jq,textStatus,errorThrown) {
-			//console.log("Check URL Request  errors");
-				if(callbacks.error != undefined)
-					callbacks.error(textStatus,errorThrown);
-			},
-			success: function(data,textStatus,jq) {
-			//console.log("Check URL Request  success");
-				if(callbacks.success != undefined)
-					callbacks.success(data);
-			}
+			});
 		});
 		
 	},
@@ -81,118 +92,124 @@ function MintSync() {
 		Retrieve passwords for the passed domain
 	*/
 	this.listURLS = function(callbacks) {
-			
-		$.ajax({
-			type: "GET",
-			url:this.getServerURL()+"?AJAX=true&action=list",
-			beforeSend: function(jq,settings) {
-				//add the headers for the auth:
-				$MS.configureAuth(jq,settings,true);
-				
-				if(callbacks.beforeSend != undefined)
-					callbacks.beforeSend(jq,settings);
-			},
-			complete: function(jq,textStatus) {
-				if(callbacks.complete != undefined)
-					callbacks.complete(jq,textStatus);
-			},
-			error: function(jq,textStatus,errorThrown) {
-				if(callbacks.error != undefined)
-					callbacks.error(jq,textStatus,errorThrown);
-			},
-			success: function(data,textStatus,jq) {
-				if(callbacks.success != undefined)
-					callbacks.success(data);
-			}
+		console.log("ListURLS Called");
+		$MS.getAuthenticationObject(function(authObj){
+			$.ajax({
+				type: "GET",
+				url:$MS.getServerURL()+"?AJAX=true&action=list",
+				beforeSend: function(jq,settings) {
+					//add the headers for the auth:
+					$MS.configureAuth(jq,settings,authObj);
+					
+					if(callbacks.beforeSend != undefined)
+						callbacks.beforeSend(jq,settings);
+				},
+				complete: function(jq,textStatus) {
+					if(callbacks.complete != undefined)
+						callbacks.complete(jq,textStatus);
+				},
+				error: function(jq,textStatus,errorThrown) {
+					if(callbacks.error != undefined)
+						callbacks.error(jq,textStatus,errorThrown);
+				},
+				success: function(data,textStatus,jq) {
+					if(callbacks.success != undefined)
+						callbacks.success(data);
+				}
+			});
 		});
-		
 	},
 	/**
 		Performs the AJAX request saving the password
 	*/
 	this.setPassword = function(Domain,Credentials,rowSalt,force,callbacks) {
-
-		$.ajax({
-			type: "POST",
-			data: {"URL":Domain,"Credentials":Credentials,"rowSalt":rowSalt,"force":force},
-			url:this.getServerURL()+"?AJAX=true&action=save",
-			beforeSend: function(jq,settings) {
-				//add the headers for the auth:
-				$MS.configureAuth(jq,settings,true);
-				
-				if(callbacks.beforeSend != undefined)
-					callbacks.beforeSend(jq.settings);
-			},
-			complete: function(jq,textStatus) {
-				if(callbacks.complete != undefined)
-					callbacks.complete(jq,textStatus);
-			},
-			error: function(jq,textStatus,errorThrown) {
-				if(callbacks.error != undefined)
-					callbacks.error(jq,textStatus,errorThrown);
-			},
-			success: function(data,textStatus,jq) {
-				if(callbacks.success != undefined)
-					callbacks.success(data);
-			}
+		$MS.getAuthenticationObject(function(authObj){
+			$.ajax({
+				type: "POST",
+				data: {"URL":Domain,"Credentials":Credentials,"rowSalt":rowSalt,"force":force},
+				url:$MS.getServerURL()+"?AJAX=true&action=save",
+				beforeSend: function(jq,settings) {
+					//add the headers for the auth:
+					$MS.configureAuth(jq,settings,authObj);
+					
+					if(callbacks.beforeSend != undefined)
+						callbacks.beforeSend(jq,settings);
+				},
+				complete: function(jq,textStatus) {
+					if(callbacks.complete != undefined)
+						callbacks.complete(jq,textStatus);
+				},
+				error: function(jq,textStatus,errorThrown) {
+					if(callbacks.error != undefined)
+						callbacks.error(jq,textStatus,errorThrown);
+				},
+				success: function(data,textStatus,jq) {
+					if(callbacks.success != undefined)
+						callbacks.success(data);
+				}
+			});
 		});
 		
 	},	
 	/** removes the password with the request ID */
 	
 	this.removePasswords = function(ID,url,callbacks) {
-		$.ajax({
-			type: "DELETE",
-			url:this.getServerURL()+"?AJAX=true&action=remove&ID="+ID,
-			beforeSend: function(jq,settings) {
-				//add the headers for the auth:
-				$MS.configureAuth(jq,settings,true);
-				
-				if(callbacks.beforeSend != undefined)
-					callbacks.beforeSend(jq,settings);
-			},
-			complete: function(jq,textStatus) {
-				if(callbacks.complete != undefined)
-					callbacks.complete(jq,textStatus);
-			},
-			error: function(jq,textStatus,errorThrown) {
-				if(callbacks.error != undefined)
-					callbacks.error(textStatus,errorThrown);
-			},
-			success: function(data,textStatus,jq) {
-				if(callbacks.success != undefined)
-					callbacks.success(data);
-			}
+		$MS.getAuthenticationObject(function(authObj){
+			$.ajax({
+				type: "DELETE",
+				url:$MS.getServerURL()+"?AJAX=true&action=remove&ID="+ID,
+				beforeSend: function(jq,settings) {
+					//add the headers for the auth:
+					$MS.configureAuth(jq,settings,authObj);
+					
+					if(callbacks.beforeSend != undefined)
+						callbacks.beforeSend(jq,settings);
+				},
+				complete: function(jq,textStatus) {
+					if(callbacks.complete != undefined)
+						callbacks.complete(jq,textStatus);
+				},
+				error: function(jq,textStatus,errorThrown) {
+					if(callbacks.error != undefined)
+						callbacks.error(textStatus,errorThrown);
+				},
+				success: function(data,textStatus,jq) {
+					if(callbacks.success != undefined)
+						callbacks.success(data);
+				}
+			});
 		});
+		
 	},
 	/**
 		Performs the AJAX request renaming the URL with the ID passed
 	*/
 	this.renameURL = function(ID,newDomain,callbacks) {
-	
-		$.ajax({
-			type: "PUT",
-			data: {"ID":ID,"newURL":newDomain},
-			url:this.getServerURL()+"?AJAX=true&action=rename",
-			beforeSend: function(jq,settings) {
-				//add the headers for the auth:
-				$MS.configureAuth(jq,settings,true);
-				
-				if(callbacks.beforeSend != undefined)
-					callbacks.beforeSend(jq,settings);
-			},
-			complete: function(jq,textStatus) {
-				if(callbacks.complete != undefined)
-					callbacks.complete(jq,textStatus);
-			},
-			error: function(jq,textStatus,errorThrown) {
-				if(callbacks.error != undefined)
-					callbacks.error(textStatus,errorThrown);
-			},
-			success: function(data,textStatus,jq) {
-				if(callbacks.success != undefined)
-					callbacks.success(data);
-			}
+		$MS.getAuthenticationObject(function(authObj){
+			$.ajax({
+				type: "PUT",
+				data: {"ID":ID,"newURL":newDomain},
+				url:$MS.getServerURL()+"?AJAX=true&action=rename",
+				beforeSend: function(jq,settings) {
+					//add the headers for the auth:
+					$MS.configureAuth(jq,settings,authObj);
+					
+					if(callbacks.beforeSend != undefined)
+						callbacks.beforeSend(jq,settings);
+				},
+				complete: function(jq,textStatus) {
+					if(callbacks.complete != undefined)
+						callbacks.complete(jq,textStatus);
+				},
+				error: function(jq,textStatus,errorThrown) {
+					if(callbacks.error != undefined)
+						callbacks.error(textStatus,errorThrown);
+				},
+				success: function(data,textStatus,jq) {
+					if(callbacks.success != undefined)
+						callbacks.success(data);
+				}
+			});
 		});
 		
 	},
@@ -204,15 +221,11 @@ function MintSync() {
 		base64EncodedAuthString = SHA512.b64(SHA512.hex(Password)+":"+Nonce)
 		
 	*/
-	this.configureAuth = function(jqXHR,settings,prompt) {
+	this.configureAuth = function(jqXHR,settings,AuthObject) {
 		//AuthObject contains the username and SHA-512 of the password
-		var AuthObject = this.getAuthenticationObject(prompt),
-			shaObj,hash,
+		var	shaObj,hash,
 			authStr = "",
-			nonce = this.generateRowSalt();
-		
-		if(AuthObject===null)
-			return false;
+			nonce = $MS.generateRowSalt();
 		
 		authStr	 = AuthObject.username+"|"+nonce+"|";
 		hash = AuthObject.password;
@@ -223,18 +236,11 @@ function MintSync() {
 		return true;
 	},
 	/**
-		Asks the user for a password and returns a hash of it
+		Returns the hash of the password
 	*/
-	this.requestPassword = function(promptStr) {
-		var 	password="",
-				shaObj,
-				hash;
-		
-		password=prompt(promptStr,"myverysecurepassword");
-		shaObj = new jsSHA(password, "ASCII");
-		hash  = shaObj.getHash("SHA-512", "HEX");
-				
-		return hash;
+	this.hashPass = function(passwd) {
+		var shaObj = new jsSHA(passwd, "ASCII");
+		return shaObj.getHash("SHA-512", "HEX");
 	},	
 	/**
 		Returns a string type that contains a hex representation of 
@@ -243,16 +249,20 @@ function MintSync() {
 			This *should* be salted really, however the salt would have to be saved
 				could this be saved server-side?
 	*/
-	this.getEncryptionPasswordHash = function() {
+	this.getEncryptionPasswordHash = function(successCallback) {
 		//text to appear on the password prompt
 		var strPrompt = "Enter your crypto password";
 		
 		if(widget.preferences["SavePassword"]==1)
 		{
 			if(!widget.preferences["SavedPassword"] || widget.preferences["SavedPassword"]==="undefined")
-				widget.preferences["SavedPassword"] = this.requestPassword(strPrompt);
-				
-			return widget.preferences["SavedPassword"];
+				askForPassword(strPrompt,function(password){
+					var hash  = $MS.hashPass(password);
+					widget.preferences["SavedPassword"] = hash;
+					successCallback(widget.preferences["SavedPassword"]);
+				});
+			else
+				successCallback(widget.preferences["SavedPassword"]);
 		}
 		else if (widget.preferences["SavePassword"]==0.8)
 		{
@@ -261,103 +271,143 @@ function MintSync() {
 			passwd = opera.extension.bgProcess.mintSyncGlobals.passwd;
 			if(passwd==undefined)
 			{
-				passwd = this.requestPassword(strPrompt);
-				//set the password in the background process
-				opera.extension.bgProcess.mintSyncGlobals.passwd = passwd;
+				askForPassword(strPrompt,function(password){
+					var hash  = $MS.hashPass(password);
+					//set the password in the background process
+					opera.extension.bgProcess.mintSyncGlobals.passwd = hash;
+					successCallback(hash);
+				});
 			}
-			
-			return passwd;
+			else
+			{
+				successCallback(passwd);
+			}
 				
 		}
 		else if (widget.preferences["SavePassword"]==0.5)
 		{
 			//request password and store in global
-			if(this.rememberedPassword==undefined)
-				this.rememberedPassword = this.requestPassword(strPrompt);
-			
-			return this.rememberedPassword;
+			if($MS.rememberedPassword==undefined)
+				askForPassword(strPrompt,function(password){
+					$MS.rememberedPassword = $MS.hashPass(password);
+					successCallback(this.rememberedPassword);
+				});
 		}
-		else {
-				return this.requestPassword(strPrompt);
+		else 
+		{
+				askForPassword(strPrompt,function(password){
+					successCallback($MS.hashPass(password));
+				});
 		}
 	},
 	/**
+		Returns a boolean representing whether or not we have any credentials saved
+	**/
+	this.checkForSavedAuth = function()
+	{
+		switch(widget.preferences["SaveAuthentication"])
+		{
+			case "1":
+				return !(widget.preferences["SavedAuthentication"]=="undefined" && widget.preferences["SavedAuthentication"]);
+			break;
+			case "0.8":
+				if(opera.extension.bgProcess == undefined) // being called from the bgProcess
+				{
+					return mintSyncGlobals.authentication !== undefined;
+				}
+				else
+				{
+					return opera.extension.bgProcess.mintSyncGlobals.authentication !== undefined;
+				}
+			break;
+			case "0.5":
+				return $MS.rememberedAuthentication!==undefined
+			break;
+			case "0":
+			default:
+				return false;
+		}
+	},
+	
+	/**
 		Will retrieve the authentication credentials if saved and request for them if not
 	*/
-	this.getAuthenticationObject = function(prompt) {
+	this.getAuthenticationObject = function(callback)
+	{
+		var promptStr = "Please enter your login details";
 		
 		if(widget.preferences["SaveAuthentication"]==1)
 		{
-			if((!widget.preferences["SavedAuthentication"] || widget.preferences["SavedAuthentication"]==="undefined") && prompt)
-				widget.preferences["SavedAuthentication"] = JSON.stringify(this.requestAuthenticationDetails());
-				
-			return $.parseJSON(widget.preferences["SavedAuthentication"]);
-		}
-		else if (widget.preferences["SaveAuthentication"]==0.8)
-		{
-			var authentication;
-			//if the bgProcess doesn't exist then we're calling FROM the background process
-			if(opera.extension.bgProcess == undefined)
+			if(!$MS.checkForSavedAuth())
 			{
-				//we're in the background process so grab it from the global
-				authentication = mintSyncGlobals.authentication;
-				
-				if(authentication==undefined)	//we can't popup so return null
-				{
-					return null;
-				}
+				askForUsernamePassword(promptStr,function(authObj){
+					authObj.password = $MS.hashPass(authObj.password);
+					widget.preferences["SavedAuthentication"] = JSON.stringify(authObj);
+					callback($.parseJSON(widget.preferences["SavedAuthentication"]));
+				});
 			}
 			else
 			{
-				//get the password from the background process
-				authentication = opera.extension.bgProcess.mintSyncGlobals.authentication;
-				
-				if(authentication==undefined && prompt)
-				{
-					authentication = this.requestAuthenticationDetails();
-					//set the password in the background process
-					opera.extension.bgProcess.mintSyncGlobals.authentication = authentication;
-				}
+				callback($.parseJSON(widget.preferences["SavedAuthentication"]));
 			}
-
-			return authentication;
+		}
+		else if (widget.preferences["SaveAuthentication"]==0.8)
+		{
 				
+			if(!$MS.checkForSavedAuth())
+			{
+				askForUsernamePassword(promptStr,function(authObj){
+					authObj.password = $MS.hashPass(authObj.password);
+					//set the password in the background process
+					
+					if(opera.extension.bgProcess == undefined) // being called from the bgProcess
+						mintSyncGlobals.authentication = authObj;
+					else
+						opera.extension.bgProcess.mintSyncGlobals.authentication = authObj;
+					
+					
+					callback(authObj);
+				});
+			}
+			else
+			{
+				if(opera.extension.bgProcess == undefined) // being called from the bgProcess
+				{	
+					callback(mintSyncGlobals.authentication);
+				}
+				else
+				{	
+					callback(opera.extension.bgProcess.mintSyncGlobals.authentication);
+				}
+				
+			}
+				
+			
 		}
 		else if (widget.preferences["SaveAuthentication"]==0.5)
 		{
 			//request password and store in global
-			if(prompt && this.rememberedAuthentication==undefined)
-				this.rememberedAuthentication = this.requestAuthenticationDetails();
-			else if (!prompt && this.rememberedAuthentication==undefined)
-				return null;
-			
-			return this.rememberedAuthentication;
+			if(!$MS.checkForSavedAuth())
+			{
+				askForUsernamePassword(promptStr,function(authObj){
+					authObj.password = $MS.hashPass(authObj.password);
+					$MS.rememberedAuthentication = authObj;
+					callback(authObj);
+				});
+			}
+			else
+			{
+				callback($MS.rememberedAuthentication);
+			}
 		}
-		else if(prompt)
+		else
 		{
-				return this.requestAuthenticationDetails();
+			askForUsernamePassword(promptStr, function(authObj){
+				authObj.password = $MS.hashPass(authObj.password);
+				callback(authObj);
+			});
 		}
-		else {
-			return null;
-		}
-		
-	}
-	
-	/** 
-		Requests from the user their authentication information
-	**/
-	this.requestAuthenticationDetails = function() {
-		var authInfo = new Object,
-			shaObj, hash;
-		
-		while(!(authInfo.username = prompt("Username:"))){};
-		while(!(authInfo.password = prompt("Password:"))){};
-		
-		shaObj = new jsSHA(authInfo.password, "ASCII");
-		authInfo.password  = shaObj.getHash("SHA-512", "HEX");
-		
-		return authInfo;
-	},
+	},	
 	/** 
 		Returns whether or not a password should be automatically 
 		retrieved when the pop up is launched or not.
@@ -382,7 +432,7 @@ function MintSync() {
 		Returns the password length configured
 	*/
 	this.getGeneratedPasswordLength = function(){
-		return widget.preferences["GeneratedPasswordLength"];
+		return (typeof(widget)==="undefined")?16:widget.preferences["GeneratedPasswordLength"];
 	},
 	/**
 		Returns the length the row salt should be generated to
@@ -397,7 +447,7 @@ function MintSync() {
 		//	return "6";		//chosen by random dice roll, guaranteed to be random
 		//| is not in this sourceSet because its used as a delimiter for the auth
 		var sourceSet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`~!@#$%^&*()-_=+[{]}\\;:'\",<.>/?",
-			length = this.getGeneratedRowSaltLength(), 
+			length = $MS.getGeneratedRowSaltLength(), 
 			salt="";
 			
 		for(var x=0;x<length;++x)

@@ -31,6 +31,8 @@ window.addEventListener("load", function() {
 /** jQuery Entry Point **/
 $(document).ready(function(){
 
+	setupLightboxes();
+
 	$("#tabBar").tabs("#tabContent > fieldset");
 	
 	//create a credentials box by default:
@@ -39,7 +41,18 @@ $(document).ready(function(){
 	$("input[name='inputPassName']").eq(0).val("Username");
 	$("input[name='inputPassName']").eq(1).val("Password");
 	
-	//check if there are credentials saved
+	//check if the notify icon is on and trigger a request
+	//for the login details
+	if(	typeof(opera.extension)!=="undefined" && 
+		$MS.getNotify() && !$MS.checkForSavedAuth())
+	{
+		//ask for it then
+		console.log("Requesting Login Credentials");
+		$MS.getAuthenticationObject(function(){});
+	}
+		
+	
+	
 });
 
 /** Global Function Handlers **/
@@ -123,34 +136,36 @@ function getPasswords(domainName) {
 				base64decoded="",
 				innerHTML="";
 
-				credentialsObj = $MC.decodeAndDecrypt(requestdata.data.Credentials, requestdata.data.Salt)
-				$("#retrieveOutput tbody").empty();
+				$MC.decodeAndDecrypt(requestdata.data.Credentials, requestdata.data.Salt,function(credentialsObj){
+					$("#retrieveOutput tbody").empty();
 
-				//also wipe out the save dialog and remove any boxes already there
-				$("#inputPassContainer img.saveBin").each(function(index,Element){
-					delPair(this);
+					//also wipe out the save dialog and remove any boxes already there
+					$("#inputPassContainer img.saveBin").each(function(index,Element){
+						delPair(this);
+					});
+					
+					var counter=0;
+					for(var index in credentialsObj) {
+						//this is done like this to ensure that the values don't screw up the HTML
+						// if they contain any special characters (<> etc)
+						$("#retrieveOutput tbody").append(
+							$("<tr>").append(
+								$("<td>").text(index),
+								$("<td>").append(
+									$("<input type='password' onfocus='revealPassword(this);' readonly='readonly' onblur='rehidePassword(this);'>").val(credentialsObj[index])
+								)
+							)
+						);
+						
+						//also add this into the save dialog for easy updates
+						addPair();
+						$("#inputPassContainer input[name='inputPassName']").eq(counter).val(index);
+						$("#inputPassContainer input[name='inputPassValue']").eq(counter++).val(credentialsObj[index]);
+						
+					}
+					$("#retrieveOutput").show(0);
 				});
 				
-				var counter=0;
-				for(var index in credentialsObj) {
-					//this is done like this to ensure that the values don't screw up the HTML
-					// if they contain any special characters (<> etc)
-					$("#retrieveOutput tbody").append(
-						$("<tr>").append(
-							$("<td>").text(index),
-							$("<td>").append(
-								$("<input type='password' onfocus='revealPassword(this);' readonly='readonly' onblur='rehidePassword(this);'>").val(credentialsObj[index])
-							)
-						)
-					);
-					
-					//also add this into the save dialog for easy updates
-					addPair();
-					$("#inputPassContainer input[name='inputPassName']").eq(counter).val(index);
-					$("#inputPassContainer input[name='inputPassValue']").eq(counter++).val(credentialsObj[index]);
-					
-				}
-				$("#retrieveOutput").show(0);
 		},
 		error: function(jq,textStatus,errorThrown){
 			if(jq.status==404)	//no password!
@@ -192,28 +207,29 @@ function setPassword() {
 		CredentialsObj[name]=password;
 	});
 	
-	encryptedData = $MC.encodeAndEncrypt(CredentialsObj,RowSalt);
-	CredentialsObj = new Object();
+	$MC.encodeAndEncrypt(CredentialsObj,RowSalt,function(encryptedData){
+		CredentialsObj = new Object();
 
-	//check is overwrites are allowed (force)
-	force = $("#canForceWrite:checked").val();
-	$MS.setPassword(domainName,encryptedData,RowSalt,force,{
-		error: function(jq,textStatus,errorThrown) {
-			if(jq.status==409)
-			{	
-				$("#saveOutput").text("Save Failed: This URL Already exists");
-			}
-			else
-			{
-				$("#saveOutput").text("An undefined error has occurred, see the error console for more information");
-				console.log("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);
-			}
-		},
-		success: function(requestdata) {
-			$("#saveOutput").text("Credentials Saved");
-			//uncheck the overwrite box
-			$("#canForceWrite").attr("checked",false);
-		},
-		zzz: function(){}
+		//check is overwrites are allowed (force)
+		force = $("#canForceWrite:checked").val();
+		$MS.setPassword(domainName,encryptedData,RowSalt,force,{
+			error: function(jq,textStatus,errorThrown) {
+				if(jq.status==409)
+				{	
+					$("#saveOutput").text("Save Failed: This URL Already exists");
+				}
+				else
+				{
+					$("#saveOutput").text("An undefined error has occurred, see the error console for more information");
+					console.log("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);
+				}
+			},
+			success: function(requestdata) {
+				$("#saveOutput").text("Credentials Saved");
+				//uncheck the overwrite box
+				$("#canForceWrite").attr("checked",false);
+			},
+			zzz: function(){}
+		});
 	});
 }

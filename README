@@ -9,6 +9,8 @@ At current (2011-08-28) there is a warning on the Opera extensions-tabs pages wa
 Done List!
 =======================================================
  - Configurable password generation length
+ - User Authentication
+ - Lightboxes instead of dialogs for credentials
  - Maybe even "store password for browser session" option
  - Better Error Handling
  - Reimplement "server" using a more consistent REST paradigm

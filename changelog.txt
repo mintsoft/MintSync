@@ -2,6 +2,14 @@
 MintSync (working title) Changelog
 ************************************
 
+10:53 04/09/2011
+================
+Client
+------
+Refactored basically everything to use callbacks where input is required
+Added lightboxes for encryption password prompts
+Added lightboxes for authentication details
+
 11:38 03/09/2011
 ================
 
