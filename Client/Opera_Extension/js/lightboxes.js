@@ -31,7 +31,8 @@ function setupLightboxes()
 		top: 'center',
 		closeOnClick: false,
 		closeOnEsc: false,
-		load: false
+		load: false,
+		speed: 'fast'
 	});	
 }
 /**
