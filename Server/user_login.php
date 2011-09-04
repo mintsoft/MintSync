@@ -23,7 +23,7 @@ class user_login {
 		
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		
-		return($rows[0]);
+		return(isset($rows[0])?$rows[0]:null);
 	}
 
 	public static function validate(){
