@@ -26,9 +26,9 @@ function setupLightboxes()
 		mask: {
 			color: '#000',
 			loadSpeed: 'fast',
-			opacity: 0.4
+			opacity: 0.7
 		},
-
+		top: 'center',
 		closeOnClick: false,
 		closeOnEsc: false,
 		load: false

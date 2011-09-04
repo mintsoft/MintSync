@@ -53,3 +53,6 @@ ul.options li {
 .rightAligned {
 	text-align: right;
 }
+.advancedOption {
+	display: none;
+}

@@ -48,12 +48,22 @@ function savePrefs() {
 	{
 		widget.preferences["SavedAuthentication"]	= undefined;
 	}
+	if(widget.preferences["SaveAuthentication"]!=0.8)
+	{
+		console.log("Resetting saved authentication credentials");
+		opera.extension.bgProcess.mintSyncGlobals.authentication = undefined;
+	}
 	
 	if(widget.preferences["SavePassword"]!=1)
 	{
 		widget.preferences["SavedPassword"]			= undefined;
 	}
-		
+	if(widget.preferences["SavePassword"]!=0.8)
+	{
+		console.log("Resetting saved encryption key");
+		opera.extension.bgProcess.mintSyncGlobals.passwd = undefined;
+	}
+
 	/**
 		This is so the effects of a change to the notification caching are immediate
 	*/
@@ -81,4 +91,16 @@ function savePrefs() {
 	}
 	
 }
+
+/**
+	Toggle the view of the "more options" and cycle the text
+*/
+function toggleAdvancedOptions(fromHere){
+	$(".advancedOption").slideToggle('fast');
+	var str = $(fromHere).text();
+	if(str.search("More")==-1)
+		$(fromHere).text(str.replace("Fewer","More"));
+	else
+		$(fromHere).text(str.replace("More","Fewer"));
 	
+}

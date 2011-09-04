@@ -2,6 +2,12 @@
 MintSync (working title) Changelog
 ************************************
 
+15:24 04/09/2011
+================
+Client
+------
+When changing the properties, the session-stored password is reset if currently stored
+
 10:53 04/09/2011
 ================
 Client
