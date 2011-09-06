@@ -55,7 +55,10 @@ if(LOGGING && !(isset($LOGLEVEL[$action]) && $LOGLEVEL[$action]==false))		//if l
 {
 	$stmt = $db->prepare("INSERT INTO AccessLog(Timestamp,RemoteIP,Request,UserID) VALUES(strftime('%s','now'),:IP,:request,:userID);");
 	$stmt->bindValue(":IP",ip2long($_SERVER['REMOTE_ADDR']));
-	$stmt->bindValue(":request",$_SERVER['REQUEST_METHOD'].": ".var_export($_REQUEST,true).";".var_export($_PUT,true));
+	$stmt->bindValue(":request",$_SERVER['REQUEST_METHOD'].": ".
+		var_export( array( 'GET' => $_GET,
+							'POST' => $_POST,
+							'PUT'  => $_PUT	),true));
 	$stmt->bindValue(":userID",$userID);
 	$stmt->execute();
 }

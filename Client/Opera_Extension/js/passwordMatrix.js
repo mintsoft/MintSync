@@ -1,7 +1,7 @@
 /** JS used on the password matrix page **/
 /** Timer objects and variable for alternating the page width **/
 var keyTimer, clickTimer, 
-containerWidth={0:"50em", 1:"90%"}, containerWidthKey=0, varWidthButtonText="|> <|";
+containerWidth = {0:"50em", 1:"90%"}, containerWidthKey = 0, varWidthButtonText = "|> <|";
 
 /**
 	Single/Double Click jQuery Extension/Hack
@@ -37,7 +37,7 @@ $(document).ready(function(){
 		containerWidthKey = 1-containerWidthKey;
 		
 		$('#mint_matrixContainer').animate({
-			width: containerWidth[containerWidthKey],
+			width: containerWidth[containerWidthKey]
 			}, 'slow', 'swing');
 
 		tmp = varWidthButtonText;
@@ -55,8 +55,15 @@ $(document).ready(function(){
 			$("#matrixLoading").fadeOut(0);
 		},
 		error: function(jq,textStatus,errorThrown) {
-			alert("An error occurred whilst listing URLs, this is probably due to not having any saved credentials. See the error console for more information");
-			console.log("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
+			switch(jq.status)
+			{
+				case 401:	//incorrect login
+					alert("List URLs failed due to incorrect Login, please try again");
+				break;
+				default:
+					alert("An error occurred whilst listing URLs, this is probably due to not having any saved credentials. See the error console for more information");
+					console.log("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
+			}
 		},
 		success: function(requestdata,textStatus,jq) {
 			//create list of domains
@@ -103,43 +110,51 @@ function updatePasswordMatrix(sourceArray)
 		
 		//add click handler to the H3
 		$(tmpObj).find("h3").single_double_click(function(event){
-			/**
-				single Click - show/hide URLS
-			*/
-			event.preventDefault();
-			
-			togglePasswordsForURL(this);
-		},
-		function(event){
-			/**
-				double Click - Edit URL
-			*/
-			var objClicked = this;	//this is used in the callback context later
-			
-			event.preventDefault();
-			
-			//TODO: replace prompt with something better
-			var newURL = prompt("Change URL:",$(this).text());
-			if(!newURL)
-				return false;
+				/**
+					single Click - show/hide URLS
+				*/
+				event.preventDefault();
 				
-			$MS.renameURL(	$(this).parent().find("input[name='ID']").val(), newURL,	{
-					beforeSend: function() {},
-					complete: function() {},
-					success: function(requestdata,textStatus,jq) {
+				togglePasswordsForURL(this);
+				return false;
+			},
+			function(event){
+				/**
+					double Click - Edit URL
+				*/
+				var objClicked = this;	//this is used in the callback context later
+				
+				event.preventDefault();
+				
+				//TODO: replace prompt with something better
+				var newURL = prompt("Change URL:",$(this).text());
+				if(!newURL)
+					return false;
 					
-						//update the record
-						$(objClicked).text(newURL);
+				$MS.renameURL(	$(this).parent().find("input[name='ID']").val(), newURL,	{
+						beforeSend: function() {},
+						complete: function() {},
+						success: function(requestdata,textStatus,jq) {
 						
-					},
-					error: function(jq,textStatus,errorThrown) {
-						alert("There was a serious error, see the error console");
-						console.log("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
-					}
-			});
-			
-			return false;
-		},200);
+							//update the record
+							$(objClicked).text(newURL);
+							
+						},
+						error: function(jq,textStatus,errorThrown) {
+							switch(jq.status)
+							{
+								case 401:	//incorrect login
+									alert("Rename Failed: Incorrect Login. Please try again");
+								break;
+								default:
+									alert("There was a serious error, see the error console");
+									console.log("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
+							}
+						}
+				});
+				
+				return false;
+			},200);
 		
 		//add click handler to the bin icon to handle deletion/removal
 		$(tmpObj).find("p.binIcon img.bin").click(function(){
@@ -152,7 +167,6 @@ function updatePasswordMatrix(sourceArray)
 			
 			$MS.removePasswords(id,url,{
 				beforeSend: function() {
-					
 				},
 				success: function(requestdata,textStatus) {
 					//remove the entire li
@@ -160,13 +174,20 @@ function updatePasswordMatrix(sourceArray)
 
 				},
 				error: function(jq,textStatus,errorThrown) {
-					alert("There was an error, see the error console for more information");
-					console.log("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
+					switch(jq.status)
+					{
+						case 401:	//incorrect login
+							alert("Delete Failed: Incorrect Login. Please try again");
+						break;
+						default:
+							alert("There was an error, see the error console for more information");
+							console.log("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
+					}
 				},
 				complete: function(status) {
 				}
 			});
-			
+			return false;
 		});
 	}
 	
@@ -213,8 +234,15 @@ function togglePasswordsForURL(srcH3)
 				 });
 			},
 			error: function(jq,textStatus,errorThrown){
-				alert("An Error Has Occurred, see the error console for more information");
-				console.log("An unexpected error has occurred ("+jq.status+" "+textStatus+"): " + errorThrown);
+				switch(jq.status)
+				{
+					case 401:	//incorrect login
+						alert("Retrieve failed due to incorrect Login, please try again");
+					break;
+					default:
+						alert("An Error Has Occurred, see the error console for more information");
+						console.log("An unexpected error has occurred ("+jq.status+" "+textStatus+"): " + errorThrown);
+				}
 			}
 		});
 	}

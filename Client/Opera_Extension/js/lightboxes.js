@@ -1,3 +1,7 @@
+/** 
+Initialise the lightboxes
+*/
+
 function setupLightboxes()
 {
 	//add the ask for a password box
@@ -42,8 +46,9 @@ function askForPassword(prompt,completeCallback)
 {
 	$("#dialogPassPassword").val("");
 	$("#dialogPasswordInstruction").text(prompt);
-	$("#passwordPrompt").data("overlay").load().onClose(function(){
+	$("#passwordPrompt").data("overlay").load().onClose(function(event){
 		completeCallback($("#dialogPassPassword").val());
+		$(this).unbind(event);
 	});
 	$("#dialogPassPassword").focus();
 	
@@ -56,11 +61,12 @@ function askForUsernamePassword(prompt,completeCallback)
 //	$("#authenticationInstruction").text(prompt);
 	$("#dialogAuthUsername").val("");
 	$("#dialogAuthPassword").val("");
-	$("#authenticationPrompt").data("overlay").load().onClose(function(){;
+	$("#authenticationPrompt").data("overlay").load().onClose(function(event){
 		completeCallback({
 			'username': $("#dialogAuthUsername").val(),
 			'password':	$("#dialogAuthPassword").val()
 		});
+		$(this).unbind(event);
 	});
 	$("#dialogAuthUsername").focus();
 }

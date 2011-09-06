@@ -168,14 +168,18 @@ function getPasswords(domainName) {
 				
 		},
 		error: function(jq,textStatus,errorThrown){
-			if(jq.status==404)	//no password!
+			switch(jq.status)
 			{
-				$("#fetchErrorDiv").text("No credentials were found for this URL");
-			}
-			else
-			{
-				$("#fetchErrorDiv").text("An undefined error has occurred, see the error console for more information");
-				console.log("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);
+				case 401:
+					$("#fetchErrorDiv").text("Incorrect Login, please try again");
+				break;
+				case 404: //no password
+					$("#fetchErrorDiv").text("No credentials were found for this URL");
+				break;
+				default:
+				
+					$("#fetchErrorDiv").text("An undefined error has occurred, see the error console for more information");
+					console.log("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);
 			}
 		}
 	});
@@ -197,7 +201,7 @@ function setPassword() {
 		return;
 	}
 	
-	//build JS Object to JSON
+	//build JS Object to JSONify
 	$("#inputPassContainer").children("p").each(function(index,Element){
 		var name = "", password="";
 		
@@ -214,14 +218,19 @@ function setPassword() {
 		force = $("#canForceWrite:checked").val();
 		$MS.setPassword(domainName,encryptedData,RowSalt,force,{
 			error: function(jq,textStatus,errorThrown) {
-				if(jq.status==409)
-				{	
-					$("#saveOutput").text("Save Failed: This URL Already exists");
-				}
-				else
+				
+				switch(jq.status)
 				{
-					$("#saveOutput").text("An undefined error has occurred, see the error console for more information");
-					console.log("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);
+					case 401:
+						$("#saveOutput").text("Save Failed: Incorrect Login, please try again");
+					break;
+					case 409:
+						$("#saveOutput").text("Save Failed: This URL Already exists");
+					break;
+					default:
+					
+						$("#saveOutput").text("An undefined error has occurred, see the error console for more information");
+						console.log("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);				
 				}
 			},
 			success: function(requestdata) {

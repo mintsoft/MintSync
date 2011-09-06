@@ -10,7 +10,7 @@ function MintSync() {
 		Retrieve passwords for the passed domain
 	*/
 	this.getPasswords = function(Domain, callbacks) {
-		
+		//console.log("getPasswords  Called");
 		$MS.getAuthenticationObject(function(authObj){
 			$.ajax({
 				type: "GET",
@@ -28,6 +28,11 @@ function MintSync() {
 						callbacks.complete(jq,textStatus);
 				},
 				error: function(jq,textStatus,errorThrown) {
+					console.log(jq.status);
+					if(jq.status==401)	//incorrect credentials
+					{
+						$MS.resetSavedCredentials();
+					}
 					if(callbacks.error != undefined)
 						callbacks.error(jq,textStatus,errorThrown);
 				},
@@ -43,7 +48,6 @@ function MintSync() {
 		Retrieve passwords for the passed domain
 	*/
 	this.checkIfPasswordsExist = function(Domain,callbacks) {
-		
 		if(!$MS.checkForSavedAuth())
 		{
 			console.log("No Saved Authenticaiton, checkIfPasswordsExist cancelled");
@@ -51,7 +55,6 @@ function MintSync() {
 		}
 		
 		$MS.getAuthenticationObject(function(authObj){
-			console.log("getAuthObject Callback started - preajax");
 			$.ajax({
 				type: "GET",
 				data: {URL:Domain},
@@ -75,9 +78,13 @@ function MintSync() {
 						callbacks.complete(jq,textStatus);
 				},
 				error: function(jq,textStatus,errorThrown) {
+					if(jq.status==401)	//incorrect credentials
+					{
+						$MS.resetSavedCredentials();
+					}
 				//console.log("Check URL Request  errors");
 					if(callbacks.error != undefined)
-						callbacks.error(textStatus,errorThrown);
+						callbacks.error(jq,textStatus,errorThrown);
 				},
 				success: function(data,textStatus,jq) {
 				//console.log("Check URL Request  success");
@@ -92,8 +99,8 @@ function MintSync() {
 		Retrieve passwords for the passed domain
 	*/
 	this.listURLS = function(callbacks) {
-		console.log("ListURLS Called");
 		$MS.getAuthenticationObject(function(authObj){
+					
 			$.ajax({
 				type: "GET",
 				url:$MS.getServerURL()+"?AJAX=true&action=list",
@@ -109,6 +116,10 @@ function MintSync() {
 						callbacks.complete(jq,textStatus);
 				},
 				error: function(jq,textStatus,errorThrown) {
+					if(jq.status==401)	//incorrect credentials
+					{
+						$MS.resetSavedCredentials();
+					}
 					if(callbacks.error != undefined)
 						callbacks.error(jq,textStatus,errorThrown);
 				},
@@ -140,6 +151,10 @@ function MintSync() {
 						callbacks.complete(jq,textStatus);
 				},
 				error: function(jq,textStatus,errorThrown) {
+					if(jq.status==401)	//incorrect credentials
+					{
+						$MS.resetSavedCredentials();
+					}
 					if(callbacks.error != undefined)
 						callbacks.error(jq,textStatus,errorThrown);
 				},
@@ -170,8 +185,12 @@ function MintSync() {
 						callbacks.complete(jq,textStatus);
 				},
 				error: function(jq,textStatus,errorThrown) {
+					if(jq.status==401)	//incorrect credentials
+					{
+						$MS.resetSavedCredentials();
+					}
 					if(callbacks.error != undefined)
-						callbacks.error(textStatus,errorThrown);
+						callbacks.error(jq,textStatus,errorThrown);
 				},
 				success: function(data,textStatus,jq) {
 					if(callbacks.success != undefined)
@@ -202,8 +221,12 @@ function MintSync() {
 						callbacks.complete(jq,textStatus);
 				},
 				error: function(jq,textStatus,errorThrown) {
+					if(jq.status==401)	//incorrect credentials
+					{
+						$MS.resetSavedCredentials();
+					}
 					if(callbacks.error != undefined)
-						callbacks.error(textStatus,errorThrown);
+						callbacks.error(jq,textStatus,errorThrown);
 				},
 				success: function(data,textStatus,jq) {
 					if(callbacks.success != undefined)
@@ -232,7 +255,7 @@ function MintSync() {
 		
 		shaObj	 = new jsSHA(hash+":"+nonce,"ASCII");
 		authStr	+= shaObj.getHash("SHA-512","B64");
-		jqXHR.setRequestHeader("Authorization", "MintSync1 "+authStr);
+		jqXHR.setRequestHeader("X-MS-Authorisation", "MintSync1 "+authStr);
 		return true;
 	},
 	/**
@@ -332,7 +355,7 @@ function MintSync() {
 	/**
 		Will retrieve the authentication credentials if saved and request for them if not
 	*/
-	this.getAuthenticationObject = function(callback)
+	this.getAuthenticationObject = function(authCallback)
 	{
 		var promptStr = "Please enter your login details";
 		
@@ -343,12 +366,12 @@ function MintSync() {
 				askForUsernamePassword(promptStr,function(authObj){
 					authObj.password = $MS.hashPass(authObj.password);
 					widget.preferences["SavedAuthentication"] = JSON.stringify(authObj);
-					callback($.parseJSON(widget.preferences["SavedAuthentication"]));
+					authCallback($.parseJSON(widget.preferences["SavedAuthentication"]));
 				});
 			}
 			else
 			{
-				callback($.parseJSON(widget.preferences["SavedAuthentication"]));
+				authCallback($.parseJSON(widget.preferences["SavedAuthentication"]));
 			}
 		}
 		else if (widget.preferences["SaveAuthentication"]==0.8)
@@ -366,18 +389,18 @@ function MintSync() {
 						opera.extension.bgProcess.mintSyncGlobals.authentication = authObj;
 					
 					
-					callback(authObj);
+					authCallback(authObj);
 				});
 			}
 			else
 			{
 				if(opera.extension.bgProcess == undefined) // being called from the bgProcess
 				{	
-					callback(mintSyncGlobals.authentication);
+					authCallback(mintSyncGlobals.authentication);
 				}
 				else
 				{	
-					callback(opera.extension.bgProcess.mintSyncGlobals.authentication);
+					authCallback(opera.extension.bgProcess.mintSyncGlobals.authentication);
 				}
 				
 			}
@@ -392,22 +415,50 @@ function MintSync() {
 				askForUsernamePassword(promptStr,function(authObj){
 					authObj.password = $MS.hashPass(authObj.password);
 					$MS.rememberedAuthentication = authObj;
-					callback(authObj);
+					authCallback(authObj);
 				});
 			}
 			else
 			{
-				callback($MS.rememberedAuthentication);
+				authCallback($MS.rememberedAuthentication);
 			}
 		}
 		else
 		{
 			askForUsernamePassword(promptStr, function(authObj){
 				authObj.password = $MS.hashPass(authObj.password);
-				callback(authObj);
+				authCallback(authObj);
 			});
 		}
 	},	
+	/**
+		Resets the credentials saved (however they are)
+	*/
+	this.resetSavedCredentials = function()
+	{
+		switch(widget.preferences["SaveAuthentication"])
+		{
+			case "1":
+				widget.preferences["SavedAuthentication"]="undefined";
+			break;
+			case "0.8":
+				if(opera.extension.bgProcess == undefined) // being called from the bgProcess
+				{
+					mintSyncGlobals.authentication = undefined;
+				}
+				else
+				{
+					opera.extension.bgProcess.mintSyncGlobals.authentication = undefined;
+				}
+				
+			break;
+			case "0.5":
+				$MS.rememberedAuthentication=undefined
+			break;
+			case "0":
+			default:
+		}
+	},
 	/** 
 		Returns whether or not a password should be automatically 
 		retrieved when the pop up is launched or not.

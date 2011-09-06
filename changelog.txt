@@ -2,6 +2,32 @@
 MintSync (working title) Changelog
 ************************************
 
+22:04 06/09/2011
+================
+Server
+------
+Altered to use X-MS-Authorisation header for compatibility with basic auth
+
+Client
+------
+Version 0.6
+Altered to use X-MS-Authorisation header for compatibility with basic auth
+Fixed issue with callbacks being executed (jQuerytools event queueing)
+Renamed Password Matrix to Credentials List
+Made Client reset the saved credentials on error
+Added some errors for incorrect credentials
+
+17:15 04/09/2011
+================
+
+Server
+------
+Altered the "log" to be a smidge more self contained
+
+Client
+------
+Attempting to figure out why the listURLS getAuthObject callback is being executed everytime any AJAX occurs on the password matrix. - quite a large outstanding issue
+
 15:24 04/09/2011
 ================
 Client

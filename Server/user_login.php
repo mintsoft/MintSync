@@ -1,9 +1,9 @@
 <?php
 /*
-	Authorisation: MintSync1 Username+"|"+Nonce+"|"+ Base64EncodedAuthString
+	X-MS-Authorisation: MintSync1 Username+"|"+Nonce+"|"+ Base64EncodedAuthString
 	base64EncodedAuthString = SHA512.b64(SHA512.hex(Password)+":"+Nonce)
 	
-	Example: Authorization: MintSync1 fdsg|;$GPtF\=S8APNM4yK^"sE805%l_E[q/B|MOGGNOnzjImU77a3aCRFwwxTOdD8bcuhZtB+4hAudeTexz9T/m7/hLBaK+2f4nzEe9QkeFaThpvSaZ5lUwkoRw
+	Example: X-MS-Authorisation: MintSync1 fdsg|;$GPtF\=S8APNM4yK^"sE805%l_E[q/B|MOGGNOnzjImU77a3aCRFwwxTOdD8bcuhZtB+4hAudeTexz9T/m7/hLBaK+2f4nzEe9QkeFaThpvSaZ5lUwkoRw
 */
 
 function debugOut($str){
@@ -30,7 +30,7 @@ class user_login {
 
 		$headers = apache_request_headers();
 
-		list($method, $authHeader) = explode(" ",$headers['Authorization']);
+		list($method, $authHeader) = explode(" ",$headers['X-MS-Authorisation']);
 		
 		switch($method)
 		{
