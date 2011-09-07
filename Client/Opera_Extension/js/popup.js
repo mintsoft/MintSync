@@ -136,7 +136,8 @@ function getPasswords(domainName) {
 				base64decoded="",
 				innerHTML="";
 
-				$MC.decodeAndDecrypt(requestdata.data.Credentials, requestdata.data.Salt,function(credentialsObj){
+				$MC.decodeAndDecrypt(requestdata.data.Credentials, requestdata.data.Salt,{
+					success:function(credentialsObj){
 					$("#retrieveOutput tbody").empty();
 
 					//also wipe out the save dialog and remove any boxes already there
@@ -164,6 +165,10 @@ function getPasswords(domainName) {
 						
 					}
 					$("#retrieveOutput").show(0);
+				},
+				error: function(){
+					alert("The password entered was incorrect, please try again");
+				}
 				});
 				
 		},

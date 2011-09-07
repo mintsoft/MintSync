@@ -210,7 +210,8 @@ function togglePasswordsForURL(srcH3)
 			beforeSend: function() {},
 			complete: function(jq,textStatus,errorThrown) {},
 			success: function(requestdata,textStatus,jq) {
-				 $MC.decodeAndDecrypt(requestdata.data.Credentials,requestdata.data.Salt,function(credentialsObj){
+				 $MC.decodeAndDecrypt(requestdata.data.Credentials,requestdata.data.Salt,{
+				 success:function(credentialsObj){
 					//object of key-value pairs
 					var table = $(srcH3).parent().find("table"),
 						tableBody = table.find("tbody");
@@ -231,6 +232,10 @@ function togglePasswordsForURL(srcH3)
 					
 					$(srcH3).parent().find(".dropDownContent").slideDown(0);
 					$(srcH3).addClass('expanded');
+				 },
+				 error: function(){
+					alert("That decryption password is incorrect. Please try again");
+				 }
 				 });
 			},
 			error: function(jq,textStatus,errorThrown){

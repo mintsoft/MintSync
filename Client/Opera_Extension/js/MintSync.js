@@ -15,6 +15,7 @@ function MintSync() {
 			$.ajax({
 				type: "GET",
 				data: {URL:Domain},
+				cache: false,
 				url:$MS.getServerURL()+"?AJAX=true&action=retrieve",
 				beforeSend: function(jq,settings) {
 					//add the headers for the auth:
@@ -58,6 +59,7 @@ function MintSync() {
 			$.ajax({
 				type: "GET",
 				data: {URL:Domain},
+				cache: false,
 				url:$MS.getServerURL()+"?AJAX=true&action=check",
 				beforeSend: function(jq,settings) {
 					//add the headers for the auth:
@@ -104,6 +106,7 @@ function MintSync() {
 			$.ajax({
 				type: "GET",
 				url:$MS.getServerURL()+"?AJAX=true&action=list",
+				cache: false,
 				beforeSend: function(jq,settings) {
 					//add the headers for the auth:
 					$MS.configureAuth(jq,settings,authObj);
@@ -138,6 +141,7 @@ function MintSync() {
 			$.ajax({
 				type: "POST",
 				data: {"URL":Domain,"Credentials":Credentials,"rowSalt":rowSalt,"force":force},
+				cache: false,
 				url:$MS.getServerURL()+"?AJAX=true&action=save",
 				beforeSend: function(jq,settings) {
 					//add the headers for the auth:
@@ -173,6 +177,7 @@ function MintSync() {
 			$.ajax({
 				type: "DELETE",
 				url:$MS.getServerURL()+"?AJAX=true&action=remove&ID="+ID,
+				cache: false,
 				beforeSend: function(jq,settings) {
 					//add the headers for the auth:
 					$MS.configureAuth(jq,settings,authObj);
@@ -209,6 +214,7 @@ function MintSync() {
 				type: "PUT",
 				data: {"ID":ID,"newURL":newDomain},
 				url:$MS.getServerURL()+"?AJAX=true&action=rename",
+				cache: false,
 				beforeSend: function(jq,settings) {
 					//add the headers for the auth:
 					$MS.configureAuth(jq,settings,authObj);

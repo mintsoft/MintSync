@@ -22,7 +22,7 @@ function MintCrypto() {
 	/** 
 		Takes an base64encoded & encrypted JSON object and returns the decrypted object
 	*/
-	this.decodeAndDecrypt = function(encryptedObject,rowSalt,mc_callback){
+	this.decodeAndDecrypt = function(encryptedObject,rowSalt,mc_callbacks){
 		var 	base64decoded = base64_decode(encryptedObject),
 				key = "", 
 				decryptedJSON = "", 
@@ -31,8 +31,16 @@ function MintCrypto() {
 		$MS.getEncryptionPasswordHash(function(passwordHash){
 			key = passwordHash+""+rowSalt;
 			decryptedJSON = $MC.Decrypt_strings(base64decoded,key,"AES",256);
-			credentialsObj = $.parseJSON(decryptedJSON);
-			mc_callback(credentialsObj);
+			try 
+			{
+				credentialsObj = $.parseJSON(decryptedJSON);	
+				mc_callbacks.success(credentialsObj);
+			}
+			catch(err)
+			{
+				//parse error, incorrect password
+				mc_callbacks.error();
+			}
 		});
 	},
 	/**

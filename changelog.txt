@@ -2,6 +2,17 @@
 MintSync (working title) Changelog
 ************************************
 
+15:54 07/09/2011
+================
+Server
+------
+Changed the MIME type of the JSON to be application/json
+
+Client
+------
+Implemented rudamentary "incorrect crypto password" handling
+Disabled browser caching on the client
+
 22:04 06/09/2011
 ================
 Server

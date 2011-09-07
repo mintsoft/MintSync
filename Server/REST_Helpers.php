@@ -9,7 +9,7 @@
 
 class restTools {
 
-	public static function sendResponse($body, $status = 200, $content_type = 'text/json')
+	public static function sendResponse($body, $status = 200, $content_type = 'application/json')
 	{
 		$status_header = 'HTTP/1.1 ' . $status . ' ' . restTools::getStatusCodeMessage($status);
 		
