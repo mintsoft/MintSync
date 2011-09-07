@@ -2,6 +2,17 @@
 MintSync (working title) Changelog
 ************************************
 
+20:03 07/09/2011
+================
+Server
+------
+Added confirmCrypto action, to compare the cryptoHash with the passed one
+
+Client
+------
+Added verifyCryptoPass method to MintSync Object
+Added CheckCryptoPass Option
+
 15:54 07/09/2011
 ================
 Server

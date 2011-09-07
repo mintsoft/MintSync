@@ -263,6 +263,29 @@ switch($action)
 					),404);	//Not Found
 	break;
 	
+	case "confirmCrypto":		//check that the hash serverside is the same as the sent one
+	
+		$testHash = $_GET['cryptoHash'];
+	
+		$stmt = $db->prepare("SELECT cryptoPassHash FROM User WHERE ID=:userID AND cryptoPassHash=:hash;");
+		$stmt->bindValue(":userID",$userID);
+		$stmt->bindValue(":hash",$testHash);
+		$stmt->execute();
+		
+		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		if(isset($rows[0]))
+			restTools::sendResponse(array(
+						"status"=>"ok", 
+						"action"=>"confirmCrypto",
+						"data"=> $rows[0]
+					),200);	//OK
+		else
+			restTools::sendResponse(array(
+						"status"=>"fail", 
+						"action"=>"confirmCrypto",
+						"data"=> false
+					),417);	//Expectation Failed
+	break;
 	
 	case "retrieve":			//GET Request
 	default:

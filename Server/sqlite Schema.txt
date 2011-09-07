@@ -9,7 +9,8 @@ CREATE TABLE AccessLog (
 CREATE TABLE User ( 
 	ID INTEGER PRIMARY KEY AUTOINCREMENT, 
 	username TEXT NOT NULL, 
-	password TEXT NOT NULL 
+	password TEXT NOT NULL,
+	cryptoPassHash TEXT NULL
 );
 
 CREATE TABLE auth (

@@ -49,6 +49,11 @@
 						<input type='number' name='NotifySourceUpdatePeriod' id='NotifySourceUpdatePeriod' min='1' max='360' step='1'/> <label for='NotifySourceUpdatePeriod'>Minutes</label>
 						<span class='mini-instructions' >Applies to Local Cache Only</span>
 					</li>
+					<li class=''><span class='bigLabel'>Check Crypto Password</span>
+						<input type='radio' name='CheckCryptoPass' id='checkCryptoPassY' value='1' /> <label for='checkCryptoPassY'>Yes</label>
+						<input type='radio' name='CheckCryptoPass' id='checkCryptoPassN' value='0' /> <label for='checkCryptoPassN'>No!</label>
+						<span class='mini-instructions' >Will Verify The Crypto Password Against the Hash Stored Server Side</span>
+					</li>
 					<li class='advancedOption'><span class='bigLabel'>Cipher</span>
 						<input type='radio' name='Cipher' id='CipherAES' value='aes'  	/> <label for='CipherAES'>AES</label>
 						<input type='radio' name='Cipher' id='Cipher3DES' value='3des' disabled='disabled' 	/> <span class='disabled'><label for='Cipher3DES'>3DES</label> </span>

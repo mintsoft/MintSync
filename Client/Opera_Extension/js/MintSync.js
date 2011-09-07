@@ -240,6 +240,50 @@ function MintSync() {
 				}
 			});
 		});
+	},
+	/**
+		Takes a password hash and verifies it against the copy kept serverside
+	*/
+	this.verifyCryptoPass = function(passwordHash,callbacks) {
+	
+		//do hash the password again (so it is double hashed)
+		passwordHash = hashPass(passwordHash);
+	
+		$MS.getAuthenticationObject(function(authObj){
+			$.ajax({
+				type: "GET",
+				data: {"cryptoHash":passwordHash},
+				url:$MS.getServerURL()+"?AJAX=true&action=confirmCrypto",
+				cache: false,
+				beforeSend: function(jq,settings) {
+					//add the headers for the auth:
+					$MS.configureAuth(jq,settings,authObj);
+					
+					if(callbacks.beforeSend != undefined)
+						callbacks.beforeSend(jq,settings);
+				},
+				complete: function(jq,textStatus) {
+					if(callbacks.complete != undefined)
+						callbacks.complete(jq,textStatus);
+				},
+				error: function(jq,textStatus,errorThrown) {
+					if(jq.status==401)	//incorrect credentials
+					{
+						$MS.resetSavedCredentials();
+					}
+					else if(jq.status==417) //Hash doesn't match
+					{
+							
+					}
+					if(callbacks.error != undefined)
+						callbacks.error(jq,textStatus,errorThrown);
+				},
+				success: function(data,textStatus,jq) {
+					if(callbacks.success != undefined)
+						callbacks.success(data);
+				}
+			});
+		});
 		
 	},
 	/** 
