@@ -172,3 +172,31 @@ ul#tabBar {
 	background: rgba(160,160,160,0.2);
 	height: 231px;
 }
+
+/** Add icon tab **/
+#addPairP {
+	cursor: pointer;
+}
+.hangingTab {
+	display: inline-block;
+	margin-top: -1px;
+	border: 1px solid #aaa;
+	border-top-color: #ececec;	/* must match bg colour */
+	padding: 0ex 0.5em 0.5ex 0.5em;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	background-image: -o-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 90%);
+	min-height: 16px;
+}
+
+.hangingTab input[type='checkbox'] {
+	margin-left: 0px;
+}
+.hangingTab label {
+	width: auto;
+}
+
+.submitContainer {
+	margin-top: 4ex;
+	float: left;
+}

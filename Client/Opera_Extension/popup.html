@@ -72,7 +72,12 @@
 					<p><label>Credentials:</label> <span class='mini-instructions'>Right Click (or ctrl+G) to Generate</span></p>
 					<div id='inputPassContainer'>
 					</div>
-					<p> <img src='img/add.png' alt='Add Pair' onclick='addPair(); return false' class='jsAction' /></p>
+					<p id='addPairP' onclick='addPair(); return false;' class='hangingTab' >
+						<img src='img/add.png' alt='Add Pair' class='jsAction' /> Add More
+					</p>
+					<p class='hangingTab'>
+						<input type='checkbox' name='force' id='canForceWrite' /><label for='canForceWrite'><span class='mini-instructions'>Allow Overwrite</span></label>
+					</p>
 					<!-- the template used for the new rows: -->
 					<div id='rowTemplate' class='hidden' >
 						<p> 
@@ -81,9 +86,12 @@
 							<img src='img/del.png' alt='Delete Pair' onclick='delPair(this); return false' class='jsAction saveBin' />
 						</p>
 					</div>
-					<p><input type='submit'/><input type='checkbox' name='force' id='canForceWrite' /><label for='canForceWrite'><span class='mini-instructions'>Allow Overwrite</span></label></p>
+					<div>
+						<p class='submitContainer'><input type='submit' value='Save' id='saveButton'/></p>
+						<div id='saveOutput'></div>
+					</div>
 				</form>
-				<div id='saveOutput'></div>
+				
 			</fieldset>
 		</ul>
 	</div>
