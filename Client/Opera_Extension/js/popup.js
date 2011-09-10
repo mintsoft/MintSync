@@ -237,7 +237,7 @@ function setPassword() {
 						$("#saveOutput").text("Save Failed: This URL Already exists");
 					break;
 					case 417:
-						$("#saveOutput").text("Save Failed: Inconsistent Encryption Password, please try again");
+						$("#saveOutput").text("Save Failed: Inconsistent Crypto Password");
 					break;
 					default:
 					

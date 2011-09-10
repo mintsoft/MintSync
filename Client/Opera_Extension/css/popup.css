@@ -197,6 +197,9 @@ ul#tabBar {
 }
 
 .submitContainer {
-	margin-top: 4ex;
+	margin-top: 2ex;
 	float: left;
+}
+
+#saveOutput {
 }
