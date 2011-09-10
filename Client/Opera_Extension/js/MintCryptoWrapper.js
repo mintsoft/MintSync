@@ -53,7 +53,7 @@ function MintCrypto() {
 		$MS.getEncryptionPasswordHash(function(passwordHash){
 			encryptionKey = passwordHash+""+RowSalt,
 			encryptedData = base64_encode($MC.Encrypt_strings(Credentials,encryptionKey,"AES",256));
-			mc_callback(encryptedData);
+			mc_callback(encryptedData,$MS.hashPass(passwordHash));
 		});
 	}
 }

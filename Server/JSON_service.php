@@ -20,7 +20,7 @@ $userID = user_login::validate();
 $domain = ""; 
 $returnValues = array();
 
-$db = new PDO('sqlite:'.PASSWORD_DATABASE);
+$db = new PDO(PDO_DSN);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 //REST services:
@@ -69,6 +69,24 @@ switch($action)
 
 		if(isset($_REQUEST['URL']) && isset($_REQUEST['rowSalt']) && isset($_REQUEST['Credentials']))
 		{
+			
+			if(!empty($_REQUEST['cryptoHash']))
+			{
+				$stmt = $db->prepare("SELECT * FROM User WHERE ID=:userID AND cryptoPassHash=:cryptoHash");
+				$stmt->bindValue(":cryptoHash",$_REQUEST['cryptoHash']);
+				$stmt->bindValue(":userID",$userID);
+				$stmt->execute();
+				$rows = $stmt->fetchAll();
+				if(!isset($rows[0]))
+					restTools::sendResponse(array(
+									"status"=>"fail",
+									"action"=>"insert",
+									"data"=>array(
+										"reason"=>"Inconsistent Encryption Key"
+									)
+								),417);		//Expectation Failed
+			}
+		
 			$stmt = $db->prepare("SELECT COUNT(*) AS Freq FROM auth WHERE URL=:url AND userID=:userID;");
 			$stmt->bindValue(":url",strtolower($_REQUEST['URL']));
 			$stmt->bindValue(":userID",$userID);

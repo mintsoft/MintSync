@@ -2,6 +2,20 @@
 MintSync (working title) Changelog
 ************************************
 
+07:23 10/09/2011
+================
+Server
+------
+Added User addition page and ability to lock the server-browser interface
+Added check for consistent encryption password on setpassword
+Altered PDO DNS to use a constant for easier swapping of database architecture
+Refactored server interface to use basic templating system
+
+Client
+------
+Implemented handling for consistent encryption password on set password
+
+
 20:03 07/09/2011
 ================
 Server

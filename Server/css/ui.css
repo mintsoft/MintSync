@@ -7,3 +7,17 @@ h1
 {
 	margin-bottom: 1ex;
 }
+
+form ul li {
+	padding: 1ex 1ex;
+}
+
+form ul li input
+{
+	width: 20em !important;
+}
+
+li label {
+	display: inline-block;
+	width: 15em;
+}

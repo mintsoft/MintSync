@@ -14,7 +14,7 @@ class user_login {
 
 	public static function getUserRow($username){
 		
-		$db = new PDO('sqlite:'.PASSWORD_DATABASE);
+		$db = new PDO(PDO_DSN);
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		
 		$stmt = $db->prepare("SELECT * FROM User WHERE username=:username;");

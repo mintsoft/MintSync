@@ -1,8 +1,10 @@
 <?php
 
 define("PASSWORD_DATABASE", "/media/WD-250_md0/dbs/pass.db");
+define("PDO_DSN",'sqlite:'.PASSWORD_DATABASE);
+define("LOGGING", true);
+define("SERVER_UI_LOCKED", false);
 
-define("LOGGING",true);
 $LOGLEVEL = array(
 				"retrieve"	=>	true,
 				"save"		=>	true,
@@ -13,5 +15,6 @@ $LOGLEVEL = array(
 				
 				"zz"		=>	false	//placeholder for the last element
 			);
+
 
 ?>

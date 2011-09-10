@@ -136,11 +136,17 @@ function MintSync() {
 	/**
 		Performs the AJAX request saving the password
 	*/
-	this.setPassword = function(Domain,Credentials,rowSalt,force,callbacks) {
+	this.setPassword = function(Domain,Credentials,rowSalt,cryptoHash,force,callbacks) {
 		$MS.getAuthenticationObject(function(authObj){
 			$.ajax({
 				type: "POST",
-				data: {"URL":Domain,"Credentials":Credentials,"rowSalt":rowSalt,"force":force},
+				data: {
+					"URL":Domain,
+					"Credentials":Credentials,
+					"rowSalt":rowSalt,
+					"cryptoHash":cryptoHash,
+					"force":force
+				},
 				cache: false,
 				url:$MS.getServerURL()+"?AJAX=true&action=save",
 				beforeSend: function(jq,settings) {
@@ -164,7 +170,7 @@ function MintSync() {
 				},
 				success: function(data,textStatus,jq) {
 					if(callbacks.success != undefined)
-						callbacks.success(data);
+						callbacks.success(data,textStatus,jq);
 				}
 			});
 		});
@@ -253,7 +259,7 @@ function MintSync() {
 			$.ajax({
 				type: "GET",
 				data: {"cryptoHash":passwordHash},
-				url:$MS.getServerURL()+"?AJAX=true&action=confirmCrypto",
+				url: $MS.getServerURL()+"?AJAX=true&action=confirmCrypto",
 				cache: false,
 				beforeSend: function(jq,settings) {
 					//add the headers for the auth:
@@ -540,6 +546,12 @@ function MintSync() {
 	*/
 	this.getGeneratedRowSaltLength = function(){
 		return 32;
+	}
+	/**
+		Returns whether the cryptoHash should be verified or not
+	*/
+	this.getVerifyCryptoPass = function() {
+		return widget.preferences["CheckCryptoPass"]=="1";
 	}
 	/**
 	Generates a random salt string

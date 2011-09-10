@@ -216,12 +216,16 @@ function setPassword() {
 		CredentialsObj[name]=password;
 	});
 	
-	$MC.encodeAndEncrypt(CredentialsObj,RowSalt,function(encryptedData){
+	$MC.encodeAndEncrypt(CredentialsObj,RowSalt,function(encryptedData,cryptoHash){
 		CredentialsObj = new Object();
 
+		//if the cryptoHash should be verified
+		if(!$MS.getVerifyCryptoPass())
+			cryptoHash=undefined;
+		
 		//check is overwrites are allowed (force)
 		force = $("#canForceWrite:checked").val();
-		$MS.setPassword(domainName,encryptedData,RowSalt,force,{
+		$MS.setPassword(domainName,encryptedData,RowSalt,cryptoHash,force,{
 			error: function(jq,textStatus,errorThrown) {
 				
 				switch(jq.status)
@@ -232,13 +236,16 @@ function setPassword() {
 					case 409:
 						$("#saveOutput").text("Save Failed: This URL Already exists");
 					break;
+					case 417:
+						$("#saveOutput").text("Save Failed: Inconsistent Encryption Password, please try again");
+					break;
 					default:
 					
 						$("#saveOutput").text("An undefined error has occurred, see the error console for more information");
 						console.log("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);				
 				}
 			},
-			success: function(requestdata) {
+			success: function(requestdata,textStatus,jq) {
 				$("#saveOutput").text("Credentials Saved");
 				//uncheck the overwrite box
 				$("#canForceWrite").attr("checked",false);

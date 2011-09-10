@@ -10,7 +10,7 @@ CREATE TABLE User (
 	ID INTEGER PRIMARY KEY AUTOINCREMENT, 
 	username TEXT NOT NULL, 
 	password TEXT NOT NULL,
-	cryptoPassHash TEXT NULL
+	cryptoPassHash TEXT NOT NULL
 );
 
 CREATE TABLE auth (
