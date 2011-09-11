@@ -10,6 +10,10 @@ if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS']==="off")	//off is the value whe
 	exit();
 }
 
+if(SERVER_UI_LOCKED)
+{
+	exit();
+}
 function header_html ()
 {	?>
 <!DOCTYPE HTML>
