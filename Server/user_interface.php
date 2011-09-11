@@ -85,10 +85,12 @@ switch($action)
 	<form action='javascript: void(0);' id='adduser'>
 		<ul class='form'>
 			<li><h2>Authentication</h2></li>
+			<li><p>These credentials are used to retrieve your URL lists and grant you the ability to add/delete passwords, they are not used in the cryptography.</p></li>
 			<li><label>Username</label><input type='text' name='username' id='username' required/></li>
 			<li><label>Password</label><input type='password' name='password1' id='password1' required/></li>
 			<li><label>Password (again)</label><input type='password' name='password2' id='password2' required/></li>
 			<li><h2>Encryption</h2></li>
+			<li><p>This is the password you will use to encrypt your credentials with. The actual encryption key will be a SHA-512 of the password. The information you enter here will NOT be sent to the server as it is, it will be hashed twice before transmission. Therefore the server is able to verify the encryption key entered but does not itself contain enough information to decrypt your credentials.</p></li>
 			<li><label>Crypto Password</label><input type='password' name='cryptopassword1' id='cryptopassword1' required/></li>
 			<li><label>Crypto Password (again)</label><input type='password' name='cryptopassword2' id='cryptopassword2' required/></li>
 		</ul>

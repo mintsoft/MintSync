@@ -5,31 +5,93 @@ Eventually, this will be a multi-browser extension and server component secure p
 
 At current (2011-08-28) there is a warning on the Opera extensions-tabs pages warning about the API being overhauled, therefore it is expected that everything will break in a new release of Opera
 
-=======================================================
-Done List!
-=======================================================
- - Configurable password generation length
- - User Authentication
- - Lightboxes instead of dialogs for credentials
- - Maybe even "store password for browser session" option
- - Better Error Handling
- - Reimplement "server" using a more consistent REST paradigm
- - Alternative way to trigger password generation, middle button? or configurable perhaps
- - Reset Allow Overwrite when the Submit request has returned
- - Highting pages with stored credentials
-		Not done: keep local cache to prevent rediculous levels of AJAX?
-	Probably best to do this with badge textContent: http://dev.opera.com/articles/view/opera-extensions-buttons-badges-and-popups/#display_badge
- - Fix bug with force override, if the URL doesn't exist then it returns that it's completed successfully even though it's done nothing
- - Audit Trail stored server side for requests
- - alter notify on page status leaves the button in whatever state it was in when you disabled it, text should be removed
-	Fixed in the background process instead
- - Master "view all passwords" page with the ability to update URLs?
- - Implement the ability to delete URLS
- - Need to add handler to update the notification when the URL on the tab changes not just on tabfocus
- - Feedback from pre-alpha tester 
-	wants a local cache maintained of urls with polling to update
- - "Backup database" option, CSV export or something
-	Probably as part of the server "config/maintenance" page
+================================
+ Standard Installation - Server
+================================
+
+1. Extract the server component into your webroot(/var/wwws/mypasswords) on an apache/PHP setup:
+2. Pick a location and use sqlite3 to create a new database (sqlite3 passwords.db) and load the schemata (.read /var/wwws/mypasswords/sqliteSchema.txt)
+3. Ensure the webserver user can write to the database (for example: chgrp www-data passwords.db && chmod g+w passwords.db)
+4. Edit config.php and set PASSWORD_DATABASE to the absolute path to your database and check that SERVER_UI_LOCKED is false
+5. Point your browser to the server location (https://example.com/mypasswords) and add your user.
+6. Enter your first user's details and click the submit button. Your new user should be set-up. 
+
+***
+You may add more users now, however once complete it is very important that you remember to set SERVER_UI_LOCKED to true in config.php
+***
+
+Notice: It would absolutely be a good idea to backup your password database reguarly (I use Amazon S3 + s3cmd to backup every night).
+
+
+==================================================
+ Frequently Asked Questions/Questions I Would Ask
+==================================================
+
+Q: What the hell is this?
+A: It's a client and server application designed to store passwords securely
+for websites. Data is kept encrypted server-side and only ever decrypted by the client.
+
+Q: What ciphers/hashes are used and how large are your keys?
+A: Currently the only supported Cipher is AES and the only supported keylength is 256 bit. Hashes are SHA-512.
+   In the pipeline for some point is variable encryption or possibly parallel encryption, depending on whether I decide its worth the hassle.
+
+Q: Why is there only an Opera Extension? Don't you know that the cool kids all use Chrome/Firefox/Safari?
+A: I use Opera, I'm planning to add extensions for other browsers once I've finalised the extension and done some refactoring
+
+Q: How does it work?
+A: The server maintains a list of URLS, Salts and "Credentials" information. The credentials information is a Base64 encoded AES256 encrypted JSON object of Key=>Value pairs. 
+   The encryption key is a SHA-512 hash of the master password concatenated with the rowSalt.
+
+Q: Why on earth have you made this?
+A: A few weeks ago a colleague of mine recovered his password from some componet of Tesco's online services, 
+   which promptly sent his password back to him via email comprimising that password in its entirety and everywhere its used.
+   At this point he and I began discussing:
+	a: how atrocious the security situation appears to be on the internet, 
+	b: how poorly understood it is even by large companies,
+	c: that the only way to limit the damage is to have totally unique passwords for each portal
+   We then decided that its massively impractical to remember so many and yet neither of us have confidence in other password
+   solutions, both technically (as most are closed source) and physically (to look after my data).
+	
+Q: Why not use Last Pass or one of the million alternative password storage solutions?
+A: Well, yes there are hundreds of "cloud password solutions" but when I have looked at each of them they're all 
+   commercially motivated and as such are usually closed source. There are those who will argue that closed source doesn't
+   necessarily mean insecure, however I prefer being able to actually check myself. Not to mention that a large centralised
+   password repository is a massive target for potential theft. Other options I looked at all involved server-side password 
+   decryption, and I wanted something more easy to use from my browser of choice (Opera).
+
+Q: I need my own server?!
+A: Yes, or at least access to a server running Apache & PHP on which to host the Server Component. 
+   SSL connectivity is not *strictly* required to keep the security of your credentials, however it is highly recommended as
+   an unencrypted connection can sniff your URL lists (giving a potential attacker a hit-list to attack) and your login credentials
+   (again the maximum damage that could be done with this is deleting your passwords or retrieval of your URL lists, not comprimise
+   your actual passwords).
+
+Q: So how secure is this really?
+A: I'm yet to complete a comprehensive security review of everything but at the moment I'm thinking "pretty secure", especially if SSL is used.
+
+Q: Is there anything wrong that you know about?
+A: There are a few things I'm not totally happy with: 
+	Ideally for stored credentials (encryption key et cetera) I would prefer to salt the hash before storing it, this will probably 
+		be implemented at some point in the future with the salt stored server-side
+    I would like the ability to change the master password from the client, this is definitely planned for the near future.
+	User feedback could really do with being improved, especially in situations where passwords are incorrect.
+	The authentication system is vulnerable to replay attacks if SSL is not used as the server does not currently keep a list of nonces.
+
+Q: Does it support X?
+A: Probably not, but I'm looking to add features where possible. 
+
+Q: Why is everything so grey and depressing?
+A: Because its neutral and I'd rather go with something looking drab and boring than luminous!
+
+Q: What new features are you planning?
+A: New features I want to add pretty soon are:
+	Two factor authentication using SSL Client Certificates	
+	Master password changing
+	Alternative Browser Support
+	Adding a non-superuser interface to the server to allow password viewing without a browser extension
+	Domain-level matching rather than exact URL
+	
+     
 
 Libraries and Attributions
 ===========================
