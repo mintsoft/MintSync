@@ -20,8 +20,7 @@ function header_html ()
  <html>
  	<head>
 	<title>MintSync Serverside User Interface</title>
-	<link rel="stylesheet" href="../Client/Opera_Extension/css/common.css" type="text/css" />
-	<link rel="stylesheet" href="./css/ui.css" type="text/css" />
+	<link rel="stylesheet" href="css/client-common.css" type="text/css" />
 	<link rel="stylesheet" href="css/ui.css" type="text/css" />
 	<script type="text/javascript" src='js/jquery.js'></script>
 	<script type="text/javascript" src='js/sha.js'></script>
