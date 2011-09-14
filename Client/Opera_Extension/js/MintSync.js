@@ -5,7 +5,7 @@ jQuery.support.cors = true;
 	MintSync Object
 */
 function MintSync() {
-		
+	this.rememberedPassword = undefined,
 	/*
 		Retrieve passwords for the passed domain
 	*/
@@ -369,7 +369,7 @@ function MintSync() {
 			if($MS.rememberedPassword==undefined)
 				askForPassword(strPrompt,function(password){
 					$MS.rememberedPassword = $MS.hashPass(password);
-					successCallback(this.rememberedPassword);
+					successCallback($MS.rememberedPassword);
 				});
 		}
 		else 
