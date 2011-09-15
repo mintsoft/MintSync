@@ -2,6 +2,18 @@
 MintSync (working title) Changelog
 ************************************
 
+21:12 15/09/2011
+================
+Server
+------
+Implemented Fuzzy URL matches
+
+Client 
+------
+Made Options automatically append a / on the end of the base URL if not entered 
+Fixed issue with the cryptoPassword not being reset if entered incorrectly
+Fixed issue with the cryptoPassword not working if set to remember per-dialog
+
 07:23 10/09/2011
 ================
 Server

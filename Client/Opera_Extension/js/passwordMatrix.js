@@ -211,31 +211,32 @@ function togglePasswordsForURL(srcH3)
 			complete: function(jq,textStatus,errorThrown) {},
 			success: function(requestdata,textStatus,jq) {
 				 $MC.decodeAndDecrypt(requestdata.data.Credentials,requestdata.data.Salt,{
-				 success:function(credentialsObj){
-					//object of key-value pairs
-					var table = $(srcH3).parent().find("table"),
-						tableBody = table.find("tbody");
-					
-					tableBody.empty();
-					
-					for(index in credentialsObj)
-					{
-						tableBody.append(
-							$("<tr>").append(
-								$("<td>").text(index),
-								$("<td>").append(
-									$("<input type='password' onfocus='revealPassword(this);' readonly='readonly' onblur='rehidePassword(this);'>").val(credentialsObj[index])
+					 success:function(credentialsObj){
+						//object of key-value pairs
+						var table = $(srcH3).parent().find("table"),
+							tableBody = table.find("tbody");
+						
+						tableBody.empty();
+						
+						for(index in credentialsObj)
+						{
+							tableBody.append(
+								$("<tr>").append(
+									$("<td>").text(index),
+									$("<td>").append(
+										$("<input type='password' onfocus='revealPassword(this);' readonly='readonly' onblur='rehidePassword(this);'>").val(credentialsObj[index])
+									)
 								)
-							)
-						);
-					}
-					
-					$(srcH3).parent().find(".dropDownContent").slideDown(0);
-					$(srcH3).addClass('expanded');
-				 },
-				 error: function(){
-					alert("That decryption password is incorrect. Please try again");
-				 }
+							);
+						}
+						
+						$(srcH3).parent().find(".dropDownContent").slideDown(0);
+						$(srcH3).addClass('expanded');
+					 },
+					 error: function(){
+						alert("That decryption password is incorrect. Please try again");
+						$MS.resetSavedCryptoPassword();
+					 }
 				 });
 			},
 			error: function(jq,textStatus,errorThrown){

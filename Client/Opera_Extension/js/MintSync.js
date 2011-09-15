@@ -371,12 +371,14 @@ function MintSync() {
 					$MS.rememberedPassword = $MS.hashPass(password);
 					successCallback($MS.rememberedPassword);
 				});
+			else
+				successCallback($MS.rememberedPassword);
 		}
 		else 
 		{
-				askForPassword(strPrompt,function(password){
-					successCallback($MS.hashPass(password));
-				});
+			askForPassword(strPrompt,function(password){
+				successCallback($MS.hashPass(password));
+			});
 		}
 	},
 	/**
@@ -510,6 +512,34 @@ function MintSync() {
 			break;
 			case "0.5":
 				$MS.rememberedAuthentication=undefined
+			break;
+			case "0":
+			default:
+		}
+	},	
+	/**
+		Resets the crypto password saved (however they are)
+	*/
+	this.resetSavedCryptoPassword = function()
+	{
+		switch(widget.preferences["SavePassword"])
+		{
+			case "1":
+				widget.preferences["SavedPassword"]="undefined";
+			break;
+			case "0.8":
+				if(opera.extension.bgProcess == undefined) // being called from the bgProcess
+				{
+					mintSyncGlobals.passwd = undefined;
+				}
+				else
+				{
+					opera.extension.bgProcess.mintSyncGlobals.passwd = undefined;
+				}
+				
+			break;
+			case "0.5":
+				$MS.rememberedPassword=undefined
 			break;
 			case "0":
 			default:

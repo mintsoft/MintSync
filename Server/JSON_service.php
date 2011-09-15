@@ -231,7 +231,7 @@ switch($action)
 		if(isset($_GET['URL']))
 			$domain = strtolower($_GET['URL']);
 		
-		$stmt = $db->prepare("SELECT COUNT(*) num FROM auth WHERE URL=:url AND userID=:userID;");
+		$stmt = $db->prepare("SELECT COUNT(*) num FROM auth WHERE :url LIKE URL AND userID=:userID;");
 		$stmt->bindValue(":url",	$domain, PDO::PARAM_STR );
 		$stmt->bindValue(":userID",	$userID);
 		$stmt->execute();
@@ -310,7 +310,7 @@ switch($action)
 		if(isset($_GET['URL']))
 			$domain = strtolower($_GET['URL']);
 
-		$stmt = $db->prepare("SELECT * FROM auth WHERE URL=:url AND userID=:userID;");
+		$stmt = $db->prepare("SELECT * FROM auth WHERE :url LIKE URL AND userID=:userID;");
 		$stmt->bindValue(":url",	$domain, PDO::PARAM_STR );
 		$stmt->bindValue(":userID",	$userID);
 		$stmt->execute();

@@ -94,7 +94,17 @@ A: New features I want to add pretty soon are:
 	Master password changing
 	Alternative Browser Support
 	Adding a non-superuser interface to the server to allow password viewing without a browser extension
-	Domain-level matching rather than exact URL
+
+Q: How do I use domain-level matching rather than exact URL & Querystring matches?
+A: Fuzzy URL matching is achieved using the sql LIKE syntax, when saving a URL either alter the URL string to include % as a wildcard
+    or rename the URL in the credentials list screen (double click the URL) and add a %
+	
+	For example, Google accounts uses many different arguments depending on where you have been redirected to the login page from however they all share
+	https://accounts.google.com/ServiceLogin as their root URL. Therefore saving credentials with the URL:
+		https://accounts.google.com/ServiceLogin?%
+	will allow you to retrieve them independent of the GET string.
+	
+	SQLite also supports the _ as a single character wildcard that is also supported. For more information see: http://www.sqlite.org/lang_expr.html#like
 	
      
 
