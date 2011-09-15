@@ -27,7 +27,12 @@ $(document).ready(function(){
 
 /** Set Save Preferences */
 function savePrefs() {
-	widget.preferences["ServerURL"] 				= $("#ServerURL").val();
+	//check if the last character is a /, if not append one!
+	var serverUrl = $("#ServerURL").val();
+	if(serverUrl.charAt(serverUrl.length-1)!="/")
+		serverUrl+="/";
+		
+	widget.preferences["ServerURL"] 				= serverUrl;
 	widget.preferences["SavePassword"]				= $("input[type=radio][name=SavePass]:checked").val();
 	widget.preferences["SaveAuthentication"]		= $("input[type=radio][name=SaveAuth]:checked").val();
 	widget.preferences["Cipher"] 					= $("input[type=radio][name=Cipher]:checked").val();

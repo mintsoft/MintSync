@@ -43,7 +43,7 @@ A: The server maintains a list of URLS, Salts and "Credentials" information. The
    The encryption key is a SHA-512 hash of the master password concatenated with the rowSalt.
 
 Q: Why on earth have you made this?
-A: A few weeks ago a colleague of mine recovered his password from some componet of Tesco's online services, 
+A: A few weeks ago a colleague of mine recovered his password from some component of Tesco's online services, 
    which promptly sent his password back to him via email comprimising that password in its entirety and everywhere its used.
    At this point he and I began discussing:
 	a: how atrocious the security situation appears to be on the internet, 
@@ -58,6 +58,11 @@ A: Well, yes there are hundreds of "cloud password solutions" but when I have lo
    necessarily mean insecure, however I prefer being able to actually check myself. Not to mention that a large centralised
    password repository is a massive target for potential theft. Other options I looked at all involved server-side password 
    decryption, and I wanted something more easy to use from my browser of choice (Opera).
+
+Q: So why not use Opera Link?
+A: I did look seriously at Opera Link, however it is closed source and descriptions of exactly how it works did not fill me
+   with confidence, see: (http://my.opera.com/operalink/blog/2011/05/03/security-of-synchronized-passwords-with-opera-link)
+   as the Opera company as an entity has both my data and at instances my decryption key.
 
 Q: I need my own server?!
 A: Yes, or at least access to a server running Apache & PHP on which to host the Server Component. 
