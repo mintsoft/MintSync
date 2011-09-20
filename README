@@ -106,7 +106,10 @@ A: Fuzzy URL matching is achieved using the sql LIKE syntax, when saving a URL e
 	
 	SQLite also supports the _ as a single character wildcard that is also supported. For more information see: http://www.sqlite.org/lang_expr.html#like
 	
-     
+Q: Why on earth do my URL encoded get strings get duplicated % signs? A %20 becomes %%20 when I add them!
+A: This is because the % is the wildcard character in SQL LIKE statements, therefore all occurances of the % character to be treated as a literal need 
+    to be represented as %% in the database. In the credentials list the data is altered exactly as it is stored in the database, therefore a % is a wildcard
+	and %% is a '%' character.
 
 Libraries and Attributions
 ===========================

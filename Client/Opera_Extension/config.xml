@@ -5,7 +5,7 @@
 	<author href="yourURL" email="rob@mintsoft.net">Rob Emery</author>
 	<access origin="*"/>
 	<icon src="img/icon.png"/>
-	<preference name = "ServerURL" 					value = "https://example.com/mypasswords"	readonly = "false"/>
+	<preference name = "ServerURL" 					value = "https://example.com/mypasswords/"	readonly = "false"/>
 	<preference name = "SaveAuthentication" 			value = "0.8"	readonly = "false" />
 	<preference name = "SavePassword" 				value = "0"		readonly = "false" />
 	<preference name = "Notify"	 					value = "1"		readonly = "false" />

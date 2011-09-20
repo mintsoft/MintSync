@@ -130,7 +130,11 @@ switch($action)
 			{
 				$stmt = $db->prepare("INSERT INTO auth(URL,Salt,Credentials,userID) VALUES(:url,:salt,:credentials,:userID);");
 			
-				$stmt->bindValue(":url", strtolower($_REQUEST['URL']));
+				$stmt->bindValue(":url", str_replace(
+										array("%"),
+										array("%%"),
+										strtolower($_REQUEST['URL']))
+								);
 				$stmt->bindValue(":salt", $_REQUEST['rowSalt']);
 				$stmt->bindValue(":credentials", $_REQUEST['Credentials']);
 				$stmt->bindValue(":userID", $userID);
