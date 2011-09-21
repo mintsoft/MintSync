@@ -72,10 +72,54 @@ function mint_handleNotify(URL)
 			case "cache":
 				
 			//	console.log("Processing Notification Request from: cache");
+				//var URLExists = ($.inArray(URL.toLowerCase(),mintSyncGlobals.urlCache)===-1)?0:1;
+				var URLExists = 0,
+					srcURL = URL.toLowerCase(),
+					regexEquivalent = "";
+					
+				for(urlIndex in mintSyncGlobals.urlCache) 
+				{ 
+					regexEquivalent = mintSyncGlobals.urlCache[urlIndex];
+					//escape regex characters
+					//? * [ ] { } ( ) . ^ $ - | / \
+					regexEquivalent = regexEquivalent.replace(/\\/g,'\\\\');
+					regexEquivalent = regexEquivalent.replace(/\?/g,'\\?');
+					regexEquivalent = regexEquivalent.replace(/\*/g,'\\*');
+					regexEquivalent = regexEquivalent.replace(/\[/g,'\\[');
+					regexEquivalent = regexEquivalent.replace(/\]/g,'\\]');
+					regexEquivalent = regexEquivalent.replace(/\{/g,'\\{');
+					regexEquivalent = regexEquivalent.replace(/\}/g,'\\}');
+					regexEquivalent = regexEquivalent.replace(/\(/g,'\\(');
+					regexEquivalent = regexEquivalent.replace(/\)/g,'\\)');
+					regexEquivalent = regexEquivalent.replace(/\./g,'\\.');
+					regexEquivalent = regexEquivalent.replace(/\^/g,'\\^');
+					regexEquivalent = regexEquivalent.replace(/\$/g,'\\$');
+					regexEquivalent = regexEquivalent.replace(/\-/g,'\\-');
+					regexEquivalent = regexEquivalent.replace(/\|/g,'\\|');
+					regexEquivalent = regexEquivalent.replace(/\//g,'\\/');
+					
+					//convert % into regex equivalent
+					regexEquivalent = regexEquivalent.replace(/%%/g,'#mintSync_replstr#');
+					regexEquivalent = regexEquivalent.replace(/%/g,'.*');
+					//convert _ into regex equivalent
+					//regexEquivalent = regexEquivalent.replace(/_/g,'.');
+					regexEquivalent = "^"+regexEquivalent.replace(/#mintSync_replstr#/g,'%%')+"$";
+			//		console.log(regexEquivalent);
+					//URLExists = (mintSyncGlobals.urlCache[url]==srcURL)?1:0;
+					URLExists = srcURL.match(regexEquivalent);
+					
+					if(URLExists)
+					{
+						URLExists=1;
+						break;
+					}
+					else
+						URLExists=0;
+				}
 				
 				mint_handleNotificationIcon({
 					'status':'ok',
-					'data': ($.inArray(URL.toLowerCase(),mintSyncGlobals.urlCache)===-1)?0:1
+					'data': URLExists
 				});
 				
 			break;
