@@ -48,7 +48,16 @@ $(document).ready(function(){
 	{
 		//ask for it then
 		console.log("Requesting Login Credentials");
-		$MS.getAuthenticationObject(function(){});
+		$MS.getAuthenticationObject(function(){
+			//retrigger a cache update if enabled
+			if(widget.preferences["Notify"]=="1"  && widget.preferences["NotifySource"]=="cache")
+			{
+				opera.extension.postMessage({
+					'action': 'startLocalCache',
+					'src' : 'options',
+				});
+			}
+		});
 	}
 		
 	
