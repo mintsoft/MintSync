@@ -34,6 +34,7 @@ function mint_handleNotificationIcon(data)
 			{
 				mintSyncGlobals.theButton.badge.textContent="";
 				mintSyncGlobals.theButton.badge.backgroundColor='#cccccc';
+				mintSyncGlobals.theButton.title = "";
 			}
 		break;
 		case "fail":
