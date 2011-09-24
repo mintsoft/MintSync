@@ -24,25 +24,38 @@ function MintCrypto() {
 	*/
 	this.decodeAndDecrypt = function(encryptedObject,rowSalt,mc_callbacks){
 		var 	base64decoded = base64_decode(encryptedObject),
-				key = "", 
 				decryptedJSON = "", 
 				credentialsObj = new Object();
 				
 		$MS.getEncryptionPasswordHash(function(passwordHash){
-			key = passwordHash+""+rowSalt;
-			decryptedJSON = $MC.Decrypt_strings(base64decoded,key,"AES",256);
-			try 
-			{
-				credentialsObj = $.parseJSON(decryptedJSON);	
-				mc_callbacks.success(credentialsObj);
-			}
-			catch(err)
-			{
-				//parse error, incorrect password
-				mc_callbacks.error();
-			}
+			$MC.handleDecodeAndDecrypt(passwordHash, rowSalt, base64decoded, mc_callbacks, 0);
 		});
 	},
+	/** 
+		callback used for  decodeAndDecrypt,
+		refactored into a standalone function for recursion
+	**/
+	this.handleDecodeAndDecrypt = function(passwordHash, rowSalt, base64decoded, mc_callbacks, callbackCount){
+		key = passwordHash+""+rowSalt;
+		decryptedJSON = $MC.Decrypt_strings(base64decoded,key,"AES",256);
+		try 
+		{
+			credentialsObj = $.parseJSON(decryptedJSON);	
+			mc_callbacks.success(credentialsObj);
+		}
+		catch(err)
+		{
+			$MS.resetSavedCryptoPassword();
+			//parse error, incorrect password
+			if(callbackCount<5)
+				$MS.getEncryptionPasswordHash(function(newPasswordHash){
+					$MC.handleDecodeAndDecrypt(newPasswordHash, rowSalt, base64decoded, mc_callbacks, ++callbackCount);
+				});
+			else	//error callback triggered if failed request 5 times
+				mc_callbacks.error();
+		}
+	},
+	
 	/**
 		Takes an object and a salt, JSONs the objected, encrypts it then BASE64 and returns the string
 	*/

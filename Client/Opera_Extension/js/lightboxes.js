@@ -29,8 +29,9 @@ function setupLightboxes()
 		// some mask tweaks suitable for modal dialogs
 		mask: {
 			color: '#000',
-			loadSpeed: 'fast',
-			opacity: 0.7
+			loadSpeed: 0,
+			closeSpeed: 0,
+			opacity: 0.7,
 		},
 		top: 'center',
 		closeOnClick: false,

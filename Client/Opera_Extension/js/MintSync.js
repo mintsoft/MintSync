@@ -616,9 +616,9 @@ function MintSync() {
 		//build	sourceString from preferences
 		sourceString = sourceSet.alpha;
 		
-		sourceString += widget.preferences["passwordStrengthNum"]	 == "true"	?sourceSet.num:"";
-		sourceString += widget.preferences["passwordStrengthPunc1"] == "true"	?sourceSet.punc1:"";
-		sourceString += widget.preferences["passwordStrengthPunc2"] == "true"	?sourceSet.punc2:"";
+		sourceString += widget.preferences["passwordStrengthNum"]	== "true"?sourceSet.num:"";
+		sourceString += widget.preferences["passwordStrengthPunc1"]	== "true"?sourceSet.punc1:"";
+		sourceString += widget.preferences["passwordStrengthPunc2"]	== "true"?sourceSet.punc2:"";
 		
 		for(var x=0;x<length;++x)
 		{
