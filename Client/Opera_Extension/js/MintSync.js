@@ -10,7 +10,6 @@ function MintSync() {
 		Retrieve passwords for the passed domain
 	*/
 	this.getPasswords = function(Domain, callbacks) {
-		//console.log("getPasswords  Called");
 		$MS.getAuthenticationObject(function(authObj){
 			$.ajax({
 				type: "GET",
@@ -29,7 +28,7 @@ function MintSync() {
 						callbacks.complete(jq,textStatus);
 				},
 				error: function(jq,textStatus,errorThrown) {
-					console.log(jq.status);
+					console.error(jq.status);
 					if(jq.status==401)	//incorrect credentials
 					{
 						$MS.resetSavedCredentials();
@@ -51,7 +50,7 @@ function MintSync() {
 	this.checkIfPasswordsExist = function(Domain,callbacks) {
 		if(!$MS.checkForSavedAuth())
 		{
-			console.log("No Saved Authenticaiton, checkIfPasswordsExist cancelled");
+			console.info("No Saved Authenticaiton, checkIfPasswordsExist cancelled");
 			return false;
 		}
 		
@@ -67,15 +66,15 @@ function MintSync() {
 					//so return false to cancel the request
 					if(!$MS.configureAuth(jq,settings,authObj))
 					{
-						//console.log("Check URL Request cancelled, no auth");
+						//console.info("Check URL Request cancelled, no auth");
 						return false
 					}
-					//console.log("Check URL Request  sent, auth available");
+					//console.info("Check URL Request  sent, auth available");
 					if(callbacks.beforeSend != undefined)
 						callbacks.beforeSend(jq,settings);
 				},
 				complete: function(jq,textStatus) {
-				//console.log("Check URL Request  complete");
+				//console.info("Check URL Request  complete");
 					if(callbacks.complete != undefined)
 						callbacks.complete(jq,textStatus);
 				},
@@ -84,12 +83,12 @@ function MintSync() {
 					{
 						$MS.resetSavedCredentials();
 					}
-				//console.log("Check URL Request  errors");
+				//console.info("Check URL Request  errors");
 					if(callbacks.error != undefined)
 						callbacks.error(jq,textStatus,errorThrown);
 				},
 				success: function(data,textStatus,jq) {
-				//console.log("Check URL Request  success");
+				//console.info("Check URL Request  success");
 					if(callbacks.success != undefined)
 						callbacks.success(data);
 				}

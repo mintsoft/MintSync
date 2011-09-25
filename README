@@ -94,6 +94,8 @@ A: New features I want to add pretty soon are:
 	Master password changing
 	Alternative Browser Support
 	Adding a non-superuser interface to the server to allow password viewing without a browser extension
+	Possibly the ability to match both http and https in one URL
+	Some system to make picking individual digits out of passwords easier (for situations in which the user is requested for digits from the password)
 
 Q: How do I use domain-level matching rather than exact URL & Querystring matches?
 A: Fuzzy URL matching is achieved using the sql LIKE syntax, when saving a URL either alter the URL string to include % as a wildcard
@@ -108,7 +110,7 @@ A: Fuzzy URL matching is achieved using the sql LIKE syntax, when saving a URL e
 	
 Q: Why on earth do my URL encoded get strings get duplicated % signs? A %20 becomes %%20 when I add them!
 A: This is because the % is the wildcard character in SQL LIKE statements, therefore all occurances of the % character to be treated as a literal need 
-    to be represented as %% in the database. In the credentials list the data is altered exactly as it is stored in the database, therefore a % is a wildcard
+    to be represented as %% in the database. In the credentials list the data is displayed exactly as it is stored in the database, therefore a % is a wildcard
 	and %% is a '%' character.
 
 Libraries and Attributions

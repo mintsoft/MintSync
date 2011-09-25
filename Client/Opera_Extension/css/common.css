@@ -242,6 +242,15 @@ ul.styled li table
 	width: 90%;
 }
 
+/* Debug links on the options page */
+.debugLink
+{
+	opacity: 0.5;
+	font-style: italic;
+	font-size: smaller;
+	
+}
+
 /** Lightboxes **/
 .modalDialog {
 	display:none;

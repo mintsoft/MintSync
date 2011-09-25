@@ -62,7 +62,7 @@ $(document).ready(function(){
 				break;
 				default:
 					alert("An error occurred whilst listing URLs, this is probably due to not having any saved credentials. See the error console for more information");
-					console.log("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
+					console.error("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
 			}
 		},
 		success: function(requestdata,textStatus,jq) {
@@ -148,7 +148,7 @@ function updatePasswordMatrix(sourceArray)
 								break;
 								default:
 									alert("There was a serious error, see the error console");
-									console.log("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
+									console.error("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
 							}
 						}
 				});
@@ -181,7 +181,7 @@ function updatePasswordMatrix(sourceArray)
 						break;
 						default:
 							alert("There was an error, see the error console for more information");
-							console.log("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
+							console.error("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
 					}
 				},
 				complete: function(status) {
@@ -247,7 +247,7 @@ function togglePasswordsForURL(srcH3)
 					break;
 					default:
 						alert("An Error Has Occurred, see the error console for more information");
-						console.log("An unexpected error has occurred ("+jq.status+" "+textStatus+"): " + errorThrown);
+						console.error("An unexpected error has occurred ("+jq.status+" "+textStatus+"): " + errorThrown);
 				}
 			}
 		});

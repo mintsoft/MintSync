@@ -17,7 +17,8 @@ function mint_handleNotificationIcon(data)
 	var parsedResult = data;	//already an object
 	if(typeof data=="string")	//this should never happen, probably means there was an error
 	{
-		console.log(data)
+		console.error("You have reached an undefined state: bg.js:20");
+		console.error(data);
 		//parsedResult = $.parseJSON(data);
 	}
 	switch(parsedResult.status)
@@ -42,14 +43,14 @@ function mint_handleNotificationIcon(data)
 			mintSyncGlobals.theButton.badge.backgroundColor='#FFFF00';
 			mintSyncGlobals.theButton.badge.color = '#FFFFFF';
 			mintSyncGlobals.theButton.title = "There was an error, checking this URL";
-			console.log("Failed: "+parsedResult.data.reason);
+			console.error("Failed: "+parsedResult.data.reason);
 		break;
 		default:
 			mintSyncGlobals.theButton.badge.textContent="X!";
 			mintSyncGlobals.theButton.badge.color = '#FFFFFF';
 			mintSyncGlobals.theButton.badge.backgroundColor='#DD0000';
 			mintSyncGlobals.theButton.title = "There was a serious error, check the Error Console";
-			console.log("An unknown state has been reached: "+data);
+			console.error("An unknown state has been reached: "+data);
 	}
 }
 
@@ -72,12 +73,14 @@ function mint_handleNotify(URL)
 		{
 			case "cache":
 				
-			//	console.log("Processing Notification Request from: cache");
+				//console.info("Processing Notification Request from: cache");
 				//var URLExists = ($.inArray(URL.toLowerCase(),mintSyncGlobals.urlCache)===-1)?0:1;
 				var URLExists = 0,
 					srcURL = URL.toLowerCase(),
 					regexEquivalent = "";
-					
+				
+				//console.info("Source URL: "+srcURL);
+				
 				for(urlIndex in mintSyncGlobals.urlCache) 
 				{ 
 					regexEquivalent = mintSyncGlobals.urlCache[urlIndex];
@@ -105,7 +108,8 @@ function mint_handleNotify(URL)
 					//convert _ into regex equivalent
 					//regexEquivalent = regexEquivalent.replace(/_/g,'.');
 					regexEquivalent = "^"+regexEquivalent.replace(/#mintSync_replstr#/g,'%%')+"$";
-			//		console.log(regexEquivalent);
+				
+					//console.info(regexEquivalent);
 					//URLExists = (mintSyncGlobals.urlCache[url]==srcURL)?1:0;
 					URLExists = srcURL.match(regexEquivalent);
 					
@@ -128,11 +132,11 @@ function mint_handleNotify(URL)
 			case "ajax":
 			default:
 
-				//console.log("Processing Notification Request from: AJAX");
+				//console.info("Processing Notification Request from: AJAX");
 				
 				$MS.checkIfPasswordsExist(URL,{
 					error: function(textStatus,errorThrown) {
-						console.log("An AJAX Error Occurred:" + textStatus + "\n" + errorThrown);
+						console.error("An AJAX Error Occurred:" + textStatus + "\n" + errorThrown);
 					},
 					success: function(data){
 						mint_handleNotificationIcon(data);
@@ -145,6 +149,7 @@ function mint_handleNotify(URL)
 		mintSyncGlobals.theButton.badge.textContent="";
 		mintSyncGlobals.theButton.badge.backgroundColor='#cccccc';
 		mintSyncGlobals.theButton.badge.color = '#FFFFFF';
+		mintSyncGlobals.theButton.title = "";
 	}
 }
 
@@ -154,7 +159,7 @@ function mint_handleNotify(URL)
 function updateLocalURLCache()
 {
 	clearTimeout(mintSyncGlobals.cacheTimer);
-	console.log("Updating local URL cache");
+	console.info("Updating local URL cache");
 	
 	//fetch the list of URLS and keep them in a cache
 	$MS.listURLS({
@@ -168,7 +173,7 @@ function updateLocalURLCache()
 			}
 		},
 		error: function(jq,textStatus,errorThrown){
-			console.log("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
+			console.error("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
 			mintSyncGlobals.theButton.badge.textContent="X!";
 			mintSyncGlobals.theButton.badge.backgroundColor='#DD0000';
 			mintSyncGlobals.theButton.badge.color = '#FFFFFF';
@@ -215,7 +220,6 @@ window.addEventListener("load", function(){
 	//add handler for tab notifications
 	opera.extension.tabs.onfocus = function() {
 		try {
-			//console.log("onfocus: "+opera.extension.tabs.getFocused().url);
 			mint_handleNotify(opera.extension.tabs.getFocused().url);
 		}
 		catch(error) {

@@ -20,9 +20,22 @@ $(document).ready(function(){
 	$('input[name="CheckCryptoPass"][value="'+widget.preferences["CheckCryptoPass"]+'"]').prop('checked', true);
 
 	/* generation options */
-	$('#passwordStrengthNum').prop('checked',		widget.preferences["passwordStrengthNum"]=="true");
+	$('#passwordStrengthNum').prop('checked',	widget.preferences["passwordStrengthNum"]=="true");
 	$('#passwordStrengthPunc1').prop('checked',	widget.preferences["passwordStrengthPunc1"]=="true");
 	$('#passwordStrengthPunc2').prop('checked',	widget.preferences["passwordStrengthPunc2"]=="true");
+	
+	/* Bind the local cache update */
+	$("#localCacheUpdateButton").click(function(){
+		cacheUpdateHandling();
+	});
+	/* console display the local cache */
+	$("#dumpLocalCacheButton").click(function(){
+		console.debug(opera.extension.bgProcess.mintSyncGlobals.urlCache);
+		for(var URL in opera.extension.bgProcess.mintSyncGlobals.urlCache)
+		{
+			console.debug(opera.extension.bgProcess.mintSyncGlobals.urlCache[URL]);
+		}
+	});
 });
 
 /** Set Save Preferences */
@@ -57,7 +70,7 @@ function savePrefs() {
 	}
 	if(widget.preferences["SaveAuthentication"]!=0.8)
 	{
-		console.log("Resetting saved authentication credentials");
+		console.info("Resetting saved authentication credentials");
 		opera.extension.bgProcess.mintSyncGlobals.authentication = undefined;
 	}
 	
@@ -67,10 +80,17 @@ function savePrefs() {
 	}
 	if(widget.preferences["SavePassword"]!=0.8)
 	{
-		console.log("Resetting saved encryption key");
+		console.info("Resetting saved encryption key");
 		opera.extension.bgProcess.mintSyncGlobals.passwd = undefined;
 	}
 
+	cacheUpdateHandling();
+}
+
+/**
+	Will handle the local cache handling
+*/
+function cacheUpdateHandling(){
 	/**
 		This is so the effects of a change to the notification caching are immediate
 	*/

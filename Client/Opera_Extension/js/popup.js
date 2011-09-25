@@ -47,7 +47,7 @@ $(document).ready(function(){
 		$MS.getNotify() && !$MS.checkForSavedAuth())
 	{
 		//ask for it then
-		console.log("Requesting Login Credentials");
+		console.info("Requesting Login Credentials");
 		$MS.getAuthenticationObject(function(){
 			//retrigger a cache update if enabled
 			if(widget.preferences["Notify"]=="1"  && widget.preferences["NotifySource"]=="cache")
@@ -194,7 +194,7 @@ function getPasswords(domainName) {
 				default:
 				
 					$("#fetchErrorDiv").text("An undefined error has occurred, see the error console for more information");
-					console.log("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);
+					console.error("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);
 			}
 		}
 	});
@@ -252,7 +252,7 @@ function setPassword() {
 					default:
 					
 						$("#saveOutput").text("An undefined error has occurred, see the error console for more information");
-						console.log("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);				
+						console.error("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);				
 				}
 			},
 			success: function(requestdata,textStatus,jq) {
