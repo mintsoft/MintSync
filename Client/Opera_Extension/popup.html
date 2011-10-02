@@ -25,15 +25,15 @@
 	<script type="text/javascript" src='js/popup.js'></script>
   </head>
   <body>
-	<div id='popupContainer'>
+	<div id='popupContainer ' unselectable='on' >
 	
-		<ul id='tabBar'>
-			<li>Retrieve</li>
-			<li>Save/Generate</li>
+		<ul id='tabBar'  unselectable='on' >
+			<li unselectable='on' >Retrieve</li>
+			<li unselectable='on' >Save/Generate</li>
 		</ul>
 		
-		<div id='tabContent'>
-			<fieldset id='retrieve'>
+		<div id='tabContent'  unselectable='on' >
+			<fieldset id='retrieve'  unselectable='on' >
 				<div id='loadingDiv' class='hidden'>
 					<span>Fetching...</span>
 					<span><img src='img/ajax_load.gif' alt='Loading...' /></span>
@@ -55,7 +55,7 @@
 							</tbody>
 						</table>
 					</div>	
-					<p>
+					<p  unselectable='on' >
 						Click retrieve to fetch and decrypt the stored information
 					</p>
 					<form action='javascript:void(0);' onsubmit='getPasswords($("#domainInput").val()); return false;'>
@@ -66,17 +66,17 @@
 				</div>
 			</fieldset>
 			
-			<fieldset id='save' class='hidden'>
-				<form action='#' onsubmit='setPassword(this); return false;'>
-					<p><label>URL/Domain:</label> <input type='text' name='domainName' id='domainName' /></p>
-					<p><label>Credentials:</label> <span class='mini-instructions'>Right Click (or ctrl+G) to Generate</span></p>
+			<fieldset id='save' class='hidden'  unselectable='on' >
+				<form action='#' onsubmit='setPassword(this); return false;'  unselectable='on' >
+					<p><label unselectable='on' >URL/Domain:</label> <input type='text' name='domainName' id='domainName' /></p>
+					<p unselectable='on' ><label unselectable='on' >Credentials:</label> <span class='mini-instructions' unselectable='on' >Right Click (or ctrl+G) to Generate</span></p>
 					<div id='inputPassContainer'>
 					</div>
-					<p id='addPairP' onclick='addPair(); return false;' class='hangingTab' >
+					<p id='addPairP' onclick='addPair(); return false;' class='hangingTab' unselectable='on'  >
 						<img src='img/add.png' alt='Add Pair' class='jsAction' /> Add More
 					</p>
-					<p class='hangingTab'>
-						<input type='checkbox' name='force' id='canForceWrite' /><label for='canForceWrite'><span class='mini-instructions'>Allow Overwrite</span></label>
+					<p class='hangingTab'  unselectable='on' >
+						<input type='checkbox' name='force' id='canForceWrite' /><label for='canForceWrite'><span class='mini-instructions' unselectable='on' >Allow Overwrite</span></label>
 					</p>
 					<!-- the template used for the new rows: -->
 					<div id='rowTemplate' class='hidden' >

@@ -2,6 +2,33 @@
 MintSync (working title) Changelog
 ************************************
 
+09:06 02/10/2011
+================
+Server
+------
+Altered AddUser scripts to support new keySlot structure
+Added retrieveKeySlot0 method
+
+Client
+------
+Rewritten encryption system to use keySlot system and more efficiently use
+256bit keys (now full range bytes rather than limited to printable characters)
+
+
+00:06 02/10/2011
+================
+Server
+------
+Renamed password crypto database fields to keySlot0PassHash
+Added new fields to prepare for keySlot system
+Altered INSERT to stop users from adding overlapping URLS, including LIKE
+
+Client
+------
+Retrieve now checks for exact match first and then checks for like matches after
+Added unselectable elements allover the place on the popup
+
+
 21:12 15/09/2011
 ================
 Server

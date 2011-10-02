@@ -314,7 +314,7 @@ function MintSync() {
 		return true;
 	},
 	/**
-		Returns the hash of the password
+		Returns the hash of the password as a string of hex digits
 	*/
 	this.hashPass = function(passwd) {
 		var shaObj = new jsSHA(passwd, "ASCII");
@@ -322,10 +322,8 @@ function MintSync() {
 	},	
 	/**
 		Returns a string type that contains a hex representation of 
-			the password hash (SHA-512), this is the MASTER Key
-			
-			This *should* be salted really, however the salt would have to be saved
-				could this be saved server-side?
+			the password hash (SHA-512), this is the MASTER Key used
+			to unlock the keySlot
 	*/
 	this.getEncryptionPasswordHash = function(successCallback) {
 		//text to appear on the password prompt
@@ -488,6 +486,42 @@ function MintSync() {
 			});
 		}
 	},	
+	/** 
+		Retrieves the keySlot password for the user 
+	*/
+	this.getKeySlot = function(callbacks)
+	{
+		$MS.getAuthenticationObject(function(authObj){
+			$.ajax({
+				type: "GET",
+				url:$MS.getServerURL()+"?AJAX=true&action=retrieveKeySlot0",
+				cache: false,
+				beforeSend: function(jq,settings) {
+					//add the headers for the auth:
+					$MS.configureAuth(jq,settings,authObj);
+					
+					if(callbacks.beforeSend != undefined)
+						callbacks.beforeSend(jq,settings);
+				},
+				complete: function(jq,textStatus) {
+					if(callbacks.complete != undefined)
+						callbacks.complete(jq,textStatus);
+				},
+				error: function(jq,textStatus,errorThrown) {
+					if(jq.status==401)	//incorrect credentials
+					{
+						$MS.resetSavedCredentials();
+					}
+					if(callbacks.error != undefined)
+						callbacks.error(jq,textStatus,errorThrown);
+				},
+				success: function(data,textStatus,jq) {
+					if(callbacks.success != undefined)
+						callbacks.success(data);
+				}
+			});
+		});
+	},
 	/**
 		Resets the credentials saved (however they are)
 	*/

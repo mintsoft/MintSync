@@ -72,7 +72,7 @@ switch($action)
 			
 			if(!empty($_REQUEST['cryptoHash']))
 			{
-				$stmt = $db->prepare("SELECT * FROM User WHERE ID=:userID AND cryptoPassHash=:cryptoHash");
+				$stmt = $db->prepare("SELECT * FROM User WHERE ID=:userID AND keySlot0PassHash=:cryptoHash");
 				$stmt->bindValue(":cryptoHash",$_REQUEST['cryptoHash']);
 				$stmt->bindValue(":userID",$userID);
 				$stmt->execute();
@@ -87,7 +87,7 @@ switch($action)
 								),417);		//Expectation Failed
 			}
 		
-			$stmt = $db->prepare("SELECT COUNT(*) AS Freq FROM auth WHERE URL=:url AND userID=:userID;");
+			$stmt = $db->prepare("SELECT COUNT(*) AS Freq FROM auth WHERE :url LIKE URL AND userID=:userID;");
 			$stmt->bindValue(":url",strtolower($_REQUEST['URL']));
 			$stmt->bindValue(":userID",$userID);
 			$stmt->execute();
@@ -105,7 +105,7 @@ switch($action)
 			}
 			elseif((int)$row['Freq']>0 && !empty($_REQUEST['force']))
 			{
-				$stmt = $db->prepare("UPDATE auth SET Salt=:salt, Credentials=:credentials WHERE URL=:url AND userID=:userID;");
+				$stmt = $db->prepare("UPDATE auth SET Salt=:salt, Credentials=:credentials WHERE :url LIKE URL AND userID=:userID;");
 			
 				$stmt->bindValue(":url", strtolower($_REQUEST['URL']));
 				$stmt->bindValue(":userID", $userID);
@@ -289,7 +289,7 @@ switch($action)
 	
 		$testHash = $_GET['cryptoHash'];
 	
-		$stmt = $db->prepare("SELECT cryptoPassHash FROM User WHERE ID=:userID AND cryptoPassHash=:hash;");
+		$stmt = $db->prepare("SELECT keySlot0PassHash AS cryptoPassHash FROM User WHERE ID=:userID AND keySlot0PassHash=:hash;");
 		$stmt->bindValue(":userID",$userID);
 		$stmt->bindValue(":hash",$testHash);
 		$stmt->execute();
@@ -309,12 +309,38 @@ switch($action)
 					),417);	//Expectation Failed
 	break;
 	
+	case "retrieveKeySlot0":		//check that the hash serverside is the same as the sent one
+		
+		$stmt = $db->prepare("SELECT keySlot0PassHash, keySlot0 FROM User WHERE ID=:userID");
+		$stmt->bindValue(":userID",$userID);
+		$stmt->execute();
+		
+		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		if(isset($rows[0]))
+			restTools::sendResponse(array(
+						"status"=>"ok", 
+						"action"=>"retrieveKeySlot0",
+						"data"=> $rows[0]
+					),200);	//OK
+		else
+			restTools::sendResponse(array(
+						"status"=>"fail", 
+						"action"=>"retrieveKeySlot0",
+						"data"=> false
+					),417);	//Expectation Failed
+	break;
+	
+	
+	
 	case "retrieve":			//GET Request
 	default:
 		if(isset($_GET['URL']))
 			$domain = strtolower($_GET['URL']);
 
-		$stmt = $db->prepare("SELECT * FROM auth WHERE :url LIKE URL AND userID=:userID;");
+		$stmt = $db->prepare("SELECT auth.*, User.keySlot0 FROM auth 
+								INNER JOIN User ON(User.ID=auth.userID) 
+								WHERE :url LIKE URL AND userID=:userID;");
+		
 		$stmt->bindValue(":url",	$domain, PDO::PARAM_STR );
 		$stmt->bindValue(":userID",	$userID);
 		$stmt->execute();

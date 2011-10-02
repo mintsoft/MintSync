@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<widget xmlns="http://www.w3.org/ns/widgets" id="https://github.com/mintsoft/MintSync" version="0.8" defaultlocale="en">
+<widget xmlns="http://www.w3.org/ns/widgets" id="https://github.com/mintsoft/MintSync" version="0.9" defaultlocale="en">
 	<name short='MintSync'>MintSync</name>
 	<description xml:lang="en">Secure, self-hosted client-side decrypted password storage</description>
 	<author href="http://mintsoft.github.com/" email="rob@mintsoft.net">Rob Emery</author>

@@ -210,8 +210,9 @@ function togglePasswordsForURL(srcH3)
 			beforeSend: function() {},
 			complete: function(jq,textStatus,errorThrown) {},
 			success: function(requestdata,textStatus,jq) {
-				 $MC.decodeAndDecrypt(requestdata.data.Credentials,requestdata.data.Salt,{
+				 $MC.decodeAndDecrypt(requestdata.data.Credentials,requestdata.data.Salt,requestdata.data.keySlot0,{
 					 success:function(credentialsObj){
+						
 						//object of key-value pairs
 						var table = $(srcH3).parent().find("table"),
 							tableBody = table.find("tbody");

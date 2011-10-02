@@ -23,10 +23,11 @@ if(isset($results[0]))
 					),409);	//Conflict
 	
 
-$stmt = $db->prepare("INSERT INTO User(username,password,cryptoPassHash) VALUES(:user, :pass, :cpasshash);");
+$stmt = $db->prepare("INSERT INTO User(username, password, keySlot0PassHash, keySlot0) VALUES(:user, :pass, :cpasshash, :keySlot0);");
 $stmt->bindValue(":user",$_POST['username']);
 $stmt->bindValue(":pass",$_POST['password']);
 $stmt->bindValue(":cpasshash",$_POST['cryptopassword']);
+$stmt->bindValue(":keySlot0",$_POST['keySlot0']);
 $stmt->execute();
 	restTools::sendResponse(array(
 									"status"=>"ok",

@@ -24,6 +24,7 @@ function header_html ()
 	<link rel="stylesheet" href="css/ui.css" type="text/css" />
 	<script type="text/javascript" src='js/jquery.js'></script>
 	<script type="text/javascript" src='js/sha.js'></script>
+	<script type="text/javascript" src='js/AES.js'></script>
 	<script type="text/javascript" src='js/ui.js'></script>
  </head>
  <body>
@@ -57,7 +58,7 @@ switch($action)
 
 		$db = new PDO(PDO_DSN);
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$stmt = $db->prepare("SELECT * FROM auth;");
+		$stmt = $db->prepare("SELECT * FROM auth INNER JOIN User ON (User.ID=auth.userID);");
 		$stmt->execute();
 
 		$stdout = fopen("php://output","w");
@@ -70,7 +71,7 @@ switch($action)
 	case "dbdump":
 		$db = new PDO(PDO_DSN);
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$stmt = $db->prepare("SELECT * FROM auth");
+		$stmt = $db->prepare("SELECT * FROM auth INNER JOIN User ON (User.ID=auth.userID);");
 		$stmt->execute();
 
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -90,11 +91,14 @@ switch($action)
 			<li><label>Password</label><input type='password' name='password1' id='password1' required/></li>
 			<li><label>Password (again)</label><input type='password' name='password2' id='password2' required/></li>
 			<li><h2>Encryption</h2></li>
-			<li><p>This is the password you will use to encrypt your credentials with. The actual encryption key will be a SHA-512 of the password. The information you enter here will NOT be sent to the server as it is, it will be hashed twice before transmission. Therefore the server is able to verify the encryption key entered but does not itself contain enough information to decrypt your credentials.</p></li>
 			<li><label>Crypto Password</label><input type='password' name='cryptopassword1' id='cryptopassword1' required/></li>
+			<li><p>
+					This is the password you will use to encrypt your keySlot with. The actual encryption key will be a randomly generated KeySlot (512bit/64character key) concatenated with the rowSalt. The KeySlot will be stored server-side encrypted with a SHA-256 of the SHA-512 of the password entered here.</p>
+					
+					<p>The information you enter here will NOT be sent to the server as it is, it will be hashed twice before transmission. Therefore the server is able to verify the encryption key entered but does not itself contain enough information to decrypt your credentials.</p></li>
 			<li><label>Crypto Password (again)</label><input type='password' name='cryptopassword2' id='cryptopassword2' required/></li>
 		</ul>
-		<p><input type='submit' /></p>
+		<p class='centeredContents'><input type='submit' /></p>
 	</form>
 <?php
 		footer_html();

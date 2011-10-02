@@ -145,10 +145,10 @@ function getPasswords(domainName) {
 				base64decoded="",
 				innerHTML="";
 
-				$MC.decodeAndDecrypt(requestdata.data.Credentials, requestdata.data.Salt,{
+				$MC.decodeAndDecrypt(requestdata.data.Credentials, requestdata.data.Salt, requestdata.data.keySlot0, {
 					success:function(credentialsObj){
 						$("#retrieveOutput tbody").empty();
-
+						
 						//also wipe out the save dialog and remove any boxes already there
 						$("#inputPassContainer img.saveBin").each(function(index,Element){
 							delPair(this);
@@ -209,7 +209,7 @@ function setPassword() {
 		encryptedData = "",
 		CredentialsObj = new Object(),
 		force = false;
-	
+		
 	if(domainName=="")
 	{
 		$("#saveOutput").text("Error: No URL entered, no save has occurred");
@@ -226,41 +226,60 @@ function setPassword() {
 		CredentialsObj[name]=password;
 	});
 	
-	$MC.encodeAndEncrypt(CredentialsObj,RowSalt,function(encryptedData,cryptoHash){
-		CredentialsObj = new Object();
+	$MS.getKeySlot({
+		success: function(returnedData){
+			$MC.encodeAndEncrypt(CredentialsObj,RowSalt,returnedData.data.keySlot0,function(encryptedData,cryptoHash){
+				CredentialsObj = new Object();
 
-		//if the cryptoHash should be verified
-		if(!$MS.getVerifyCryptoPass())
-			cryptoHash=undefined;
-		
-		//check is overwrites are allowed (force)
-		force = $("#canForceWrite:checked").val();
-		$MS.setPassword(domainName,encryptedData,RowSalt,cryptoHash,force,{
-			error: function(jq,textStatus,errorThrown) {
+				//if the cryptoHash should be verified
+				if(!$MS.getVerifyCryptoPass())
+					cryptoHash=undefined;
 				
-				switch(jq.status)
-				{
-					case 401:
-						$("#saveOutput").text("Save Failed: Incorrect Login, please try again");
-					break;
-					case 409:
-						$("#saveOutput").text("Save Failed: This URL Already exists");
-					break;
-					case 417:
-						$("#saveOutput").text("Save Failed: Inconsistent Crypto Password");
-					break;
-					default:
-					
-						$("#saveOutput").text("An undefined error has occurred, see the error console for more information");
-						console.error("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);				
-				}
-			},
-			success: function(requestdata,textStatus,jq) {
-				$("#saveOutput").text("Credentials Saved");
-				//uncheck the overwrite box
-				$("#canForceWrite").attr("checked",false);
-			},
-			zzz: function(){}
-		});
+				//check is overwrites are allowed (force)
+				force = $("#canForceWrite:checked").val();
+				$MS.setPassword(domainName,encryptedData,RowSalt,cryptoHash,force,{
+					error: function(jq,textStatus,errorThrown) {
+						
+						switch(jq.status)
+						{
+							case 401:
+								$("#saveOutput").text("Save Failed: Incorrect Login, please try again");
+							break;
+							case 409:
+								$("#saveOutput").text("Save Failed: This URL Already exists");
+							break;
+							case 417:
+								$("#saveOutput").text("Save Failed: Inconsistent Crypto Password");
+							break;
+							default:
+							
+								$("#saveOutput").text("An undefined error has occurred, see the error console for more information");
+								console.error("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);				
+						}
+					},
+					success: function(requestdata,textStatus,jq) {
+						$("#saveOutput").text("Credentials Saved");
+						//uncheck the overwrite box
+						$("#canForceWrite").attr("checked",false);
+					},
+					zzz: function(){}
+				});
+			});
+		},
+		error: function(jq,textStatus,errorThrown) {
+		
+			switch(jq.status)
+			{
+				case 401:
+					$("#saveOutput").text("Save Failed: Incorrect Login, please try again");
+				break;
+				default:
+					alert("Catastrophic Error Retrieving keySlot0, see the error log for more information");
+					console.error("An Error Occured Retrieving keySlot0: "+textStatus);
+					console.error(jq);
+					console.error(errorThrown);
+					console.error("##########################################");
+			}
+		}
 	});
 }

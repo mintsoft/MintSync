@@ -32,15 +32,16 @@ A: It's a client and server application designed to store passwords securely
 for websites. Data is kept encrypted server-side and only ever decrypted by the client.
 
 Q: What ciphers/hashes are used and how large are your keys?
-A: Currently the only supported Cipher is AES and the only supported keylength is 256 bit. Hashes are SHA-512.
-   In the pipeline for some point is variable encryption or possibly parallel encryption, depending on whether I decide its worth the hassle.
+A: Currently the only supported Cipher is AES and the only supported keylength is 256 bit. Hashes are SHA-512 where applicable and SHA-256 when used as AES256 encryption keys.
+   In the pipeline for some point is variable encryption or possibly parallel encryption, depending on whether or not I decide it's worth the hassle.
 
 Q: Why is there only an Opera Extension? Don't you know that the cool kids all use Chrome/Firefox/Safari?
 A: I use Opera, I'm planning to add extensions for other browsers once I've finalised the extension and done some refactoring
 
 Q: How does it work?
 A: The server maintains a list of URLS, Salts and "Credentials" information. The credentials information is a Base64 encoded AES256 encrypted JSON object of Key=>Value pairs. 
-   The encryption key is a SHA-512 hash of the master password concatenated with the rowSalt.
+   The encryption key for the credentials data is the master-key concatenated with the rowSalt. The master-key is stored with the database (keySlot0 in the User table), however 
+   it is encrypted with the SHA-256 of the password (which itself is a SHA-512 of the password the user enters).
 
 Q: Why on earth have you made this?
 A: A few weeks ago a colleague of mine recovered his password from some component of Tesco's online services, 
@@ -59,7 +60,7 @@ A: Well, yes there are hundreds of "cloud password solutions" but when I have lo
    password repository is a massive target for potential theft. Other options I looked at all involved server-side password 
    decryption, and I wanted something more easy to use from my browser of choice (Opera).
 
-Q: So why not use Opera Link?
+Q: So why not use Opera Link if you're all about Opera?
 A: I did look seriously at Opera Link, however it is closed source and descriptions of exactly how it works did not fill me
    with confidence, see: (http://my.opera.com/operalink/blog/2011/05/03/security-of-synchronized-passwords-with-opera-link)
    as the Opera company as an entity has both my data and at instances my decryption key.
@@ -80,13 +81,13 @@ A: There are a few things I'm not totally happy with:
 		be implemented at some point in the future with the salt stored server-side
     I would like the ability to change the master password from the client, this is definitely planned for the near future.
 	User feedback could really do with being improved, especially in situations where passwords are incorrect.
-	The authentication system is vulnerable to replay attacks if SSL is not used as the server does not currently keep a list of nonces.
+	The authentication system is vulnerable to replay attacks if SSL is not used as the server does not currently keep a list of nonces (coming soon).
 
 Q: Does it support X?
 A: Probably not, but I'm looking to add features where possible. 
 
 Q: Why is everything so grey and depressing?
-A: Because its neutral and I'd rather go with something looking drab and boring than luminous!
+A: Because it's neutral and I'd rather go with something looking drab and boring than luminous!
 
 Q: What new features are you planning?
 A: New features I want to add pretty soon are:
@@ -96,7 +97,7 @@ A: New features I want to add pretty soon are:
 	Adding a non-superuser interface to the server to allow password viewing without a browser extension
 	Possibly the ability to match both http and https in one URL
 	Some system to make picking individual digits out of passwords easier (for situations in which the user is requested for digits from the password)
-
+	
 Q: How do I use domain-level matching rather than exact URL & Querystring matches?
 A: Fuzzy URL matching is achieved using the sql LIKE syntax, when saving a URL either alter the URL string to include % as a wildcard
     or rename the URL in the credentials list screen (double click the URL) and add a %
