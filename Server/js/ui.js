@@ -31,7 +31,7 @@ function hexObj() {
 };
 
 /**
-	creates a SHA512 hash
+	creates a SHA hash
 */
 function doHash(passwd,type)
 {

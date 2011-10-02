@@ -157,6 +157,8 @@ ul#tabBar {
 	position: relative;
 	top: 1px;
 	
+	color: grey;
+	
 	cursor: pointer;
 }
 #tabBar li.current {
@@ -164,6 +166,8 @@ ul#tabBar {
 	border-color: #aaa;
 	border-bottom-color: #ececec;	/* must match bg colour */
 	background-image: -o-linear-gradient(top, rgba(255,255,255,0.3) 0%, #ececec 90%);
+	top: 2px;
+	color: black;
 }
 #tabContent {
 	border: 1px solid #aaa;

@@ -381,8 +381,7 @@ function MintSync() {
 	/**
 		Returns a boolean representing whether or not we have any credentials saved
 	**/
-	this.checkForSavedAuth = function()
-	{
+	this.checkForSavedAuth = function() {
 		switch(widget.preferences["SaveAuthentication"])
 		{
 			case "1":
@@ -410,8 +409,7 @@ function MintSync() {
 	/**
 		Will retrieve the authentication credentials if saved and request for them if not
 	*/
-	this.getAuthenticationObject = function(authCallback)
-	{
+	this.getAuthenticationObject = function(authCallback) {
 		var promptStr = "Please enter your login details";
 		
 		if(widget.preferences["SaveAuthentication"]==1)
@@ -489,8 +487,7 @@ function MintSync() {
 	/** 
 		Retrieves the keySlot password for the user 
 	*/
-	this.getKeySlot = function(callbacks)
-	{
+	this.getKeySlot = function(callbacks) {
 		$MS.getAuthenticationObject(function(authObj){
 			$.ajax({
 				type: "GET",
@@ -523,10 +520,49 @@ function MintSync() {
 		});
 	},
 	/**
+		Performs the AJAX request saving the password
+	*/
+	this.setKeySlot = function(newKeySlot, newKeySlot0PassHash, callbacks) {
+		$MS.getAuthenticationObject(function(authObj){
+			$.ajax({
+				type: "PUT",
+				data: {
+					"newKeySlot":newKeySlot,
+					"newKeySlot0PassHash":newKeySlot0PassHash,
+				},
+				cache: false,
+				url:$MS.getServerURL()+"?AJAX=true&action=setKeySlot",
+				beforeSend: function(jq,settings) {
+					//add the headers for the auth:
+					$MS.configureAuth(jq,settings,authObj);
+					
+					if(callbacks.beforeSend != undefined)
+						callbacks.beforeSend(jq,settings);
+				},
+				complete: function(jq,textStatus) {
+					if(callbacks.complete != undefined)
+						callbacks.complete(jq,textStatus);
+				},
+				error: function(jq,textStatus,errorThrown) {
+					if(jq.status==401)	//incorrect credentials
+					{
+						$MS.resetSavedCredentials();
+					}
+					if(callbacks.error != undefined)
+						callbacks.error(jq,textStatus,errorThrown);
+				},
+				success: function(data,textStatus,jq) {
+					if(callbacks.success != undefined)
+						callbacks.success(data,textStatus,jq);
+				}
+			});
+		});
+		
+	},	
+	/**
 		Resets the credentials saved (however they are)
 	*/
-	this.resetSavedCredentials = function()
-	{
+	this.resetSavedCredentials = function() {
 		switch(widget.preferences["SaveAuthentication"])
 		{
 			case "1":
@@ -553,8 +589,7 @@ function MintSync() {
 	/**
 		Resets the crypto password saved (however they are)
 	*/
-	this.resetSavedCryptoPassword = function()
-	{
+	this.resetSavedCryptoPassword = function() {
 		switch(widget.preferences["SavePassword"])
 		{
 			case "1":
@@ -582,32 +617,32 @@ function MintSync() {
 		Returns whether or not a password should be automatically 
 		retrieved when the pop up is launched or not.
 	**/
-	this.getAutoFetch = function(){
+	this.getAutoFetch = function() {
 		return widget.preferences["AutoFetch"];
 	},
 	/** 
 		Returns whether or not the user wants to be notified when 
 		there is a password on the page or not
 	**/
-	this.getNotify = function(){
+	this.getNotify = function() {
 		return widget.preferences["Notify"]=="1";
 	},
 	/**
 		Get the Server's base URL
 	*/
-	this.getServerURL = function(){
+	this.getServerURL = function() {
 		return widget.preferences["ServerURL"];
 	},
 	/**
 		Returns the password length configured
 	*/
-	this.getGeneratedPasswordLength = function(){
+	this.getGeneratedPasswordLength = function() {
 		return (typeof(widget)==="undefined")?16:widget.preferences["GeneratedPasswordLength"];
 	},
 	/**
 		Returns the length the row salt should be generated to
 	*/
-	this.getGeneratedRowSaltLength = function(){
+	this.getGeneratedRowSaltLength = function() {
 		return 32;
 	}
 	/**

@@ -39,7 +39,7 @@ switch($request)
 		$action = "save";
 	break;
 	case "put":							//UPDATE 
-		$action = "rename";
+		$action = $_GET['action'];
 		$put_vars="";
 		parse_str(file_get_contents('php://input'), $put_vars);
 		$_PUT = $put_vars;
@@ -229,6 +229,55 @@ switch($action)
 						),410);	//Gone
 		}
 		
+	break;
+	
+	case "setKeySlot": 	//PUT Request
+	
+		if(empty($_PUT['newKeySlot']) || empty($_PUT['newKeySlot0PassHash']) ) 
+		{
+			restTools::sendResponse(array(
+									"status"=>"fail",
+									"action"=>"setKeySlot",
+									"data"=>array (
+										"reason"=>"Required data was missing"
+									)
+								),400);	//Bad Request
+		}
+		
+		$stmt = $db->prepare("UPDATE User SET keySlot0=:keySlot0, keySlot0PassHash=:keySlot0PassHash WHERE ID=:userID;");
+		
+		$stmt->bindValue(":keySlot0",			$_PUT['newKeySlot'],PDO::PARAM_STR);
+		$stmt->bindValue(":keySlot0PassHash",	$_PUT['newKeySlot0PassHash'],PDO::PARAM_STR);
+		$stmt->bindValue(":userID",				$userID,PDO::PARAM_INT);
+		$stmt->execute();
+		
+		$stmt = $db->prepare("SELECT * FROM User WHERE keySlot0=:keySlot0 AND keySlot0PassHash=:keySlot0PassHash AND ID=:userID;");
+		$stmt->bindValue(":keySlot0",			$_PUT['newKeySlot'],PDO::PARAM_STR);
+		$stmt->bindValue(":keySlot0PassHash",	$_PUT['newKeySlot0PassHash'],PDO::PARAM_STR);
+		$stmt->bindValue(":userID",				$userID,PDO::PARAM_INT);
+		$stmt->execute();
+	
+		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		if(isset($rows[0]))
+		{	
+			restTools::sendResponse(array(
+							"status"=>"ok",
+							"action"=>"setKeySlot",
+							"data"=>array()
+						),200);	//OK
+		}
+		else
+		{
+			restTools::sendResponse(array(
+							"status"=>"fail",
+							"action"=>"setKeySlot",
+							"data"=>array (
+								"reason" => "SELECT After UPDATE failed, check the database for integrity!" 
+							)
+						),410);	//Gone
+		}
+	
 	break;
 	
 	case "check":			//GET Request
