@@ -17,6 +17,54 @@ function MintSync() {
 				cache: false,
 				url:$MS.getServerURL()+"?AJAX=true&action=retrieve",
 				beforeSend: function(jq,settings) {
+					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					{
+						alert("Please configure the Server URL");
+						return false;
+					}
+					//add the headers for the auth:
+					$MS.configureAuth(jq,settings,authObj);
+					
+					if(callbacks.beforeSend != undefined)
+						callbacks.beforeSend(jq,settings);
+				},
+				complete: function(jq,textStatus) {
+					if(callbacks.complete != undefined)
+						callbacks.complete(jq,textStatus);
+				},
+				error: function(jq,textStatus,errorThrown) {
+					console.error(jq.status);
+					if(jq.status==401)	//incorrect credentials
+					{
+						$MS.resetSavedCredentials();
+					}
+					if(callbacks.error != undefined)
+						callbacks.error(jq,textStatus,errorThrown);
+				},
+				success: function(data,textStatus,jq) {
+					if(callbacks.success != undefined)
+						callbacks.success(data);
+				}
+			});
+		});
+		
+	},
+	/*
+		Retrieve passwords for the passed ID
+	*/
+	this.getPasswordsByID = function(IDnum, callbacks) {
+		$MS.getAuthenticationObject(function(authObj){
+			$.ajax({
+				type: "GET",
+				data: {ID:IDnum},
+				cache: false,
+				url:$MS.getServerURL()+"?AJAX=true&action=retrieve",
+				beforeSend: function(jq,settings) {
+					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					{
+						alert("Please configure the Server URL");
+						return false;
+					}
 					//add the headers for the auth:
 					$MS.configureAuth(jq,settings,authObj);
 					
@@ -61,6 +109,11 @@ function MintSync() {
 				cache: false,
 				url:$MS.getServerURL()+"?AJAX=true&action=check",
 				beforeSend: function(jq,settings) {
+					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					{
+						alert("Please configure the Server URL");
+						return false;
+					}
 					//add the headers for the auth:
 					//returns false if there are no saved credentials
 					//so return false to cancel the request
@@ -107,6 +160,11 @@ function MintSync() {
 				url:$MS.getServerURL()+"?AJAX=true&action=list",
 				cache: false,
 				beforeSend: function(jq,settings) {
+					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					{
+						alert("Please configure the Server URL");
+						return false;
+					}
 					//add the headers for the auth:
 					$MS.configureAuth(jq,settings,authObj);
 					
@@ -149,6 +207,11 @@ function MintSync() {
 				cache: false,
 				url:$MS.getServerURL()+"?AJAX=true&action=save",
 				beforeSend: function(jq,settings) {
+					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					{
+						alert("Please configure the Server URL");
+						return false;
+					}
 					//add the headers for the auth:
 					$MS.configureAuth(jq,settings,authObj);
 					
@@ -184,6 +247,11 @@ function MintSync() {
 				url:$MS.getServerURL()+"?AJAX=true&action=remove&ID="+ID,
 				cache: false,
 				beforeSend: function(jq,settings) {
+					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					{
+						alert("Please configure the Server URL");
+						return false;
+					}
 					//add the headers for the auth:
 					$MS.configureAuth(jq,settings,authObj);
 					
@@ -221,6 +289,11 @@ function MintSync() {
 				url:$MS.getServerURL()+"?AJAX=true&action=rename",
 				cache: false,
 				beforeSend: function(jq,settings) {
+					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					{
+						alert("Please configure the Server URL");
+						return false;
+					}
 					//add the headers for the auth:
 					$MS.configureAuth(jq,settings,authObj);
 					
@@ -261,6 +334,11 @@ function MintSync() {
 				url: $MS.getServerURL()+"?AJAX=true&action=confirmCrypto",
 				cache: false,
 				beforeSend: function(jq,settings) {
+					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					{
+						alert("Please configure the Server URL");
+						return false;
+					}
 					//add the headers for the auth:
 					$MS.configureAuth(jq,settings,authObj);
 					
@@ -291,6 +369,91 @@ function MintSync() {
 		});
 		
 	},
+	/** 
+		Retrieves the keySlot password for the user 
+	*/
+	this.getKeySlot = function(callbacks) {
+		$MS.getAuthenticationObject(function(authObj){
+			$.ajax({
+				type: "GET",
+				url:$MS.getServerURL()+"?AJAX=true&action=retrieveKeySlot0",
+				cache: false,
+				beforeSend: function(jq,settings) {
+					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					{
+						alert("Please configure the Server URL");
+						return false;
+					}
+					//add the headers for the auth:
+					$MS.configureAuth(jq,settings,authObj);
+					
+					if(callbacks.beforeSend != undefined)
+						callbacks.beforeSend(jq,settings);
+				},
+				complete: function(jq,textStatus) {
+					if(callbacks.complete != undefined)
+						callbacks.complete(jq,textStatus);
+				},
+				error: function(jq,textStatus,errorThrown) {
+					if(jq.status==401)	//incorrect credentials
+					{
+						$MS.resetSavedCredentials();
+					}
+					if(callbacks.error != undefined)
+						callbacks.error(jq,textStatus,errorThrown);
+				},
+				success: function(data,textStatus,jq) {
+					if(callbacks.success != undefined)
+						callbacks.success(data);
+				}
+			});
+		});
+	},
+	/**
+		Performs the AJAX request saving the password
+	*/
+	this.setKeySlot = function(newKeySlot, newKeySlot0PassHash, callbacks) {
+		$MS.getAuthenticationObject(function(authObj){
+			$.ajax({
+				type: "PUT",
+				data: {
+					"newKeySlot":newKeySlot,
+					"newKeySlot0PassHash":newKeySlot0PassHash,
+				},
+				cache: false,
+				url:$MS.getServerURL()+"?AJAX=true&action=setKeySlot",
+				beforeSend: function(jq,settings) {
+					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					{
+						alert("Please configure the Server URL");
+						return false;
+					}
+					//add the headers for the auth:
+					$MS.configureAuth(jq,settings,authObj);
+					
+					if(callbacks.beforeSend != undefined)
+						callbacks.beforeSend(jq,settings);
+				},
+				complete: function(jq,textStatus) {
+					if(callbacks.complete != undefined)
+						callbacks.complete(jq,textStatus);
+				},
+				error: function(jq,textStatus,errorThrown) {
+					if(jq.status==401)	//incorrect credentials
+					{
+						$MS.resetSavedCredentials();
+					}
+					if(callbacks.error != undefined)
+						callbacks.error(jq,textStatus,errorThrown);
+				},
+				success: function(data,textStatus,jq) {
+					if(callbacks.success != undefined)
+						callbacks.success(data,textStatus,jq);
+				}
+			});
+		});
+		
+	},	
 	/** 
 		Takes a jQuery AJAX object and does the voodoo to the headers for auth 
 		last argument is whether to prompt or not
@@ -483,81 +646,6 @@ function MintSync() {
 				authCallback(authObj);
 			});
 		}
-	},	
-	/** 
-		Retrieves the keySlot password for the user 
-	*/
-	this.getKeySlot = function(callbacks) {
-		$MS.getAuthenticationObject(function(authObj){
-			$.ajax({
-				type: "GET",
-				url:$MS.getServerURL()+"?AJAX=true&action=retrieveKeySlot0",
-				cache: false,
-				beforeSend: function(jq,settings) {
-					//add the headers for the auth:
-					$MS.configureAuth(jq,settings,authObj);
-					
-					if(callbacks.beforeSend != undefined)
-						callbacks.beforeSend(jq,settings);
-				},
-				complete: function(jq,textStatus) {
-					if(callbacks.complete != undefined)
-						callbacks.complete(jq,textStatus);
-				},
-				error: function(jq,textStatus,errorThrown) {
-					if(jq.status==401)	//incorrect credentials
-					{
-						$MS.resetSavedCredentials();
-					}
-					if(callbacks.error != undefined)
-						callbacks.error(jq,textStatus,errorThrown);
-				},
-				success: function(data,textStatus,jq) {
-					if(callbacks.success != undefined)
-						callbacks.success(data);
-				}
-			});
-		});
-	},
-	/**
-		Performs the AJAX request saving the password
-	*/
-	this.setKeySlot = function(newKeySlot, newKeySlot0PassHash, callbacks) {
-		$MS.getAuthenticationObject(function(authObj){
-			$.ajax({
-				type: "PUT",
-				data: {
-					"newKeySlot":newKeySlot,
-					"newKeySlot0PassHash":newKeySlot0PassHash,
-				},
-				cache: false,
-				url:$MS.getServerURL()+"?AJAX=true&action=setKeySlot",
-				beforeSend: function(jq,settings) {
-					//add the headers for the auth:
-					$MS.configureAuth(jq,settings,authObj);
-					
-					if(callbacks.beforeSend != undefined)
-						callbacks.beforeSend(jq,settings);
-				},
-				complete: function(jq,textStatus) {
-					if(callbacks.complete != undefined)
-						callbacks.complete(jq,textStatus);
-				},
-				error: function(jq,textStatus,errorThrown) {
-					if(jq.status==401)	//incorrect credentials
-					{
-						$MS.resetSavedCredentials();
-					}
-					if(callbacks.error != undefined)
-						callbacks.error(jq,textStatus,errorThrown);
-				},
-				success: function(data,textStatus,jq) {
-					if(callbacks.success != undefined)
-						callbacks.success(data,textStatus,jq);
-				}
-			});
-		});
-		
 	},	
 	/**
 		Resets the credentials saved (however they are)

@@ -146,9 +146,16 @@ function updatePasswordMatrix(sourceArray)
 								case 401:	//incorrect login
 									alert("Rename Failed: Incorrect Login. Please try again");
 								break;
+								case 409:	//conflicting LIKE pattern
+									//parse response object
+									var responseData = $.parseJSON(jq.responseText);
+									alert("The rename has been rejected:\n\n"+responseData.data.reason);
+								break;
 								default:
 									alert("There was a serious error, see the error console");
-									console.error("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
+									console.error("You have reached an undefined state ("+jq.status+")");
+									console.error(jq);
+									console.error(textStatus, errorThrown);
 							}
 						}
 				});
@@ -206,7 +213,7 @@ function togglePasswordsForURL(srcH3)
 	}
 	else
 	{
-		$MS.getPasswords($(srcH3).text(),{
+		$MS.getPasswordsByID($(srcH3).siblings("div.dropDownContent").children("input[name='ID']").val(),{
 			beforeSend: function() {},
 			complete: function(jq,textStatus,errorThrown) {},
 			success: function(requestdata,textStatus,jq) {

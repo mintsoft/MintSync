@@ -92,7 +92,6 @@ A: Because it's neutral and I'd rather go with something looking drab and boring
 Q: What new features are you planning?
 A: New features I want to add pretty soon are:
 	Two factor authentication using SSL Client Certificates	
-	Master password changing
 	Alternative Browser Support
 	Adding a non-superuser interface to the server to allow password viewing without a browser extension
 	Possibly the ability to match both http and https in one URL

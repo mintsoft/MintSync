@@ -195,6 +195,30 @@ switch($action)
 								),400);	//Bad Request
 		}
 		
+		//is this new URL a LIKE pattern?
+		if(preg_match("/([^%]%[^%])|(^%[^%])|([^%]%$)|(^%$)/", $_PUT['newURL']))
+		{
+			//check that this isn't a LIKE pattern that conflicts with another LIKE pattern
+			$stmt = $db->prepare("SELECT * FROM auth WHERE (URL LIKE :url1 OR :url2 LIKE URL) AND NOT ID=:ID");
+			
+			$stmt->bindValue(":url1", $_PUT['newURL'], PDO::PARAM_STR);
+			$stmt->bindValue(":url2", $_PUT['newURL'], PDO::PARAM_STR);
+			$stmt->bindValue(":ID", $_PUT['ID'], PDO::PARAM_INT);
+			$stmt->execute();
+			
+			$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			if(isset($rows[0]))
+			{
+				restTools::sendResponse(array(
+							"status"=>"fail",
+							"action"=>"rename",
+							"data"=>array (
+								"reason" => "The LIKE pattern conflicts with another LIKE pattern ({$rows[0]['URL']})" 
+							)
+						),409);	//Conflict
+			}
+		}
+		
 		$stmt = $db->prepare("UPDATE auth SET URL=:newURL WHERE ID=:ID AND userID=:userID;");
 		
 		$stmt->bindValue(":newURL",$_PUT['newURL'],PDO::PARAM_STR);
@@ -385,13 +409,21 @@ switch($action)
 	default:
 		if(isset($_GET['URL']))
 			$domain = strtolower($_GET['URL']);
-
-		$stmt = $db->prepare("SELECT auth.*, User.keySlot0 FROM auth 
-								INNER JOIN User ON(User.ID=auth.userID) 
-								WHERE :url LIKE URL AND userID=:userID;");
-		
-		$stmt->bindValue(":url",	$domain, PDO::PARAM_STR );
-		$stmt->bindValue(":userID",	$userID);
+		if(isset($_GET['ID']))
+		{
+			$stmt = $db->prepare("SELECT auth.*, User.keySlot0 FROM auth 
+									INNER JOIN User ON(User.ID=auth.userID) 
+									WHERE auth.ID=:authID AND userID=:userID;");
+			$stmt->bindValue(":authID",	$_GET['ID'], PDO::PARAM_INT );
+		}
+		else
+		{
+			$stmt = $db->prepare("SELECT auth.*, User.keySlot0 FROM auth 
+									INNER JOIN User ON(User.ID=auth.userID) 
+									WHERE :url LIKE URL AND userID=:userID;");
+			$stmt->bindValue(":url",	$domain, PDO::PARAM_STR );
+		}
+		$stmt->bindValue(":userID",	$userID, PDO::PARAM_INT);
 		$stmt->execute();
 		
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);

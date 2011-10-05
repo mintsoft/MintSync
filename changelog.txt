@@ -1,6 +1,30 @@
 ************************************
-MintSync (working title) Changelog
+ MintSync (working title) Changelog
 ************************************
+
+19:07 05/10/2011
+================
+Server
+------
+Implemented protection against overlapping LIKE patterned URLS
+Added retrieve credentials by ID in addition to URL
+
+Client
+------
+Implemented handling of 409 CONFLICT messages on rename
+Implemented new method, getPasswordsByID to retrieve from auth.ID
+Added alert to warn users they haven't changed the default server URL
+
+23:09 02/20/2011
+================
+Server
+------
+Implemented methods to retrieve and update keySlot0 and keySlot0Hash
+
+Client
+------
+Added functionality to change the cryptography password
+
 
 09:06 02/10/2011
 ================
