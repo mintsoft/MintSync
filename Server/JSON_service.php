@@ -199,11 +199,17 @@ switch($action)
 		if(preg_match("/([^%]%[^%])|(^%[^%])|([^%]%$)|(^%$)/", $_PUT['newURL']))
 		{
 			//check that this isn't a LIKE pattern that conflicts with another LIKE pattern
-			$stmt = $db->prepare("SELECT * FROM auth WHERE (URL LIKE :url1 OR :url2 LIKE URL) AND NOT ID=:ID");
+			//this will deal with *most* eventualities, however in some specific situations it will not detect a conflict
 			
-			$stmt->bindValue(":url1", $_PUT['newURL'], PDO::PARAM_STR);
-			$stmt->bindValue(":url2", $_PUT['newURL'], PDO::PARAM_STR);
-			$stmt->bindValue(":ID", $_PUT['ID'], PDO::PARAM_INT);
+			// e.g. SELECT "https://my.%.com/specific/" LIKE "https://%.opera.com/%" 
+			//will return false despite the potential for a conflict
+			
+			$stmt = $db->prepare("SELECT * FROM auth WHERE (URL LIKE :url1 OR :url2 LIKE URL) AND NOT ID=:ID AND userID=:userID");
+			
+			$stmt->bindValue(":url1", 	$_PUT['newURL'],	PDO::PARAM_STR);
+			$stmt->bindValue(":url2", 	$_PUT['newURL'],	PDO::PARAM_STR);
+			$stmt->bindValue(":ID", 	$_PUT['ID'], 		PDO::PARAM_INT);
+			$stmt->bindValue(":userID",	$userID, 			PDO::PARAM_INT);
 			$stmt->execute();
 			
 			$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -221,9 +227,9 @@ switch($action)
 		
 		$stmt = $db->prepare("UPDATE auth SET URL=:newURL WHERE ID=:ID AND userID=:userID;");
 		
-		$stmt->bindValue(":newURL",$_PUT['newURL'],PDO::PARAM_STR);
-		$stmt->bindValue(":ID",$_PUT['ID'],PDO::PARAM_INT);
-		$stmt->bindValue(":userID",$userID,PDO::PARAM_INT);
+		$stmt->bindValue(":newURL",	$_PUT['newURL'], PDO::PARAM_STR);
+		$stmt->bindValue(":ID",		$_PUT['ID'],	 PDO::PARAM_INT);
+		$stmt->bindValue(":userID",	$userID,		 PDO::PARAM_INT);
 		$stmt->execute();
 		
 		$stmt = $db->prepare("SELECT * FROM auth WHERE URL=:url AND ID=:ID AND userID=:userID;");
