@@ -261,8 +261,15 @@ function setPassword() {
 					},
 					success: function(requestdata,textStatus,jq) {
 						$("#saveOutput").text("Credentials Saved");
+						
 						//uncheck the overwrite box
 						$("#canForceWrite").attr("checked",false);
+						
+						//update the local cache
+						opera.extension.postMessage({
+							'action': 'updateLocalCache',
+							'src' : 'passwordMatrix',
+						});
 					},
 					zzz: function(){}
 				});

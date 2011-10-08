@@ -238,11 +238,6 @@ window.addEventListener("load", function(){
 					mint_handleNotify(event.data.url);
 			break;
 			
-			//messages from the popup script
-			case "popup":
-
-			break;
-			
 			case "options":
 				if(event.data.action=='stopLocalCache')
 				{
@@ -254,6 +249,12 @@ window.addEventListener("load", function(){
 					updateLocalURLCache();		
 				}
 			break;
+			default:
+			//messages from any other source
+				if(event.data.action=='updateLocalCache')
+				{
+					updateLocalURLCache();
+				}
 		}
 	}
 	

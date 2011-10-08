@@ -9,7 +9,7 @@
 	<preference name = "SaveAuthentication" 			value = "0.8"	readonly = "false" />
 	<preference name = "SavePassword" 				value = "0"		readonly = "false" />
 	<preference name = "Notify"	 					value = "1"		readonly = "false" />
-	<preference name = "CheckCryptoPass"	 			value = "1"		readonly = "false" />
+	<preference name = "CheckCryptoPass"	 			value = "1"		readonly = "true" />
 	<preference name = "NotifySource"	 				value = "ajax"	readonly = "false" />
 	<preference name = "NotifySourceUpdatePeriod"	value = "5"		readonly = "false" />
 	<preference name = "AutoFetch"	 				value = "0"		readonly = "false" />

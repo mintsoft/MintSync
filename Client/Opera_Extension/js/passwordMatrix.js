@@ -139,6 +139,11 @@ function updatePasswordMatrix(sourceArray)
 							//update the record
 							$(objClicked).text(newURL);
 							
+							//update the local cache
+							opera.extension.postMessage({
+								'action': 'updateLocalCache',
+								'src' : 'passwordMatrix',
+							});
 						},
 						error: function(jq,textStatus,errorThrown) {
 							switch(jq.status)
@@ -179,6 +184,11 @@ function updatePasswordMatrix(sourceArray)
 					//remove the entire li
 					$(srcImg).parent().parent().remove();
 
+					//update the local cache
+					opera.extension.postMessage({
+						'action': 'updateLocalCache',
+						'src' : 'passwordMatrix',
+					});
 				},
 				error: function(jq,textStatus,errorThrown) {
 					switch(jq.status)

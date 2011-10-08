@@ -17,7 +17,6 @@ $(document).ready(function(){
 	$('input[name="NotifySource"][value="'+widget.preferences["NotifySource"]+'"]').prop('checked', true);
 	$("#NotifySourceUpdatePeriod").val(widget.preferences["NotifySourceUpdatePeriod"]);
 	$("#GeneratedPasswordLength").val(widget.preferences["GeneratedPasswordLength"]);
-	$('input[name="CheckCryptoPass"][value="'+widget.preferences["CheckCryptoPass"]+'"]').prop('checked', true);
 
 	/* generation options */
 	$('#passwordStrengthNum').prop('checked',	widget.preferences["passwordStrengthNum"]=="true");
@@ -55,7 +54,7 @@ function savePrefs() {
 	widget.preferences["NotifySource"]				= $("input[type=radio][name=NotifySource]:checked").val();
 	widget.preferences["NotifySourceUpdatePeriod"] 	= $("#NotifySourceUpdatePeriod").val();
 	widget.preferences["GeneratedPasswordLength"] 	= $("#GeneratedPasswordLength").val();
-	widget.preferences["CheckCryptoPass"]			= $("input[type=radio][name=CheckCryptoPass]:checked").val();
+	widget.preferences["CheckCryptoPass"]			= 1;			//this has to be checked with the new keySlot system
 	
 	/* generation options */
 	widget.preferences["passwordStrengthNum"]		= $("#passwordStrengthNum").is(":checked");
@@ -66,7 +65,7 @@ function savePrefs() {
 	//clear saved data if applicable
 	if(widget.preferences["SaveAuthentication"]!=1)
 	{
-		widget.preferences["SavedAuthentication"]	= undefined;
+		widget.preferences["SavedAuthentication"] = undefined;
 	}
 	if(widget.preferences["SaveAuthentication"]!=0.8)
 	{
@@ -76,7 +75,7 @@ function savePrefs() {
 	
 	if(widget.preferences["SavePassword"]!=1)
 	{
-		widget.preferences["SavedPassword"]			= undefined;
+		widget.preferences["SavedPassword"]	= undefined;
 	}
 	if(widget.preferences["SavePassword"]!=0.8)
 	{
