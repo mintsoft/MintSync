@@ -204,6 +204,13 @@ switch($action)
 			// e.g. SELECT "https://my.%.com/specific/" LIKE "https://%.opera.com/%" 
 			//will return false despite the potential for a conflict
 			
+			//actual solution is going to be to check for non-negative intersection between the patterns
+			// similiar issues with REGEX rather than simple PATTERNS:
+			// http://sulzmann.blogspot.com/2008/11/playing-with-regular-expressions.html
+			// http://www.groupsrv.com/computers/about507565.html
+			// http://qntm.org/greenery - python implementation
+			
+			
 			$stmt = $db->prepare("SELECT * FROM auth WHERE (URL LIKE :url1 OR :url2 LIKE URL) AND NOT ID=:ID AND userID=:userID");
 			
 			$stmt->bindValue(":url1", 	$_PUT['newURL'],	PDO::PARAM_STR);
@@ -227,14 +234,14 @@ switch($action)
 		
 		$stmt = $db->prepare("UPDATE auth SET URL=:newURL WHERE ID=:ID AND userID=:userID;");
 		
-		$stmt->bindValue(":newURL",	$_PUT['newURL'], PDO::PARAM_STR);
+		$stmt->bindValue(":newURL",	strtolower($_PUT['newURL']), PDO::PARAM_STR);
 		$stmt->bindValue(":ID",		$_PUT['ID'],	 PDO::PARAM_INT);
 		$stmt->bindValue(":userID",	$userID,		 PDO::PARAM_INT);
 		$stmt->execute();
 		
 		$stmt = $db->prepare("SELECT * FROM auth WHERE URL=:url AND ID=:ID AND userID=:userID;");
-		$stmt->bindValue(":url", strtolower($_PUT['newURL']), PDO::PARAM_STR );
-		$stmt->bindValue(":ID", strtolower($_PUT['ID']), PDO::PARAM_INT );
+		$stmt->bindValue(":url", 	strtolower($_PUT['newURL']), PDO::PARAM_STR );
+		$stmt->bindValue(":ID",		$_PUT['ID'], PDO::PARAM_INT );
 		$stmt->bindValue(":userID", $userID, PDO::PARAM_INT );
 		$stmt->execute();
 	
