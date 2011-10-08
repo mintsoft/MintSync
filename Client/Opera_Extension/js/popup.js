@@ -250,6 +250,8 @@ function setPassword() {
 							break;
 							case 417:
 								$("#saveOutput").text("Save Failed: Inconsistent Crypto Password");
+								//update the saved crypto password if it is set to anything other than no
+								$MS.resetSavedCryptoPassword();
 							break;
 							default:
 							
