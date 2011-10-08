@@ -54,7 +54,6 @@ function savePrefs() {
 	widget.preferences["NotifySource"]				= $("input[type=radio][name=NotifySource]:checked").val();
 	widget.preferences["NotifySourceUpdatePeriod"] 	= $("#NotifySourceUpdatePeriod").val();
 	widget.preferences["GeneratedPasswordLength"] 	= $("#GeneratedPasswordLength").val();
-	widget.preferences["CheckCryptoPass"]			= 1;			//this has to be checked with the new keySlot system
 	
 	/* generation options */
 	widget.preferences["passwordStrengthNum"]		= $("#passwordStrengthNum").is(":checked");

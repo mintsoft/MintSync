@@ -230,10 +230,6 @@ function setPassword() {
 		success: function(returnedData){
 			$MC.encodeAndEncrypt(CredentialsObj,RowSalt,returnedData.data.keySlot0,function(encryptedData,cryptoHash){
 				CredentialsObj = new Object();
-
-				//if the cryptoHash should be verified
-				if(!$MS.getVerifyCryptoPass())
-					cryptoHash=undefined;
 				
 				//check is overwrites are allowed (force)
 				force = $("#canForceWrite:checked").val();

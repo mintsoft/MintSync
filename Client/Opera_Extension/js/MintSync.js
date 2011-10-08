@@ -732,13 +732,7 @@ function MintSync() {
 	*/
 	this.getGeneratedRowSaltLength = function() {
 		return 32;
-	}
-	/**
-		Returns whether the cryptoHash should be verified or not
-	*/
-	this.getVerifyCryptoPass = function() {
-		return widget.preferences["CheckCryptoPass"]=="1";
-	}
+	},
 	/**
 	Generates a random salt string
 	*/
