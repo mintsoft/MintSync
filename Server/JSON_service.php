@@ -170,8 +170,8 @@ switch($action)
 				),400);	//Bad Request
 		}
 		$stmt = $db->prepare("DELETE FROM auth WHERE ID=:id AND userID=:userID;");
-		$stmt->bindValue(":id",$_REQUEST['ID']);
-		$stmt->bindValue(":userID",$userID);
+		$stmt->bindValue(":id",$_REQUEST['ID'], PDO::PARAM_INT);
+		$stmt->bindValue(":userID",$userID, 	PDO::PARAM_INT);
 		$stmt->execute();
 
 		restTools::sendResponse(array(
@@ -234,15 +234,15 @@ switch($action)
 		
 		$stmt = $db->prepare("UPDATE auth SET URL=:newURL WHERE ID=:ID AND userID=:userID;");
 		
-		$stmt->bindValue(":newURL",	strtolower($_PUT['newURL']), PDO::PARAM_STR);
-		$stmt->bindValue(":ID",		$_PUT['ID'],	 PDO::PARAM_INT);
-		$stmt->bindValue(":userID",	$userID,		 PDO::PARAM_INT);
+		$stmt->bindValue(":newURL",	strtolower($_PUT['newURL']), 	PDO::PARAM_STR);
+		$stmt->bindValue(":ID",		$_PUT['ID'],	 				PDO::PARAM_INT);
+		$stmt->bindValue(":userID",	$userID,		 				PDO::PARAM_INT);
 		$stmt->execute();
 		
 		$stmt = $db->prepare("SELECT * FROM auth WHERE URL=:url AND ID=:ID AND userID=:userID;");
-		$stmt->bindValue(":url", 	strtolower($_PUT['newURL']), PDO::PARAM_STR );
-		$stmt->bindValue(":ID",		$_PUT['ID'], PDO::PARAM_INT );
-		$stmt->bindValue(":userID", $userID, PDO::PARAM_INT );
+		$stmt->bindValue(":url", 	strtolower($_PUT['newURL']), 	PDO::PARAM_STR );
+		$stmt->bindValue(":ID",		$_PUT['ID'], 					PDO::PARAM_INT );
+		$stmt->bindValue(":userID", $userID, 						PDO::PARAM_INT );
 		$stmt->execute();
 	
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -283,15 +283,15 @@ switch($action)
 		
 		$stmt = $db->prepare("UPDATE User SET keySlot0=:keySlot0, keySlot0PassHash=:keySlot0PassHash WHERE ID=:userID;");
 		
-		$stmt->bindValue(":keySlot0",			$_PUT['newKeySlot'],PDO::PARAM_STR);
-		$stmt->bindValue(":keySlot0PassHash",	$_PUT['newKeySlot0PassHash'],PDO::PARAM_STR);
-		$stmt->bindValue(":userID",				$userID,PDO::PARAM_INT);
+		$stmt->bindValue(":keySlot0",			$_PUT['newKeySlot'],			PDO::PARAM_STR);
+		$stmt->bindValue(":keySlot0PassHash",	$_PUT['newKeySlot0PassHash'],	PDO::PARAM_STR);
+		$stmt->bindValue(":userID",				$userID,						PDO::PARAM_INT);
 		$stmt->execute();
 		
 		$stmt = $db->prepare("SELECT * FROM User WHERE keySlot0=:keySlot0 AND keySlot0PassHash=:keySlot0PassHash AND ID=:userID;");
-		$stmt->bindValue(":keySlot0",			$_PUT['newKeySlot'],PDO::PARAM_STR);
-		$stmt->bindValue(":keySlot0PassHash",	$_PUT['newKeySlot0PassHash'],PDO::PARAM_STR);
-		$stmt->bindValue(":userID",				$userID,PDO::PARAM_INT);
+		$stmt->bindValue(":keySlot0",			$_PUT['newKeySlot'],			PDO::PARAM_STR);
+		$stmt->bindValue(":keySlot0PassHash",	$_PUT['newKeySlot0PassHash'],	PDO::PARAM_STR);
+		$stmt->bindValue(":userID",				$userID,						PDO::PARAM_INT);
 		$stmt->execute();
 	
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -323,7 +323,7 @@ switch($action)
 		
 		$stmt = $db->prepare("SELECT COUNT(*) num FROM auth WHERE :url LIKE URL AND userID=:userID;");
 		$stmt->bindValue(":url",	$domain, PDO::PARAM_STR );
-		$stmt->bindValue(":userID",	$userID);
+		$stmt->bindValue(":userID",	$userID, PDO::PARAM_INT );
 		$stmt->execute();
 		
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -349,7 +349,7 @@ switch($action)
 	case "list":			//GET Request
 
 		$stmt = $db->prepare("SELECT ID, URL FROM auth WHERE userID=:userID;");
-		$stmt->bindValue(":userID",$userID);
+		$stmt->bindValue(":userID",$userID, PDO::PARAM_INT );
 		$stmt->execute();
 		
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -376,8 +376,8 @@ switch($action)
 		$testHash = $_GET['cryptoHash'];
 	
 		$stmt = $db->prepare("SELECT keySlot0PassHash AS cryptoPassHash FROM User WHERE ID=:userID AND keySlot0PassHash=:hash;");
-		$stmt->bindValue(":userID",$userID);
-		$stmt->bindValue(":hash",$testHash);
+		$stmt->bindValue(":userID",$userID, PDO::PARAM_INT );
+		$stmt->bindValue(":hash",$testHash, PDO::PARAM_STR );
 		$stmt->execute();
 		
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -398,7 +398,7 @@ switch($action)
 	case "retrieveKeySlot0":		//check that the hash serverside is the same as the sent one
 		
 		$stmt = $db->prepare("SELECT keySlot0PassHash, keySlot0 FROM User WHERE ID=:userID");
-		$stmt->bindValue(":userID",$userID);
+		$stmt->bindValue(":userID",$userID, PDO::PARAM_INT );
 		$stmt->execute();
 		
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);

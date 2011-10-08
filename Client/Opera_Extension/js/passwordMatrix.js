@@ -277,8 +277,8 @@ function togglePasswordsForURL(srcH3)
 	Function that performs the filtering of URLS depending on the value in the search box
 */
 function doListFiltering(){
-	var stringValue = $("#searchValue").val()
-	if(stringValue!== "")
+	var stringValue = $("#searchValue").val().toLowerCase();
+	if(stringValue !== "")
 	{		
 		//filter based on stringValue
 		$("#PasswordList li").hide();
