@@ -135,8 +135,9 @@ function mint_handleNotify(URL)
 				//console.info("Processing Notification Request from: AJAX");
 				
 				$MS.checkIfPasswordsExist(URL,{
-					error: function(textStatus,errorThrown) {
-						console.error("An AJAX Error Occurred:" + textStatus + "\n" + errorThrown);
+					error: function(jq, textStatus,errorThrown) {
+						console.error("An AJAX Error Occurred:"+ textStatus + "\n" + errorThrown);
+						console.error(jq);
 					},
 					success: function(data){
 						mint_handleNotificationIcon(data);
@@ -174,6 +175,7 @@ function updateLocalURLCache()
 		},
 		error: function(jq,textStatus,errorThrown){
 			console.error("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
+			console.error(jq);
 			mintSyncGlobals.theButton.badge.textContent="X!";
 			mintSyncGlobals.theButton.badge.backgroundColor='#DD0000';
 			mintSyncGlobals.theButton.badge.color = '#FFFFFF';

@@ -195,6 +195,7 @@ function getPasswords(domainName) {
 				
 					$("#fetchErrorDiv").text("An undefined error has occurred, see the error console for more information");
 					console.error("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);
+					console.error(jq);
 			}
 		}
 	});
@@ -252,7 +253,8 @@ function setPassword() {
 							default:
 							
 								$("#saveOutput").text("An undefined error has occurred, see the error console for more information");
-								console.error("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);				
+								console.error("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);		
+								console.error(jq);
 						}
 					},
 					success: function(requestdata,textStatus,jq) {
