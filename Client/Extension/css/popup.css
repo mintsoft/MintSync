@@ -141,6 +141,7 @@ ul#tabBar {
 	list-style: none;
 	padding: 0em 1em;
 }
+
 #tabBar li {
 	display: inline-block;
 	min-width: 8em;
@@ -161,6 +162,7 @@ ul#tabBar {
 	
 	cursor: pointer;
 }
+
 #tabBar li.current {
 	font-weight: bold;
 	border-color: #aaa;
@@ -169,6 +171,7 @@ ul#tabBar {
 	top: 2px;
 	color: black;
 }
+
 #tabContent {
 	border: 1px solid #aaa;
 	border-radius: 3px;
@@ -180,6 +183,7 @@ ul#tabBar {
 #addPairP {
 	cursor: pointer;
 }
+
 .hangingTab {
 	display: inline-block;
 	margin-top: -1px;
@@ -195,6 +199,7 @@ ul#tabBar {
 .hangingTab input[type='checkbox'] {
 	margin-left: 0px;
 }
+
 .hangingTab label {
 	width: auto;
 }
@@ -205,4 +210,12 @@ ul#tabBar {
 }
 
 #saveOutput {
+
+}
+
+#maximise {
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	display: none;  
 }

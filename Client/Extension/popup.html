@@ -26,6 +26,14 @@
   </head>
   <body>
 	<div id='popupContainer ' unselectable='on' >
+
+		<div id='maximise'>
+			<!--
+				onclick='window.open(window.location,"Mintsync Popup - Fullscreen"); alert(window.location); return false;'
+				doesn't work so I've used target for now.
+			-->
+			<a href='popup.html' alt='Maximise'  target="_blank" ><img src='img/maximise_16.png' /></a> 
+		</div>
 	
 		<ul id='tabBar'  unselectable='on' >
 			<li unselectable='on' >Retrieve</li>
