@@ -29,14 +29,17 @@ $request = strtolower($_SERVER['REQUEST_METHOD']);
 $_PUT = array();
 switch($request)
 {
-	case "get":							//RETRIEVE
+	case "get":							//RETRIEVE for old Versions
 		if(isset($_GET['action']))
 			$action = $_GET['action'];
 		else
 			$action = "";
 	break;
-	case "post":							//INSERT
-		$action = "save";
+	case "post":							//INSERT or RETRIEVE or CHECK (works for all length URLs)
+		if(isset($_GET['action']))
+			$action = $_GET['action'];
+		else
+			$action = "";
 	break;
 	case "put":							//UPDATE 
 		$action = $_GET['action'];
@@ -317,9 +320,9 @@ switch($action)
 	
 	break;
 	
-	case "check":			//GET Request
-		if(isset($_GET['URL']))
-			$domain = strtolower($_GET['URL']);
+	case "check":			//GET or POST Request
+		if(isset($_REQUEST['URL']))
+			$domain = strtolower($_REQUEST['URL']);
 		
 		$stmt = $db->prepare("SELECT COUNT(*) num FROM auth WHERE :url LIKE URL AND userID=:userID;");
 		$stmt->bindValue(":url",	$domain, PDO::PARAM_STR );
@@ -416,18 +419,16 @@ switch($action)
 					),417);	//Expectation Failed
 	break;
 	
-	
-	
-	case "retrieve":			//GET Request
+	case "retrieve":			//GET or POST Request
 	default:
-		if(isset($_GET['URL']))
-			$domain = strtolower($_GET['URL']);
-		if(isset($_GET['ID']))
+		if(isset($_REQUEST['URL']))
+			$domain = strtolower($_REQUEST['URL']);
+		if(isset($_REQUEST['ID']))
 		{
 			$stmt = $db->prepare("SELECT auth.*, User.keySlot0 FROM auth 
 									INNER JOIN User ON(User.ID=auth.userID) 
 									WHERE auth.ID=:authID AND userID=:userID;");
-			$stmt->bindValue(":authID",	$_GET['ID'], PDO::PARAM_INT );
+			$stmt->bindValue(":authID",	$_REQUEST['ID'], PDO::PARAM_INT );
 		}
 		else
 		{

@@ -162,7 +162,13 @@ function getPasswords(domainName) {
 								$("<tr>").append(
 									$("<td>").text(index),
 									$("<td>").append(
-										$("<input type='password' onfocus='revealPassword(this);' readonly='readonly' onblur='rehidePassword(this);'>").val(credentialsObj[index])
+										$("<input type='password' onfocus='revealPassword(this);' readonly='readonly' onblur='rehidePassword(this);'>")
+											.val(credentialsObj[index])
+											.dblclick(function(event) {
+												//when the fields are double clicked, hilight individual characters
+												event.preventDefault();
+												
+										})
 									)
 								)
 							);
