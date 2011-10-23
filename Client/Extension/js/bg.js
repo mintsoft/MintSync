@@ -232,6 +232,8 @@ window.addEventListener("load", function(){
 	
 	//add handler for messages, including injected JS
 	opera.extension.onmessage = function(event) {
+		console.debug("Received extension message:");
+		console.debug(event);
 		switch(event.data.src)
 		{
 			//message from the Inject JS
