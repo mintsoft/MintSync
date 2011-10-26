@@ -113,6 +113,12 @@ A: This is because the % is the wildcard character in SQL LIKE statements, there
     to be represented as %% in the database. In the credentials list the data is displayed exactly as it is stored in the database, therefore a % is a wildcard
 	and %% is a '%' character.
 
+Q: Why doesn't it work with long URLs like the Amazon Web Service Login page?
+A: This is more than likely due to the PHP Suhosin module's get.max_value_length value which defaults to 256 characters, add/change your php config 
+   (/etc/php5/conf.d/suhosin.ini on Debian & Ubuntu) to include the line
+	suhosin.get.max_value_length = 2048
+   and that should more than cover it.
+	
 Libraries and Attributions
 ===========================
 

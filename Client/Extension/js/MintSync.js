@@ -12,7 +12,7 @@ function MintSync() {
 	this.getPasswords = function(Domain, callbacks) {
 		$MS.getAuthenticationObject(function(authObj){
 			$.ajax({
-				type: "POST",
+				type: "GET",
 				data: {URL:Domain},
 				cache: false,
 				url:$MS.getServerURL()+"?AJAX=true&action=retrieve",
@@ -104,7 +104,7 @@ function MintSync() {
 		
 		$MS.getAuthenticationObject(function(authObj){
 			$.ajax({
-				type: "POST",
+				type: "GET",
 				data: {URL:Domain},
 				cache: false,
 				url:$MS.getServerURL()+"?AJAX=true&action=check",

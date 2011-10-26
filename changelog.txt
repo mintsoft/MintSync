@@ -2,6 +2,26 @@
  MintSync (working title) Changelog
 ************************************
 
+18:48 16/10/2011
+================
+Server
+------
+Configuration Changes - see README
+
+Client
+------
+Reverting previous change switching from GET to POST
+
+11:21 22/10/2011
+================
+Server
+------
+Altered Check and Retrieve verbs to support URL from both GET and POST 
+
+Client
+------
+Altered Retrieval methods to send URLS via POST instead of GET (for very long URLS)
+
 19:07 05/10/2011
 ================
 Server
