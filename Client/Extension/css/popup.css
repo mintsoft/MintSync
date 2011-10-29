@@ -11,6 +11,7 @@
 
 body, #popupContainer {
 	overflow: hidden;
+/*	background:  transparent !important;	*/
 }
 
 /* headings */
@@ -217,5 +218,5 @@ ul#tabBar {
 	position: absolute;
 	top: 2px;
 	right: 2px;
-	display: none;  
+	display: none;
 }

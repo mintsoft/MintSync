@@ -30,9 +30,10 @@
 		<div id='maximise'>
 			<!--
 				onclick='window.open(window.location,"Mintsync Popup - Fullscreen"); alert(window.location); return false;'
-				doesn't work so I've used target for now.
+				doesn't work so I've used opera.extension.tabs which isn't accessible directly so one has to go via the
+				background process
 			-->
-			<a href='popup.html' alt='Maximise'  target="_blank" ><img src='img/maximise_16.png' /></a> 
+			<a href='popup.html' alt='Maximise' onclick='opera.extension.bgProcess.opera.extension.tabs.create({url: "popup.html", focused: true}); return false;'><img src='img/maximise_16.png' /></a> 
 		</div>
 	
 		<ul id='tabBar'  unselectable='on' >

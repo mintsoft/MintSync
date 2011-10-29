@@ -240,9 +240,18 @@ function togglePasswordsForURL(srcH3)
 						{
 							tableBody.append(
 								$("<tr>").append(
-									$("<td>").text(index),
-									$("<td>").append(
-										$("<input type='password' onfocus='revealPassword(this);' readonly='readonly' onblur='rehidePassword(this);'>").val(credentialsObj[index])
+									$("<td class='pm_label'>").text(index),
+									$("<td class='pm_value'>").append(
+										$("<input type='password' onfocus='revealPassword(this);' readonly='readonly' onblur='rehidePassword(this);'>")
+											.val(credentialsObj[index])
+											.dblclick(function(event) {
+												//when the fields are double clicked, hilight individual characters
+												//event.target is the element clicked
+												event.preventDefault();
+											}),
+										$("<img src='img/expandDown.png' class='explodeIcon clickable' alt='Explode' title='Explode Password' />").click(function(event){
+											handleShowIndividualCharacters($(this).siblings("input"));
+										})
 									)
 								)
 							);
@@ -288,4 +297,35 @@ function doListFiltering(){
 	{
 		$("#PasswordList li").show();
 	}
+}
+
+/**
+	Function to cause the separation of a password field into individual characters for easy viewing
+*/
+function handleShowIndividualCharacters(target) {
+	
+	if($(target).siblings("table.digits").length>0)
+		return;
+
+	var passwordArray = $(target).val().split("");
+	var	thead = $("<tr>"),
+		tbody = $("<tr class='explodeRow'>");
+	
+	
+	for(var x=0; x<passwordArray.length; ++x)
+	{
+		thead.append(
+				$("<th>").text(x)
+			);
+		tbody.append(
+				$("<td>").append($("<input type='password' onfocus='revealPassword(this);' readonly='readonly' class='singleDigit' onblur='rehidePassword(this);'>").val(passwordArray[x]))
+			);
+	}
+
+	$(target).parent().append(
+		$("<table class='digits'>").
+			append($("<thead>").append(thead)).
+			append($("<tbody>").append(tbody))
+	);
+	
 }

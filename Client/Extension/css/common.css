@@ -59,12 +59,16 @@ a:visited, a:link
 
 input 
 {
-	background: #eee;
 	border: 1px solid #eee;
 	padding: 1ex 2ex;
 	border-radius: 5px;
 	box-shadow: inset 1px 1px 2px #666;
 	color: #666;
+}
+
+input, tr.explodeRow, tr.explodeRow td
+{
+	background: #eee;
 }
 
 input[type='text']
@@ -222,7 +226,12 @@ ul.styled li .binIcon
 	float: right;
 	position: relative;
 	/* nice hacky positioning here */
-	top: -1ex;
+	top: -0.6ex;
+	right: -1ex;
+}
+
+img.clickable, ul.styled li .binIcon 
+{
 	cursor: pointer;
 }
 
@@ -268,4 +277,65 @@ ul.styled li table
 .modalDialog input,.modalDialog button {
 	margin-left: auto;
 	margin-right: auto;
+}
+
+/**
+	Single digit table and inputs
+*/
+
+input.singleDigit 
+{
+	width: 1em !important;
+	padding: 1px !important;
+	text-align: center;
+	border-radius: 0px !important;
+	box-shadow: none !important;
+}
+
+
+table.digits td:first-of-type
+{
+	padding-bottom: 3px !important;
+	padding-left: 3px !important;
+}
+
+input.singleDigit:first-of-type, 
+table.digits td:first-of-type,
+table.digits tbody tr:last-of-type, table.digits, table.digits tbody
+{
+	border-bottom-left-radius: 3px;
+}
+
+table.digits td:last-of-type
+{
+	padding-bottom: 3px !important;
+	padding-right: 3px !important;
+}
+
+input.singleDigit:last-of-type, 
+table.digits td:last-of-type,
+table.digits tbody tr:last-of-type, table.digits, table.digits tbody
+{
+	border-bottom-right-radius: 3px;
+}
+
+table.digits
+{
+	margin-top: 1ex !important;
+	margin-bottom: 0.5ex !important;
+	margin-left: auto !important;
+	margin-right: auto !important;
+	box-shadow: none !important;
+}
+
+table.digits tr, table.digits td, table.digits th
+{
+	padding: 0px !important;
+	margin: 0px !important;
+	width: auto !important;
+}
+
+table.digits td:not(:last-of-type), table.digits th:not(:last-of-type)
+{
+	border-right: 1px solid white;
 }
