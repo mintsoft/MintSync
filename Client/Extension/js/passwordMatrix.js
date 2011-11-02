@@ -315,7 +315,7 @@ function handleShowIndividualCharacters(target) {
 	for(var x=0; x<passwordArray.length; ++x)
 	{
 		thead.append(
-				$("<th>").text(x)
+				$("<th>").text((x+1))
 			);
 		tbody.append(
 				$("<td>").append($("<input type='password' onfocus='revealPassword(this);' readonly='readonly' class='singleDigit' onblur='rehidePassword(this);'>").val(passwordArray[x]))
