@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<widget xmlns="http://www.w3.org/ns/widgets" id="http://mintsoft.github.com/MintSync" version="0.98" defaultlocale="en">
+<widget xmlns="http://www.w3.org/ns/widgets" id="http://mintsoft.github.com/MintSync" version="0.99" defaultlocale="en">
 	<name short='MintSync'>MintSync</name>
 	<description xml:lang="en">Secure, self-hosted client-side decrypted password storage</description>
 	<author href="http://mintsoft.github.com/" email="rob@mintsoft.net">Rob Emery</author>
@@ -18,7 +18,7 @@
 	<preference name = "passwordStrengthPunc1"		value = "true" readonly = "false" />
 	<preference name = "passwordStrengthPunc2"		value = "true" readonly = "false" />
 	<preference name = "GeneratedPasswordLength"	value = "16" 	readonly = "false" />
-	<update-description href="http://mintsoft.github.com/mintsync_updater.xml"/>
+	<update-description href="http://mintsoft.github.com/mintsync_updater.xml?version=0.99"/>
 	<license href='http://www.apache.org/licenses/LICENSE-2.0'>Copyright 2011 Mintsoft
 
 Licensed under the Apache License, Version 2.0 (the "License");

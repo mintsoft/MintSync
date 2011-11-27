@@ -214,9 +214,26 @@ ul#tabBar {
 
 }
 
-#maximise {
+/*
+ * Mini-menu on the popup
+ */
+#iconBar {
 	position: absolute;
 	top: 2px;
 	right: 2px;
-	display: none;
+}
+#iconBar a {
+	display: inline-block;
+	margin-left: 0.2em;
+}
+
+/*
+ *	URL display for the fullscreen version
+ */
+ 
+#fullscreen_url {
+	font-family: "Consolas", mono-space;
+	display: block;
+	margin-bottom: 2ex;
+	padding-left: 1em;
 }

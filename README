@@ -95,7 +95,6 @@ A: New features I want to add pretty soon are:
 	Alternative Browser Support
 	Adding a non-superuser interface to the server to allow password viewing without a browser extension
 	Possibly the ability to match both http and https in one URL
-	Some system to make picking individual digits out of passwords easier (for situations in which the user is requested for digits from the password)
 	
 Q: How do I use domain-level matching rather than exact URL & Querystring matches?
 A: Fuzzy URL matching is achieved using the sql LIKE syntax, when saving a URL either alter the URL string to include % as a wildcard
@@ -118,6 +117,9 @@ A: This is more than likely due to the PHP Suhosin module's get.max_value_length
    (/etc/php5/conf.d/suhosin.ini on Debian & Ubuntu) to include the line
 	suhosin.get.max_value_length = 2048
    and that should more than cover it.
+
+Q: Why does it keep auto updating every 3 days even when it doesn't need to!?
+A: This is due to me not understanding how the auto-update functionality works in Opera Extensions; this will be fixed soon (probably for version 1.0).
 	
 Libraries and Attributions
 ===========================
@@ -315,3 +317,6 @@ REST utils:
 	
 Icons: Creative Commons 3.0
 	http://www.fatcow.com/free-icons
+	
+GET String parameter parsing in JS:
+	Thanks to Nathan Campos; http://stackoverflow.com/questions/901115/get-query-string-values-in-javascript

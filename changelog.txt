@@ -2,6 +2,21 @@
  MintSync (working title) Changelog
 ************************************
 
+12:34 27/11/2011
+================
+Client
+------
+Version 0.99
+Added a "maximise" button to the popup which will open in a new window
+Added links to the credentials list and options pages from the popup
+
+
+12:11 02/11/2011
+================
+Client
+------
+Password exploding now is 1 based rather than 0 based
+
 18:48 16/10/2011
 ================
 Server

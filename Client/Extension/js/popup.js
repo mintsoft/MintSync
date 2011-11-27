@@ -1,20 +1,36 @@
 /** Popup specific JS in this file */
 //is the control key down?
-var ctrlDown = false;
+var g_ctrlDown = false,
+	g_currentURL ="",
+	g_isFullscreen = false;
+
+//used to parse GET variables from the current URL when opened "fullscreen"
+function getParameterByName(name)
+{
+  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+  var regexS = "[\\?&]" + name + "=([^&#]*)";
+  var regex = new RegExp(regexS);
+  var results = regex.exec(window.location.href);
+  if(results == null)
+    return "";
+  else
+    return decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
 
 //insert the currently selected tab into the box by default
-
 window.addEventListener("load", function() {
 	if(!opera.extension)
 		return;
-		
+	
+	//if it has been clicked, then the message will contain the URL etc
 	opera.extension.onmessage = function(event) {
 		var data = event.data;
 		switch (data.action) {
 			case "click":
 				document.getElementById("domainInput").value = data.url;
 				document.getElementById("domainName").value = data.url;
-				
+				g_currentURL = data.url;
 				if($MS.getAutoFetch()==1)
 				{
 					getPasswords(data.url);
@@ -23,7 +39,21 @@ window.addEventListener("load", function() {
 			default:
 			break;
 		}
+	};
+	
+	//if its a "fullscreen" window then the target URL is URIEncoded as a GET string
+	if(getParameterByName("fullscreen"))
+	{
+		var URL = getParameterByName("URL");
+		
+		g_isFullscreen = true;
+		$("#maximise").hide(0);
+		$("#fullscreen_url").text("Target: "+URL);
+		console.debug("Fullscreen URL:", URL);
+		document.getElementById("domainInput").value = URL;
+		document.getElementById("domainName").value = URL;
 	}
+	
 	
 },false);
 
@@ -94,11 +124,11 @@ function addPair()
 		return true;
 	}).keyup(function(e) {
 		if(e.which == 17)
-			ctrlDown = false;
+			g_ctrlDown = false;
 	}).keydown(function(e) {
 		if(e.which == 17)
-			ctrlDown=true;
-		else if(ctrlDown == true && e.which == 71) {		//ctrl+g
+			g_ctrlDown=true;
+		else if(g_ctrlDown == true && e.which == 71) {		//ctrl+g
 			event.preventDefault();
 			$(this).val($MS.generatePassword(passwordLength));
 			return false;
@@ -295,4 +325,40 @@ function setPassword() {
 			}
 		}
 	});
+}
+
+/**
+	Open the popup in a new tab
+*/
+function openPopupFullScreen(thisA)
+{
+	urlData = $.param({
+			'fullscreen': '1',
+			'URL': g_currentURL
+			});
+	opera.extension.bgProcess.opera.extension.tabs.create(
+				{
+					url: thisA.href+"?"+urlData, 
+					focused: true
+				}); 
+	return false;
+}
+
+/**
+	Opens an A tag's href fullscreen
+*/
+function openNewTabFromPopup(thisA)
+{
+	/*
+	onclick='window.open(window.location,"Mintsync Popup - Fullscreen"); alert(window.location); return false;'
+	doesn't work so I've used opera.extension.tabs which isn't accessible directly so one has to go via the
+	background process
+	*/
+	
+	opera.extension.bgProcess.opera.extension.tabs.create(
+	{
+		url: thisA.href, 
+		focused: true
+	}); 
+	return false;
 }
