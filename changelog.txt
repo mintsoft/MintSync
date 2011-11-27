@@ -2,11 +2,18 @@
  MintSync (working title) Changelog
 ************************************
 
+13:05 27/11/2011
+================
+Client
+------
+version 0.99
+Moved the update XML file to use a directory structure I can control without SSS
+
 12:34 27/11/2011
 ================
 Client
 ------
-Version 0.99
+Version 0.99 Beta
 Added a "maximise" button to the popup which will open in a new window
 Added links to the credentials list and options pages from the popup
 
