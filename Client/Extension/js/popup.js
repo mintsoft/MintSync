@@ -114,14 +114,14 @@ function addPair()
 	var passwordLength = $MS.getGeneratedPasswordLength();
 	
 	//add click handler
-	$(tmpObj).find("input[name='inputPassValue']").mousedown(function(event){
-		if(event.which == 3 && $(this).val()=="" ) 	//right click
+	//using contextmenu instead of click so that it can be cancelled on the maximised version
+	$(tmpObj).find("input[name='inputPassValue']").bind("contextmenu", function(event){
+		if($(this).val()=="" )
 		{
-			event.preventDefault();
 			$(this).val($MS.generatePassword(passwordLength));
+			event.preventDefault();
 			return false;
 		}
-		return true;
 	}).keyup(function(e) {
 		if(e.which == 17)
 			g_ctrlDown = false;
