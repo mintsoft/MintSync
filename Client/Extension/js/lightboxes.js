@@ -92,7 +92,7 @@ function chooseInputForInject(inputs, completeCallback)
 			$("<option>")
 				.val(x)
 			//	.text(inputs[x].labelText+": "+"#"+inputs[x].id+" "+inputs[x].name+" ("+inputs[x].type+")")
-				.text("Label: '"+inputs[x].labelText+"', ID: "+inputs[x].id+", Name:"+inputs[x].name)
+				.text("Label: '"+inputs[x].labelText+"', ID: '"+inputs[x].id+"', Name: '"+inputs[x].name+"'")
 		);
 	}
 	$("#InputChooserPrompt").data("overlay").load().onClose(function(event){

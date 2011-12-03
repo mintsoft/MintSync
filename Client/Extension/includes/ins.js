@@ -53,7 +53,7 @@ function(a,b){return!!(a.compareDocumentPosition(b)&16)}:function(){return!1};i.
 function MS_inputnotify(e) {
 
 	//get a list of input boxes with names and their IDs or name, and their associated labels if they exist
-	var inputElements = window.Sizzle("input",document),
+	var inputElements = window.Sizzle("input", document),
 		serialInputs = new Array(),
 		label, labelText
 	
