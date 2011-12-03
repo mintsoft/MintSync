@@ -301,6 +301,14 @@ utf8_decode.js			http://phpjs.org/functions/utf8_decode:576
 	 * OTHER DEALINGS IN THE SOFTWARE.
 	 */ 
 
+Sizzle Selector Engine:
+	/*!
+	 * Sizzle CSS Selector Engine
+	 *  Copyright 2011, The Dojo Foundation
+	 *  Released under the MIT, BSD, and GPL Licenses.
+	 *  More information: http://sizzlejs.com/
+	 */
+	 
 AES:	http://www.movable-type.co.uk/scripts/aes.html
 	http://creativecommons.org/licenses/by/3.0/
 	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */

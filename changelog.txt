@@ -2,6 +2,32 @@
  MintSync (working title) Changelog
 ************************************
 
+22:03 03/12/2011
+================
+Probably Feature Complete for Version 1.0
+	- styles need tweaking before release
+
+Updated XML with version 1.0 update URL and version number
+
+10:20 03/12/2011
+================
+Client
+------
+Added sizzle selector engine to the injected JS to help with the form roboting 
+	- performance consequencies need to be profiled!
+Added message channel between the popup and the injectedJS
+Popup nolonger relies on the background process to get the current tab URL, 
+	uses opera.bgprocess object instead
+Implemented value injection into input boxes from the popup
+
+
+02/12/2011
+==========	
+Client
+------
+Fixed context menu in the maximised popup
+Changed the maximise icon to a different one
+
 13:05 27/11/2011
 ================
 Client

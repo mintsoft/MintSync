@@ -88,7 +88,7 @@ input.inputLabel {
 	width: 7em !important;
 }
 
-input.inputPass {
+input.inputPass, input.retrievedPassword {
 	width: 15em !important;
 }
 
@@ -134,6 +134,10 @@ img.jsAction {
 div#retrieveOutput {
 	padding: 2ex 2em;
 }	
+
+div#retrieveOutput table.results tbody td {
+	white-space: nowrap;
+}
 
 /**
 	Tab Bar 
