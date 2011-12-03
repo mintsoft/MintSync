@@ -28,7 +28,7 @@ function setupLightboxes()
 			<h2 id='InputChooserInstruction'>Select the correct input tag</h2>\
 			<form onsubmit='return false;'>\
 				<select id='InputChooserTarget'></select>\
-				<p class='centeredContents'><input type='submit' value='choose' class='close'></p>\
+				<p class='centeredContents'><input type='submit' value='OK' class='close'></p>\
 			</form>\
 		</div>");
 		
@@ -67,7 +67,6 @@ function askForPassword(prompt,completeCallback)
 */
 function askForUsernamePassword(prompt,completeCallback)
 {
-//	$("#authenticationInstruction").text(prompt);
 	$("#dialogAuthUsername").val("");
 	$("#dialogAuthPassword").val("");
 	$("#authenticationPrompt").data("overlay").load().onClose(function(event){
@@ -91,7 +90,6 @@ function chooseInputForInject(inputs, completeCallback)
 		$("#InputChooserTarget").append(
 			$("<option>")
 				.val(x)
-			//	.text(inputs[x].labelText+": "+"#"+inputs[x].id+" "+inputs[x].name+" ("+inputs[x].type+")")
 				.text("Label: '"+inputs[x].labelText+"', ID: '"+inputs[x].id+"', Name: '"+inputs[x].name+"'")
 		);
 	}
