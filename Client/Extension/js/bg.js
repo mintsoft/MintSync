@@ -204,42 +204,58 @@ window.addEventListener("load", function(){
 	mintSyncGlobals.theButton = opera.contexts.toolbar.createItem(ToolbarUIItemProperties);
 	opera.contexts.toolbar.addItem(mintSyncGlobals.theButton);
 
-	//add connection to popup for currentURL sending
+	//OnConnect for both injectJS and popups
 	opera.extension.onconnect = function(event) {
+		console.debug("Handling onconnect message",event);
 		try {
-			event.source.postMessage({
-									'action':'click',
-									'src':'backgroundProcess',
-									'url':opera.extension.tabs.getFocused().url
-								});
+			//if it's our Popup
+			if ( event.origin.indexOf("popup.html") > -1 && event.origin.indexOf("widget://") > -1)
+			{
+			
+				var tab = opera.extension.tabs.getFocused();
+				if(tab)
+				{
+					//send a message to the injectedJS with the messageChannel to the popup
+					tab.postMessage('popupConnect', [event.source]);
+				}
+			}
+			else
+			{
+				
+			}
 		}
 		catch(error) {
 			//ignore it for now
-			alert("There was an error with the Opera Extension OnConnect callback:"+error);
+			console.error("There was an error with the Opera Extension OnConnect callback:",error);
 		}
 	}
 
 	//add handler for tab notifications
 	opera.extension.tabs.onfocus = function() {
 		try {
-			mint_handleNotify(opera.extension.tabs.getFocused().url);
+			if(opera.extension.tabs.getFocused())	//on some operations this object is not quite set yet
+				mint_handleNotify(opera.extension.tabs.getFocused().url);
 		}
 		catch(error) {
 			//ignore it for now
-			alert("There was an error with the Opera Extension onfocus callback:"+error);
+			console.error("There was an error with the Opera Extension onfocus callback:",error);
 		}
 	}
 	
 	//add handler for messages, including injected JS
 	opera.extension.onmessage = function(event) {
-		console.debug("Received extension message:");
-		console.debug(event);
+		console.debug("Received extension message:", event);
 		switch(event.data.src)
 		{
 			//message from the Inject JS
 			case "injectedJS":
 				if(event.data.action=='navigate')	// got the URL from the injected script
 					mint_handleNotify(event.data.url);
+				else if(event.data.action=='inputList')
+				{
+					console.log("background Process Received:",event.data.inputs);
+				}
+				
 			break;
 			
 			case "options":
@@ -251,6 +267,12 @@ window.addEventListener("load", function(){
 				else if(event.data.action='startLocalCache')
 				{
 					updateLocalURLCache();		
+				}
+			break;
+			case "popup":
+				if(event.data.action=="requestInputList")
+				{
+					//post message to the injectedJS
 				}
 			break;
 			default:

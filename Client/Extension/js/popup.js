@@ -2,7 +2,9 @@
 //is the control key down?
 var g_ctrlDown = false,
 	g_currentURL ="",
-	g_isFullscreen = false;
+	g_isFullscreen = false,
+	g_injectedPort,
+	g_clickedImg;
 
 //used to parse GET variables from the current URL when opened "fullscreen"
 function getParameterByName(name)
@@ -17,6 +19,45 @@ function getParameterByName(name)
     return decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
+//Callback for handling messages sent over the MessageChannel from InjectedJS
+function handleMessageFromInjectedJS(e)
+{
+	console.debug("Popup received Message from Injected Script:",e)
+	if(e.data.action == "inputList")
+	{		
+		//display lightbox for the user to decide where its going into
+		chooseInputForInject(e.data.inputs,function(input){
+		
+			var injectedValue = $(g_clickedImg).parent().siblings().children("input").val();
+		
+			sendMessageToInjectedJS({
+				'action'	: "injectValue",
+				'src'		: 'popup',
+				'target'	: {
+					'name'	:	input.name,
+					'id'	:	input.id,
+					'value'	:	injectedValue,
+					}
+			});
+			injectedValue = "";
+		});
+		
+	}
+}
+
+//Use configured messageChannel to send a message to the InjectedJS
+function sendMessageToInjectedJS(message)
+{
+	var sendStr = message;
+	if(g_injectedPort)
+	{
+		g_injectedPort.postMessage(sendStr);
+	}
+	else
+	{
+		console.error("MessageChannel not yet configured, message not sent", message);
+	}
+}
 
 //insert the currently selected tab into the box by default
 window.addEventListener("load", function() {
@@ -25,29 +66,63 @@ window.addEventListener("load", function() {
 	
 	//if it has been clicked, then the message will contain the URL etc
 	opera.extension.onmessage = function(event) {
-		var data = event.data;
-		switch (data.action) {
-			case "click":
-				document.getElementById("domainInput").value = data.url;
-				document.getElementById("domainName").value = data.url;
-				g_currentURL = data.url;
-				if($MS.getAutoFetch()==1)
-				{
-					getPasswords(data.url);
-				}
-			break;
-			default:
-			break;
+		if (event.data == "popupConnect")
+		{
+			if(event.ports.length > 0)
+			{
+				g_injectedPort = event.ports[0];
+				g_injectedPort.onmessage = handleMessageFromInjectedJS;
+			}
+		}	
+		/*
+		else if(event.data.src == "backgroundProcess")
+		{
+			var data = event.data;
+			switch (data.action) {
+				case "click":
+					document.getElementById("domainInput").value = data.url;
+					document.getElementById("domainName").value = data.url;
+					g_currentURL = data.url;
+					if($MS.getAutoFetch()==1)
+					{
+						getPasswords(data.url);
+					}
+				break;
+				default:
+				break;
+			}
 		}
+		*/
+		/*else if (event.data.src == "injectedJS")
+		{
+			if(event.data.action == "popupChannel")
+			{
+				console.debug(event);
+				if(event.ports.length >0)
+				{
+					g_injectedPort = event.ports[0];
+					g_injectedPort.onmessage = handleMessageFromInjectedJS;
+				}
+			}
+		}*/
+		
 	};
 	
+	//if running as a standard popup
+	if(!getParameterByName("fullscreen"))
+	{
+		var currentTab = opera.extension.bgProcess.opera.extension.tabs.getFocused();
+		document.getElementById("domainInput").value = currentTab.url;
+		document.getElementById("domainName").value = currentTab.url;
+		g_currentURL = currentTab.url;
+	}
 	//if its a "fullscreen" window then the target URL is URIEncoded as a GET string
-	if(getParameterByName("fullscreen"))
+	else
 	{
 		var URL = getParameterByName("URL");
 		
 		g_isFullscreen = true;
-		$("#maximise").hide(0);
+		$("a.hidden_when_max, img.hidden_when_max").hide(0);
 		$("#fullscreen_url").text("Target: "+URL);
 		console.debug("Fullscreen URL:", URL);
 		document.getElementById("domainInput").value = URL;
@@ -192,17 +267,18 @@ function getPasswords(domainName) {
 								$("<tr>").append(
 									$("<td>").text(index),
 									$("<td>").append(
-										$("<input type='password' onfocus='revealPassword(this);' readonly='readonly' onblur='rehidePassword(this);'>")
+										$("<input type='password' class='retrievedPassword' onfocus='revealPassword(this);' readonly='readonly' onblur='rehidePassword(this);'>")
 											.val(credentialsObj[index])
 											.dblclick(function(event) {
 												//when the fields are double clicked, hilight individual characters
 												event.preventDefault();
 												
-										})
+										})),
+									$("<td>").append(
+										$("<img src='img/document_import.png' alt='Insert Password' onclick='injectPass(this); return false' class='jsAction injectPW hidden_when_max' />")
 									)
 								)
 							);
-							
 							//also add this into the save dialog for easy updates
 							addPair();
 							$("#inputPassContainer input[name='inputPassName']").eq(counter).val(index);
@@ -210,6 +286,9 @@ function getPasswords(domainName) {
 							
 						}
 						$("#retrieveOutput").show(0);
+						
+						if(g_isFullscreen)
+							$("img.hidden_when_max").hide(0);
 					},
 					error: function(){
 						alert("The password entered was incorrect, please try again");
@@ -335,12 +414,11 @@ function openPopupFullScreen(thisA)
 	urlData = $.param({
 			'fullscreen': '1',
 			'URL': g_currentURL
-			});
-	opera.extension.bgProcess.opera.extension.tabs.create(
-				{
-					url: thisA.href+"?"+urlData, 
-					focused: true
-				}); 
+		});
+	opera.extension.bgProcess.opera.extension.tabs.create({
+			url: thisA.href+"?"+urlData, 
+			focused: true
+		}); 
 	return false;
 }
 
@@ -350,15 +428,28 @@ function openPopupFullScreen(thisA)
 function openNewTabFromPopup(thisA)
 {
 	/*
-	onclick='window.open(window.location,"Mintsync Popup - Fullscreen"); alert(window.location); return false;'
-	doesn't work so I've used opera.extension.tabs which isn't accessible directly so one has to go via the
-	background process
+		onclick='window.open(window.location,"Mintsync Popup - Fullscreen"); alert(window.location); return false;'
+		doesn't work so I've used opera.extension.tabs which isn't accessible directly so one has to go via the
+		background process
 	*/
 	
-	opera.extension.bgProcess.opera.extension.tabs.create(
-	{
+	opera.extension.bgProcess.opera.extension.tabs.create({
 		url: thisA.href, 
 		focused: true
 	}); 
 	return false;
+}
+
+/**
+	Input for the password insert/injection script
+	from the thisImg that was clicked
+*/
+function injectPass(thisImg)
+{
+	//NOT good practise but it'll do for now
+	g_clickedImg = thisImg;
+	sendMessageToInjectedJS({
+		'action'	: "requestInputList",
+		'src'		: 'popup',
+	});
 }

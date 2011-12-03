@@ -22,7 +22,15 @@ function setupLightboxes()
 				<p class='centeredContents'><input type='submit' class='close'></p>\
 			</form>\
 		</div>");	
-		
+	
+	//input tag selector for value injection
+	$("body").append("<div class='modalDialog' id='InputChooserPrompt'>\
+			<h2 id='InputChooserInstruction'>Select the correct input tag</h2>\
+			<form onsubmit='return false;'>\
+				<select id='InputChooserTarget'></select>\
+				<p class='centeredContents'><input type='submit' value='choose' class='close'></p>\
+			</form>\
+		</div>");
 		
 	$(".modalDialog").overlay({
 
@@ -70,4 +78,26 @@ function askForUsernamePassword(prompt,completeCallback)
 		$(this).unbind(event);
 	});
 	$("#dialogAuthUsername").focus();
+}
+
+/**
+	Select the correct input box to inject the values into!
+ */
+function chooseInputForInject(inputs, completeCallback)
+{
+	$("#InputChooserTarget").html("");
+	for(var x in inputs)
+	{
+		$("#InputChooserTarget").append(
+			$("<option>")
+				.val(x)
+			//	.text(inputs[x].labelText+": "+"#"+inputs[x].id+" "+inputs[x].name+" ("+inputs[x].type+")")
+				.text("Label: '"+inputs[x].labelText+"', ID: "+inputs[x].id+", Name:"+inputs[x].name)
+		);
+	}
+	$("#InputChooserPrompt").data("overlay").load().onClose(function(event){
+		//get the selected item
+		var selectedIndex = $("#InputChooserTarget option:selected").val();
+		completeCallback(inputs[selectedIndex]);
+	});
 }
