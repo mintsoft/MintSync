@@ -74,38 +74,6 @@ window.addEventListener("load", function() {
 				g_injectedPort.onmessage = handleMessageFromInjectedJS;
 			}
 		}	
-		/*
-		else if(event.data.src == "backgroundProcess")
-		{
-			var data = event.data;
-			switch (data.action) {
-				case "click":
-					document.getElementById("domainInput").value = data.url;
-					document.getElementById("domainName").value = data.url;
-					g_currentURL = data.url;
-					if($MS.getAutoFetch()==1)
-					{
-						getPasswords(data.url);
-					}
-				break;
-				default:
-				break;
-			}
-		}
-		*/
-		/*else if (event.data.src == "injectedJS")
-		{
-			if(event.data.action == "popupChannel")
-			{
-				console.debug(event);
-				if(event.ports.length >0)
-				{
-					g_injectedPort = event.ports[0];
-					g_injectedPort.onmessage = handleMessageFromInjectedJS;
-				}
-			}
-		}*/
-		
 	};
 	
 	//if running as a standard popup

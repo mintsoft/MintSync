@@ -1,26 +1,33 @@
 MintSync - Mintsoft (Rob Emery) 2011
 ====================================
 
-Eventually, this will be a multi-browser extension and server component secure password storage solution with all data decrypted clientside only.
+Eventually, this will be a multi-browser extension and server component secure password storage 
+solution with all data decrypted clientside only.
 
-At current (2011-08-28) there is a warning on the Opera extensions-tabs pages warning about the API being overhauled, therefore it is expected that everything will break in a new release of Opera
+At current (2011-08-28) there is a warning on the Opera extensions-tabs pages warning about the API 
+being overhauled, therefore it is expected that everything will break in a new release of Opera.
 
 ================================
  Standard Installation - Server
 ================================
 
 1. Extract the server component into your webroot(/var/wwws/mypasswords) on an apache/PHP setup:
-2. Pick a location and use sqlite3 to create a new database (sqlite3 passwords.db) and load the schemata (.read /var/wwws/mypasswords/sqliteSchema.txt)
-3. Ensure the webserver user can write to the database (for example: chgrp www-data passwords.db && chmod g+w passwords.db)
-4. Edit config.php and set PASSWORD_DATABASE to the absolute path to your database and check that SERVER_UI_LOCKED is false
+2. Pick a location and use sqlite3 to create a new database (sqlite3 passwords.db) and load the 
+    schema (.read /var/wwws/mypasswords/sqliteSchema.txt)
+3. Ensure the webserver user can write to the database 
+    (for example: chgrp www-data passwords.db && chmod g+w passwords.db)
+4. Edit config.php and set PASSWORD_DATABASE to the absolute path to your database and check that 
+    SERVER_UI_LOCKED is false
 5. Point your browser to the server location (https://example.com/mypasswords) and add your user.
 6. Enter your first user's details and click the submit button. Your new user should be set-up. 
 
 ***
-You may add more users now, however once complete it is very important that you remember to set SERVER_UI_LOCKED to true in config.php
+You may add more users now, however once complete it is very important that you remember to 
+set SERVER_UI_LOCKED to true in config.php
 ***
 
-Notice: It would absolutely be a good idea to backup your password database reguarly (I use Amazon S3 + s3cmd to backup every night).
+Notice: It would absolutely be a good idea to backup your password database reguarly 
+(I use Amazon S3 + s3cmd to backup every night).
 
 
 ==================================================
@@ -32,56 +39,68 @@ A: It's a client and server application designed to store passwords securely
 for websites. Data is kept encrypted server-side and only ever decrypted by the client.
 
 Q: What ciphers/hashes are used and how large are your keys?
-A: Currently the only supported Cipher is AES and the only supported keylength is 256 bit. Hashes are SHA-512 where applicable and SHA-256 when used as AES256 encryption keys.
-   In the pipeline for some point is variable encryption or possibly parallel encryption, depending on whether or not I decide it's worth the hassle.
+A: Currently the only supported Cipher is AES and the only supported keylength is 256 bit. 
+   Hashes are SHA-512 where applicable and SHA-256 when used as AES256 encryption keys.
+   In the pipeline for some point is variable encryption or possibly parallel encryption, 
+   depending on whether or not I decide it's worth the hassle.
 
 Q: Why is there only an Opera Extension? Don't you know that the cool kids all use Chrome/Firefox/Safari?
-A: I use Opera, I'm planning to add extensions for other browsers once I've finalised the extension and done some refactoring
+A: I use Opera, I'm planning to add extensions for other browsers once I've finalised the extension and 
+   done some refactoring
 
 Q: How does it work?
-A: The server maintains a list of URLS, Salts and "Credentials" information. The credentials information is a Base64 encoded AES256 encrypted JSON object of Key=>Value pairs. 
-   The encryption key for the credentials data is the master-key concatenated with the rowSalt. The master-key is stored with the database (keySlot0 in the User table), however 
-   it is encrypted with the SHA-256 of the password (which itself is a SHA-512 of the password the user enters).
+A: The server maintains a list of URLS, Salts and "Credentials" information. The credentials information 
+   is a Base64 encoded AES256 encrypted JSON object of Key=>Value pairs. 
+   The encryption key for the credentials data is the master-key concatenated with the rowSalt. The 
+   master-key is stored with the database (keySlot0 in the User table), however it is encrypted with 
+   the SHA-256 of the password (which itself is a SHA-512 of the password the user enters).
 
 Q: Why on earth have you made this?
-A: A few weeks ago a colleague of mine recovered his password from some component of Tesco's online services, 
-   which promptly sent his password back to him via email comprimising that password in its entirety and everywhere its used.
-   At this point he and I began discussing:
+A: A few weeks ago a colleague of mine recovered his password from some component of Tesco's 
+   online services, which promptly sent his password back to him via email comprimising that 
+   password in its entirety and everywhere its used. At this point he and I began discussing:
 	a: how atrocious the security situation appears to be on the internet, 
 	b: how poorly understood it is even by large companies,
 	c: that the only way to limit the damage is to have totally unique passwords for each portal
-   We then decided that its massively impractical to remember so many and yet neither of us have confidence in other password
-   solutions, both technically (as most are closed source) and physically (to look after my data).
+   We then decided that its massively impractical to remember so many and yet neither of us have 
+   confidence in other password solutions, both technically (as most are closed source) and physically
+   (to look after my data).
 	
 Q: Why not use Last Pass or one of the million alternative password storage solutions?
-A: Well, yes there are hundreds of "cloud password solutions" but when I have looked at each of them they're all 
-   commercially motivated and as such are usually closed source. There are those who will argue that closed source doesn't
-   necessarily mean insecure, however I prefer being able to actually check myself. Not to mention that a large centralised
-   password repository is a massive target for potential theft. Other options I looked at all involved server-side password 
-   decryption, and I wanted something more easy to use from my browser of choice (Opera).
+A: Well, yes there are hundreds of "cloud password solutions" but when I have looked at each of 
+   them they're all commercially motivated and as such are usually closed source. There are those who 
+   will argue that closed source doesn't necessarily mean insecure, however I prefer being able to actually
+   check myself. Not to mention that a large centralised password repository is a massive target for 
+   potential theft. Other options I looked at all involved server-side password  decryption, and I wanted 
+   something more easy to use from my browser of choice (Opera).
 
 Q: So why not use Opera Link if you're all about Opera?
-A: I did look seriously at Opera Link, however it is closed source and descriptions of exactly how it works did not fill me
-   with confidence, see: (http://my.opera.com/operalink/blog/2011/05/03/security-of-synchronized-passwords-with-opera-link)
+A: I did look seriously at Opera Link, however it is closed source and descriptions of exactly how it 
+   works did not fill me with confidence, see: 
+   (http://my.opera.com/operalink/blog/2011/05/03/security-of-synchronized-passwords-with-opera-link)
    as the Opera company as an entity has both my data and at instances my decryption key.
 
 Q: I need my own server?!
 A: Yes, or at least access to a server running Apache & PHP on which to host the Server Component. 
-   SSL connectivity is not *strictly* required to keep the security of your credentials, however it is highly recommended as
-   an unencrypted connection can sniff your URL lists (giving a potential attacker a hit-list to attack) and your login credentials
-   (again the maximum damage that could be done with this is deleting your passwords or retrieval of your URL lists, not comprimise
+   SSL connectivity is not *strictly* required to keep the security of your credentials, however 
+   it is highly recommended as an unencrypted connection can sniff your URL lists (giving a 
+   potential attacker a hit-list to attack) and your login credentials (again the maximum damage 
+   that could be done with this is deleting your passwords or retrieval of your URL lists, not comprimise
    your actual passwords).
 
 Q: So how secure is this really?
-A: I'm yet to complete a comprehensive security review of everything but at the moment I'm thinking "pretty secure", especially if SSL is used.
+A: I'm yet to complete a comprehensive security review of everything but at the moment I'm thinking
+   "pretty secure", especially if SSL is used.
 
 Q: Is there anything wrong that you know about?
 A: There are a few things I'm not totally happy with: 
-	Ideally for stored credentials (encryption key et cetera) I would prefer to salt the hash before storing it, this will probably 
-		be implemented at some point in the future with the salt stored server-side
-    I would like the ability to change the master password from the client, this is definitely planned for the near future.
-	User feedback could really do with being improved, especially in situations where passwords are incorrect.
-	The authentication system is vulnerable to replay attacks if SSL is not used as the server does not currently keep a list of nonces (coming soon).
+	Ideally for stored credentials (encryption key et cetera) I would prefer to salt the hash before 
+	storing it, this will probably be implemented at some point in the future with the salt stored 
+	server-side.
+    User feedback could really do with being improved, especially in situations where passwords are 
+	incorrect.
+	The authentication system is vulnerable to replay attacks if SSL is not used as the server does 
+	not currently keep a list of nonces (coming soon).
 
 Q: Does it support X?
 A: Probably not, but I'm looking to add features where possible. 
@@ -97,29 +116,35 @@ A: New features I want to add pretty soon are:
 	Possibly the ability to match both http and https in one URL
 	
 Q: How do I use domain-level matching rather than exact URL & Querystring matches?
-A: Fuzzy URL matching is achieved using the sql LIKE syntax, when saving a URL either alter the URL string to include % as a wildcard
-    or rename the URL in the credentials list screen (double click the URL) and add a %
+A: Fuzzy URL matching is achieved using the sql LIKE syntax, when saving a URL either alter the URL 
+    string to include % as a wildcard or rename the URL in the credentials list screen (double click 
+	the URL) and add a %
 	
-	For example, Google accounts uses many different arguments depending on where you have been redirected to the login page from however they all share
-	https://accounts.google.com/ServiceLogin as their root URL. Therefore saving credentials with the URL:
+	For example, Google accounts uses many different arguments depending on where you have been 
+	redirected to the login page from however they all share https://accounts.google.com/ServiceLogin 
+	as their root URL. Therefore saving credentials with the URL:
 		https://accounts.google.com/ServiceLogin?%
 	will allow you to retrieve them independent of the GET string.
 	
-	SQLite also supports the _ as a single character wildcard that is also supported. For more information see: http://www.sqlite.org/lang_expr.html#like
+	SQLite also supports the _ as a single character wildcard that is also supported. For more information
+	see: http://www.sqlite.org/lang_expr.html#like
 	
 Q: Why on earth do my URL encoded get strings get duplicated % signs? A %20 becomes %%20 when I add them!
-A: This is because the % is the wildcard character in SQL LIKE statements, therefore all occurances of the % character to be treated as a literal need 
-    to be represented as %% in the database. In the credentials list the data is displayed exactly as it is stored in the database, therefore a % is a wildcard
-	and %% is a '%' character.
+A: This is because the % is the wildcard character in SQL LIKE statements, therefore all occurances of 
+    the % character to be treated as a literal need to be represented as %% in the database. In the 
+	credentials list the data is displayed exactly as it is stored in the database, therefore a % is a 
+	wildcard and %% is a '%' character.
 
 Q: Why doesn't it work with long URLs like the Amazon Web Service Login page?
-A: This is more than likely due to the PHP Suhosin module's get.max_value_length value which defaults to 256 characters, add/change your php config 
-   (/etc/php5/conf.d/suhosin.ini on Debian & Ubuntu) to include the line
-	suhosin.get.max_value_length = 2048
-   and that should more than cover it.
+A: This is more than likely due to the PHP Suhosin module's get.max_value_length value which defaults to 
+    256 characters, add/change your php config (/etc/php5/conf.d/suhosin.ini on Debian & Ubuntu) to include 
+	the line
+		suhosin.get.max_value_length = 2048
+    and that should more than cover it.
 
 Q: Why does it keep auto updating every 3 days even when it doesn't need to!?
-A: This is due to me not understanding how the auto-update functionality works in Opera Extensions; this will be fixed soon (probably for version 1.0).
+A: This is due to me not understanding how the auto-update functionality works in Opera Extensions; 
+    this was fixed in version 0.99.s
 	
 Libraries and Attributions
 ===========================
