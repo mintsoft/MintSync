@@ -224,8 +224,26 @@ ul#tabBar {
 #InputChooserTableContainer {
 	margin-top:2ex;
 	margin-bottom: 2ex;
-	margin-left: 0px;
-	margin-right: 0px;
+}
+
+#InputChooserTableContainer table {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#InputChooserTableContainer select
+{
+	padding: 0px;
+	margin: 0px;
+}
+
+.expanded
+{
+	display: none;
+}
+
+.rightAligned {
+	text-align: right;
 }
 
 /*

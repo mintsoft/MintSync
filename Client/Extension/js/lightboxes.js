@@ -25,7 +25,7 @@ function setupLightboxes()
 	
 	//input tag selector for value injection
 	$("body").append("<div class='modalDialog' id='InputChooserPrompt'>\
-			<h2 id='InputChooserInstruction'>Select the correct input tag</h2>\
+			<h2 id='InputChooserInstruction'>Select the correct input tag using the properties below:</h2>\
 			<form onsubmit='return false;'>\
 				<div id='InputChooserTableContainer' ></div>\
 				<p class='centeredContents'><input type='hidden' id='IC_closedDialog' value='0' />\
@@ -87,22 +87,35 @@ function askForUsernamePassword(prompt,completeCallback)
 function chooseInputForInject(inputs, completeCallback)
 {
 	$("#IC_closedDialog").val("0");
+
 	$("#InputChooserTableContainer").html("<table>\
 		<thead>\
 			<tr>\
-				<th>ID</th>\
-				<th>Name</th>\
-				<th>Label Text</th>\
-				<th>Type</th>\
+				<th>Property</th><th>Value</th>\
 			</tr>\
 		</thead>\
+		<tfoot>\
+			<tr>\
+				<td colspan='2' class='rightAligned'><a href='#' id='IC_ExpandLink'>Expand</a></td>\
+			</tr>\
+		</tfoot>\
 		<tbody>\
-			<tr><td><select id='IC_ID' /></td><td><select id='IC_name' /></td><td><select id='IC_LabelText' /></td><td><select id='IC_Type' /></td></tr>\
+			<tr>	<td>Label Text</td><td class='rightAligned' ><select id='IC_LabelText' /></td>	</tr>\
+			<tr class='expanded'>	<td>ID</td><td class='rightAligned' ><select id='IC_ID' /></td>	</tr>\
+			<tr class='expanded'>	<td>Name</td><td class='rightAligned' ><select id='IC_name' /></td>	</tr>\
+			<tr class='expanded'>	<td>Type</td><td class='rightAligned' ><select id='IC_Type' /></td>	</tr>\
 		</tbody>\
 		</table>");
 	
 	$("#IC_closeButton").click(function(){
 		$("#IC_closedDialog").val("1");
+	});
+	
+	$("#IC_ExpandLink").click(function(event){
+		event.preventDefault();
+		$(".expanded").show();
+		$("#IC_ExpandLink").parent().hide();
+		return false;
 	});
 	
 	$("#IC_ID, #IC_name, #IC_LabelText, #IC_Type").change(function(){
@@ -116,25 +129,26 @@ function chooseInputForInject(inputs, completeCallback)
 	});
 	for(var x in inputs)
 	{
+		var txtPrefix = (1*x+1)+": ";
 		$("#IC_ID").append(
 			$("<option>")
 				.val(x)
-				.text(inputs[x].id)
+				.text(txtPrefix + inputs[x].id)
 		);
 		$("#IC_name").append(
 			$("<option>")
 				.val(x)
-				.text(inputs[x].name)
+				.text(txtPrefix + inputs[x].name)
 		);
 		$("#IC_LabelText").append(
 			$("<option>")
 				.val(x)
-				.text(inputs[x].labelText)
+				.text(txtPrefix + inputs[x].labelText)
 		);
 		$("#IC_Type").append(
 			$("<option>")
 				.val(x)
-				.text(inputs[x].type)
+				.text(txtPrefix + inputs[x].type)
 		);
 		
 	}
