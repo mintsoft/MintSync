@@ -219,6 +219,16 @@ ul#tabBar {
 }
 
 /*
+ *	table on the lightbox
+ */
+#InputChooserTableContainer {
+	margin-top:2ex;
+	margin-bottom: 2ex;
+	margin-left: 0px;
+	margin-right: 0px;
+}
+
+/*
  * Mini-menu on the popup
  */
 #iconBar {

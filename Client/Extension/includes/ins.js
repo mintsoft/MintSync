@@ -59,7 +59,7 @@ function MS_inputnotify(e) {
 	
 	//TODO: filter these based on input types that the user can actually input into
 	//	perhaps ( :not(input[type=hidden],input[type=button],input[type=image],input[type=checkbox],input[type=radio],input[type=submit],input[type=reset],input[type=file]) ) instead?
-	inputElements = window.Sizzle.matches("input[type=password],input[type=text],input[type=email]", inputElements);
+	inputElements = window.Sizzle.matches("input[type=password], input[type=text], input[type=email]", inputElements);
 
 	//serialise the inputElements into an array to pass to the popup
 	for(var inputIndex in inputElements)
@@ -126,13 +126,14 @@ function MS_handlePopupMessage(e)
 
 //send the URL to the extension, this doesn't depend on the DOM being loaded, so do it asap
 opera.extension.postMessage({
-		'action': 'navigate',
-		'src' : 'injectedJS',
-		'url': document.URL
+		'action'	: 'navigate',
+		'src' 		: 'injectedJS',
+		'url'		: document.URL
 	});
 
 //Handler for messages from the BackgroundProcess
 opera.extension.onmessage = function(e) {
+//	console.debug("InjectedJS Received", e);
 	try 
 	{	
 		if(e.data == "popupConnect")

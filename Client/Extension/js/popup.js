@@ -60,7 +60,7 @@ function sendMessageToInjectedJS(message)
 }
 
 //insert the currently selected tab into the box by default
-window.addEventListener("load", function() {
+window.addEventListener('load', function() {
 	if(!opera.extension)
 		return;
 	

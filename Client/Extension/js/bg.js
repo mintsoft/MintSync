@@ -221,7 +221,7 @@ window.addEventListener("load", function(){
 			}
 			else
 			{
-				
+				console.debug("onconnect received from something not popup.html, event");
 			}
 		}
 		catch(error) {

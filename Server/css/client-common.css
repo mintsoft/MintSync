@@ -57,7 +57,7 @@ a:visited, a:link
 	text-shadow: none;
 }
 
-input, select 
+input, select, .SelectWrapper
 {
 	border: 1px solid #eee;
 	padding: 1ex 2ex;
@@ -65,12 +65,15 @@ input, select
 	box-shadow: inset 1px 1px 2px #666;
 	color: #666;
 }
-select {
-	box-shadow: 1px 1px 2px #666;
+
+select 
+{
 	border-top-right-radius: 0px;
 	border-bottom-right-radius: 0px;
+	padding: 0px;
+	margin: 0px;
 }
-input, select, tr.explodeRow, tr.explodeRow td
+input, select, .SelectWrapper, tr.explodeRow, tr.explodeRow td
 {
 	background: #eee;
 }
