@@ -5,7 +5,7 @@
 	however this now also sends messages to the background process whenever a page is visited in order
 	to have the notifications working if they are enabled.
 */
-var MS_PopupChannel;
+var MS_PopupChannel, MS_LastHighlighted=null;
 /** 
 	Sizzle JS Engine, closure compiled
 	
@@ -95,6 +95,19 @@ function MS_inputnotify(e) {
 }
 
 /**
+ *	Removes the outline from the previously selected input
+ */
+function MS_unhighlight_previous_input()
+{
+	//unlight the previous one
+	if(MS_LastHighlighted)
+	{
+		//Lastobj = document.getElementById(e.data.target.id);
+		MS_LastHighlighted.style.outline = "0px solid red";
+	}
+}
+
+/**
  *	handle messages using the MS_PopupChannel sent from the popup to this injectedJS
  */
 function MS_handlePopupMessage(e)
@@ -106,6 +119,7 @@ function MS_handlePopupMessage(e)
 	}
 	else if(e.data.action == 'injectValue')
 	{
+		MS_unhighlight_previous_input();
 		//If there was an id, use that to inject the value
 		//else, use the name and set them all 
 		if(e.data.target.id)
@@ -121,17 +135,34 @@ function MS_handlePopupMessage(e)
 			}
 		}
 	}
+	else if (e.data.action == 'hilightInput')
+	{
+		MS_unhighlight_previous_input();
+		var obj = null;
+		
+		if(e.data.target.id)
+			obj = document.getElementById(e.data.target.id);
+		
+		if(obj)
+			obj.style.outline = "2px solid red";
+		
+		MS_LastHighlighted = obj;
+	}
 }
 
 
-//send the URL to the extension, this doesn't depend on the DOM being loaded, so do it asap
+/**
+ * send the URL to the extension, this doesn't depend on the DOM being loaded, so do it asap
+ */
 opera.extension.postMessage({
 		'action'	: 'navigate',
 		'src' 		: 'injectedJS',
 		'url'		: document.URL
 	});
 
-//Handler for messages from the BackgroundProcess
+/**
+ * Handler for messages from the BackgroundProcess
+ */
 opera.extension.onmessage = function(e) {
 //	console.debug("InjectedJS Received", e);
 	try 

@@ -126,6 +126,16 @@ function chooseInputForInject(inputs, completeCallback)
 		$("#IC_LabelText").find("option[value='"+selectedVal+"']").attr('selected','selected');
 		$("#IC_Type").find("option[value='"+selectedVal+"']").attr('selected','selected');
 		
+		//send message to injected JS to hilight the selected option
+		sendMessageToInjectedJS({
+				'action'	: "hilightInput",
+				'src'		: 'popup',
+				'target'	: {
+					'name'	:	inputs[selectedVal].name,
+					'id'	:	inputs[selectedVal].id,
+					}
+			});
+		
 	});
 	for(var x in inputs)
 	{
@@ -158,6 +168,18 @@ function chooseInputForInject(inputs, completeCallback)
 			//get the selected item
 			var selectedIndex = $("#IC_ID option:selected").val();
 			completeCallback(inputs[selectedIndex]);
+		}
+		else
+		{
+			//send message to injected JS to trigger an unhighlight
+			sendMessageToInjectedJS({
+				'action'	: "hilightInput",
+				'src'		: 'popup',
+				'target'	: {
+					'name'	:	"",
+					'id'	:	"",
+					}
+			});
 		}
 	});
 }
