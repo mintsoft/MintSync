@@ -9,8 +9,8 @@
 
 	var MS_PopupChannel, 
 		MS_LastHighlighted = { 
-			'object'		: null,
-			'outlineStyle' 	: '',
+			'objects'		: [],
+			'outlineStyle' 	: [],
 			},
 		MS_HilightedOutlineStyle = "2px dotted red";
 
@@ -31,24 +31,25 @@
 		//serialise the inputElements into an array to pass to the popup
 		for(var inputIndex in inputElements)
 		{
-			if(inputElements[inputIndex].id != "" && inputElements[inputIndex].name != "")
-			{
-				//Find labels here and somehow link to the input boxes
-				label = window.Sizzle("label[for="+inputElements[inputIndex].id+"]",document);
+			if(inputElements[inputIndex].id == "" && inputElements[inputIndex].name == "")
+				continue;
 			
-				labelText = "";
-				if(label && label[0] && label[0].innerText)
-					labelText = label[0].innerText;
+			//Find labels here and somehow link to the input boxes
+			label = window.Sizzle("label[for="+inputElements[inputIndex].id+"]",document);
+		
+			labelText = "";
+			if(label && label[0] && label[0].innerText)
+				labelText = label[0].innerText;
 
-				//if both of these are blank, then there's no way of actually accessing them except with
-				//an xpath, which I'm NOT going to implement ^_^
-				serialInputs.push({
-					'id'		: inputElements[inputIndex].id,
-					'name'		: inputElements[inputIndex].name,
-					'type'		: inputElements[inputIndex].type,
-					'labelText'	: labelText,
-				});
-			}
+			//if both of these are blank, then there's no way of actually accessing them except with
+			//an xpath, which I'm NOT going to implement ^_^
+			serialInputs.push({
+				'id'		: inputElements[inputIndex].id,
+				'name'		: inputElements[inputIndex].name,
+				'type'		: inputElements[inputIndex].type,
+				'labelText'	: labelText,
+			});
+			
 		}
 
 		//send the array to the popup
@@ -67,14 +68,22 @@
 	function MS_unhighlight_previous_input()
 	{
 		//unlight the previous one
-		if(MS_LastHighlighted.object)
+		for (var ox in MS_LastHighlighted.objects)
 		{
-			//Lastobj = document.getElementById(e.data.target.id);
-			
-			MS_LastHighlighted.object.style.outline = MS_LastHighlighted.outlineStyle;
+			MS_LastHighlighted.objects[ox].style.outline = MS_LastHighlighted.outlineStyle[ox];
 		}
 	}
 
+	/**
+	 *	Build a selector out of the passed object
+	 */
+	function obj2Selector(obj)
+	{
+		var selector = obj.id ? "#"+obj.id : "input";
+		selector += obj.name ? "[name="+(obj.name)+"]" : "";
+		return selector;
+	}
+	
 	/**
 	 *	handle messages using the MS_PopupChannel sent from the popup to this injectedJS
 	 */
@@ -88,35 +97,35 @@
 		else if(e.data.action == 'injectValue')
 		{
 			MS_unhighlight_previous_input();
-			//If there was an id, use that to inject the value
-			//else, use the name and set them all 
-			if(e.data.target.id)
+			
+			if(!e.data.target.id && ! e.data.target.name)
+				return;
+			
+			//build a selector
+			var selector = obj2Selector(e.data.target);
+			
+			var elements = window.Sizzle(selector, document);			
+			for(var x in elements)
 			{
-				document.getElementById(e.data.target.id).value = e.data.target.value;
+				elements[x].value = e.data.target.value;
 			}
-			else if(e.data.target.name)
-			{
-				var elements = document.getElementsByName(e.data.target.name);
-				for(var x in elements)
-				{
-					elements[x].value = e.data.target.value;
-				}
-			}
+			
 		}
 		else if (e.data.action == 'hilightInput')
 		{
 			MS_unhighlight_previous_input();
-			var obj = null;
+			var objList = null;
 			
-			if(e.data.target.id)
-				obj = document.getElementById(e.data.target.id);
+			var selector = obj2Selector(e.data.target);
 			
-			if(obj)
+			objList = window.Sizzle(selector, document);
+			
+			for (var ox in objList)
 			{
-				MS_LastHighlighted.outlineStyle = obj.style.outline;
-				obj.style.outline = MS_HilightedOutlineStyle;
+				MS_LastHighlighted.outlineStyle[ox] = objList [ox].style.outline;
+				objList[ox].style.outline = MS_HilightedOutlineStyle;
 			}
-			MS_LastHighlighted.object = obj;
+			MS_LastHighlighted.objects = objList;
 		}
 	}
 
