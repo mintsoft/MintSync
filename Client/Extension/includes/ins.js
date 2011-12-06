@@ -10,9 +10,9 @@
 	var MS_PopupChannel, 
 		MS_LastHighlighted = { 
 			'object'		: null,
-			'outlineStyle' 	: ''
-			}
-		;
+			'outlineStyle' 	: '',
+			},
+		MS_HilightedOutline = "2px dotted red";
 
 	/**
 		Send a message to the background process with information about the input elements
@@ -114,7 +114,7 @@
 			if(obj)
 			{
 				MS_LastHighlighted.outlineStyle = obj.style.outline;
-				obj.style.outline = "2px solid red";
+				obj.style.outline = MS_HilightedOutline;
 			}
 			MS_LastHighlighted.object = obj;
 		}

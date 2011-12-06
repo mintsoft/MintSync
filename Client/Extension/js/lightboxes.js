@@ -84,7 +84,7 @@ function askForUsernamePassword(prompt,completeCallback)
 /**
 	Select the correct input box to inject the values into!
  */
-function chooseInputForInject(inputs, completeCallback)
+function chooseInputForInject(inputs, valueName, completeCallback)
 {
 	$("#IC_closedDialog").val("0");
 
@@ -137,6 +137,10 @@ function chooseInputForInject(inputs, completeCallback)
 			});
 		
 	});
+	
+	//Used to find the best match later
+	var alreadyAutoSelected = 0;
+	
 	for(var x in inputs)
 	{
 		var txtPrefix = (1*x+1)+": ";
@@ -165,9 +169,32 @@ function chooseInputForInject(inputs, completeCallback)
 		// * LabelText
 		// * ID
 		// * Name
-		
-		
+		valueName = valueName.toLowerCase();
+		if	(	inputs[x].labelText.toLowerCase(valueName).indexOf(valueName) != -1 
+				&& alreadyAutoSelected < 4	)
+		{
+			$("#IC_LabelText").val(x).change();
+			
+			alreadyAutoSelected = 4;
+		}
+		else if (	inputs[x].id.toLowerCase(valueName).indexOf(valueName) != -1 
+						&& alreadyAutoSelected < 2	)
+		{
+			$("#IC_ID").val(x).change();
+			alreadyAutoSelected = 2;
+		}
+		else if	(	inputs[x].name.toLowerCase(valueName).indexOf(valueName) != -1 
+							&& alreadyAutoSelected < 1	)
+		{
+			$("#IC_name").val(x).change();
+			alreadyAutoSelected = 1;
+		}
 	}
+	//if no box was automatically selected then trigger the change event to make the 
+	//current box hilighted
+	if ( alreadyAutoSelected == 0 )
+		$("#IC_ID").change();
+	
 	$("#InputChooserPrompt").data("overlay").load().onClose(function(event){
 		if($("#IC_closedDialog").val()=="0")	//if OK was clicked
 		{

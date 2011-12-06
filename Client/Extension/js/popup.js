@@ -24,9 +24,12 @@ function handleMessageFromInjectedJS(e)
 {
 	console.debug("Popup received Message from Injected Script:",e)
 	if(e.data.action == "inputList")
-	{		
+	{	
+		//get the label for the clicked input
+		var valueName = $(g_clickedImg).parent().siblings("td:first").text();
+	
 		//display lightbox for the user to decide where its going into
-		chooseInputForInject(e.data.inputs,function(input){
+		chooseInputForInject(e.data.inputs, valueName, function(input){
 		
 			var injectedValue = $(g_clickedImg).parent().siblings().children("input").val();
 		
