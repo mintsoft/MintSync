@@ -953,7 +953,7 @@ try {
 
 var sortOrder, siblingCheck;
 
-if ( document.documentElement.compareDocumentPosition ) {
+if ( document.documentElement && document.documentElement.compareDocumentPosition ) {
 	sortOrder = function( a, b ) {
 		if ( a === b ) {
 			hasDuplicate = true;
