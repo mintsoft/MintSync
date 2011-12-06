@@ -135,9 +135,7 @@ $(document).ready(function(){
 			}
 		});
 	}
-		
-	
-	
+
 });
 
 /** Global Function Handlers **/

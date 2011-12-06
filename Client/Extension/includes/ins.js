@@ -80,7 +80,7 @@
 	function obj2Selector(obj)
 	{
 		var selector = obj.id ? "#"+obj.id : "input";
-		selector += obj.name ? "[name="+(obj.name)+"]" : "";
+		selector += obj.name ? "[name='"+(obj.name)+"']" : "";
 		return selector;
 	}
 	
@@ -98,7 +98,7 @@
 		{
 			MS_unhighlight_previous_input();
 			
-			if(!e.data.target.id && ! e.data.target.name)
+			if(!e.data.target.id && !e.data.target.name)
 				return;
 			
 			//build a selector
@@ -114,7 +114,10 @@
 		else if (e.data.action == 'hilightInput')
 		{
 			MS_unhighlight_previous_input();
-			var objList = null;
+			var objList = [];
+			
+			if(!e.data.target.id && !e.data.target.name)
+				return;
 			
 			var selector = obj2Selector(e.data.target);
 			
