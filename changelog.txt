@@ -2,8 +2,21 @@
  MintSync (working title) Changelog
 ************************************
 
+18:41 16/12/2011
+================
+Client
+------
+Wrapped injected JS in function to isolate it from other code
+Added max-height to the popup retrieve
+Injected JS highlighter now stores the outline style when it highlights an input
+Split Sizzle into a separate injected file
+Patched sizzle.js:956 - if ( document.documentElement.compareDocumentPosition ) 
+	to test for document.documentElement which doesn't always exist in injectedjs
+
 22:03 03/12/2011
 ================
+Client
+------
 Probably Feature Complete for Version 1.0
 	- styles need tweaking before release
 

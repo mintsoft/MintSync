@@ -139,6 +139,11 @@ div#retrieveOutput table.results tbody td {
 	white-space: nowrap;
 }
 
+div#fetchDiv {
+	max-height: 230px;
+	overflow-y: auto;
+}
+
 /**
 	Tab Bar 
 */

@@ -161,6 +161,12 @@ function chooseInputForInject(inputs, completeCallback)
 				.text(txtPrefix + inputs[x].type)
 		);
 		
+		//Select one by attempting to match the mintsync name against the following:
+		// * LabelText
+		// * ID
+		// * Name
+		
+		
 	}
 	$("#InputChooserPrompt").data("overlay").load().onClose(function(event){
 		if($("#IC_closedDialog").val()=="0")	//if OK was clicked
