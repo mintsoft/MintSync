@@ -12,7 +12,7 @@
 			'object'		: null,
 			'outlineStyle' 	: '',
 			},
-		MS_HilightedOutline = "2px dotted red";
+		MS_HilightedOutlineStyle = "2px dotted red";
 
 	/**
 		Send a message to the background process with information about the input elements
@@ -114,7 +114,7 @@
 			if(obj)
 			{
 				MS_LastHighlighted.outlineStyle = obj.style.outline;
-				obj.style.outline = MS_HilightedOutline;
+				obj.style.outline = MS_HilightedOutlineStyle;
 			}
 			MS_LastHighlighted.object = obj;
 		}
