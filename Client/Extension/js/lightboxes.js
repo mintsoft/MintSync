@@ -147,22 +147,22 @@ function chooseInputForInject(inputs, valueName, completeCallback)
 		$("#IC_ID").append(
 			$("<option>")
 				.val(x)
-				.text(txtPrefix + inputs[x].id)
+				.text(txtPrefix + truncateInputAttribute(inputs[x].id))
 		);
 		$("#IC_name").append(
 			$("<option>")
 				.val(x)
-				.text(txtPrefix + inputs[x].name)
+				.text(txtPrefix + truncateInputAttribute(inputs[x].name))
 		);
 		$("#IC_LabelText").append(
 			$("<option>")
 				.val(x)
-				.text(txtPrefix + inputs[x].labelText)
+				.text(txtPrefix + truncateInputAttribute(inputs[x].labelText))
 		);
 		$("#IC_Type").append(
 			$("<option>")
 				.val(x)
-				.text(txtPrefix + inputs[x].type)
+				.text(txtPrefix + truncateInputAttribute(inputs[x].type))
 		);
 		
 		//Select one by attempting to match the mintsync name against the following:

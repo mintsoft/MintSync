@@ -101,6 +101,10 @@ input {
 	font-family: monospace;
 }
 
+.underline {
+	text-decoration: underline;
+}
+
 /** Internal Scrolling **/
 #inputPassContainer {
 	max-height: 98px;

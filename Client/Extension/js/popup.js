@@ -19,6 +19,18 @@ function getParameterByName(name)
     return decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
+//returns a "representative" string if str > maxlength
+//returns startOfString...EndOfString 
+function truncateInputAttribute(str)
+{
+	var maxLength=25,
+		thisLength = str.length;
+	if ( thisLength <= maxLength)
+		return str;
+	else
+		return str.substring(0,11) + "..." + str.substring(thisLength-11,thisLength);
+}
+
 //Callback for handling messages sent over the MessageChannel from InjectedJS
 function handleMessageFromInjectedJS(e)
 {
@@ -135,6 +147,20 @@ $(document).ready(function(){
 			}
 		});
 	}
+	
+	//Add keyboard shortcut for add
+	$(document).keyup(function(e) {
+		if(e.which == 17)
+			g_ctrlDown = false;
+	}).keydown(function(e) {
+		if(e.which == 17)
+			g_ctrlDown=true;
+		else if(g_ctrlDown == true && e.which == 68) {		//ctrl+d
+			event.preventDefault();
+			addPair();
+			return false;
+		}
+	});
 
 });
 
@@ -166,9 +192,6 @@ function addPair()
 			event.preventDefault();
 			return false;
 		}
-	}).keyup(function(e) {
-		if(e.which == 17)
-			g_ctrlDown = false;
 	}).keydown(function(e) {
 		if(e.which == 17)
 			g_ctrlDown=true;
@@ -178,7 +201,6 @@ function addPair()
 			return false;
 		}
 	});
-	
 }
 
 /**

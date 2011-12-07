@@ -2,7 +2,15 @@
  MintSync (working title) Changelog
 ************************************
 
-18:41 16/12/2011
+19:16 07/12/2011
+================
+Client
+------
+Adding ctrl+d shortcut on the popup for 'add a row'
+Implementing 25 character maximum on the input fields,
+	displays <first>...<last> if > 25 characters now
+
+18:41 06/12/2011
 ================
 Client
 ------
