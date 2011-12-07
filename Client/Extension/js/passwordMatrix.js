@@ -79,7 +79,22 @@ $(document).ready(function(){
 		clearTimeout(keyTimer);
 		keyTimer = setTimeout(doListFiltering,400);	//TODO: get the duration from a preference
 	});
-
+	
+	//add ctrl+f shortcut
+/*
+	$(document).keyup(function(e) {
+		if(e.which == 17)
+			g_ctrlDown = false;
+	}).keydown(function(e) {
+		if(e.which == 17)
+			g_ctrlDown=true;
+		else if(g_ctrlDown == true && e.which == 70) {		//ctrl+f
+			event.preventDefault();
+			$("#searchValue").focus();
+			return false;
+		}
+	});
+*/
 });
 
 
