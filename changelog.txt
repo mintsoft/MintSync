@@ -2,6 +2,13 @@
  MintSync (working title) Changelog
 ************************************
 
+19:21 08/12/2011
+================
+Client
+------
+Adding some more document.documentElement checks in Sizzle to prevent errors
+
+
 19:16 07/12/2011
 ================
 Client

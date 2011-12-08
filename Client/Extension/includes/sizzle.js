@@ -1054,7 +1054,10 @@ if ( document.documentElement && document.documentElement.compareDocumentPositio
 	var form = document.createElement("div"),
 		id = "script" + (new Date()).getTime(),
 		root = document.documentElement;
-
+	
+	if(!root)
+		return;
+		
 	form.innerHTML = "<a name='" + id + "'/>";
 
 	// Inject it into the root element, check its status, and remove it quickly
@@ -1242,8 +1245,12 @@ if ( document.querySelectorAll ) {
 }
 
 (function(){
-	var html = document.documentElement,
-		matches = html.matchesSelector || html.mozMatchesSelector || html.webkitMatchesSelector || html.msMatchesSelector;
+	var html = document.documentElement;
+	
+	if(!html)
+		return;
+		
+	var matches = html.matchesSelector || html.mozMatchesSelector || html.webkitMatchesSelector || html.msMatchesSelector;
 
 	if ( matches ) {
 		// Check to see if it's possible to do matchesSelector
@@ -1388,12 +1395,12 @@ function dirCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
 	}
 }
 
-if ( document.documentElement.contains ) {
+if ( document.documentElement && document.documentElement.contains ) {
 	Sizzle.contains = function( a, b ) {
 		return a !== b && (a.contains ? a.contains(b) : true);
 	};
 
-} else if ( document.documentElement.compareDocumentPosition ) {
+} else if ( document.documentElement && document.documentElement.compareDocumentPosition ) {
 	Sizzle.contains = function( a, b ) {
 		return !!(a.compareDocumentPosition(b) & 16);
 	};
