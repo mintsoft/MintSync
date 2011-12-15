@@ -9,9 +9,13 @@
 }
 
 /* Set background and font */
+body, p, h1,h2,h3,h4,h5,h6, *
+{
+	font-family:	"Trebuchet MS", "Liberation Sans", "Tahoma", Sans-Serif;
+}
+
 body 
 {
-	font-family: "trebuchet ms",Sans-Serif;
 	font-size: small;
 	color: #111;
 	background: white;
@@ -39,8 +43,8 @@ a:visited, a:link
 {
 	width: 50em;
 	min-width: 50em;
-	margin-top: 4ex;
-	margin-bottom: 4ex;
+	margin-top: 2ex;
+	margin-bottom: 2ex;
 	margin-left: auto;
 	margin-right: auto;
 	background: #fcfcfc;
@@ -160,9 +164,9 @@ table tr:last-child td:last-child
 	border-bottom-right-radius:3px
 }
 	
-table td 
+table td, table tbody input
 {
-	font-family: monospace;
+	font-family: "Consolas", "Inconsolata", "DejaVu Sans Mono", monospace;
 }
 
 table thead th, table td 
@@ -193,7 +197,6 @@ table tbody input
 	height: auto 	!important;
 	margin: 0px auto !important;
 	padding: 0.5ex 1ex !important;
-	font-family: monospace;
 	border-radius: 3px;
 	box-shadow: inset 1px 1px 1px #666;
 }
