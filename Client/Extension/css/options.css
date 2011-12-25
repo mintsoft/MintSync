@@ -56,3 +56,6 @@ ul.options li {
 .advancedOption {
 	display: none;
 }
+.indented {
+	margin-left: 1em;
+}

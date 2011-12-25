@@ -30,6 +30,13 @@
 						<input type='radio' name='SavePass' id='SavePassS' value='0.5'		/> <label for='SavePassS'>Per Dialog Instance</label>
 						<input type='radio' name='SavePass' id='SavePassB' value='0.8'		/> <label for='SavePassB'>Per Browser Session</label>
 					</li>
+
+					<!-- memory options for crypto password -->
+					<li class='advancedOption indented'><span class='bigLabel'>Remember For</span> 
+						<input type='number' name='SavePassBDuration' id='SavePassBDuration' min='0' max='360' step='5'/> <label for='SavePassBDuration'>Minutes</label>
+						<span class='mini-instructions' >Applies to "Per Browser Session" Only, 0 means forever</span>
+					</li>
+					
 					<li class='advancedOption'><span class='bigLabel'>Auto-Retrieve?</span> 
 						<input type='radio' name='AutoFetch' id='AutoFetch1' value='1'   	/> <label for='AutoFetch1'>Yes</label>
 						<input type='radio' name='AutoFetch' id='AutoFetch0' value='0'   	/> <label for='AutoFetch0'>No!</label>
@@ -41,11 +48,11 @@
 						<span class='mini-instructions' >Requires Either Permanent or Browser Session Saved Authentication</span>
 					</li>
 					
-					<li class='advancedOption'><span class='bigLabel'>Notification Source</span> 
+					<li class='advancedOption indented'><span class='bigLabel'>Notification Source</span> 
 						<input type='radio' name='NotifySource' id='NotifyAJAX' value='ajax'   	/> <label for='NotifyAJAX'>Live AJAX Data</label>
 						<input type='radio' name='NotifySource' id='NotifyCache' value='cache'   /> <label for='NotifyCache'>Local Cache</label>
 					</li>
-					<li class='advancedOption'><span class='bigLabel'>Update Period</span> 
+					<li class='advancedOption indented'><span class='bigLabel'>Update Period</span> 
 						<input type='number' name='NotifySourceUpdatePeriod' id='NotifySourceUpdatePeriod' min='1' max='360' step='1'/> <label for='NotifySourceUpdatePeriod'>Minutes</label>
 						<span class='mini-instructions' >Applies to Local Cache Only</span>
 					</li>
@@ -53,7 +60,7 @@
 						<input type='radio' name='Cipher' id='CipherAES' value='aes'  	/> <label for='CipherAES'>AES</label>
 						<input type='radio' name='Cipher' id='Cipher3DES' value='3des' disabled='disabled' 	/> <span class='disabled'><label for='Cipher3DES'>3DES</label> </span>
 					</li>
-					<li class='advancedOption'><span class='bigLabel'>Key Length (Bits)</span>
+					<li class='advancedOption indented'><span class='bigLabel'>Key Length (Bits)</span>
 						<input type='radio' name='KeyLength' id='KeyLength256' value='256'  	/> <label for='KeyLength256'>256</label>
 						<input type='radio' name='KeyLength' id='KeyLength128' value='128'  	disabled='disabled' /> <span class='disabled'><label for='KeyLength128'>128</label></span>
 						<input type='radio' name='KeyLength' id='KeyLength168' value='168'  	disabled='disabled' /> <span class='disabled'><label for='KeyLength168'>168</label></span>
@@ -65,7 +72,7 @@
 						<input type='checkbox' name='passwordStrengthPunc2' id='passwordStrengthPunc2' /> <label for='passwordStrengthPunc2'>More Punctuation</label>
 						<span class='mini-instructions' >All Activated is Highly Recommended</span>
 					</li>
-					<li class='advancedOption'><span class='bigLabel'>Password length</span> 
+					<li class='advancedOption indented'><span class='bigLabel'>Password length</span> 
 						<input type='number' name='GeneratedPasswordLength' id='GeneratedPasswordLength' min='6' step='1'/> <label for='GeneratedPasswordLength'>Characters</label>
 						<span class='mini-instructions' >&ge;16 Characters Highly Recommended</span>
 					</li>
@@ -80,6 +87,7 @@
 			<p class='rightAligned'>
 				<a href='javascript: void(0);' class='debugLink' id='dumpLocalCacheButton' title='Check the console or error log for debug info'>Debug Dump Local Cache </a> | 
 				<a href='javascript: void(0);' class='debugLink' id='localCacheUpdateButton'>Force Local Cache Update</a> | 
+				<a href='javascript: void(0);' class='debugLink' id='forgetSavedCryptoPass'>Forget Crypto Pass</a> | 
 				<a href='passwordChange.html' alt='Change Crypto Password'>Change Crypto Password</a> | 
 				<a href='passwordMatrix.html' alt='Credentials List'>Credentials List</a>
 			</p>

@@ -2,6 +2,20 @@
  MintSync (working title) Changelog
 ************************************
 
+22:36 25/12/2011
+================
+Client
+------
+Finishing the timeout forgetting functionality for crypto passwords
+Added manual "forget saved password" option on the options
+
+21:42 18/12/2011
+================
+Client
+------
+Implementing settings and handling for timeout on password memory for
+	"per-browser-session" saves
+
 23:06 14/12/2011
 ================
 Client

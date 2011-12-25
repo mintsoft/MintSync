@@ -1,0 +1,7 @@
+Things to fix before version 1.10
+=================================
+
+Add "inject" option to the saving tab
+ on the popup
+Fix issues with "pressing enter" on the
+ injection lightboxes

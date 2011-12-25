@@ -1,12 +1,13 @@
-/** Background Process File**/
+/** Background Process File **/
 
 /** Persistant variables for browserSession */
 var mintSyncGlobals = {
-	'passwd': undefined,
-	'authentication': undefined,
-	'cacheTimer': undefined,
-	'urlCache': [],
-	'theButton': undefined
+	'passwd': undefined,			//saved crypto password
+	'authentication': undefined,	//save auth details
+	'cacheTimer': undefined,		//URL Cache timer
+	'urlCache': [],				//array of URLS
+	'passwdResetTimer': undefined,	//URL Cache timer
+	'theButton': undefined			//the button on the toolbar
 };
 
 /**
@@ -186,6 +187,30 @@ function updateLocalURLCache()
 	mintSyncGlobals.cacheTimer = setTimeout(updateLocalURLCache,60000*widget.preferences["NotifySourceUpdatePeriod"]);
 }
 
+/**
+	Reset the password stored in the background process
+*/
+function clearCachedPasswd()
+{
+	console.debug("clearCachedPasswd being called, BG saved passwd cleared");
+	//passwdResetTimer	
+	clearTimeout(mintSyncGlobals.passwdResetTimer);
+	mintSyncGlobals.passwd = undefined;
+}
+
+/**
+	(re)start the timer to reset the stored password
+*/
+function startPasswdResetTimer()
+{
+	console.debug("StartPasswordResettimer");
+	clearTimeout(mintSyncGlobals.passwdResetTimer);
+	if(widget.preferences["SavePassBDuration"] > 0)
+		mintSyncGlobals.passwdResetTimer = setTimeout(clearCachedPasswd,60000*widget.preferences["SavePassBDuration"]);
+}
+
+
+
 
 /** Entry Point **/
 window.addEventListener("load", function(){
@@ -249,35 +274,40 @@ window.addEventListener("load", function(){
 		{
 			//message from the Inject JS
 			case "injectedJS":
-				if(event.data.action=='navigate')	// got the URL from the injected script
+				if(event.data.action == 'navigate')	// got the URL from the injected script
 					mint_handleNotify(event.data.url);
-				else if(event.data.action=='inputList')
+				else if(event.data.action == 'inputList')
 				{
 					console.log("background Process Received:",event.data.inputs);
 				}
 				
 			break;
-			
 			case "options":
-				if(event.data.action=='stopLocalCache')
+				if(event.data.action == 'stopLocalCache')
 				{
 					clearTimeout(mintSyncGlobals.cacheTimer);
 					mintSyncGlobals.urlCache = [];
 				}
-				else if(event.data.action='startLocalCache')
+				else if(event.data.action == 'startLocalCache')
 				{
 					updateLocalURLCache();		
 				}
 			break;
 			case "popup":
-				if(event.data.action=="requestInputList")
+				if(event.data.action == "requestInputList")
 				{
-					//post message to the injectedJS
+					//post message to the injectedJS --no longer used
+				}
+			break;
+			case "all":
+				if (event.data.action == 'startPasswdResetTimer')
+				{
+					startPasswdResetTimer();
 				}
 			break;
 			default:
 			//messages from any other source
-				if(event.data.action=='updateLocalCache')
+				if(event.data.action == 'updateLocalCache')
 				{
 					updateLocalURLCache();
 				}
@@ -286,7 +316,7 @@ window.addEventListener("load", function(){
 	
 	//Optional NotifySource system,
 	// if the notifysource is configured to local cache, then maintain a local cache every x mins
-	if($MS.getNotify() && widget.preferences["NotifySource"]==="cache")
+	if($MS.getNotify() && widget.preferences["NotifySource"] === "cache")
 	{
 		//updates the cache and retriggers the timeout
 		updateLocalURLCache();		

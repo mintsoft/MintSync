@@ -512,8 +512,20 @@ function MintSync() {
 			{
 				askForPassword(strPrompt,function(password){
 					var hash  = $MS.hashPass(password);
+					
 					//set the password in the background process
 					opera.extension.bgProcess.mintSyncGlobals.passwd = hash;
+					
+					//if required, start the background process timer
+					if(widget.preferences["SavePassBDuration"])
+					{
+						console.debug("SavePassBDuration is true");
+						opera.extension.postMessage({
+							'action': 'startPasswdResetTimer',
+							'src' : 'all',
+						});
+					}
+					
 					successCallback(hash);
 				});
 			}
@@ -595,6 +607,9 @@ function MintSync() {
 				
 			if(!$MS.checkForSavedAuth())
 			{
+				if(opera.extension.bgProcess == undefined) // being called from the bgProcess
+					return;
+				
 				askForUsernamePassword(promptStr,function(authObj){
 					authObj.password = $MS.hashPass(authObj.password);
 					//set the password in the background process
@@ -604,6 +619,16 @@ function MintSync() {
 					else
 						opera.extension.bgProcess.mintSyncGlobals.authentication = authObj;
 					
+					
+					//start the password reset timer if applicable
+					if(widget.preferences["SavePassBDuration"] > 0)
+					{
+						//start the timer
+						opera.extension.postMessage({
+							'action': 'startPasswdResetTimer',
+							'src' : 'popup',
+						});	
+					}
 					
 					authCallback(authObj);
 				});

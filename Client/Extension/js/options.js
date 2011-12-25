@@ -17,6 +17,7 @@ $(document).ready(function(){
 	$('input[name="NotifySource"][value="'+widget.preferences["NotifySource"]+'"]').prop('checked', true);
 	$("#NotifySourceUpdatePeriod").val(widget.preferences["NotifySourceUpdatePeriod"]);
 	$("#GeneratedPasswordLength").val(widget.preferences["GeneratedPasswordLength"]);
+	$("#SavePassBDuration").val(widget.preferences["SavePassBDuration"] ? widget.preferences["SavePassBDuration"] : 0);
 
 	/* generation options */
 	$('#passwordStrengthNum').prop('checked',	widget.preferences["passwordStrengthNum"]=="true");
@@ -34,6 +35,15 @@ $(document).ready(function(){
 		{
 			console.debug(opera.extension.bgProcess.mintSyncGlobals.urlCache[URL]);
 		}
+	});
+	
+	/* Bind force forget saved password*/
+	$("#forgetSavedCryptoPass").click(function(){
+		console.log("Forgetting Saved Crypto Password");
+		//For BG Process/Browser session
+		opera.extension.bgProcess.mintSyncGlobals.passwd = undefined;
+		//For "yes"
+		widget.preferences["SavedPassword"] = undefined;
 	});
 });
 
@@ -54,6 +64,8 @@ function savePrefs() {
 	widget.preferences["NotifySource"]				= $("input[type=radio][name=NotifySource]:checked").val();
 	widget.preferences["NotifySourceUpdatePeriod"] 	= $("#NotifySourceUpdatePeriod").val();
 	widget.preferences["GeneratedPasswordLength"] 	= $("#GeneratedPasswordLength").val();
+	
+	widget.preferences["SavePassBDuration"] 		= $("#SavePassBDuration").val() ? $("#SavePassBDuration").val() : 0;
 	
 	/* generation options */
 	widget.preferences["passwordStrengthNum"]		= $("#passwordStrengthNum").is(":checked");
