@@ -115,6 +115,16 @@ input[type='submit'], button, input[type='button']
 	margin-bottom: 1ex;
 }
 
+/** Force a Y-scrollbar**/
+/*
+	Only really applied to html on the password matrix
+	to stop it from jumping around when you search
+ */
+.y-scrollbar 
+{
+	overflow-y: scroll;
+}
+
 /** Save Button **/
 #saveContainer, .centeredContents
 {

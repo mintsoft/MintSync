@@ -1,6 +1,9 @@
 //required otherwise jQuery attempts to stop the cross domain request
 jQuery.support.cors = true;
 
+//is the ctrl key down?
+var g_ctrlDown = false;
+
 /** 
 	MintSync Object
 */

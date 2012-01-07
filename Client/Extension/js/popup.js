@@ -1,7 +1,5 @@
 /** Popup specific JS in this file */
-//is the control key down?
-var g_ctrlDown = false,
-	g_currentURL ="",
+var g_currentURL ="",
 	g_isFullscreen = false,
 	g_injectedPort,
 	g_clickedImg;
@@ -154,6 +152,8 @@ window.addEventListener('load', function() {
 	if(!g_isFullscreen)
 	{
 		var currentTab = opera.extension.bgProcess.opera.extension.tabs.getFocused();
+		if(!currentTab)
+			return;
 		document.getElementById("domainInput").value = currentTab.url;
 		document.getElementById("domainName").value = currentTab.url;
 		g_currentURL = currentTab.url;
@@ -188,6 +188,13 @@ function addPair()
 	tmpObj = document.createElement(source.firstElementChild.tagName);
 	tmpObj.innerHTML = source.firstElementChild.innerHTML;
 	
+	//if it's the fullscreen popup then don't display the inject button
+	if(g_isFullscreen)
+	{	//using hide here causes some sort of clash with jQuery-Tools
+		//and it un-hides them ¬_¬
+		$(tmpObj).find("img.hidden_when_max").css({'display' : 'none'});
+	}
+	
 	target.appendChild(tmpObj);
 	
 	var passwordLength = $MS.getGeneratedPasswordLength();
@@ -209,16 +216,14 @@ function addPair()
 			$(this).val($MS.generatePassword(passwordLength));
 			return false;
 		}
+		else if(g_ctrlDown == true && e.which == 73) {		//ctrl+i
+			event.preventDefault();
+			//"click" the inject button
+			$(this).parent().find("img.injectPW").click();
+			return false;
+		}
 	});
-	
-	if(g_isFullscreen)
-	{
-		console.debug("Hiding objects");
-		var tmp = $(target).find("img.hidden_when_max");
-		console.debug(tmp);
-		$(target).find("img.hidden_when_max").hide(0);
 	}
-}
 
 /**
 	Deletes the pair from the passed element

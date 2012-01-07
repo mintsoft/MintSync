@@ -2,6 +2,16 @@
  MintSync (working title) Changelog
 ************************************
 
+21:18 07/01/2012
+================
+Client
+------
+Fixed issue with missing variable on the password matrix
+Added CTRL+I shortcut for inject into page on the generate tab
+Fixed issue with the inject button showing on the maximised popup
+Added a y-axis scrollbar onto the password matrix to stop it from
+	jumping around when the user filters the list
+
 11:39 07/01/2011
 ================
 Client
