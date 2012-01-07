@@ -1,8 +1,6 @@
-Things to fix before version 1.10
-=================================
+Things to fix
+=============
 
-Add "inject" option to the saving tab
- on the popup
 Fix the "close the popup whilst the input is highlighted issue"
 	- not really possible until opera add popup.onclose callback
 Add "no URL sent" notification if possible
