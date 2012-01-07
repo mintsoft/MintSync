@@ -77,11 +77,10 @@ $(document).ready(function(){
 			event.preventDefault();
 			
 		clearTimeout(keyTimer);
-		keyTimer = setTimeout(doListFiltering,400);	//TODO: get the duration from a preference
+		keyTimer = setTimeout(doListFiltering,200);	//TODO: get the duration from a preference
 	});
 	
 	//add ctrl+f shortcut
-/*
 	$(document).keyup(function(e) {
 		if(e.which == 17)
 			g_ctrlDown = false;
@@ -94,7 +93,7 @@ $(document).ready(function(){
 			return false;
 		}
 	});
-*/
+
 });
 
 
@@ -306,7 +305,7 @@ function doListFiltering(){
 	{		
 		//filter based on stringValue
 		$("#PasswordList li").hide();
-		$("#PasswordList li h3:contains('"+stringValue+"')").parent().show();
+		$("#PasswordList h3").filter(":contains('"+stringValue+"')").parent().show();
 	}
 	else
 	{

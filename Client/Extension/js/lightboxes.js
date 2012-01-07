@@ -190,29 +190,34 @@ function chooseInputForInject(inputs, valueName, completeCallback)
 			alreadyAutoSelected = 1;
 		}
 	}
-	//if no box was automatically selected then trigger the change event to make the 
-	//current box hilighted
+	//if no box was automatically selected then trigger the change event to make the first
+	//box the current option
 	if ( alreadyAutoSelected == 0 )
 		$("#IC_ID").change();
-	
-	$("#InputChooserPrompt").data("overlay").load().onClose(function(event){
-		if($("#IC_closedDialog").val()=="0")	//if OK was clicked
-		{
-			//get the selected item
-			var selectedIndex = $("#IC_ID option:selected").val();
-			completeCallback(inputs[selectedIndex]);
-		}
-		else
-		{
-			//send message to injected JS to trigger an unhighlight
-			sendMessageToInjectedJS({
-				'action'	: "hilightInput",
-				'src'		: 'popup',
-				'target'	: {
-					'name'	:	"",
-					'id'	:	"",
-					}
-			});
-		}
-	});
+		
+	$("#InputChooserPrompt").data("overlay").load()
+		.onLoad(function(){
+			//focus on the default displayed box (Label text)
+			$("#IC_LabelText").focus();
+		})
+		.onClose(function(event){
+			if($("#IC_closedDialog").val()=="0")	//if OK was clicked
+			{
+				//get the selected item
+				var selectedIndex = $("#IC_ID option:selected").val();
+				completeCallback(inputs[selectedIndex]);
+			}
+			else
+			{
+				//send message to injected JS to trigger an unhighlight
+				sendMessageToInjectedJS({
+					'action'	: "hilightInput",
+					'src'		: 'popup',
+					'target'	: {
+						'name'	:	"",
+						'id'	:	"",
+						}
+				});
+			}
+		});
 }

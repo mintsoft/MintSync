@@ -38,13 +38,16 @@ function handleMessageFromInjectedJS(e)
 	if(e.data.action == "inputList")
 	{	
 		//get the label for the clicked input
+		//td:first for the retrieve page, input[name=inputPassName] for the save/generate
 		var valueName = $(g_clickedImg).parent().siblings("td:first").text();
-	
+		if(!valueName)	//save/generate tab!
+			valueName = $(g_clickedImg).parent().siblings("input[name=inputPassName]").val();
+				
 		//display lightbox for the user to decide where its going into
 		chooseInputForInject(e.data.inputs, valueName, function(input){
 		
-			var injectedValue = $(g_clickedImg).parent().siblings().children("input").val();
-		
+			var injectedValue = $(g_clickedImg).parent().parent().find("input.injectValueSourceElement").val();
+			
 			sendMessageToInjectedJS({
 				'action'	: "injectValue",
 				'src'		: 'popup',
@@ -74,51 +77,14 @@ function sendMessageToInjectedJS(message)
 	}
 }
 
-//insert the currently selected tab into the box by default
-window.addEventListener('load', function() {
-	if(!opera.extension)
-		return;
-	
-	//if it has been clicked, then the message will contain the URL etc
-	opera.extension.onmessage = function(event) {
-		if (event.data == "popupConnect")
-		{
-			if(event.ports.length > 0)
-			{
-				g_injectedPort = event.ports[0];
-				g_injectedPort.onmessage = handleMessageFromInjectedJS;
-			}
-		}	
-	};
-	
-	//if running as a standard popup
-	if(!getParameterByName("fullscreen"))
-	{
-		var currentTab = opera.extension.bgProcess.opera.extension.tabs.getFocused();
-		document.getElementById("domainInput").value = currentTab.url;
-		document.getElementById("domainName").value = currentTab.url;
-		g_currentURL = currentTab.url;
-	}
-	//if its a "fullscreen" window then the target URL is URIEncoded as a GET string
-	else
-	{
-		var URL = getParameterByName("URL");
-		
-		g_isFullscreen = true;
-		$("a.hidden_when_max, img.hidden_when_max").hide(0);
-		$("#fullscreen_url").text("Target: "+URL);
-		console.debug("Fullscreen URL:", URL);
-		document.getElementById("domainInput").value = URL;
-		document.getElementById("domainName").value = URL;
-	}
-	
-	
-},false);
-
-
 /** jQuery Entry Point **/
+// runs before window.load();
 $(document).ready(function(){
 
+	//detect fullscreen popup 
+	if(getParameterByName("fullscreen"))
+		g_isFullscreen = true;
+	
 	setupLightboxes();
 
 	$("#tabBar").tabs("#tabContent > fieldset");
@@ -164,6 +130,49 @@ $(document).ready(function(){
 
 });
 
+//Window onload handler
+// runs AFTER jQuery(document).ready();
+//insert the currently selected tab into the box by default
+window.addEventListener('load', function() {
+		
+	if(!opera.extension)
+		return;
+	
+	//if it has been clicked, then the message will contain the URL etc
+	opera.extension.onmessage = function(event) {
+		if (event.data == "popupConnect")
+		{
+			if(event.ports.length > 0)
+			{
+				g_injectedPort = event.ports[0];
+				g_injectedPort.onmessage = handleMessageFromInjectedJS;
+			}
+		}	
+	};
+	
+	//if running as a standard popup
+	if(!g_isFullscreen)
+	{
+		var currentTab = opera.extension.bgProcess.opera.extension.tabs.getFocused();
+		document.getElementById("domainInput").value = currentTab.url;
+		document.getElementById("domainName").value = currentTab.url;
+		g_currentURL = currentTab.url;
+	}
+	//if its a "fullscreen" window then the target URL is URIEncoded as a GET string
+	else
+	{
+		var URL = getParameterByName("URL");
+		
+		$("a.hidden_when_max, img.hidden_when_max").hide(0);
+		$("#fullscreen_url").text("Target: "+URL);
+		console.debug("Fullscreen URL:", URL);
+		document.getElementById("domainInput").value = URL;
+		document.getElementById("domainName").value = URL;
+	}
+	
+	
+},false);
+
 /** Global Function Handlers **/
 
 /** 
@@ -201,6 +210,14 @@ function addPair()
 			return false;
 		}
 	});
+	
+	if(g_isFullscreen)
+	{
+		console.debug("Hiding objects");
+		var tmp = $(target).find("img.hidden_when_max");
+		console.debug(tmp);
+		$(target).find("img.hidden_when_max").hide(0);
+	}
 }
 
 /**
@@ -258,7 +275,7 @@ function getPasswords(domainName) {
 								$("<tr>").append(
 									$("<td>").text(index),
 									$("<td>").append(
-										$("<input type='password' class='retrievedPassword' onfocus='revealPassword(this);' readonly='readonly' onblur='rehidePassword(this);'>")
+										$("<input type='password' class='retrievedPassword injectValueSourceElement' onfocus='revealPassword(this);' readonly='readonly' onblur='rehidePassword(this);'>")
 											.val(credentialsObj[index])
 											.dblclick(function(event) {
 												//when the fields are double clicked, hilight individual characters

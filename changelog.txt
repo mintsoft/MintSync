@@ -2,6 +2,20 @@
  MintSync (working title) Changelog
 ************************************
 
+11:39 07/01/2011
+================
+Client
+------
+Slightly optimised the selectors on the password matrix filtering,
+	reduced timeout
+Overridden ctrl+f to put the cursor in the filter box instead of
+	Opera's filter
+The inject values popup now places focus on the input box so the
+	user can press enter
+Made the jQuery injection selectors slightly less efficient in order
+	to handle both retrieve and save/generate tabs injection
+Implemented Injection of values from the generate tab
+	
 22:36 25/12/2011
 ================
 Client

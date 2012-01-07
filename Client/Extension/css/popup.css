@@ -89,7 +89,7 @@ input.inputLabel {
 }
 
 input.inputPass, input.retrievedPassword {
-	width: 15em !important;
+	width: 14.85em !important;
 }
 
 input {
@@ -118,6 +118,7 @@ input {
 #inputPassContainer p {
 	margin-left: 0ex;
 	margin-top: 0ex;
+	margin-right: 0ex;
 }
 
 /** Loading Stuff **/

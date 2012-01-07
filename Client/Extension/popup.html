@@ -92,8 +92,9 @@
 					<div id='rowTemplate' class='hidden' >
 						<p> 
 							<input type='text' name='inputPassName' class='inputLabel'  /> 
-							<input type='password' name='inputPassValue' class='inputPass' onfocus='revealPassword(this);' onblur='rehidePassword(this);' />
-							<img src='img/del.png' alt='Delete Pair' onclick='delPair(this); return false' class='jsAction saveBin' />
+							<input type='password' name='inputPassValue' class='inputPass injectValueSourceElement' onfocus='revealPassword(this);' onblur='rehidePassword(this);' />
+							<!-- span around the img is a hack to make the XPath to the password box analogous to the one used on retrieve -->
+							<img src='img/del.png' alt='Delete Pair' onclick='delPair(this); return false' class='jsAction saveBin' /><span><img src='img/document_import.png' alt='Insert Password' onclick='injectPass(this); return false' class='jsAction injectPW hidden_when_max' /></span>
 						</p>
 					</div>
 					<div>
