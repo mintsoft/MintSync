@@ -194,8 +194,8 @@ function clearCachedPasswd()
 {
 	console.debug("clearCachedPasswd being called, BG saved passwd cleared");
 	//passwdResetTimer	
-	clearTimeout(mintSyncGlobals.passwdResetTimer);
 	mintSyncGlobals.passwd = undefined;
+	clearTimeout(mintSyncGlobals.passwdResetTimer);
 }
 
 /**
@@ -205,7 +205,7 @@ function startPasswdResetTimer()
 {
 	console.debug("StartPasswordResettimer");
 	clearTimeout(mintSyncGlobals.passwdResetTimer);
-	if(widget.preferences["SavePassBDuration"] > 0)
+	if(widget.preferences["SavePassBDuration"]*1 > 0)
 		mintSyncGlobals.passwdResetTimer = setTimeout(clearCachedPasswd,60000*widget.preferences["SavePassBDuration"]);
 }
 
