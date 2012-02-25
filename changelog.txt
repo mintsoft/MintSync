@@ -1,11 +1,29 @@
 ************************************
  MintSync (working title) Changelog
 ************************************
+10:20 25/02/2012
+================
+Attempted to address issues with background navigation
+	updating the password available indicator
+Address regression that occurred on 03Dec2011
+	that breaks (or removes entirely!) the autofetch option
+Added data attribute (data-fulltext) to the td for the full input 
+	text for the text nodes with ellipses added on 09/01/2012
+Made the injected script message handling js use the data-fulltext
+	attribute - related to above
+
+20:54 09/01/2012
+================
+Client
+------
+Adding ellipses to the key td on popup retrieve
+Tweaked input widths to make things fit better
 
 21:18 07/01/2012
 ================
 Client
 ------
+Version 1.10!
 Fixed issue with missing variable on the password matrix
 Added CTRL+I shortcut for inject into page on the generate tab
 Fixed issue with the inject button showing on the maximised popup

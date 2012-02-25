@@ -85,11 +85,14 @@ input[type='checkbox'] {
 	margin-left: 10ex;
 }
 input.inputLabel {
-	width: 7em !important;
+	width: 10em !important;
 }
 
-input.inputPass, input.retrievedPassword {
-	width: 14.85em !important;
+table tbody input.retrievedPassword {
+	width: 10em !important;
+}
+input.inputPass {
+	width: 11.85em !important;
 }
 
 input {

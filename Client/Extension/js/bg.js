@@ -275,7 +275,19 @@ window.addEventListener("load", function(){
 			//message from the Inject JS
 			case "injectedJS":
 				if(event.data.action == 'navigate')	// got the URL from the injected script
+				{	//if one uses the URL from the injected script here, and the tab isn't the
+					//currently highlighted one, then it'll display the notification for the 
+					//background navigation; therefore we must check again for the currently 
+					//focused tab
+					
+					var focusedTab = opera.extension.tabs.getFocused();
+					console.debug(event.data.url);
+					
+					if(focusedTab)
+						console.debug(focusedTab.url)
+						
 					mint_handleNotify(event.data.url);
+				}
 				else if(event.data.action == 'inputList')
 				{
 					console.log("background Process Received:",event.data.inputs);

@@ -37,7 +37,8 @@ function handleMessageFromInjectedJS(e)
 	{	
 		//get the label for the clicked input
 		//td:first for the retrieve page, input[name=inputPassName] for the save/generate
-		var valueName = $(g_clickedImg).parent().siblings("td:first").text();
+		//the data attribute is used because the text is now truncated to a maximum number of chars
+		var valueName = $(g_clickedImg).parent().siblings("td:first").attr("data-fulltext");
 		if(!valueName)	//save/generate tab!
 			valueName = $(g_clickedImg).parent().siblings("input[name=inputPassName]").val();
 				
@@ -145,7 +146,7 @@ window.addEventListener('load', function() {
 				g_injectedPort = event.ports[0];
 				g_injectedPort.onmessage = handleMessageFromInjectedJS;
 			}
-		}	
+		}
 	};
 	
 	//if running as a standard popup
@@ -168,8 +169,14 @@ window.addEventListener('load', function() {
 		console.debug("Fullscreen URL:", URL);
 		document.getElementById("domainInput").value = URL;
 		document.getElementById("domainName").value = URL;
+		g_currentURL = URL;
 	}
-	
+
+	//if the user has selected the autofetch option:
+	if($MS.getAutoFetch() == 1)
+	{
+		getPasswords(g_currentURL);
+	}
 	
 },false);
 
@@ -278,7 +285,9 @@ function getPasswords(domainName) {
 							// if they contain any special characters (<> etc)
 							$("#retrieveOutput tbody").append(
 								$("<tr>").append(
-									$("<td>").text(index),
+									$("<td>")
+											.text(truncateInputAttribute(index))
+											.attr("data-fulltext", index),
 									$("<td>").append(
 										$("<input type='password' class='retrievedPassword injectValueSourceElement' onfocus='revealPassword(this);' readonly='readonly' onblur='rehidePassword(this);'>")
 											.val(credentialsObj[index])
@@ -465,4 +474,5 @@ function injectPass(thisImg)
 		'action'	: "requestInputList",
 		'src'		: 'popup',
 	});
+	//for the response see handling in handleMessageFromInjectedJS
 }
