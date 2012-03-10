@@ -1,6 +1,10 @@
 ************************************
  MintSync (working title) Changelog
 ************************************
+10/03/2012
+================
+Version 1.15!
+
 10:20 25/02/2012
 ================
 Attempted to address issues with background navigation
