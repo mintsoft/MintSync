@@ -28,8 +28,10 @@ function setupLightboxes()
 			<h2 id='InputChooserInstruction'>Select the correct input tag using the properties below:</h2>\
 			<form onsubmit='return false;'>\
 				<div id='InputChooserTableContainer' ></div>\
-				<p class='centeredContents'><input type='hidden' id='IC_closedDialog' value='0' />\
-					<input type='submit' value='OK' class='close' /> <input type='submit' value='Close' class='close' id='IC_closeButton' />\
+				<p class='centeredContents'><input type='hidden' id='IC_closedDialogState' value='0' />\
+					<input type='submit' value='OK' class='close' /> \
+					<input type='submit' value='OK + Next' class='close' id='IC_OKNextButton' /> \
+					<input type='submit' value='Close' class='close' id='IC_closeButton' />\
 				</p>\
 			</form>\
 		</div>");
@@ -86,7 +88,7 @@ function askForUsernamePassword(prompt,completeCallback)
  */
 function chooseInputForInject(inputs, valueName, completeCallback)
 {
-	$("#IC_closedDialog").val("0");
+	$("#IC_closedDialogState").val("1");	//OK
 
 	$("#InputChooserTableContainer").html("<table>\
 		<thead>\
@@ -107,11 +109,14 @@ function chooseInputForInject(inputs, valueName, completeCallback)
 		</tbody>\
 		</table>");
 	
-	$("#IC_closeButton").click(function(){
-		$("#IC_closedDialog").val("1");
+	$("#IC_closeButton").one('click', function(){
+		$("#IC_closedDialogState").val("0");	//Close
 	});
 	
-	$("#IC_ExpandLink").click(function(event){
+	$("#IC_OKNextButton").one('click',function(){
+		$("#IC_closedDialogState").val("2");	//Close+Next
+	});
+	$("#IC_ExpandLink").one('click' ,function(event){
 		event.preventDefault();
 		$(".expanded").show();
 		$("#IC_ExpandLink").parent().hide();
@@ -195,17 +200,18 @@ function chooseInputForInject(inputs, valueName, completeCallback)
 	if ( alreadyAutoSelected == 0 )
 		$("#IC_ID").change();
 		
-	$("#InputChooserPrompt").data("overlay").load()
-		.onLoad(function(){
+	var overlay = $("#InputChooserPrompt").data("overlay").load();
+	
+	$(overlay).one('onLoad',function(){
 			//focus on the default displayed box (Label text)
 			$("#IC_LabelText").focus();
 		})
-		.onClose(function(event){
-			if($("#IC_closedDialog").val()=="0")	//if OK was clicked
+		.one('onClose',function(event){
+			if($("#IC_closedDialogState").val()!="0")	//if not "close"
 			{
 				//get the selected item
 				var selectedIndex = $("#IC_ID option:selected").val();
-				completeCallback(inputs[selectedIndex]);
+				completeCallback(inputs[selectedIndex], $("#IC_closedDialogState").val()=="2" );
 			}
 			else
 			{

@@ -43,7 +43,7 @@ function handleMessageFromInjectedJS(e)
 			valueName = $(g_clickedImg).parent().siblings("input[name=inputPassName]").val();
 				
 		//display lightbox for the user to decide where its going into
-		chooseInputForInject(e.data.inputs, valueName, function(input){
+		chooseInputForInject(e.data.inputs, valueName, function(input, doNext){
 		
 			var injectedValue = $(g_clickedImg).parent().parent().find("input.injectValueSourceElement").val();
 			
@@ -57,8 +57,12 @@ function handleMessageFromInjectedJS(e)
 					}
 			});
 			injectedValue = "";
+
+			if(doNext){	//Popup the injection dialog for the next one too!
+				$(g_clickedImg).parent().parent().next().find("img.injectPW").click();
+			}
+			
 		});
-		
 	}
 }
 
