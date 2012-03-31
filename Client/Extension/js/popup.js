@@ -269,7 +269,9 @@ function getPasswords(domainName) {
 				key = "",
 				base64decoded="",
 				innerHTML="";
-
+/*				
+				console.debug("salt",requestdata.data.Salt);
+*/				
 				$MC.decodeAndDecrypt(requestdata.data.Credentials, requestdata.data.Salt, requestdata.data.keySlot0, {
 					success:function(credentialsObj){
 						$("#retrieveOutput tbody").empty();
