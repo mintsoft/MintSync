@@ -143,6 +143,10 @@ div#retrieveOutput {
 	padding: 2ex 2em;
 }	
 
+div#retrieveOutput table.results {
+	width: 100%;
+}
+
 div#retrieveOutput table.results tbody td {
 	white-space: nowrap;
 }
