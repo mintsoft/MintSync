@@ -1,6 +1,12 @@
 ************************************
  MintSync (working title) Changelog
 ************************************
+21:33 31/03/2012
+================
+Implemented "inject + do next" button
+Fixed an issue with callbacks on the injection dialog
+	being executed n times rather than once
+
 10/03/2012
 ================
 Version 1.15!
