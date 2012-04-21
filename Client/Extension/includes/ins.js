@@ -137,9 +137,8 @@
 	 * send the URL to the extension, this doesn't depend on the DOM being loaded, so do it asap
 	 */
 	opera.extension.postMessage({
-			'action'	: 'navigate',
-			'src' 		: 'injectedJS',
-			'url'		: document.URL
+			'action'	: 'updateIconBadge',
+			'src' 		: 'injectedJS'
 		});
 
 	/**
