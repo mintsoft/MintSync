@@ -133,7 +133,7 @@ function cacheUpdateHandling(){
 	Toggle the view of the "more options" and cycle the text
 */
 function toggleAdvancedOptions(fromHere){
-	$(".advancedOption").slideToggle('fast');
+	$(".advancedOption").not(".hidden").slideToggle('fast');
 	var str = $(fromHere).text();
 	if(str.search("More")==-1)
 		$(fromHere).text(str.replace("Fewer","More"));
