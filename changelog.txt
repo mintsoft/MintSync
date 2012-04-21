@@ -1,6 +1,18 @@
 ************************************
  MintSync (working title) Changelog
 ************************************
+
+17:37 21/04/2012
+================
+Version 1.20!
+
+13:12 21/04/2012
+================
+checking in empty db file for ease of checkout
+removed URL from injectedJS bg-process posts
+	and now use the selected tab's URL only
+
+
 21:33 31/03/2012
 ================
 Implemented "inject + do next" button
