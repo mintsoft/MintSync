@@ -292,12 +292,22 @@ ul.styled li table
 }
 
 .modalDialog input[type='password'], .modalDialog input[type='text'] {
-	width: 120px;
+	width: 14em;
 }
 
 .modalDialog input,.modalDialog button {
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.modalDialog #dialogPasswordInstruction, .modalDialog #authenticationInstruction {
+	text-align: center;
+	margin-top: 1ex;
+}
+
+.modalDialog input.close {
+	margin-top: 1ex;
+	margin-bottom: 0ex;
 }
 
 /**
