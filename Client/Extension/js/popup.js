@@ -109,7 +109,7 @@ $(document).ready(function(){
 			//retrigger a cache update if enabled
 			if(widget.preferences["Notify"]=="1"  && widget.preferences["NotifySource"]=="cache")
 			{
-				opera.extension.postMessage({
+				genericPostMessage({
 					'action': 'startLocalCache',
 					'src' : 'options',
 				});
@@ -407,7 +407,7 @@ function setPassword() {
 						$("#canForceWrite").attr("checked",false);
 						
 						//update the local cache
-						opera.extension.postMessage({
+						genericPostMessage({
 							'action': 'updateLocalCache',
 							'src' : 'passwordMatrix',
 						});

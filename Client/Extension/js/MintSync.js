@@ -523,7 +523,7 @@ function MintSync() {
 					if(widget.preferences["SavePassBDuration"])
 					{
 						console.debug("SavePassBDuration is true");
-						opera.extension.postMessage({
+						genericPostMessage({
 							'action': 'startPasswdResetTimer',
 							'src' : 'all',
 						});
@@ -627,7 +627,7 @@ function MintSync() {
 					if(widget.preferences["SavePassBDuration"] > 0)
 					{
 						//start the timer
-						opera.extension.postMessage({
+						genericPostMessage({
 							'action': 'startPasswdResetTimer',
 							'src' : 'popup',
 						});	
