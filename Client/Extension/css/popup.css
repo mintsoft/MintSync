@@ -57,7 +57,7 @@ legend {
 /* Labels  and Inputs */
 label {
 	display: inline-block;
-	width: 10em;
+	width: 7em;
 	font-weight: bold;
 }
 
@@ -109,7 +109,7 @@ input {
 }
 
 /** Internal Scrolling **/
-#inputPassContainer {
+#tabContent #inputPassContainer {
 	max-height: 98px;
 	overflow-y: auto;
 	overflow-x: hidden;
@@ -118,10 +118,11 @@ input {
 	border-right: 0px;
 	padding: 1ex;
 }
-#inputPassContainer p {
+#tabContent #inputPassContainer p {
 	margin-left: 0ex;
 	margin-top: 0ex;
 	margin-right: 0ex;
+	margin-bottom: 0.25ex;
 }
 
 /** Loading Stuff **/
