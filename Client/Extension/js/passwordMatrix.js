@@ -154,7 +154,7 @@ function updatePasswordMatrix(sourceArray)
 							$(objClicked).text(newURL);
 							
 							//update the local cache
-							opera.extension.postMessage({
+							genericPostMessage({
 								'action': 'updateLocalCache',
 								'src' : 'passwordMatrix',
 							});
@@ -199,7 +199,7 @@ function updatePasswordMatrix(sourceArray)
 					$(srcImg).parent().parent().remove();
 
 					//update the local cache
-					opera.extension.postMessage({
+					genericPostMessage({
 						'action': 'updateLocalCache',
 						'src' : 'passwordMatrix',
 					});

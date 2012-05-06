@@ -111,7 +111,7 @@ function cacheUpdateHandling(){
 		//this uses a message because it does not work if clearTimeout is used from here
 		
 		//stopLocalCache
-		opera.extension.postMessage({
+		genericPostMessage({
 			'action': 'stopLocalCache',
 			'src' : 'options',
 		});
@@ -120,7 +120,7 @@ function cacheUpdateHandling(){
 	{
 		//the cache should be kept, so start the timeout
 		
-		opera.extension.postMessage({
+		genericPostMessage({
 			'action': 'startLocalCache',
 			'src' : 'options',
 		});
