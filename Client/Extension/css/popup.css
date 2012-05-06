@@ -235,6 +235,10 @@ ul#tabBar {
 
 }
 
+#tabContent p {
+	margin: 0 1ex;
+}
+
 /*
  *	table on the lightbox
  */
