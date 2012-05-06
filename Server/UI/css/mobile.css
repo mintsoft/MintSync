@@ -18,10 +18,7 @@
 	#variableWidth {
 		display: none;
 	}
-	input#searchValue {
-		
-	}
-	#prefform {
-		
+	#PasswordList.styled li > h3 {
+		margin-left: 0.5ex;
 	}
 }
