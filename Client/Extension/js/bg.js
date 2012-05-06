@@ -74,8 +74,6 @@ function mint_handleNotify(URL)
 		{
 			case "cache":
 				
-				//console.info("Processing Notification Request from: cache");
-				//var URLExists = ($.inArray(URL.toLowerCase(),mintSyncGlobals.urlCache)===-1)?0:1;
 				var URLExists = 0,
 					srcURL = URL.toLowerCase(),
 					regexEquivalent = "";

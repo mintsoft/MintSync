@@ -30,10 +30,11 @@ $(document).ready(function(){
 	});
 	/* console display the local cache */
 	$("#dumpLocalCacheButton").click(function(){
-		console.debug(opera.extension.bgProcess.mintSyncGlobals.urlCache);
-		for(var URL in opera.extension.bgProcess.mintSyncGlobals.urlCache)
+		var localCache = genericRetrieve_mintSyncGlobals().urlCache;
+		console.debug(localCache);
+		for(var URL in localCache)
 		{
-			console.debug(opera.extension.bgProcess.mintSyncGlobals.urlCache[URL]);
+			console.debug(localCache[URL]);
 		}
 	});
 	
@@ -41,7 +42,7 @@ $(document).ready(function(){
 	$("#forgetSavedCryptoPass").click(function(){
 		console.log("Forgetting Saved Crypto Password");
 		//For BG Process/Browser session
-		opera.extension.bgProcess.mintSyncGlobals.passwd = undefined;
+		genericRetrieve_mintSyncGlobals().passwd = undefined;
 		//For "yes"
 		widget.preferences["SavedPassword"] = undefined;
 	});
@@ -81,7 +82,7 @@ function savePrefs() {
 	if(widget.preferences["SaveAuthentication"]!=0.8)
 	{
 		console.info("Resetting saved authentication credentials");
-		opera.extension.bgProcess.mintSyncGlobals.authentication = undefined;
+		genericRetrieve_mintSyncGlobals().authentication = undefined;
 	}
 	
 	if(widget.preferences["SavePassword"]!=1)
@@ -91,7 +92,7 @@ function savePrefs() {
 	if(widget.preferences["SavePassword"]!=0.8)
 	{
 		console.info("Resetting saved encryption key");
-		opera.extension.bgProcess.mintSyncGlobals.passwd = undefined;
+		genericRetrieve_mintSyncGlobals().passwd = undefined;
 	}
 
 	cacheUpdateHandling();
