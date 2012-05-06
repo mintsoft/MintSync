@@ -6,23 +6,24 @@
 	Entry point
 */
 $(document).ready(function(){
+	var preferences = genericRetrieve_preferencesObj();
 	/* Load Preferences */
-	$("#ServerURL").val(widget.preferences["ServerURL"]);
-	$('input[name="SaveAuth"][value="'+widget.preferences["SaveAuthentication"]+'"]').prop('checked', true);
-	$('input[name="SavePass"][value="'+widget.preferences["SavePassword"]+'"]').prop('checked', true);
-	$('input[name="Cipher"][value="'+widget.preferences["Cipher"]+'"]').prop('checked', true);
-	$('input[name="KeyLength"][value="'+widget.preferences["KeyLength"]+'"]').prop('checked', true);
-	$('input[name="AutoFetch"][value="'+widget.preferences["AutoFetch"]+'"]').prop('checked', true);
-	$('input[name="Notify"][value="'+widget.preferences["Notify"]+'"]').prop('checked', true);
-	$('input[name="NotifySource"][value="'+widget.preferences["NotifySource"]+'"]').prop('checked', true);
-	$("#NotifySourceUpdatePeriod").val(widget.preferences["NotifySourceUpdatePeriod"]);
-	$("#GeneratedPasswordLength").val(widget.preferences["GeneratedPasswordLength"]);
-	$("#SavePassBDuration").val(widget.preferences["SavePassBDuration"] ? widget.preferences["SavePassBDuration"] : 0);
+	$("#ServerURL").val(preferences["ServerURL"]);
+	$('input[name="SaveAuth"][value="'+preferences["SaveAuthentication"]+'"]').prop('checked', true);
+	$('input[name="SavePass"][value="'+preferences["SavePassword"]+'"]').prop('checked', true);
+	$('input[name="Cipher"][value="'+preferences["Cipher"]+'"]').prop('checked', true);
+	$('input[name="KeyLength"][value="'+preferences["KeyLength"]+'"]').prop('checked', true);
+	$('input[name="AutoFetch"][value="'+preferences["AutoFetch"]+'"]').prop('checked', true);
+	$('input[name="Notify"][value="'+preferences["Notify"]+'"]').prop('checked', true);
+	$('input[name="NotifySource"][value="'+preferences["NotifySource"]+'"]').prop('checked', true);
+	$("#NotifySourceUpdatePeriod").val(preferences["NotifySourceUpdatePeriod"]);
+	$("#GeneratedPasswordLength").val(preferences["GeneratedPasswordLength"]);
+	$("#SavePassBDuration").val(preferences["SavePassBDuration"] ? preferences["SavePassBDuration"] : 0);
 
 	/* generation options */
-	$('#passwordStrengthNum').prop('checked',	widget.preferences["passwordStrengthNum"]=="true");
-	$('#passwordStrengthPunc1').prop('checked',	widget.preferences["passwordStrengthPunc1"]=="true");
-	$('#passwordStrengthPunc2').prop('checked',	widget.preferences["passwordStrengthPunc2"]=="true");
+	$('#passwordStrengthNum').prop('checked',		preferences["passwordStrengthNum"]=="true");
+	$('#passwordStrengthPunc1').prop('checked',	preferences["passwordStrengthPunc1"]=="true");
+	$('#passwordStrengthPunc2').prop('checked',	preferences["passwordStrengthPunc2"]=="true");
 	
 	/* Bind the local cache update */
 	$("#localCacheUpdateButton").click(function(){
@@ -44,7 +45,7 @@ $(document).ready(function(){
 		//For BG Process/Browser session
 		genericRetrieve_mintSyncGlobals().passwd = undefined;
 		//For "yes"
-		widget.preferences["SavedPassword"] = undefined;
+		preferences["SavedPassword"] = undefined;
 	});
 });
 
@@ -55,41 +56,41 @@ function savePrefs() {
 	if(serverUrl.charAt(serverUrl.length-1)!="/")
 		serverUrl+="/";
 		
-	widget.preferences["ServerURL"] 				= serverUrl;
-	widget.preferences["SavePassword"]				= $("input[type=radio][name=SavePass]:checked").val();
-	widget.preferences["SaveAuthentication"]		= $("input[type=radio][name=SaveAuth]:checked").val();
-	widget.preferences["Cipher"] 					= $("input[type=radio][name=Cipher]:checked").val();
-	widget.preferences["KeyLength"] 				= $("input[type=radio][name=KeyLength]:checked").val();
-	widget.preferences["AutoFetch"]					= $("input[type=radio][name=AutoFetch]:checked").val();
-	widget.preferences["Notify"]					= $("input[type=radio][name=Notify]:checked").val();
-	widget.preferences["NotifySource"]				= $("input[type=radio][name=NotifySource]:checked").val();
-	widget.preferences["NotifySourceUpdatePeriod"] 	= $("#NotifySourceUpdatePeriod").val();
-	widget.preferences["GeneratedPasswordLength"] 	= $("#GeneratedPasswordLength").val();
+	preferences["ServerURL"] 					= serverUrl;
+	preferences["SavePassword"]					= $("input[type=radio][name=SavePass]:checked").val();
+	preferences["SaveAuthentication"]			= $("input[type=radio][name=SaveAuth]:checked").val();
+	preferences["Cipher"] 						= $("input[type=radio][name=Cipher]:checked").val();
+	preferences["KeyLength"] 					= $("input[type=radio][name=KeyLength]:checked").val();
+	preferences["AutoFetch"]					= $("input[type=radio][name=AutoFetch]:checked").val();
+	preferences["Notify"]						= $("input[type=radio][name=Notify]:checked").val();
+	preferences["NotifySource"]					= $("input[type=radio][name=NotifySource]:checked").val();
+	preferences["NotifySourceUpdatePeriod"] 	= $("#NotifySourceUpdatePeriod").val();
+	preferences["GeneratedPasswordLength"] 		= $("#GeneratedPasswordLength").val();
 	
-	widget.preferences["SavePassBDuration"] 		= $("#SavePassBDuration").val() ? $("#SavePassBDuration").val() : 0;
+	preferences["SavePassBDuration"] 			= $("#SavePassBDuration").val() ? $("#SavePassBDuration").val() : 0;
 	
 	/* generation options */
-	widget.preferences["passwordStrengthNum"]		= $("#passwordStrengthNum").is(":checked");
-	widget.preferences["passwordStrengthPunc1"]		= $("#passwordStrengthPunc1").is(":checked");
-	widget.preferences["passwordStrengthPunc2"]		= $("#passwordStrengthPunc2").is(":checked");
+	preferences["passwordStrengthNum"]			= $("#passwordStrengthNum").is(":checked");
+	preferences["passwordStrengthPunc1"]		= $("#passwordStrengthPunc1").is(":checked");
+	preferences["passwordStrengthPunc2"]		= $("#passwordStrengthPunc2").is(":checked");
 	
 	
 	//clear saved data if applicable
-	if(widget.preferences["SaveAuthentication"]!=1)
+	if(preferences["SaveAuthentication"]!=1)
 	{
-		widget.preferences["SavedAuthentication"] = undefined;
+		preferences["SavedAuthentication"] = undefined;
 	}
-	if(widget.preferences["SaveAuthentication"]!=0.8)
+	if(preferences["SaveAuthentication"]!=0.8)
 	{
 		console.info("Resetting saved authentication credentials");
 		genericRetrieve_mintSyncGlobals().authentication = undefined;
 	}
 	
-	if(widget.preferences["SavePassword"]!=1)
+	if(preferences["SavePassword"]!=1)
 	{
-		widget.preferences["SavedPassword"]	= undefined;
+		preferences["SavedPassword"]	= undefined;
 	}
-	if(widget.preferences["SavePassword"]!=0.8)
+	if(preferences["SavePassword"]!=0.8)
 	{
 		console.info("Resetting saved encryption key");
 		genericRetrieve_mintSyncGlobals().passwd = undefined;
@@ -105,8 +106,9 @@ function cacheUpdateHandling(){
 	/**
 		This is so the effects of a change to the notification caching are immediate
 	*/
-	if(		widget.preferences["Notify"]=="0" || 
-			widget.preferences["Notify"]=="1"  && widget.preferences["NotifySource"]!="cache"		)
+	var preferences = genericRetrieve_preferencesObj();
+	if(		preferences["Notify"]=="0" || 
+			preferences["Notify"]=="1"  && preferences["NotifySource"]!="cache"		)
 	{
 		//should not be keeping a local cache, send a message to the bg process and stop it
 		//this uses a message because it does not work if clearTimeout is used from here

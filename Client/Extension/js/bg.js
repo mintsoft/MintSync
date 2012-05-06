@@ -62,6 +62,7 @@ function mint_handleNotify(URL)
 {
 	if($MS.getNotify())
 	{
+		var preferences = genericRetrieve_preferencesObj();
 		if(!$MS.checkForSavedAuth())
 		{
 				mintSyncGlobals.theButton.badge.textContent=" ? ";
@@ -70,7 +71,8 @@ function mint_handleNotify(URL)
 				mintSyncGlobals.theButton.title = "You have not logged in";
 			return;
 		}
-		switch(widget.preferences["NotifySource"])
+		
+		switch(preferences["NotifySource"])
 		{
 			case "cache":
 				
@@ -158,6 +160,8 @@ function mint_handleNotify(URL)
 */
 function updateLocalURLCache()
 {
+	var preferences = genericRetrieve_preferencesObj();
+	
 	clearTimeout(mintSyncGlobals.cacheTimer);
 	console.info("Updating local URL cache");
 	
@@ -182,7 +186,7 @@ function updateLocalURLCache()
 		},
 	});
 	
-	mintSyncGlobals.cacheTimer = setTimeout(updateLocalURLCache,60000*widget.preferences["NotifySourceUpdatePeriod"]);
+	mintSyncGlobals.cacheTimer = setTimeout(updateLocalURLCache,60000*preferences["NotifySourceUpdatePeriod"]);
 }
 
 /**
@@ -201,10 +205,11 @@ function clearCachedPasswd()
 */
 function startPasswdResetTimer()
 {
+	var preferences = genericRetrieve_preferencesObj();
 	console.debug("StartPasswordResettimer");
 	clearTimeout(mintSyncGlobals.passwdResetTimer);
-	if(widget.preferences["SavePassBDuration"]*1 > 0)
-		mintSyncGlobals.passwdResetTimer = setTimeout(clearCachedPasswd,60000*widget.preferences["SavePassBDuration"]);
+	if(preferences["SavePassBDuration"]*1 > 0)
+		mintSyncGlobals.passwdResetTimer = setTimeout(clearCachedPasswd,60000*preferences["SavePassBDuration"]);
 }
 
 
@@ -223,7 +228,9 @@ window.addEventListener("load", function(){
 				height: 260
 			}
 		};
-		
+	
+	var preferences = genericRetrieve_preferencesObj();
+	
 	mintSyncGlobals.theButton = opera.contexts.toolbar.createItem(ToolbarUIItemProperties);
 	opera.contexts.toolbar.addItem(mintSyncGlobals.theButton);
 
@@ -322,7 +329,7 @@ window.addEventListener("load", function(){
 	
 	//Optional NotifySource system,
 	// if the notifysource is configured to local cache, then maintain a local cache every x mins
-	if($MS.getNotify() && widget.preferences["NotifySource"] === "cache")
+	if($MS.getNotify() && preferences["NotifySource"] === "cache")
 	{
 		//updates the cache and retriggers the timeout
 		updateLocalURLCache();		
