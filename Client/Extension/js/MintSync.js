@@ -510,14 +510,14 @@ function MintSync() {
 		{
 			var passwd;
 			//get the password from the background process
-			passwd = opera.extension.bgProcess.mintSyncGlobals.passwd;
+			passwd = genericRetrieve_mintSyncGlobals().passwd;
 			if(passwd==undefined)
 			{
 				askForPassword(strPrompt,function(password){
 					var hash  = $MS.hashPass(password);
 					
 					//set the password in the background process
-					opera.extension.bgProcess.mintSyncGlobals.passwd = hash;
+					genericRetrieve_mintSyncGlobals().passwd = hash;
 					
 					//if required, start the background process timer
 					if(widget.preferences["SavePassBDuration"])
@@ -572,7 +572,7 @@ function MintSync() {
 				}
 				else
 				{
-					return opera.extension.bgProcess.mintSyncGlobals.authentication !== undefined;
+					return genericRetrieve_mintSyncGlobals().authentication !== undefined;
 				}
 			break;
 			case "0.5":
@@ -620,7 +620,7 @@ function MintSync() {
 					if(opera.extension.bgProcess == undefined) // being called from the bgProcess
 						mintSyncGlobals.authentication = authObj;
 					else
-						opera.extension.bgProcess.mintSyncGlobals.authentication = authObj;
+						genericRetrieve_mintSyncGlobals().authentication = authObj;
 					
 					
 					//start the password reset timer if applicable
@@ -644,7 +644,7 @@ function MintSync() {
 				}
 				else
 				{	
-					authCallback(opera.extension.bgProcess.mintSyncGlobals.authentication);
+					authCallback(genericRetrieve_mintSyncGlobals().authentication);
 				}
 				
 			}
@@ -691,7 +691,7 @@ function MintSync() {
 				}
 				else
 				{
-					opera.extension.bgProcess.mintSyncGlobals.authentication = undefined;
+					genericRetrieve_mintSyncGlobals().authentication = undefined;
 				}
 				
 			break;
@@ -718,7 +718,7 @@ function MintSync() {
 				}
 				else
 				{
-					opera.extension.bgProcess.mintSyncGlobals.passwd = undefined;
+					genericRetrieve_mintSyncGlobals().passwd = undefined;
 				}
 				
 			break;
