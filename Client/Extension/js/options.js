@@ -51,6 +51,8 @@ $(document).ready(function(){
 
 /** Set Save Preferences */
 function savePrefs() {
+
+	var preferences = genericRetrieve_preferencesObj();
 	//check if the last character is a /, if not append one!
 	var serverUrl = $("#ServerURL").val();
 	if(serverUrl.charAt(serverUrl.length-1)!="/")
