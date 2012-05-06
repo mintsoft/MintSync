@@ -248,7 +248,7 @@ ul.styled li .binIcon
 	position: relative;
 	/* nice hacky positioning here */
 	top: -0.6ex;
-	right: -1ex;
+	right: 0.5ex;
 }
 
 img.clickable, ul.styled li .binIcon 
