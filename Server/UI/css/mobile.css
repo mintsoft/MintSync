@@ -1,0 +1,27 @@
+
+@media all and (max-width: 851px) {
+/** Override floating container thing **/
+	#mint_matrixContainer {
+		width: 100%;
+		padding: 1ex;
+		margin: 0px;
+		border-radius: 0px;
+		background: none;
+		box-shadow: none;
+		
+	}
+	body {
+		background: white;
+		padding: 0px;
+		margin: 0px;
+	}
+	#variableWidth {
+		display: none;
+	}
+	input#searchValue {
+		
+	}
+	#prefform {
+		
+	}
+}

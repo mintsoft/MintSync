@@ -30,7 +30,7 @@ ul
 /* Remargin p's */
 p 
 {
-	margin: 1ex 1em;
+	margin: 1ex 0em;
 }
 
 a:visited, a:link
@@ -248,7 +248,7 @@ ul.styled li .binIcon
 	position: relative;
 	/* nice hacky positioning here */
 	top: -0.6ex;
-	right: -1ex;
+	right: 0.5ex;
 }
 
 img.clickable, ul.styled li .binIcon 
@@ -292,12 +292,22 @@ ul.styled li table
 }
 
 .modalDialog input[type='password'], .modalDialog input[type='text'] {
-	width: 120px;
+	width: 14em;
 }
 
 .modalDialog input,.modalDialog button {
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.modalDialog #dialogPasswordInstruction, .modalDialog #authenticationInstruction {
+	text-align: center;
+	margin-top: 1ex;
+}
+
+.modalDialog input.close {
+	margin-top: 1ex;
+	margin-bottom: 0ex;
 }
 
 /**

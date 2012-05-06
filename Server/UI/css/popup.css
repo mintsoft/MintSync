@@ -57,7 +57,7 @@ legend {
 /* Labels  and Inputs */
 label {
 	display: inline-block;
-	width: 10em;
+	width: 7em;
 	font-weight: bold;
 }
 
@@ -109,7 +109,7 @@ input {
 }
 
 /** Internal Scrolling **/
-#inputPassContainer {
+#tabContent #inputPassContainer {
 	max-height: 98px;
 	overflow-y: auto;
 	overflow-x: hidden;
@@ -118,10 +118,11 @@ input {
 	border-right: 0px;
 	padding: 1ex;
 }
-#inputPassContainer p {
+#tabContent #inputPassContainer p {
 	margin-left: 0ex;
 	margin-top: 0ex;
 	margin-right: 0ex;
+	margin-bottom: 0.25ex;
 }
 
 /** Loading Stuff **/
@@ -152,6 +153,7 @@ div#retrieveOutput table.results tbody td {
 }
 
 div#fetchDiv {
+	margin-top: 0.5ex;
 	max-height: 230px;
 	overflow-y: auto;
 }
@@ -208,7 +210,7 @@ ul#tabBar {
 
 .hangingTab {
 	display: inline-block;
-	margin-top: -1px;
+	margin-top: -1px !important;
 	border: 1px solid #aaa;
 	border-top-color: #ececec;	/* must match bg colour */
 	padding: 0ex 0.5em 0.5ex 0.5em;
@@ -226,13 +228,17 @@ ul#tabBar {
 	width: auto;
 }
 
-.submitContainer {
+#tabContent .submitContainer {
 	margin-top: 2ex;
 	float: left;
 }
 
 #saveOutput {
 
+}
+
+#tabContent p {
+	margin: 0 1ex;
 }
 
 /*
@@ -285,4 +291,5 @@ ul#tabBar {
 	display: block;
 	margin-bottom: 2ex;
 	padding-left: 1em;
+	margin-top: 1ex;
 }
