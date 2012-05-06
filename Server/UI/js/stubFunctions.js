@@ -8,3 +8,7 @@ function genericPostMessage(objToSend){
 function genericRetrieve_mintSyncGlobals(){
 
 }
+
+function genericRetrieve_preferencesObj(){
+
+}

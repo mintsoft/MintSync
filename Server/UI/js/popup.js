@@ -106,8 +106,9 @@ $(document).ready(function(){
 		//ask for it then
 		console.info("Requesting Login Credentials");
 		$MS.getAuthenticationObject(function(){
+			var preferences = genericRetrieve_preferencesObj();
 			//retrigger a cache update if enabled
-			if(widget.preferences["Notify"]=="1"  && widget.preferences["NotifySource"]=="cache")
+			if(preferences["Notify"]=="1"  && preferences["NotifySource"]=="cache")
 			{
 				genericPostMessage({
 					'action': 'startLocalCache',
