@@ -493,20 +493,21 @@ function MintSync() {
 	*/
 	this.getEncryptionPasswordHash = function(successCallback) {
 		//text to appear on the password prompt
-		var strPrompt = "Enter your crypto password";
+		var strPrompt = "Enter your crypto password",
+			preferences = genericRetrieve_preferencesObj();	//generic preferences object
 		
-		if(widget.preferences["SavePassword"]==1)
+		if(preferences["SavePassword"]==1)
 		{
-			if(!widget.preferences["SavedPassword"] || widget.preferences["SavedPassword"]==="undefined")
+			if(!preferences["SavedPassword"] || preferences["SavedPassword"]==="undefined")
 				askForPassword(strPrompt,function(password){
 					var hash  = $MS.hashPass(password);
-					widget.preferences["SavedPassword"] = hash;
-					successCallback(widget.preferences["SavedPassword"]);
+					preferences["SavedPassword"] = hash;
+					successCallback(preferences["SavedPassword"]);
 				});
 			else
-				successCallback(widget.preferences["SavedPassword"]);
+				successCallback(preferences["SavedPassword"]);
 		}
-		else if (widget.preferences["SavePassword"]==0.8)
+		else if (preferences["SavePassword"]==0.8)
 		{
 			var passwd;
 			//get the password from the background process
@@ -520,7 +521,7 @@ function MintSync() {
 					genericRetrieve_mintSyncGlobals().passwd = hash;
 					
 					//if required, start the background process timer
-					if(widget.preferences["SavePassBDuration"])
+					if(preferences["SavePassBDuration"])
 					{
 						console.debug("SavePassBDuration is true");
 						genericPostMessage({
@@ -538,7 +539,7 @@ function MintSync() {
 			}
 				
 		}
-		else if (widget.preferences["SavePassword"]==0.5)
+		else if (preferences["SavePassword"]==0.5)
 		{
 			//request password and store in global
 			if($MS.rememberedPassword==undefined)
@@ -560,10 +561,12 @@ function MintSync() {
 		Returns a boolean representing whether or not we have any credentials saved
 	**/
 	this.checkForSavedAuth = function() {
-		switch(widget.preferences["SaveAuthentication"])
+		var preferences = genericRetrieve_preferencesObj();
+		
+		switch(preferences["SaveAuthentication"])
 		{
 			case "1":
-				return !(widget.preferences["SavedAuthentication"]=="undefined" && widget.preferences["SavedAuthentication"]);
+				return !(preferences["SavedAuthentication"]=="undefined" && preferences["SavedAuthentication"]);
 			break;
 			case "0.8":
 				if(opera.extension.bgProcess == undefined) // being called from the bgProcess
@@ -589,23 +592,24 @@ function MintSync() {
 	*/
 	this.getAuthenticationObject = function(authCallback) {
 		var promptStr = "Please enter your login details";
+		var preferences = genericRetrieve_preferencesObj();
 		
-		if(widget.preferences["SaveAuthentication"]==1)
+		if(preferences["SaveAuthentication"]==1)
 		{
 			if(!$MS.checkForSavedAuth())
 			{
 				askForUsernamePassword(promptStr,function(authObj){
 					authObj.password = $MS.hashPass(authObj.password);
-					widget.preferences["SavedAuthentication"] = JSON.stringify(authObj);
-					authCallback($.parseJSON(widget.preferences["SavedAuthentication"]));
+					preferences["SavedAuthentication"] = JSON.stringify(authObj);
+					authCallback($.parseJSON(preferences["SavedAuthentication"]));
 				});
 			}
 			else
 			{
-				authCallback($.parseJSON(widget.preferences["SavedAuthentication"]));
+				authCallback($.parseJSON(preferences["SavedAuthentication"]));
 			}
 		}
-		else if (widget.preferences["SaveAuthentication"]==0.8)
+		else if (preferences["SaveAuthentication"]==0.8)
 		{
 				
 			if(!$MS.checkForSavedAuth())
@@ -624,7 +628,7 @@ function MintSync() {
 					
 					
 					//start the password reset timer if applicable
-					if(widget.preferences["SavePassBDuration"] > 0)
+					if(preferences["SavePassBDuration"] > 0)
 					{
 						//start the timer
 						genericPostMessage({
@@ -651,7 +655,7 @@ function MintSync() {
 				
 			
 		}
-		else if (widget.preferences["SaveAuthentication"]==0.5)
+		else if (preferences["SaveAuthentication"]==0.5)
 		{
 			//request password and store in global
 			if(!$MS.checkForSavedAuth())
@@ -679,10 +683,12 @@ function MintSync() {
 		Resets the credentials saved (however they are)
 	*/
 	this.resetSavedCredentials = function() {
-		switch(widget.preferences["SaveAuthentication"])
+		var preferences = genericRetrieve_preferencesObj();
+		
+		switch(preferences["SaveAuthentication"])
 		{
 			case "1":
-				widget.preferences["SavedAuthentication"]="undefined";
+				preferences["SavedAuthentication"]="undefined";
 			break;
 			case "0.8":
 				if(opera.extension.bgProcess == undefined) // being called from the bgProcess
@@ -706,10 +712,11 @@ function MintSync() {
 		Resets the crypto password saved (however they are)
 	*/
 	this.resetSavedCryptoPassword = function() {
-		switch(widget.preferences["SavePassword"])
+		var preferences = genericRetrieve_preferencesObj();
+		switch(preferences["SavePassword"])
 		{
 			case "1":
-				widget.preferences["SavedPassword"]="undefined";
+				preferences["SavedPassword"]="undefined";
 			break;
 			case "0.8":
 				if(opera.extension.bgProcess == undefined) // being called from the bgProcess
@@ -734,26 +741,30 @@ function MintSync() {
 		retrieved when the pop up is launched or not.
 	**/
 	this.getAutoFetch = function() {
-		return widget.preferences["AutoFetch"];
+		var preferences = genericRetrieve_preferencesObj();
+		return preferences["AutoFetch"];
 	},
 	/** 
 		Returns whether or not the user wants to be notified when 
 		there is a password on the page or not
 	**/
 	this.getNotify = function() {
-		return widget.preferences["Notify"]=="1";
+		var preferences = genericRetrieve_preferencesObj();
+		return preferences["Notify"]=="1";
 	},
 	/**
 		Get the Server's base URL
 	*/
 	this.getServerURL = function() {
-		return widget.preferences["ServerURL"];
+		var preferences = genericRetrieve_preferencesObj();
+		return preferences["ServerURL"];
 	},
 	/**
 		Returns the password length configured
 	*/
 	this.getGeneratedPasswordLength = function() {
-		return (typeof(widget)==="undefined")?16:widget.preferences["GeneratedPasswordLength"];
+		var preferences = genericRetrieve_preferencesObj();
+		return (typeof(preferences)==="undefined")?16:preferences["GeneratedPasswordLength"];
 	},
 	/**
 		Returns the length the row salt should be generated to
@@ -789,14 +800,15 @@ function MintSync() {
 							"punc2"	: "`~@$%^&*()_+{}|:\"<>!?",
 						 },
 			password="",
-			sourceString="";
+			sourceString="",
+			preferences = genericRetrieve_preferencesObj();
 		
 		//build	sourceString from preferences
 		sourceString = sourceSet.alpha;
 		
-		sourceString += widget.preferences["passwordStrengthNum"]	== "true"?sourceSet.num:"";
-		sourceString += widget.preferences["passwordStrengthPunc1"]	== "true"?sourceSet.punc1:"";
-		sourceString += widget.preferences["passwordStrengthPunc2"]	== "true"?sourceSet.punc2:"";
+		sourceString += preferences["passwordStrengthNum"]	== "true"?sourceSet.num:"";
+		sourceString += preferences["passwordStrengthPunc1"]	== "true"?sourceSet.punc1:"";
+		sourceString += preferences["passwordStrengthPunc2"]	== "true"?sourceSet.punc2:"";
 		
 		for(var x=0;x<length;++x)
 		{

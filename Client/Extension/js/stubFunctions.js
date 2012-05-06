@@ -10,3 +10,7 @@ function genericPostMessage(objToSend){
 function genericRetrieve_mintSyncGlobals(){
 	return opera.extension.bgProcess.mintSyncGlobals;
 }
+
+function genericRetrieve_preferencesObj(){
+	return widget.preferences;
+}
