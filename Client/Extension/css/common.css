@@ -30,7 +30,7 @@ ul
 /* Remargin p's */
 p 
 {
-	margin: 1ex 1em;
+	margin: 1ex 0em;
 }
 
 a:visited, a:link
