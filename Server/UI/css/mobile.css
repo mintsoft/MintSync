@@ -3,12 +3,23 @@
 /** Override floating container thing **/
 	#mint_matrixContainer {
 		width: 100%;
+		min-width: 0px;
 		padding: 1ex;
 		margin: 0px;
 		border-radius: 0px;
 		background: none;
 		box-shadow: none;
 		
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		
+	}
+	
+	input#searchValue {
+		width: 100%;
+		
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
 	}
 	body {
 		background: white;
