@@ -12,7 +12,6 @@
 		
 		-webkit-box-sizing: border-box;
 		box-sizing: border-box;
-		
 	}
 	
 	input#searchValue {
@@ -20,7 +19,9 @@
 		
 		-webkit-box-sizing: border-box;
 		box-sizing: border-box;
+		margin-bottom: 1ex;
 	}
+	
 	body {
 		background: white;
 		padding: 0px;
@@ -31,5 +32,72 @@
 	}
 	#PasswordList.styled li > h3 {
 		margin-left: 0.5ex;
+	}
+
+	/** Font Size Fixes: */
+	#mint_matrixContainer form, .modalDialog {
+		font-size: 200%;
+	}
+	
+	.modalDialog h2 {
+		font-size: smaller;
+	}
+	
+	.modalDialog #dialogPassPassword, input#searchValue {
+		font-size: 100%;
+	}
+	
+	/**
+	margin and Padding fixes to save space 
+	*/
+	
+	ul.styled li table, #retrieveOutput {
+		margin: 0px;
+	}
+	.dropDownContent, ul.styled li {
+		padding: 0px;
+	}
+	
+	ul.styled li h3 {
+		padding: 0.5ex 0ex 0.5ex 0.5ex;
+		margin: 0px !important;
+	}
+	
+	/** Hide Explode Icon*/
+	.explodeIcon {
+		display: none;
+	}
+	
+	table tbody input {
+		width: 100% !important;
+		
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+	
+	ul.styled li table {
+		width: 100%;
+		border-radius: 0px;
+	}
+	
+	/* Switch off them damn rounded corners */
+	ul.styled table tr, ul.styled table	td {
+		border-radius: 0px !important
+	}
+	
+	.results thead, .instructions {
+		display: none;
+	}
+
+	ul.styled li  h3 {
+		background: rgba(10,10,10,0.8);
+		background: -o-linear-gradient(rgba(10,10,10,0.8),rgba(10,10,10,0.7));
+		color: rgba(240,240,240,1);
+		text-shadow: rgba(255,255,255,0.2) 1px -1px 2px;
+		font-weight: normal;
+	}
+
+	table.results {
+		box-shadow: none;
 	}
 }
