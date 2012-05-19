@@ -27,9 +27,11 @@
 		padding: 0px;
 		margin: 0px;
 	}
+	
 	#variableWidth {
 		display: none;
 	}
+	
 	#PasswordList.styled li > h3 {
 		margin-left: 0.5ex;
 	}
@@ -43,8 +45,11 @@
 		font-size: smaller;
 	}
 	
-	.modalDialog #dialogPassPassword, input#searchValue {
-		font-size: 100%;
+	.modalDialog input[type=text], .modalDialog input[type=password] {
+		padding: 1ex 1ex;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		width: 100% !important
 	}
 	
 	/**
