@@ -194,7 +194,11 @@ table tbody tr:nth-child(odd), ul.zebra li:nth-child(even)
 table thead th 
 {
 	background: rgba(10,10,10,0.8);
+	background: linear-gradient(rgba(10,10,10,0.8),rgba(10,10,10,0.7));
 	background: -o-linear-gradient(rgba(10,10,10,0.8),rgba(10,10,10,0.7));
+	background: -webkit-linear-gradient(rgba(10,10,10,0.8),rgba(10,10,10,0.7));
+	background: -moz-linear-gradient(rgba(10,10,10,0.8),rgba(10,10,10,0.7));
+	background: -ms-linear-gradient(rgba(10,10,10,0.8),rgba(10,10,10,0.7));
 	color: rgba(240,240,240,1);
 	text-shadow: rgba(255,255,255,0.2) 1px -1px 2px;
 }
