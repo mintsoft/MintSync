@@ -1,0 +1,9 @@
+/**
+	Chromium Specific Popup Styling
+*/	
+	body {
+		width: 330px;
+		height: 260px;
+		overflow-x: auto;
+		overflow-y: auto;
+  }
