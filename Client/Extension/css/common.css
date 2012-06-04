@@ -115,6 +115,11 @@ input[type='submit'], button, input[type='button']
 	margin-bottom: 1ex;
 }
 
+/* Disable chromium's irritating outline on selected boxes */
+input:focus {
+	outline: none;
+}
+
 /** Force a Y-scrollbar**/
 /*
 	Only really applied to html on the password matrix
