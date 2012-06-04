@@ -84,6 +84,8 @@ function sendMessageToInjectedJS(message)
 // runs before window.load();
 $(document).ready(function(){
 
+	addPopupEventHandlers();
+
 	//detect fullscreen popup 
 	if(getParameterByName("fullscreen"))
 		g_isFullscreen = true;
@@ -186,6 +188,28 @@ window.addEventListener('load', function() {
 },false);
 
 /** Global Function Handlers **/
+
+function addPopupEventHandlers()
+{
+	$("#iconBar a.newTabLink").click(function(event){
+		event.preventDefault();
+		openNewTabFromPopup(this);
+	});
+	
+	$("#iconBar a.popupFullScreen").click(function(event){
+		event.preventDefault();
+		openPopupFullScreen(this);
+	});
+	
+	$("#passwordRetrieveForm").submit(function(event){
+		event.preventDefault();
+		getPasswords($("#domainInput").val());
+	});
+	$("#passwordSaveForm").submit(function(event){
+		event.preventDefault();
+		setPassword(this);
+	});
+}
 
 /** 
 	Adds a new input pair to the popup and defines the click handlers
@@ -444,10 +468,10 @@ function openPopupFullScreen(thisA)
 			'fullscreen': '1',
 			'URL': g_currentURL
 		});
-	opera.extension.bgProcess.opera.extension.tabs.create({
-			url: thisA.href+"?"+urlData, 
-			focused: true
-		}); 
+	chrome.tabs.create({
+			url: thisA.href+"?"+urlData,
+			active: true
+		});
 	return false;
 }
 
@@ -456,15 +480,9 @@ function openPopupFullScreen(thisA)
 */
 function openNewTabFromPopup(thisA)
 {
-	/*
-		onclick='window.open(window.location,"Mintsync Popup - Fullscreen"); alert(window.location); return false;'
-		doesn't work so I've used opera.extension.tabs which isn't accessible directly so one has to go via the
-		background process
-	*/
-	
-	opera.extension.bgProcess.opera.extension.tabs.create({
+	chrome.tabs.create({
 		url: thisA.href, 
-		focused: true
+		active: true
 	}); 
 	return false;
 }
