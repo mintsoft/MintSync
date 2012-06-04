@@ -84,6 +84,8 @@ function sendMessageToInjectedJS(message)
 // runs before window.load();
 $(document).ready(function(){
 
+	addPopupEventHandlers();
+
 	//detect fullscreen popup 
 	if(getParameterByName("fullscreen"))
 		g_isFullscreen = true;
@@ -186,6 +188,28 @@ window.addEventListener('load', function() {
 },false);
 
 /** Global Function Handlers **/
+
+function addPopupEventHandlers()
+{
+	$("#iconBar a.newTabLink").click(function(event){
+		event.preventDefault();
+		openNewTabFromPopup(this);
+	});
+	
+	$("#iconBar a.popupFullScreen").click(function(event){
+		event.preventDefault();
+		openPopupFullScreen(this);
+	});
+	
+	$("#passwordRetrieveForm").submit(function(event){
+		event.preventDefault();
+		getPasswords($("#domainInput").val());
+	});
+	$("#passwordSaveForm").submit(function(event){
+		event.preventDefault();
+		setPassword(this);
+	});
+}
 
 /** 
 	Adds a new input pair to the popup and defines the click handlers

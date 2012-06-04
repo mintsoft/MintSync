@@ -29,9 +29,9 @@
 	<div id='popupContainer ' unselectable='on' >
 
 		<div id='iconBar'>
-			<a href='options.html' alt='Options' onclick='openNewTabFromPopup(this); return false;'><img src='img/options.png' /></a> 
-			<a href='passwordMatrix.html' alt='Credentials List' onclick='openNewTabFromPopup(this); return false;'><img src='img/credentials_list.png' /></a> 
-			<a href='popup.html' alt='Maximise' id='maximise' class='hidden_when_max' onclick='openPopupFullScreen(this); return false;'><img src='img/maximise_16.png' /></a> 
+			<a href='options.html' alt='Options' class='newTabLink' ><img src='img/options.png' /></a> 
+			<a href='passwordMatrix.html' alt='Credentials List' class='newTabLink'  ><img src='img/credentials_list.png' /></a> 
+			<a href='popup.html' alt='Maximise' id='maximise' class='hidden_when_max popupFullScreen' ><img src='img/maximise_16.png' /></a> 
 		</div>
 	
 		<ul id='tabBar'  unselectable='on' >
@@ -66,7 +66,7 @@
 					<p  unselectable='on' >
 						Click retrieve to fetch and decrypt the stored information
 					</p>
-					<form action='javascript:void(0);' onsubmit='getPasswords($("#domainInput").val()); return false;'>
+					<form action='#' id='passwordRetrieveForm'>
 						<p>
 							<span id='fullscreen_url'></span>
 							<input type='hidden' name='domain' id='domainInput' /><input type='submit' value='Retrieve'/>
@@ -78,7 +78,7 @@
 			</fieldset>
 			
 			<fieldset id='save' class='hidden'  unselectable='on' >
-				<form action='#' onsubmit='setPassword(this); return false;'  unselectable='on' >
+				<form action='#' id='passwordSaveForm' unselectable='on' >
 					<p><label unselectable='on' >URL/Domain:</label> <input type='text' name='domainName' id='domainName' /></p>
 					<p unselectable='on' ><label unselectable='on' >Credentials:</label> <span class='mini-instructions' unselectable='on' >Generate: Right Click (Ctrl+G), Inject: Ctrl+I</span></p>
 					<div id='inputPassContainer'>
