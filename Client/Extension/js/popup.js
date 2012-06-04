@@ -200,6 +200,15 @@ function addPopupEventHandlers()
 		event.preventDefault();
 		openPopupFullScreen(this);
 	});
+	
+	$("#passwordRetrieveForm").submit(function(event){
+		event.preventDefault();
+		getPasswords($("#domainInput").val());
+	});
+	$("#passwordSaveForm").submit(function(event){
+		event.preventDefault();
+		setPassword(this);
+	});
 }
 
 /** 
