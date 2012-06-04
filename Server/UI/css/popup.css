@@ -176,7 +176,11 @@ ul#tabBar {
 	border-top-right-radius: 3px;
 	border-bottom: 1px solid #aaa;
 	
+	background-image: linear-gradient(top, rgba(160,160,160,0.1) 0%, rgba(255,255,255,0) 90%);
 	background-image: -o-linear-gradient(top, rgba(160,160,160,0.1) 0%, rgba(255,255,255,0) 90%);
+	background-image: -webkit-linear-gradient(top, rgba(160,160,160,0.1) 0%, rgba(255,255,255,0) 90%);
+	background-image: -moz-linear-gradient(top, rgba(160,160,160,0.1) 0%, rgba(255,255,255,0) 90%);
+	background-image: -ms-linear-gradient(top, rgba(160,160,160,0.1) 0%, rgba(255,255,255,0) 90%);
 	
 	text-align: center;
 	position: relative;
@@ -191,7 +195,11 @@ ul#tabBar {
 	font-weight: bold;
 	border-color: #aaa;
 	border-bottom-color: #ececec;	/* must match bg colour */
+	background-image: linear-gradient(top, rgba(255,255,255,0.3) 0%, #ececec 90%);
 	background-image: -o-linear-gradient(top, rgba(255,255,255,0.3) 0%, #ececec 90%);
+	background-image: -webkit-linear-gradient(top, rgba(255,255,255,0.3) 0%, #ececec 90%);
+	background-image: -moz-linear-gradient(top, rgba(255,255,255,0.3) 0%, #ececec 90%);
+	background-image: -ms-linear-gradient(top, rgba(255,255,255,0.3) 0%, #ececec 90%);
 	top: 2px;
 	color: black;
 }
@@ -216,7 +224,11 @@ ul#tabBar {
 	padding: 0ex 0.5em 0.5ex 0.5em;
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
+	background-image: linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 90%);
 	background-image: -o-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 90%);
+	background-image: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 90%);
+	background-image: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 90%);
+	background-image: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 90%);
 	min-height: 16px;
 }
 
