@@ -6,6 +6,9 @@
 	Entry point
 */
 $(document).ready(function(){
+
+	addPreferencesEventHandlers();
+
 	var preferences = genericRetrieve_preferencesObj();
 	/* Load Preferences */
 	$("#ServerURL").val(preferences["ServerURL"]);
@@ -145,4 +148,20 @@ function toggleAdvancedOptions(fromHere){
 	else
 		$(fromHere).text(str.replace("More","Fewer"));
 	
+}
+
+/**
+	Add Preferences Event Callbacks
+*/
+function addPreferencesEventHandlers()
+{
+	$("#moreOptionsA").click(function(event){
+		event.preventDefault();
+		toggleAdvancedOptions(this)
+	});
+	
+	$("#saveButtonInput").click(function(event){
+		event.preventDefault();
+		savePrefs();
+	});
 }
