@@ -341,15 +341,25 @@ function getPasswords(domainName) {
 											.text(truncateInputAttribute(index))
 											.attr("data-fulltext", index),
 									$("<td>").append(
-										$("<input type='password' class='retrievedPassword injectValueSourceElement' onfocus='revealPassword(this);' readonly='readonly' onblur='rehidePassword(this);'>")
+										$("<input type='password' class='retrievedPassword injectValueSourceElement' readonly='readonly' >")
 											.val(credentialsObj[index])
 											.dblclick(function(event) {
 												//when the fields are double clicked, hilight individual characters
 												event.preventDefault();
 												
-										})),
+											})
+											.focus(function(event) {
+												revealPassword(this);
+											})
+											.blur(function(event){
+												rehidePassword(this);
+											})
+										),
 									$("<td>").append(
-										$("<img src='img/document_import.png' alt='Insert Password' onclick='injectPass(this); return false' class='jsAction injectPW hidden_when_max' />")
+										$("<img src='img/document_import.png' alt='Insert Password' class='jsAction injectPW hidden_when_max' />")
+											.click(function(event){
+												injectPass(this);
+											})
 									)
 								)
 							);
