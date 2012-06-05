@@ -569,7 +569,7 @@ function MintSync() {
 				return !(preferences["SavedAuthentication"]=="undefined" && preferences["SavedAuthentication"]);
 			break;
 			case "0.8":
-				if(opera.extension.bgProcess == undefined) // being called from the bgProcess
+				if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess
 				{
 					return mintSyncGlobals.authentication !== undefined;
 				}
@@ -614,14 +614,14 @@ function MintSync() {
 				
 			if(!$MS.checkForSavedAuth())
 			{
-				if(opera.extension.bgProcess == undefined) // being called from the bgProcess
+				if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess so don't prompt!
 					return;
 				
 				askForUsernamePassword(promptStr,function(authObj){
 					authObj.password = $MS.hashPass(authObj.password);
 					//set the password in the background process
 					
-					if(opera.extension.bgProcess == undefined) // being called from the bgProcess
+					if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess
 						mintSyncGlobals.authentication = authObj;
 					else
 						genericRetrieve_mintSyncGlobals().authentication = authObj;
@@ -642,7 +642,7 @@ function MintSync() {
 			}
 			else
 			{
-				if(opera.extension.bgProcess == undefined) // being called from the bgProcess
+				if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess
 				{	
 					authCallback(mintSyncGlobals.authentication);
 				}
@@ -691,7 +691,7 @@ function MintSync() {
 				preferences["SavedAuthentication"]="undefined";
 			break;
 			case "0.8":
-				if(opera.extension.bgProcess == undefined) // being called from the bgProcess
+				if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess
 				{
 					mintSyncGlobals.authentication = undefined;
 				}
@@ -719,7 +719,7 @@ function MintSync() {
 				preferences["SavedPassword"]="undefined";
 			break;
 			case "0.8":
-				if(opera.extension.bgProcess == undefined) // being called from the bgProcess
+				if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess
 				{
 					mintSyncGlobals.passwd = undefined;
 				}
