@@ -256,12 +256,18 @@ function togglePasswordsForURL(srcH3)
 								$("<tr>").append(
 									$("<td class='pm_label'>").text(index),
 									$("<td class='pm_value'>").append(
-										$("<input type='password' onfocus='revealPassword(this);' readonly='readonly' onblur='rehidePassword(this);'>")
+										$("<input type='password' readonly='readonly' >")
 											.val(credentialsObj[index])
 											.dblclick(function(event) {
 												//when the fields are double clicked, hilight individual characters
 												//event.target is the element clicked
 												event.preventDefault();
+											})
+											.focus(function(event) {
+												revealPassword(this);
+											})
+											.blur(function(event){
+												rehidePassword(this);
 											}),
 										$("<img src='img/expandDown.png' class='explodeIcon clickable' alt='Explode' title='Explode Password' />").click(function(event){
 											handleShowIndividualCharacters($(this).siblings("input"));
@@ -332,7 +338,16 @@ function handleShowIndividualCharacters(target) {
 				$("<th>").text((x+1))
 			);
 		tbody.append(
-				$("<td>").append($("<input type='password' onfocus='revealPassword(this);' readonly='readonly' class='singleDigit' onblur='rehidePassword(this);'>").val(passwordArray[x]))
+				$("<td>").append(
+					$("<input type='password' readonly='readonly' class='singleDigit' >")
+						.val(passwordArray[x])
+						.focus(function(event) {
+							revealPassword(this);
+						})
+						.blur(function(event){
+							rehidePassword(this);
+						})
+				)
 			);
 	}
 
