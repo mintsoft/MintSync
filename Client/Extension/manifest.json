@@ -8,6 +8,7 @@
 	"default_popup": "popup.html"
   },
   "permissions": [
+	"storage",
     "tabs",
 	"<all_urls>"
   ],
