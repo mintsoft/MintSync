@@ -12,7 +12,7 @@ function genericRetrieve_mintSyncGlobals(){
 }
 
 function genericRetrieve_preferencesObj(){
-	return widget.preferences;
+	return typeof(widget)!=="undefined"?widget.preferences:{};
 }
 
 function genericRetrieve_currentTab(callback){
