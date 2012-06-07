@@ -12,3 +12,7 @@ function genericRetrieve_mintSyncGlobals(){
 function genericRetrieve_preferencesObj(){
 
 }
+
+function genericRetrieve_currentTab(callback){
+	callback(null);
+}
