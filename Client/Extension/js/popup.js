@@ -102,8 +102,7 @@ $(document).ready(function(){
 	
 	//check if the notify icon is on and trigger a request
 	//for the login details
-	if(	typeof(opera.extension)!=="undefined" && 
-		$MS.getNotify() && !$MS.checkForSavedAuth())
+	if($MS.getNotify() && !$MS.checkForSavedAuth())
 	{
 		//ask for it then
 		console.info("Requesting Login Credentials");
@@ -140,7 +139,7 @@ $(document).ready(function(){
 // runs AFTER jQuery(document).ready();
 //insert the currently selected tab into the box by default
 window.addEventListener('load', function() {
-		
+/*
 	if(!opera.extension)
 		return;
 	
@@ -155,7 +154,7 @@ window.addEventListener('load', function() {
 			}
 		}
 	};
-	
+*/	
 	//if running as a standard popup
 	if(!g_isFullscreen)
 	{
