@@ -16,4 +16,9 @@ function genericRetrieve_preferencesObj(){
 		'SavePassword' : '0.5',
 		'SaveAuthentication' : '0.5'
 	};
+
+}
+
+function genericRetrieve_currentTab(callback){
+	callback(null);
 }
