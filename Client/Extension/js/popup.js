@@ -102,8 +102,7 @@ $(document).ready(function(){
 	
 	//check if the notify icon is on and trigger a request
 	//for the login details
-	if(	typeof(opera.extension)!=="undefined" && 
-		$MS.getNotify() && !$MS.checkForSavedAuth())
+	if($MS.getNotify() && !$MS.checkForSavedAuth())
 	{
 		//ask for it then
 		console.info("Requesting Login Credentials");
