@@ -159,12 +159,20 @@ window.addEventListener('load', function() {
 	//if running as a standard popup
 	if(!g_isFullscreen)
 	{
-		var currentTab = opera.extension.bgProcess.opera.extension.tabs.getFocused();
-		if(!currentTab)
-			return;
-		document.getElementById("domainInput").value = currentTab.url;
-		document.getElementById("domainName").value = currentTab.url;
-		g_currentURL = currentTab.url;
+		genericRetrieve_currentTab(function(currentTab){	
+			if(!currentTab)
+				return;
+			document.getElementById("domainInput").value = currentTab.url;
+			document.getElementById("domainName").value = currentTab.url;
+			g_currentURL = currentTab.url;
+			
+			//if the user has selected the autofetch option:
+			if($MS.getAutoFetch() == 1)
+			{
+				getPasswords(g_currentURL);
+			}
+			
+		});
 	}
 	//if its a "fullscreen" window then the target URL is URIEncoded as a GET string
 	else
@@ -177,12 +185,12 @@ window.addEventListener('load', function() {
 		document.getElementById("domainInput").value = URL;
 		document.getElementById("domainName").value = URL;
 		g_currentURL = URL;
-	}
-
-	//if the user has selected the autofetch option:
-	if($MS.getAutoFetch() == 1)
-	{
-		getPasswords(g_currentURL);
+	
+		//if the user has selected the autofetch option:
+		if($MS.getAutoFetch() == 1)
+		{
+			getPasswords(g_currentURL);
+		}
 	}
 	
 },false);

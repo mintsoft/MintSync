@@ -14,3 +14,7 @@ function genericRetrieve_mintSyncGlobals(){
 function genericRetrieve_preferencesObj(){
 	return widget.preferences;
 }
+
+function genericRetrieve_currentTab(callback){
+	callback(opera.extension.bgProcess.opera.extension.tabs.getFocused());
+}
