@@ -12,3 +12,7 @@ function genericRetrieve_mintSyncGlobals(){
 function genericRetrieve_preferencesObj(){
 	return localStorage;
 }
+
+function genericRetrieve_currentTab(callback){
+	chrome.tabs.getSelected(null,callback);
+}
