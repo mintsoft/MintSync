@@ -523,7 +523,6 @@ function MintSync() {
 					//if required, start the background process timer
 					if(preferences["SavePassBDuration"])
 					{
-						console.debug("SavePassBDuration is true");
 						genericPostMessage({
 							'action': 'startPasswdResetTimer',
 							'src' : 'all',

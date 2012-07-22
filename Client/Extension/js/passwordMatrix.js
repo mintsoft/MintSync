@@ -335,7 +335,11 @@ function handleShowIndividualCharacters(target) {
 	for(var x=0; x<passwordArray.length; ++x)
 	{
 		thead.append(
-				$("<th>").text((x+1))
+				$("<th>")
+					.text((x+1))
+					.click(function(e){
+						$(this).closest("table").find("tr.explodeRow").children("td:nth-child(" + $(this).text() + ")" ).children("input").focus();
+					})
 			);
 		tbody.append(
 				$("<td>").append(
@@ -347,7 +351,9 @@ function handleShowIndividualCharacters(target) {
 						.blur(function(event){
 							rehidePassword(this);
 						})
-				)
+				).click(function(event){
+					$(this).find("input.singleDigit").focus();
+				})
 			);
 	}
 
