@@ -34,15 +34,19 @@
 	
 	#PasswordList.styled li > h3 {
 		margin-left: 0.5ex;
+		font-size: 12pt;
 	}
 
 	/** Font Size Fixes: */
+	#mint_matrixContainer h1 {
+		font-size: 16pt;
+	}
 	#mint_matrixContainer form, .modalDialog {
-		font-size: 200%;
+		font-size: 16pt;
 	}
 	
 	.modalDialog h2 {
-		font-size: smaller;
+		font-size: 16pt;
 	}
 	
 	.modalDialog input[type=text], .modalDialog input[type=password] {
