@@ -26,27 +26,32 @@
 		background: white;
 		padding: 0px;
 		margin: 0px;
+		font-size: 62.5% !important;	/*http://stackoverflow.com/questions/2515991/em-vs-px-for-mobile-browsers*/
 	}
 	
 	#variableWidth {
 		display: none;
 	}
-	
-	#PasswordList.styled li > h3 {
-		margin-left: 0.5ex;
-		font-size: 12pt;
-	}
 
 	/** Font Size Fixes: */
 	#mint_matrixContainer h1 {
-		font-size: 16pt;
+		font-size: 1.6em;
 	}
 	#mint_matrixContainer form, .modalDialog {
-		font-size: 16pt;
+		font-size: 1.6em;
 	}
 	
 	.modalDialog h2 {
-		font-size: 16pt;
+		font-size: 1.6em;
+	}
+	
+	#PasswordList.styled li > h3 {
+		font-size: 1.2et;
+		margin-left: 0.5ex;
+	}
+	
+	.pm_label {
+		font-size: 1.0em;
 	}
 	
 	.modalDialog input[type=text], .modalDialog input[type=password] {

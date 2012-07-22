@@ -50,7 +50,7 @@ function setupLightboxes()
 			closeSpeed: 0,
 			opacity: 0.7,
 		},
-		top: '10%',
+		top: '5%',
 		closeOnClick: false,
 		closeOnEsc: false,
 		load: false,
