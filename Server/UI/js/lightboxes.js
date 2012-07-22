@@ -16,7 +16,7 @@ function setupLightboxes()
 	//user login box
 	$("body").append("<div class='modalDialog' id='authenticationPrompt'>\
 			<h2 id='authenticationInstruction'>Enter your username and password</h2>\
-			<form>\
+			<form novalidate>\
 				<p><label for='dialogAuthUsername'>Username</label><input name='dialogAuthUsername' id='dialogAuthUsername' type='text' value='' placeholder='Username' required /></p>\
 				<p><label for='dialogAuthPassword'>Password</label><input name='dialogAuthPassword' id='dialogAuthPassword' type='password' value='' required /></p>\
 				<p><label for='dialogAuthServer'>Server</label><input name='dialogAuthServer' id='dialogAuthServer' type='url' value ='../' required /></p> \
