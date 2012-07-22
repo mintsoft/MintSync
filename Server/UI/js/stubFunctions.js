@@ -12,7 +12,7 @@ function genericRetrieve_mintSyncGlobals(){
 //temporary stub to hardcode sensible defaults for server-side interface
 function genericRetrieve_preferencesObj(){
 	return { 
-		'ServerURL' : '../',
+		'ServerURL' : g_serverURL,
 		'SavePassword' : '0.5',
 		'SaveAuthentication' : '0.5'
 	};

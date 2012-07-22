@@ -19,6 +19,7 @@ function setupLightboxes()
 			<form>\
 				<p><label for='dialogAuthUsername'>Username</label><input name='dialogAuthUsername' id='dialogAuthUsername' type='text' value='' placeholder='Username' required /></p>\
 				<p><label for='dialogAuthPassword'>Password</label><input name='dialogAuthPassword' id='dialogAuthPassword' type='password' value='' required /></p>\
+				<p><label for='dialogAuthServer'>Server</label><input name='dialogAuthServer' id='dialogAuthServer' type='text' value ='../' required /></p> \
 				<p class='centeredContents'><input type='submit' class='close'></p>\
 			</form>\
 		</div>");	
@@ -79,6 +80,7 @@ function askForUsernamePassword(prompt,completeCallback)
 	$("#dialogAuthUsername").val("");
 	$("#dialogAuthPassword").val("");
 	$("#authenticationPrompt").data("overlay").load().onClose(function(event){
+		g_serverURL = $("#dialogAuthServer").val();
 		completeCallback({
 			'username': $("#dialogAuthUsername").val(),
 			'password':	$("#dialogAuthPassword").val()
