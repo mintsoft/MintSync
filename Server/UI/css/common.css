@@ -293,7 +293,7 @@ ul.styled li table
 	border-radius:3px;
 }
 
-.modalDialog input[type='password'], .modalDialog input[type='text'] {
+.modalDialog input[type='password'], .modalDialog input[type='text'], .modalDialog input[type='url'] {
 	width: 14em;
 }
 
