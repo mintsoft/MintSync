@@ -286,9 +286,23 @@ ul#tabBar {
  */
 #iconBar {
 	position: absolute;
-	top: 2px;
-	right: 2px;
+	top: 	0px;
+	right:	0px;
+	
+	padding-right: 2px;
+	padding-top: 2px;
+	padding-left: 2px;
+	padding-bottom: 0px;
+	
+	background: white;
+	
+	box-shadow: 0px 0px 5px #fcfcfc;
+	border-bottom-left-radius:3px;
+	
+	z-index: 9999;
+
 }
+
 #iconBar a {
 	display: inline-block;
 	margin-left: 0.2em;
