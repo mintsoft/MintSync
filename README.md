@@ -1,6 +1,5 @@
-MintSync - Mintsoft (Rob Emery) 2011
-====================================
-
+MintSync
+========
 Eventually, this will be a multi-browser extension and server component secure password storage solution with all data decrypted clientside only.
 
 Currently, a working Server and Opera extension exist (see the relevent branches); soon the master branch will be emptied entirely
@@ -11,19 +10,19 @@ Chromium support is being actively worked on, as is a server Web-UI to access th
  Standard Installation - Server
 ================================
 
-1. Extract the server component into your webroot(/var/wwws/mypasswords) on an apache/PHP setup:
-2. Pick a location and use sqlite3 to create a new database (sqlite3 passwords.db) and load the 
-    schema (.read /var/wwws/mypasswords/sqliteSchema.txt)
+1. Extract the server component into your webroot(<code>/var/wwws/mypasswords</code>) on an apache/PHP setup:
+2. Pick a location and use sqlite3 to create a new database (<code>sqlite3 passwords.db</code>) and load the 
+    schema (<code>.read /var/wwws/mypasswords/sqliteSchema.txt</code>)
 3. Ensure the webserver user can write to the database 
-    (for example: chgrp www-data passwords.db && chmod g+w passwords.db)
-4. Edit config.php and set PASSWORD_DATABASE to the absolute path to your database and check that 
-    SERVER_UI_LOCKED is false
+    (for example: <code>chgrp www-data passwords.db && chmod g+w passwords.db</code>)
+4. Edit <code>config.php</code> and set <code>PASSWORD_DATABASE</code> to the absolute path to your database and check that 
+    <code>SERVER_UI_LOCKED=false</code>
 5. Point your browser to the server location (https://example.com/mypasswords) and add your user.
 6. Enter your first user's details and click the submit button. Your new user should be set-up. 
 
 ***
 You may add more users now, however once complete it is very important that you remember to 
-set SERVER_UI_LOCKED to true in config.php
+set <code>SERVER_UI_LOCKED</code> to true in <code>config.php</code>
 ***
 
 Notice: It would absolutely be a good idea to backup your password database reguarly 
