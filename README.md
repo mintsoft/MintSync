@@ -1,11 +1,11 @@
 MintSync - Mintsoft (Rob Emery) 2011
 ====================================
 
-Eventually, this will be a multi-browser extension and server component secure password storage 
-solution with all data decrypted clientside only.
+Eventually, this will be a multi-browser extension and server component secure password storage solution with all data decrypted clientside only.
 
-At current (2011-08-28) there is a warning on the Opera extensions-tabs pages warning about the API 
-being overhauled, therefore it is expected that everything will break in a new release of Opera.
+Currently, a working Server and Opera extension exist (see the relevent branches); soon the master branch will be emptied entirely
+
+Chromium support is being actively worked on, as is a server Web-UI to access the passwords which is targeted at mobile browsers mainly.
 
 ================================
  Standard Installation - Server
@@ -35,8 +35,7 @@ Notice: It would absolutely be a good idea to backup your password database regu
 ==================================================
 
 Q: What the hell is this?
-A: It's a client and server application designed to store passwords securely
-for websites. Data is kept encrypted server-side and only ever decrypted by the client.
+A: It's a client and server application designed to store passwords securely for websites. Data is kept encrypted server-side and only ever decrypted by the client.
 
 Q: What ciphers/hashes are used and how large are your keys?
 A: Currently the only supported Cipher is AES and the only supported keylength is 256 bit. 
