@@ -34,28 +34,28 @@ Notice: It would absolutely be a good idea to backup your password database regu
  Frequently Asked Questions/Questions I Would Ask
 ==================================================
 
-Q: What the hell is this?
-A: It's a client and server application designed to store passwords securely for websites. Data is kept encrypted server-side and only ever decrypted by the client.
+* Q: What the hell is this?
+* A: It's a client and server application designed to store passwords securely for websites. Data is kept encrypted server-side and only ever decrypted by the client.
 
-Q: What ciphers/hashes are used and how large are your keys?
-A: Currently the only supported Cipher is AES and the only supported keylength is 256 bit. 
+* Q: What ciphers/hashes are used and how large are your keys?
+* A: Currently the only supported Cipher is AES and the only supported keylength is 256 bit. 
    Hashes are SHA-512 where applicable and SHA-256 when used as AES256 encryption keys.
    In the pipeline for some point is variable encryption or possibly parallel encryption, 
    depending on whether or not I decide it's worth the hassle.
 
-Q: Why is there only an Opera Extension? Don't you know that the cool kids all use Chrome/Firefox/Safari?
-A: I use Opera, I'm planning to add extensions for other browsers once I've finalised the extension and 
+* Q: Why is there only an Opera Extension? Don't you know that the cool kids all use Chrome/Firefox/Safari?
+* A: I use Opera, I'm planning to add extensions for other browsers once I've finalised the extension and 
    done some refactoring
 
-Q: How does it work?
-A: The server maintains a list of URLS, Salts and "Credentials" information. The credentials information 
+* Q: How does it work?
+* A: The server maintains a list of URLS, Salts and "Credentials" information. The credentials information 
    is a Base64 encoded AES256 encrypted JSON object of Key=>Value pairs. 
    The encryption key for the credentials data is the master-key concatenated with the rowSalt. The 
    master-key is stored with the database (keySlot0 in the User table), however it is encrypted with 
    the SHA-256 of the password (which itself is a SHA-512 of the password the user enters).
 
-Q: Why on earth have you made this?
-A: A few weeks ago a colleague of mine recovered his password from some component of Tesco's 
+* Q: Why on earth have you made this?
+* A: A few weeks ago a colleague of mine recovered his password from some component of Tesco's 
    online services, which promptly sent his password back to him via email comprimising that 
    password in its entirety and everywhere its used. At this point he and I began discussing:
 	a: how atrocious the security situation appears to be on the internet, 
@@ -65,34 +65,34 @@ A: A few weeks ago a colleague of mine recovered his password from some componen
    confidence in other password solutions, both technically (as most are closed source) and physically
    (to look after my data).
 	
-Q: Why not use Last Pass or one of the million alternative password storage solutions?
-A: Well, yes there are hundreds of "cloud password solutions" but when I have looked at each of 
+* Q: Why not use Last Pass or one of the million alternative password storage solutions?
+* A: Well, yes there are hundreds of "cloud password solutions" but when I have looked at each of 
    them they're all commercially motivated and as such are usually closed source. There are those who 
    will argue that closed source doesn't necessarily mean insecure, however I prefer being able to actually
    check myself. Not to mention that a large centralised password repository is a massive target for 
    potential theft. Other options I looked at all involved server-side password  decryption, and I wanted 
    something more easy to use from my browser of choice (Opera).
 
-Q: So why not use Opera Link if you're all about Opera?
-A: I did look seriously at Opera Link, however it is closed source and descriptions of exactly how it 
+* Q: So why not use Opera Link if you're all about Opera?
+* A: I did look seriously at Opera Link, however it is closed source and descriptions of exactly how it 
    works did not fill me with confidence, see: 
    (http://my.opera.com/operalink/blog/2011/05/03/security-of-synchronized-passwords-with-opera-link)
    as the Opera company as an entity has both my data and at instances my decryption key.
 
-Q: I need my own server?!
-A: Yes, or at least access to a server running Apache & PHP on which to host the Server Component. 
+* Q: I need my own server?!
+* A: Yes, or at least access to a server running Apache & PHP on which to host the Server Component. 
    SSL connectivity is not *strictly* required to keep the security of your credentials, however 
    it is highly recommended as an unencrypted connection can sniff your URL lists (giving a 
    potential attacker a hit-list to attack) and your login credentials (again the maximum damage 
    that could be done with this is deleting your passwords or retrieval of your URL lists, not comprimise
    your actual passwords).
 
-Q: So how secure is this really?
-A: I'm yet to complete a comprehensive security review of everything but at the moment I'm thinking
+* Q: So how secure is this really?
+* A: I'm yet to complete a comprehensive security review of everything but at the moment I'm thinking
    "pretty secure", especially if SSL is used.
 
-Q: Is there anything wrong that you know about?
-A: There are a few things I'm not totally happy with: 
+* Q: Is there anything wrong that you know about?
+* A: There are a few things I'm not totally happy with: 
 	Ideally for stored credentials (encryption key et cetera) I would prefer to salt the hash before 
 	storing it, this will probably be implemented at some point in the future with the salt stored 
 	server-side.
@@ -101,21 +101,21 @@ A: There are a few things I'm not totally happy with:
 	The authentication system is vulnerable to replay attacks if SSL is not used as the server does 
 	not currently keep a list of nonces (coming soon).
 
-Q: Does it support X?
-A: Probably not, but I'm looking to add features where possible. 
+* Q: Does it support X?
+* A: Probably not, but I'm looking to add features where possible. 
 
-Q: Why is everything so grey and depressing?
-A: Because it's neutral and I'd rather go with something looking drab and boring than luminous!
+* Q: Why is everything so grey and depressing?
+* A: Because it's neutral and I'd rather go with something looking drab and boring than luminous!
 
-Q: What new features are you planning?
-A: New features I want to add pretty soon are:
+* Q: What new features are you planning?
+* A: New features I want to add pretty soon are:
 	Two factor authentication using SSL Client Certificates	
 	Alternative Browser Support
 	Adding a non-superuser interface to the server to allow password viewing without a browser extension
 	Possibly the ability to match both http and https in one URL
 	
-Q: How do I use domain-level matching rather than exact URL & Querystring matches?
-A: Fuzzy URL matching is achieved using the sql LIKE syntax, when saving a URL either alter the URL 
+* Q: How do I use domain-level matching rather than exact URL & Querystring matches?
+* A: Fuzzy URL matching is achieved using the sql LIKE syntax, when saving a URL either alter the URL 
     string to include % as a wildcard or rename the URL in the credentials list screen (double click 
 	the URL) and add a %
 	
@@ -128,21 +128,21 @@ A: Fuzzy URL matching is achieved using the sql LIKE syntax, when saving a URL e
 	SQLite also supports the _ as a single character wildcard that is also supported. For more information
 	see: http://www.sqlite.org/lang_expr.html#like
 	
-Q: Why on earth do my URL encoded get strings get duplicated % signs? A %20 becomes %%20 when I add them!
-A: This is because the % is the wildcard character in SQL LIKE statements, therefore all occurances of 
+* Q: Why on earth do my URL encoded get strings get duplicated % signs? A %20 becomes %%20 when I add them!
+* A: This is because the % is the wildcard character in SQL LIKE statements, therefore all occurances of 
     the % character to be treated as a literal need to be represented as %% in the database. In the 
 	credentials list the data is displayed exactly as it is stored in the database, therefore a % is a 
 	wildcard and %% is a '%' character.
 
-Q: Why doesn't it work with long URLs like the Amazon Web Service Login page?
-A: This is more than likely due to the PHP Suhosin module's get.max_value_length value which defaults to 
+* Q: Why doesn't it work with long URLs like the Amazon Web Service Login page?
+* A: This is more than likely due to the PHP Suhosin module's get.max_value_length value which defaults to 
     256 characters, add/change your php config (/etc/php5/conf.d/suhosin.ini on Debian & Ubuntu) to include 
 	the line
 		suhosin.get.max_value_length = 2048
     and that should more than cover it.
 
-Q: Why does it keep auto updating every 3 days even when it doesn't need to!?
-A: This is due to me not understanding how the auto-update functionality works in Opera Extensions; 
+* Q: Why does it keep auto updating every 3 days even when it doesn't need to!?
+* A: This is due to me not understanding how the auto-update functionality works in Opera Extensions; 
     this was fixed in version 0.99.s
 	
 Libraries and Attributions
@@ -199,7 +199,8 @@ sha(1|256|512)?.js:		http://sourceforge.net/projects/jssha/files/
 	(INCLUDING NEGLIGENCEOR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 	SOFTWARE, EVEN IF ADVISEDOF THE POSSIBILITY OF SUCH DAMAGE.
 
-base64_decode.js		http://phpjs.org/functions/base64_decode:357
+base64_decode.js: 		http://phpjs.org/functions/base64_decode:357
+
 utf8_decode.js			http://phpjs.org/functions/utf8_decode:576
 
 	/* 
@@ -250,7 +251,7 @@ utf8_decode.js			http://phpjs.org/functions/utf8_decode:576
 	 * (http://web2.bitbaro.hu/), paulo kuong, jmweb, Lincoln Ramsay, djmix,
 	 * Pyerre, Jon Hohle, Thiago Mata (http://thiagomata.blog.com), lmeyrick
 	 * (https://sourceforge.net/projects/bcmath-js/this.), Linuxworld, duncan,
-	 * Gilbert, Sanjoy Roy, Shingo, sankai, Oskar Larsson Högfeldt
+	 * Gilbert, Sanjoy Roy, Shingo, sankai, Oskar Larsson Hï¿½gfeldt
 	 * (http://oskar-lh.name/), Denny Wardhana, 0m3r, Everlasto, Subhasis Deb,
 	 * josh, jd, Pier Paolo Ramon (http://www.mastersoup.com/), P, merabi, Soren
 	 * Hansen, EdorFaus, Eugene Bulkin (http://doubleaw.com/), Der Simon
@@ -283,7 +284,7 @@ utf8_decode.js			http://phpjs.org/functions/utf8_decode:576
 	 * (http://www.3rd-Eden.com), Chris McMacken, Yannoo, jakes, gabriel paderni,
 	 * FGFEmperor, Greg Frazier, baris ozdil, 3D-GRAF, daniel airton wermann
 	 * (http://wermann.com.br), Howard Yeend, Diogo Resende, Allan Jensen
-	 * (http://www.winternet.no), Benjamin Lupton, Atli Þór, Maximusya, davook,
+	 * (http://www.winternet.no), Benjamin Lupton, Atli ï¿½ï¿½r, Maximusya, davook,
 	 * Tod Gentille, Ryan W Tenney (http://ryan.10e.us), Nathan Sepulveda, Cord,
 	 * fearphage (http://http/my.opera.com/fearphage/), Victor, Rafal Kukawski
 	 * (http://kukawski.pl), Matteo, Manish, Matt Bradley, Riddler
@@ -326,6 +327,7 @@ utf8_decode.js			http://phpjs.org/functions/utf8_decode:576
 	 */ 
 
 Sizzle Selector Engine:
+
 	/*!
 	 * Sizzle CSS Selector Engine
 	 *  Copyright 2011, The Dojo Foundation
@@ -333,8 +335,8 @@ Sizzle Selector Engine:
 	 *  More information: http://sizzlejs.com/
 	 */
 	 
-AES:	http://www.movable-type.co.uk/scripts/aes.html
-	http://creativecommons.org/licenses/by/3.0/
+AES:	http://www.movable-type.co.uk/scripts/aes.html under creative commons, (http://creativecommons.org/licenses/by/3.0/)
+
 	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 	/*  AES implementation in JavaScript (c) Chris Veness 2005-2011                                   */
 	/*   - see http://csrc.nist.gov/publications/PubsFIPS.html#197                                    */
@@ -344,11 +346,8 @@ json2.js:     http://www.JSON.org/json2.js
 
 jquery.tools.min.1.2.5.js: 		http://flowplayer.org/tools/
 
-REST utils:
-	http://www.gen-x-design.com/archives/create-a-rest-api-with-php/
+REST utils: Originally http://www.gen-x-design.com/archives/create-a-rest-api-with-php/
 	
-Icons: Creative Commons 3.0
-	http://www.fatcow.com/free-icons
+Icons: Creative Commons 3.0: http://www.fatcow.com/free-icons
 	
-GET String parameter parsing in JS:
-	Thanks to Nathan Campos; http://stackoverflow.com/questions/901115/get-query-string-values-in-javascript
+GET String parameter parsing in JS: Thanks to Nathan Campos; http://stackoverflow.com/questions/901115/get-query-string-values-in-javascript
