@@ -8,14 +8,16 @@
 
 
 class restTools {
+    
 	private $additionalHeaders;
+        
 	public function __construct()
 	{
 		$this->additionalHeaders = array();
 	}
 	public function addHeader($newHeader)
 	{
-		array_push($this->additionalHeaders, $newHeader);
+		$this->additionalHeaders[] = $newHeader;
 	}
 	public function sendResponse($body, $status = 200, $content_type = 'application/json')
 	{

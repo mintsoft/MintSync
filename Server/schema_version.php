@@ -14,7 +14,8 @@ class schema_version {
 	{
 		$maxVer = $this->retrieveCurrentSchemaVersion();
 		if($maxVer < 0) 	//replace 0 with dynamically retrieved migration count
-			$this->doMigration();
+			return $this->doMigration();
+        return false;
 	}
 	
 	public function retrieveCurrentSchemaVersion()
@@ -39,6 +40,7 @@ class schema_version {
 	}
 	public function doMigration()
 	{
+		return true;
 	}
 }
 ?>

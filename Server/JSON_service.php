@@ -25,7 +25,12 @@ $db = new PDO(PDO_DSN);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $dbSchema = new schema_version($db);
+
 $dbSchema->checkAndMigrate();
+
+//add header for matching server version against client version
+$serverSchemaVersion = $dbSchema->retrieveCurrentSchemaVersion();
+$restTools->addheader("X-MS-Server-Version: ".$serverSchemaVersion);
 
 //REST services:
 //Convert Type of request into the relevant action
