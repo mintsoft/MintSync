@@ -11,7 +11,7 @@ This is the PHP REST Server component including a rudementary Server UI to acces
 3. Ensure the webserver user can write to the database and the containing folder. 
     (for example: <code>chgrp www-data passwords.db . && chmod g+w passwords.db .</code>)
 4. Edit <code>config.php</code> and set <code>PASSWORD_DATABASE</code> to the absolute path to your database and check that 
-    <code>SERVER_UI_LOCKED</code> is <code>false<code>
+    <code>SERVER_UI_LOCKED</code> is <code>false</code>
 5. Point your browser to the server location (https://example.com/mypasswords) and add your user.
 6. Enter your first user's details and click the submit button. Your new user should be set-up. 
 
@@ -21,4 +21,4 @@ You may add more users now, however once complete it is very important that you 
 
 Notice: It would absolutely be a good idea to backup your password database reguarly (I use Amazon S3 + s3cmd to backup every night).
 
-For more information see the readme in master
+For more information see the README.md in master
