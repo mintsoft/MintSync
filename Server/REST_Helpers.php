@@ -1,6 +1,6 @@
 <?php
 /**
-	class of static methods to wrap up some REST orientated things,
+	Class to wrap up some REST orientated things,
 	
 	based on code from:
 	http://www.gen-x-design.com/archives/create-a-rest-api-with-php/
@@ -8,17 +8,29 @@
 
 
 class restTools {
-
-	public static function sendResponse($body, $status = 200, $content_type = 'application/json')
+	private $additionalHeaders;
+	public function __construct()
+	{
+		$this->additionalHeaders = array();
+	}
+	public function addHeader($newHeader)
+	{
+		array_push($this->additionalHeaders, $newHeader);
+	}
+	public function sendResponse($body, $status = 200, $content_type = 'application/json')
 	{
 		$status_header = 'HTTP/1.1 ' . $status . ' ' . restTools::getStatusCodeMessage($status);
 		
 		// set the status
 		header($status_header);
-		
 		// set the content type
 		header('Content-type: ' . $content_type);
 
+		foreach ($this->additionalHeaders as $thisHeader)
+		{
+			header($thisHeader);
+		}
+		
 		if(is_string($body))
 			echo $body;
 		else

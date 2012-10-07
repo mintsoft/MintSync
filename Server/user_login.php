@@ -46,9 +46,10 @@ class user_login {
 					
 				$srcString = "{$passhash}:{$auth_components[1]}";				
 				$ourAuthStr = base64_encode(hash("sha512",$srcString,true));
+				$restTools = new restTools();
 				if($ourAuthStr!==$auth_components[2])
 				{
-					restTools::sendResponse(array(
+					$restTools->sendResponse(array(
 										"status"=>"fail",
 										"data"=>array(
 											"reason"=>"Authentication Error"

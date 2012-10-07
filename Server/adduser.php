@@ -13,8 +13,10 @@ $stmt->execute();
 
 $results = $stmt->fetchAll();
 
+$restTools = new restTools();
+
 if(isset($results[0]))
-	restTools::sendResponse(array(
+	$restTools->sendResponse(array(
 									"status"=>"fail",
 									"data"=>array(
 										"reason"=>"User Exists"
@@ -28,7 +30,7 @@ $stmt->bindValue(":pass",$_POST['password']);
 $stmt->bindValue(":cpasshash",$_POST['cryptopassword']);
 $stmt->bindValue(":keySlot0",$_POST['keySlot0']);
 $stmt->execute();
-	restTools::sendResponse(array(
+	$restTools->sendResponse(array(
 									"status"=>"ok",
 									"data"=>array(
 										"description"=>"User Added"

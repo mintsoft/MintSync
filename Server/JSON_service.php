@@ -2,10 +2,12 @@
 
 require_once 'server_components.php';
 
+$restTools = new restTools();
+
 //check for HTTPs, if not then JSON an error
 if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS']==="off")	//off is the value when using IIS+ISAPI
 {
-	restTools::sendResponse(array(
+	$restTools->sendResponse(array(
 								"status"=>"fail",
 								"action"=>"",
 								"data"=>array(
@@ -82,7 +84,7 @@ switch($action)
 				$stmt->execute();
 				$rows = $stmt->fetchAll();
 				if(!isset($rows[0]))
-					restTools::sendResponse(array(
+					$restTools->sendResponse(array(
 									"status"=>"fail",
 									"action"=>"insert",
 									"data"=>array(
@@ -99,7 +101,7 @@ switch($action)
 			$row = $stmt->fetch(PDO::FETCH_ASSOC);
 			if((int)$row['Freq']>0 && empty($_REQUEST['force']))
 			{
-				restTools::sendResponse(array(
+				$restTools->sendResponse(array(
 									"status"=>"fail",
 									"action"=>"insert",
 									"data"=>array(
@@ -124,7 +126,7 @@ switch($action)
 			
 				$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			
-				restTools::sendResponse(array(
+				$restTools->sendResponse(array(
 									"status"=>"ok",
 									"action"=>"update",
 									"data"=>array()
@@ -165,7 +167,7 @@ switch($action)
 	
 		if(empty($_REQUEST['ID']))
 		{
-			restTools::sendResponse(array(
+			$restTools->sendResponse(array(
 					"status"=>"fail", 
 					"action"=>"remove",
 					"data"=> array(
@@ -178,7 +180,7 @@ switch($action)
 		$stmt->bindValue(":userID",$userID, 	PDO::PARAM_INT);
 		$stmt->execute();
 
-		restTools::sendResponse(array(
+		$restTools->sendResponse(array(
 					"status"=>"ok", 
 					"action"=>"remove",
 					"data"=> 1
@@ -190,7 +192,7 @@ switch($action)
 		
 		if(empty($_PUT['newURL']) || empty($_PUT['ID']) || $_PUT['newURL']==="null") 
 		{
-			restTools::sendResponse(array(
+			$restTools->sendResponse(array(
 									"status"=>"fail",
 									"action"=>"rename",
 									"data"=>array (
@@ -226,7 +228,7 @@ switch($action)
 			$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			if(isset($rows[0]))
 			{
-				restTools::sendResponse(array(
+				$restTools->sendResponse(array(
 							"status"=>"fail",
 							"action"=>"rename",
 							"data"=>array (
@@ -253,7 +255,7 @@ switch($action)
 		
 		if(isset($rows[0]))
 		{	
-			restTools::sendResponse(array(
+			$restTools->sendResponse(array(
 							"status"=>"ok",
 							"action"=>"rename",
 							"data"=>array()
@@ -261,7 +263,7 @@ switch($action)
 		}
 		else
 		{
-			restTools::sendResponse(array(
+			$restTools->sendResponse(array(
 							"status"=>"fail",
 							"action"=>"rename",
 							"data"=>array (
@@ -276,7 +278,7 @@ switch($action)
 	
 		if(empty($_PUT['newKeySlot']) || empty($_PUT['newKeySlot0PassHash']) ) 
 		{
-			restTools::sendResponse(array(
+			$restTools->sendResponse(array(
 									"status"=>"fail",
 									"action"=>"setKeySlot",
 									"data"=>array (
@@ -302,7 +304,7 @@ switch($action)
 		
 		if(isset($rows[0]))
 		{	
-			restTools::sendResponse(array(
+			$restTools->sendResponse(array(
 							"status"=>"ok",
 							"action"=>"setKeySlot",
 							"data"=>array()
@@ -310,7 +312,7 @@ switch($action)
 		}
 		else
 		{
-			restTools::sendResponse(array(
+			$restTools->sendResponse(array(
 							"status"=>"fail",
 							"action"=>"setKeySlot",
 							"data"=>array (
@@ -334,14 +336,14 @@ switch($action)
 
 		
 		if(isset($rows[0]))
-			restTools::sendResponse(array(
+			$restTools->sendResponse(array(
 						"status"=>"ok", 
 						"action"=>"check",
 						"data"=> $rows[0]['num']
 					),200);
 				
 		else 
-			restTools::sendResponse(array(
+			$restTools->sendResponse(array(
 						"status"=>"fail",
 						"action"=>"check",
 						"data" => array(
@@ -359,14 +361,14 @@ switch($action)
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		
 		if(isset($rows[0]))
-			restTools::sendResponse(array(
+			$restTools->sendResponse(array(
 						"status"=>"ok", 
 						"action"=>"list",
 						"data"=> $rows
 					),200);	//OK
 				
 		else 
-			restTools::sendResponse(array(
+			$restTools->sendResponse(array(
 						"status"=>"fail",
 						"action"=>"list",
 						"data" => array(
@@ -386,13 +388,13 @@ switch($action)
 		
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		if(isset($rows[0]))
-			restTools::sendResponse(array(
+			$restTools->sendResponse(array(
 						"status"=>"ok", 
 						"action"=>"confirmCrypto",
 						"data"=> $rows[0]
 					),200);	//OK
 		else
-			restTools::sendResponse(array(
+			$restTools->sendResponse(array(
 						"status"=>"fail", 
 						"action"=>"confirmCrypto",
 						"data"=> false
@@ -407,13 +409,13 @@ switch($action)
 		
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		if(isset($rows[0]))
-			restTools::sendResponse(array(
+			$restTools->sendResponse(array(
 						"status"=>"ok", 
 						"action"=>"retrieveKeySlot0",
 						"data"=> $rows[0]
 					),200);	//OK
 		else
-			restTools::sendResponse(array(
+			$restTools->sendResponse(array(
 						"status"=>"fail", 
 						"action"=>"retrieveKeySlot0",
 						"data"=> false
@@ -445,14 +447,14 @@ switch($action)
 
 		
 		if(isset($rows[0]))
-			restTools::sendResponse(array(
+			$restTools->sendResponse(array(
 						"status"=>"ok", 
 						"action"=>"retrieve",
 						"data"=> $rows[0]
 					),200);		//OK
 				
 		else 
-			restTools::sendResponse(array(
+			$restTools->sendResponse(array(
 						"status"=>"fail",
 						"action"=>"retrieve",
 						"data" => array(
