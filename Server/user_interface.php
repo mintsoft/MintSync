@@ -12,6 +12,7 @@ if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS']==="off")	//off is the value whe
 
 if(SERVER_UI_LOCKED)
 {
+	header("Location: ./UI");
 	exit();
 }
 function header_html ()
@@ -19,7 +20,7 @@ function header_html ()
 <!DOCTYPE HTML>
  <html>
  	<head>
-	<title>MintSync Serverside User Interface</title>
+	<title>MintSync Server Interface</title>
 	<link rel="stylesheet" href="css/client-common.css" type="text/css" />
 	<link rel="stylesheet" href="css/ui.css" type="text/css" />
 	<script type="text/javascript" src='js/jquery.js'></script>
@@ -107,8 +108,9 @@ switch($action)
 	default:
 		header_html();
 ?>
-		<h1>ServerSide-User Interface</h1>
+		<h1>MintSync Server Interface</h1>
 		<ul class='styled'>
+			<li><span><a href='./UI'>Read Only Client UI</a></span></li>
 			<li><span><a href='?action=backup'>Backup Password Database (encrypted)</a> - <a href='?action=backup&amp;output=browser'>View in browser</a></span></li>
 			<li><a href='?action=dbdump'>Debug Database View (encrypted)</a></li>
 			<li><a href='?action=adduser'>Add User</a></li>
