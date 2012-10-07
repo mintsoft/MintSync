@@ -1,7 +1,0 @@
-Things to fix if possible
-=========================
-
-Fix the "close the popup whilst the input is highlighted issue"
-	- not really possible until opera add popup.onclose callback
-Reset the status of the button text/colour on Speeddial pages
-	- does not appear to be possible currently
