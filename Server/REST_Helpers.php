@@ -6,19 +6,45 @@
 	http://www.gen-x-design.com/archives/create-a-rest-api-with-php/
 */
 
-
 class restTools {
     
 	private $additionalHeaders;
-        
+    private $debugHeaderCount;
+    
 	public function __construct()
 	{
 		$this->additionalHeaders = array();
+        $this->debugHeaderCount = 0;
 	}
+    
+    /**
+     * Adds an HTTP header to the final response
+     * 
+     * @param string $newHeader an HTTP Header
+     */
 	public function addHeader($newHeader)
 	{
 		$this->additionalHeaders[] = $newHeader;
 	}
+    
+    /**
+     * Adds a variable to special debug headers
+     * @param type $str
+     */
+    public function addDebugHeader($str)
+    {
+        $this->additionalHeaders[] = "X-MS-Debug:{$this->debugHeaderCount} {$str}";
+        $this->debugHeaderCount++;
+    }
+    
+    /**
+     * Sends the REST response to the client/browser and halts execution
+     * 
+     * @param mixed $body The body of the request to send, if a string 
+     *  it will be sent as is, if an object it will be encoded as JSON
+     * @param integer $status optional HTTP Status Code
+     * @param string $content_type optional Content-Type
+     */
 	public function sendResponse($body, $status = 200, $content_type = 'application/json')
 	{
 		$status_header = 'HTTP/1.1 ' . $status . ' ' . restTools::getStatusCodeMessage($status);
@@ -41,7 +67,12 @@ class restTools {
 		exit;
 	}
 	
-	//nice and hacky
+	/**
+     * getStatusCodeMessage, returns the associated message for an 
+     *  HTTP status code
+     * @param integer $status
+     * @return string HTTP description
+     */
 	public static function getStatusCodeMessage($status)
 	{
 		$codes = Array(

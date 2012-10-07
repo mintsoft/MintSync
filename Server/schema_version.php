@@ -1,7 +1,7 @@
 <?php
-/*
-	Holds methods for checking the schema version of the server and migrating the database on demand if required.
-*/
+/**
+ * Holds methods for checking the schema version of the server and migrating the database on demand if required.
+ */
 
 class schema_version {
 	private $db;
@@ -9,8 +9,13 @@ class schema_version {
 	{
 		$this->db = $pdo;
 	}
-	
-	public function checkAndMigrate()
+    
+    /**
+     * Checks if any migrations are due against this schema and performs them
+     * if necessary
+     * @return boolean
+     */	
+    public function checkAndMigrate()
 	{
 		$maxVer = $this->retrieveCurrentSchemaVersion();
 		if($maxVer < 0) 	//replace 0 with dynamically retrieved migration count
@@ -18,6 +23,11 @@ class schema_version {
         return false;
 	}
 	
+    /**
+     * Returns the current schema version from the schema_version table,
+     * if the table does not exist, will create it an intialise to version 0
+     * @return integer
+     */
 	public function retrieveCurrentSchemaVersion()
 	{
 		//check if table exists
@@ -38,6 +48,12 @@ class schema_version {
 		$resultSet = $stmt->fetchAll();
 		return $resultSet[0]['currentVersion'];
 	}
+    
+    /**
+     * Will perform migrations on the database from a source
+     * TODO: Implement and decide on structure
+     * @return boolean
+     */
 	public function doMigration()
 	{
 		return true;

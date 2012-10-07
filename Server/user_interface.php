@@ -1,8 +1,9 @@
 <?php
-
 /**
-	User Interface
-*/
+ * TODO: Refactor this page massively.
+ * 
+ * User Interface
+ */
 if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS']==="off")	//off is the value when using IIS+ISAPI
 {
 	echo "<h1>Error: HTTPS is REQUIRED</h1>
@@ -15,6 +16,9 @@ if(SERVER_UI_LOCKED)
 	header("Location: ./UI");
 	exit();
 }
+/**
+ * Output the Header HTML markup
+ */
 function header_html ()
 {	?>
 <!DOCTYPE HTML>
@@ -33,6 +37,9 @@ function header_html ()
 <?php
 }
 
+/**
+ * Output the footer markup
+ */
 function footer_html ()
 {	?>
 	</div>
