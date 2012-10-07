@@ -19,7 +19,7 @@ if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS']==="off")	//off is the value whe
 $userID = user_login::validate();
 
 $domain = ""; 
-$returnValues = array();
+$action = "";
 
 $db = new PDO(PDO_DSN);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -36,14 +36,10 @@ switch($request)
 	case "get":							//RETRIEVE for old Versions
 		if(isset($_GET['action']))
 			$action = $_GET['action'];
-		else
-			$action = "";
 	break;
 	case "post":						//INSERT or RETRIEVE or CHECK (works for all length URLs)
 		if(isset($_GET['action']))
 			$action = $_GET['action'];
-		else
-			$action = "";
 	break;
 	case "put":							//UPDATE 
 		$action = $_GET['action'];
