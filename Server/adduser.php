@@ -1,7 +1,6 @@
 <?php
 
-require_once 'config.php';
-require_once 'REST_Helpers.php';
+require_once 'server_components.php';
 
 if(SERVER_UI_LOCKED)
 	exit();

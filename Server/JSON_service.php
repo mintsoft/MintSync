@@ -1,7 +1,6 @@
 <?php 
 
-require_once 'REST_Helpers.php';
-require_once 'user_login.php';
+require_once 'server_components.php';
 
 //check for HTTPs, if not then JSON an error
 if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS']==="off")	//off is the value when using IIS+ISAPI
@@ -23,6 +22,9 @@ $returnValues = array();
 $db = new PDO(PDO_DSN);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+$dbSchema = new schema_version($db);
+$dbSchema->checkAndMigrate();
+
 //REST services:
 //Convert Type of request into the relevant action
 $request = strtolower($_SERVER['REQUEST_METHOD']);
@@ -35,7 +37,7 @@ switch($request)
 		else
 			$action = "";
 	break;
-	case "post":							//INSERT or RETRIEVE or CHECK (works for all length URLs)
+	case "post":						//INSERT or RETRIEVE or CHECK (works for all length URLs)
 		if(isset($_GET['action']))
 			$action = $_GET['action'];
 		else
@@ -51,7 +53,6 @@ switch($request)
 		$action = "remove";
 	break;
 }
-
 
 //do logging if enabled
 if(LOGGING && !(isset($LOGLEVEL[$action]) && $LOGLEVEL[$action]==false))		//if log level is undefined, then assume we wish to log
