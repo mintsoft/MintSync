@@ -101,9 +101,12 @@ switch($action)
 			<li><h2>Encryption</h2></li>
 			<li><label>Crypto Password</label><input type='password' name='cryptopassword1' id='cryptopassword1' required/></li>
 			<li><p>
-					This is the password you will use to encrypt your keySlot with. The actual encryption key will be a randomly generated KeySlot (512bit/64character key) concatenated with the rowSalt. The KeySlot will be stored server-side encrypted with a SHA-256 of the SHA-512 of the password entered here.</p>
-					
-					<p>The information you enter here will NOT be sent to the server as it is, it will be hashed twice before transmission. Therefore the server is able to verify the encryption key entered but does not itself contain enough information to decrypt your credentials.</p></li>
+					This is the password you will use to encrypt your keySlot with. The actual encryption key will be a randomly generated KeySlot (512bit/64character key) concatenated with the rowSalt. The KeySlot will be stored server-side encrypted with a SHA-256 of the SHA-512 of the password entered here.
+                </p>
+				<p>
+                    The information you enter here will NOT be sent to the server as it is, it will be hashed twice before transmission. Therefore the server is able to verify the encryption key entered but does not itself contain enough information to decrypt your credentials.
+                </p>
+            </li>
 			<li><label>Crypto Password (again)</label><input type='password' name='cryptopassword2' id='cryptopassword2' required/></li>
 		</ul>
 		<p class='centeredContents'><input type='submit' /></p>
