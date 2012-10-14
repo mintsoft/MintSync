@@ -1,6 +1,6 @@
 <?php
 
-define("PASSWORD_DATABASE", "/var/wwws/code/MintSync/master/Server/db/pass.db");
+define("PASSWORD_DATABASE", "/var/wwws/code/MintSync/ServerUI/db/pass.db");
 define("PDO_DSN",'sqlite:'.PASSWORD_DATABASE);
 define("LOGGING", true);
 define("SERVER_UI_LOCKED", false);
