@@ -31,19 +31,18 @@ class mintsync_server {
     /**
      * Retrieve a credentials Object
      */
-    public function retrieve()
+    public function retrieve($request)
     {
-        if(isset($_REQUEST['URL']))
-			$domain = strtolower($_REQUEST['URL']);
-		if(isset($_REQUEST['ID']))
+		if(isset($request['ID']))
 		{
 			$stmt = $this->db->prepare("SELECT auth.*, User.keySlot0 FROM auth 
 									INNER JOIN User ON(User.ID=auth.userID) 
 									WHERE auth.ID=:authID AND userID=:userID;");
-			$stmt->bindValue(":authID",	$_REQUEST['ID'], PDO::PARAM_INT );
+			$stmt->bindValue(":authID",	$request['ID'], PDO::PARAM_INT );
 		}
 		else
 		{
+            $domain = strtolower($request['URL']);
 			$stmt = $this->db->prepare("SELECT auth.*, User.keySlot0 FROM auth 
 									INNER JOIN User ON(User.ID=auth.userID) 
 									WHERE :url LIKE URL AND userID=:userID;");

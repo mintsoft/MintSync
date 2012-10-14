@@ -74,7 +74,8 @@ switch($action)
     case NULL:
     case "":
     case "retrieve":   //GET or POST Request
-        $mintsyncServer->retrieve();
+        if(!empty($_REQUEST['ID']) || !empty($_REQUEST['URL']))
+            $mintsyncServer->retrieve($_REQUEST);
     break;
     case "list":			//GET Request
         $mintsyncServer->listCredentials();
@@ -112,11 +113,11 @@ switch($action)
 }
 $restTool = new restTools();
 $restTool->sendResponse(array(
-                                "status" => "fail",
-                                "action" => $action,
-                                "data" => array (
-                                    "reason" => "Required data was missing"
-                                )
-                            ),400);	//Bad Request
+                        "status" => "fail",
+                        "action" => $action,
+                        "data" => array (
+                            "reason" => "Required data was missing"
+                        )
+                    ),400);	//Bad Request
 
 ?>
