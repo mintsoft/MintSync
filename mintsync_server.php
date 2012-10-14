@@ -78,11 +78,8 @@ class mintsync_server {
     /**
      * Check for the existance of a credentialsObject for a URL
      */
-    public function check() 
+    public function check($domain) 
     {
-        if(isset($_REQUEST['URL']))
-			$domain = strtolower($_REQUEST['URL']);
-		
 		$stmt = $this->db->prepare("SELECT COUNT(*) num FROM auth WHERE :url LIKE URL AND userID=:userID;");
 		$stmt->bindValue(":url",	$domain, PDO::PARAM_STR );
 		$stmt->bindValue(":userID",	$this->userID, PDO::PARAM_INT );
@@ -115,7 +112,6 @@ class mintsync_server {
      */
     public function listCredentials()
     {
-        
 		$stmt = $this->db->prepare("SELECT ID, URL FROM auth WHERE userID=:userID;");
 		$stmt->bindValue(":userID",$this->userID, PDO::PARAM_INT );
 		$stmt->execute();
@@ -147,113 +143,100 @@ class mintsync_server {
      */
     public function save()
     {
-        if(isset($_REQUEST['URL']) && isset($_REQUEST['rowSalt']) && isset($_REQUEST['Credentials']))
-		{
-			
-			if(!empty($_REQUEST['cryptoHash']))
-			{
-				$stmt = $this->db->prepare("SELECT * FROM User WHERE ID=:userID AND keySlot0PassHash=:cryptoHash");
-				$stmt->bindValue(":cryptoHash",$_REQUEST['cryptoHash']);
-				$stmt->bindValue(":userID",$this->userID);
-				$stmt->execute();
-				$rows = $stmt->fetchAll();
-				if(!isset($rows[0]))
-					$this->restTool->sendResponse(array(
-									"status"=>"fail",
-									"action"=>"insert",
-									"data"=>array(
-										"reason"=>"Inconsistent Encryption Key"
-									)
-								),417);		//Expectation Failed
-			}
-		
-			$stmt = $this->db->prepare("SELECT COUNT(*) AS Freq FROM auth WHERE :url LIKE URL AND userID=:userID;");
-			$stmt->bindValue(":url",strtolower($_REQUEST['URL']));
-			$stmt->bindValue(":userID",$this->userID);
-			$stmt->execute();
-		
-			$row = $stmt->fetch(PDO::FETCH_ASSOC);
-			if((int)$row['Freq']>0 && empty($_REQUEST['force']))
-			{
-				$this->restTool->sendResponse(array(
-									"status"=>"fail",
-									"action"=>"insert",
-									"data"=>array(
-										"reason"=>"Record already exists"
-									)
-								),409);		//Conflict
-			}
-			elseif((int)$row['Freq']>0 && !empty($_REQUEST['force']))
-			{
-				$stmt = $this->db->prepare("UPDATE auth SET Salt=:salt, Credentials=:credentials WHERE :url LIKE URL AND userID=:userID;");
-			
-				$stmt->bindValue(":url", strtolower($_REQUEST['URL']));
-				$stmt->bindValue(":userID", $this->userID);
-				$stmt->bindValue(":salt", $_REQUEST['rowSalt']);
-				$stmt->bindValue(":credentials", $_REQUEST['Credentials']);
-				$stmt->execute();
-			
-				$stmt = $this->db->prepare("SELECT * FROM auth WHERE URL=:url AND userID=:userID;");
-				$stmt->bindValue(":url", strtolower($_REQUEST['URL']), PDO::PARAM_STR );
-				$stmt->bindValue(":userID", $this->userID);
-				$stmt->execute();
-			
-				$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-			
-				$this->restTool->sendResponse(array(
-									"status"=>"ok",
-									"action"=>"update",
-									"data"=>array()
-								),205);		//Reset Content
-			}
-			else
-			{
-				$stmt = $this->db->prepare("INSERT INTO auth(URL,Salt,Credentials,userID) VALUES(:url,:salt,:credentials,:userID);");
-			
-				$stmt->bindValue(":url", str_replace(
-										array("%"),
-										array("%%"),
-										strtolower($_REQUEST['URL']))
-								);
-				$stmt->bindValue(":salt", $_REQUEST['rowSalt']);
-				$stmt->bindValue(":credentials", $_REQUEST['Credentials']);
-				$stmt->bindValue(":userID", $this->userID);
-				$stmt->execute();
-			
-				$stmt = $this->db->prepare("SELECT * FROM auth WHERE URL=:url AND userID=:userID");
-				$stmt->bindValue(":url", strtolower($_REQUEST['URL']), PDO::PARAM_STR );
-				$stmt->bindValue(":userID", $this->userID);
-				$stmt->execute();
-			
-				$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-			
-				echo json_encode(array(
-									"status"=>"ok",
-									"action"=>"insert",
-									"data"=>array()
-								),200);		//OK
-			}
-		}
+
+        if(!empty($_REQUEST['cryptoHash']))
+        {
+            $stmt = $this->db->prepare("SELECT * FROM User WHERE ID=:userID AND keySlot0PassHash=:cryptoHash");
+            $stmt->bindValue(":cryptoHash",$_REQUEST['cryptoHash']);
+            $stmt->bindValue(":userID",$this->userID);
+            $stmt->execute();
+            $rows = $stmt->fetchAll();
+            if(!isset($rows[0]))
+                $this->restTool->sendResponse(array(
+                                "status"=>"fail",
+                                "action"=>"insert",
+                                "data"=>array(
+                                    "reason"=>"Inconsistent Encryption Key"
+                                )
+                            ),417);		//Expectation Failed
+        }
+
+        $stmt = $this->db->prepare("SELECT COUNT(*) AS Freq FROM auth WHERE :url LIKE URL AND userID=:userID;");
+        $stmt->bindValue(":url",strtolower($_REQUEST['URL']));
+        $stmt->bindValue(":userID",$this->userID);
+        $stmt->execute();
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if((int)$row['Freq']>0 && empty($_REQUEST['force']))
+        {
+            $this->restTool->sendResponse(array(
+                                "status"=>"fail",
+                                "action"=>"insert",
+                                "data"=>array(
+                                    "reason"=>"Record already exists"
+                                )
+                            ),409);		//Conflict
+        }
+        elseif((int)$row['Freq']>0 && !empty($_REQUEST['force']))
+        {
+            $stmt = $this->db->prepare("UPDATE auth SET Salt=:salt, Credentials=:credentials WHERE :url LIKE URL AND userID=:userID;");
+
+            $stmt->bindValue(":url", strtolower($_REQUEST['URL']));
+            $stmt->bindValue(":userID", $this->userID);
+            $stmt->bindValue(":salt", $_REQUEST['rowSalt']);
+            $stmt->bindValue(":credentials", $_REQUEST['Credentials']);
+            $stmt->execute();
+
+            $stmt = $this->db->prepare("SELECT * FROM auth WHERE URL=:url AND userID=:userID;");
+            $stmt->bindValue(":url", strtolower($_REQUEST['URL']), PDO::PARAM_STR );
+            $stmt->bindValue(":userID", $this->userID);
+            $stmt->execute();
+
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $this->restTool->sendResponse(array(
+                                "status"=>"ok",
+                                "action"=>"update",
+                                "data"=>array()
+                            ),205);		//Reset Content
+        }
+        else
+        {
+            $stmt = $this->db->prepare("INSERT INTO auth(URL,Salt,Credentials,userID) VALUES(:url,:salt,:credentials,:userID);");
+
+            $stmt->bindValue(":url", str_replace(
+                                    array("%"),
+                                    array("%%"),
+                                    strtolower($_REQUEST['URL']))
+                            );
+            $stmt->bindValue(":salt", $_REQUEST['rowSalt']);
+            $stmt->bindValue(":credentials", $_REQUEST['Credentials']);
+            $stmt->bindValue(":userID", $this->userID);
+            $stmt->execute();
+
+            $stmt = $this->db->prepare("SELECT * FROM auth WHERE URL=:url AND userID=:userID");
+            $stmt->bindValue(":url", strtolower($_REQUEST['URL']), PDO::PARAM_STR );
+            $stmt->bindValue(":userID", $this->userID);
+            $stmt->execute();
+
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            echo json_encode(array(
+                                "status"=>"ok",
+                                "action"=>"insert",
+                                "data"=>array()
+                            ),200);		//OK
+        }
     }
     
     /**
      * Deletes a CredentialsObject
      */
-    public function remove()
+    public function remove($credentialsID)
     {
-		if(empty($_REQUEST['ID']))
-		{
-			$this->restTool->sendResponse(array(
-					"status"=>"fail", 
-					"action"=>"remove",
-					"data"=> array(
-						"reason" => "A piece of information is missing: ID"
-					)
-				),400);	//Bad Request
-		}
 		$stmt = $this->db->prepare("DELETE FROM auth WHERE ID=:id AND userID=:userID;");
-		$stmt->bindValue(":id",$_REQUEST['ID'], PDO::PARAM_INT);
-		$stmt->bindValue(":userID",$this->userID, 	PDO::PARAM_INT);
+		$stmt->bindValue(":id", $credentialsID,     PDO::PARAM_INT);
+		$stmt->bindValue(":userID", $this->userID,  PDO::PARAM_INT);
 		$stmt->execute();
 
 		$this->restTool->sendResponse(array(
@@ -266,23 +249,13 @@ class mintsync_server {
     
     /**
      * Changes the URL for a credentialsObject
+     * @param integer $ID The UniqueID of the credentialsObject
+     * @param string $newURL The New URL 
      */
-    public function rename()
+    public function rename($ID, $newURL)
     {
-        global $_PUT;
-		if(empty($_PUT['newURL']) || empty($_PUT['ID']) || $_PUT['newURL']==="null") 
-		{
-			$this->restTool->sendResponse(array(
-									"status"=>"fail",
-									"action"=>"rename",
-									"data"=>array (
-										"reason"=>"Required data was missing"
-									)
-								),400);	//Bad Request
-		}
-		
 		//is this new URL a LIKE pattern?
-		if(preg_match("/([^%]%[^%])|(^%[^%])|([^%]%$)|(^%$)/", $_PUT['newURL']))
+		if(preg_match("/([^%]%[^%])|(^%[^%])|([^%]%$)|(^%$)/", $newURL))
 		{
 			//check that this isn't a LIKE pattern that conflicts with another LIKE pattern
 			//this will deal with *most* eventualities, however in some specific situations it will not detect a conflict
@@ -299,10 +272,10 @@ class mintsync_server {
 			
 			$stmt = $this->db->prepare("SELECT * FROM auth WHERE (URL LIKE :url1 OR :url2 LIKE URL) AND NOT ID=:ID AND userID=:userID");
 			
-			$stmt->bindValue(":url1", 	$_PUT['newURL'],	PDO::PARAM_STR);
-			$stmt->bindValue(":url2", 	$_PUT['newURL'],	PDO::PARAM_STR);
-			$stmt->bindValue(":ID", 	$_PUT['ID'], 		PDO::PARAM_INT);
-			$stmt->bindValue(":userID",	$this->userID, 			PDO::PARAM_INT);
+			$stmt->bindValue(":url1", 	$newURL,        PDO::PARAM_STR);
+			$stmt->bindValue(":url2", 	$newURL,        PDO::PARAM_STR);
+			$stmt->bindValue(":ID", 	$ID,            PDO::PARAM_INT);
+			$stmt->bindValue(":userID",	$this->userID, 	PDO::PARAM_INT);
 			$stmt->execute();
 			
 			$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -320,15 +293,15 @@ class mintsync_server {
 		
 		$stmt = $this->db->prepare("UPDATE auth SET URL=:newURL WHERE ID=:ID AND userID=:userID;");
 		
-		$stmt->bindValue(":newURL",	strtolower($_PUT['newURL']), 	PDO::PARAM_STR);
-		$stmt->bindValue(":ID",		$_PUT['ID'],	 				PDO::PARAM_INT);
-		$stmt->bindValue(":userID",	$this->userID,		 			PDO::PARAM_INT);
+		$stmt->bindValue(":newURL",	strtolower($newURL), 	PDO::PARAM_STR);
+		$stmt->bindValue(":ID",		$ID,	 				PDO::PARAM_INT);
+		$stmt->bindValue(":userID",	$this->userID,		 	PDO::PARAM_INT);
 		$stmt->execute();
 		
 		$stmt = $this->db->prepare("SELECT * FROM auth WHERE URL=:url AND ID=:ID AND userID=:userID;");
-		$stmt->bindValue(":url", 	strtolower($_PUT['newURL']), 	PDO::PARAM_STR );
-		$stmt->bindValue(":ID",		$_PUT['ID'], 					PDO::PARAM_INT );
-		$stmt->bindValue(":userID", $this->userID, 					PDO::PARAM_INT );
+		$stmt->bindValue(":url", 	strtolower($newURL), 	PDO::PARAM_STR );
+		$stmt->bindValue(":ID",		$ID, 					PDO::PARAM_INT );
+		$stmt->bindValue(":userID", $this->userID, 			PDO::PARAM_INT );
 		$stmt->execute();
 	
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -354,33 +327,24 @@ class mintsync_server {
     }
     
     /**
-     * Updates a user's KeySlot
+     * Replaces a user's keyslot with a new one
+     * @param integer $keySlotIndex        Currently unused, reserved for future use
+     * @param string $newKeySlot          The new keyslot value
+     * @param string $newKeySlotPassHash  The Hash of the new keyslot encryption key
      */
-    public function setKeySlot($keyslotIndex=0)
+    public function setKeySlot($keySlotIndex, $newKeySlot, $newKeySlotPassHash)
     {
-        global $_PUT;
-		if(empty($_PUT['newKeySlot']) || empty($_PUT['newKeySlot0PassHash']) ) 
-		{
-			$this->restTool->sendResponse(array(
-									"status"=>"fail",
-									"action"=>"setKeySlot",
-									"data"=>array (
-										"reason"=>"Required data was missing"
-									)
-								),400);	//Bad Request
-		}
+		$stmt = $this->db->prepare("UPDATE User SET keySlot0=:keySlot, keySlot0PassHash=:keySlotPassHash WHERE ID=:userID;");
 		
-		$stmt = $this->db->prepare("UPDATE User SET keySlot0=:keySlot0, keySlot0PassHash=:keySlot0PassHash WHERE ID=:userID;");
-		
-		$stmt->bindValue(":keySlot0",			$_PUT['newKeySlot'],			PDO::PARAM_STR);
-		$stmt->bindValue(":keySlot0PassHash",	$_PUT['newKeySlot0PassHash'],	PDO::PARAM_STR);
-		$stmt->bindValue(":userID",				$this->userID,					PDO::PARAM_INT);
+		$stmt->bindValue(":keySlot",			$newKeySlot,			PDO::PARAM_STR);
+		$stmt->bindValue(":keySlotPassHash",	$newKeySlotPassHash,	PDO::PARAM_STR);
+		$stmt->bindValue(":userID",				$this->userID,			PDO::PARAM_INT);
 		$stmt->execute();
 		
-		$stmt = $this->db->prepare("SELECT * FROM User WHERE keySlot0=:keySlot0 AND keySlot0PassHash=:keySlot0PassHash AND ID=:userID;");
-		$stmt->bindValue(":keySlot0",			$_PUT['newKeySlot'],			PDO::PARAM_STR);
-		$stmt->bindValue(":keySlot0PassHash",	$_PUT['newKeySlot0PassHash'],	PDO::PARAM_STR);
-		$stmt->bindValue(":userID",				$this->userID,					PDO::PARAM_INT);
+		$stmt = $this->db->prepare("SELECT * FROM User WHERE keySlot0=:keySlot AND keySlot0PassHash=:keySlotPassHash AND ID=:userID;");
+		$stmt->bindValue(":keySlot",			$newKeySlot,			PDO::PARAM_STR);
+		$stmt->bindValue(":keySlotPassHash",	$newKeySlotPassHash,	PDO::PARAM_STR);
+		$stmt->bindValue(":userID",				$this->userID,			PDO::PARAM_INT);
 		$stmt->execute();
 	
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -408,15 +372,13 @@ class mintsync_server {
     
     /**
      * Verify the hash of the Cryptopassword against the stored one in the db
+     * @param type $cryptoHash  The 
      */
-    public function confirmCrypto()
+    public function confirmCrypto($cryptoHash)
     {
-        	
-		$testHash = $_GET['cryptoHash'];
-	
 		$stmt = $this->db->prepare("SELECT keySlot0PassHash AS cryptoPassHash FROM User WHERE ID=:userID AND keySlot0PassHash=:hash;");
-		$stmt->bindValue(":userID",$this->userID, PDO::PARAM_INT );
-		$stmt->bindValue(":hash",$testHash, PDO::PARAM_STR );
+		$stmt->bindValue(":userID", $this->userID,   PDO::PARAM_INT );
+		$stmt->bindValue(":hash", $cryptoHash,       PDO::PARAM_STR );
 		$stmt->execute();
 		
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -439,11 +401,11 @@ class mintsync_server {
     }
     
     /**
-     * Retrieves the key for a keySlot
+     * Retrieves the key for a keyslot
+     * @param integer $keySlotIndex Currently unused, reserved for future use
      */
-    public function retrieveKeySlot($keyslotIndex=0)
+    public function retrieveKeySlot($keySlotIndex=0)
     {
-        
 		$stmt = $this->db->prepare("SELECT keySlot0PassHash, keySlot0 FROM User WHERE ID=:userID");
 		$stmt->bindValue(":userID",$this->userID, PDO::PARAM_INT );
 		$stmt->execute();

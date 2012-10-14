@@ -71,33 +71,83 @@ if(LOGGING && !(isset($LOGLEVEL[$action]) && $LOGLEVEL[$action]==false))		//if l
 
 switch($action)
 {
-	case "save":		//POST
-        $mintsyncServer->save();
-	break;
-	case "remove":			//DELETE Request
-        $mintsyncServer->remove();
-	break;
-	case "rename":			//PUT Request
-		$mintsyncServer->rename();
-	break;
-	case "setKeySlot": 	//PUT Request
-        $mintsyncServer->setKeySlot(0);
-	break;
-	case "check":			//GET or POST Request
-        $mintsyncServer->check();
-	break;
-	case "list":			//GET Request
+    case NULL:
+    case "":
+    case "retrieve":   //GET or POST Request
+        $mintsyncServer->retrieve();
+    break;
+    case "list":			//GET Request
         $mintsyncServer->listCredentials();
 	break;
-	case "confirmCrypto":		//check that the hash serverside is the same as the sent one
-        $mintsyncServer->confirmCrypto();
+	case "save":		//POST
+        if(isset($_REQUEST['URL']) && isset($_REQUEST['rowSalt']) && isset($_REQUEST['Credentials']))
+            $mintsyncServer->save();
 	break;
-	case "retrieveKeySlot0":		//check that the hash serverside is the same as the sent one
-		$mintsyncServer->retrieveKeySlot(0);
+	case "remove":			//DELETE Request
+        if(empty($_REQUEST['ID']))
+		{
+			$this->restTool->sendResponse(array(
+					"status"=>"fail", 
+					"action"=>"remove",
+					"data"=> array(
+						"reason" => "A piece of information is missing: ID"
+					)
+				),400);	//Bad Request
+		}
+        
+        $mintsyncServer->remove($_REQUEST['ID']);
+	break;
+	case "rename":			//PUT Request
+		if(empty($_PUT['newURL']) || empty($_PUT['ID']) || $_PUT['newURL']==="null") 
+		{
+			$this->restTool->sendResponse(array(
+									"status"=>"fail",
+									"action"=>"rename",
+									"data"=>array (
+										"reason"=>"Required data was missing"
+									)
+								),400);	//Bad Request
+		}
+        
+		$mintsyncServer->rename($_PUT['ID'], $_PUT['newURL']);
+	break;
+	case "check":			//GET or POST Request
+        if(isset($_REQUEST['URL']))
+		{
+            $domain = strtolower($_REQUEST['URL']);
+            $mintsyncServer->check($domain);
+        }
+	break;
+	case "confirmCrypto":		//check that the hash serverside is the same as the sent one
+        if(isset($_GET['cryptoHash']))
+            $mintsyncServer->confirmCrypto($_GET['cryptoHash']);
+	break;
+	case "retrieveKeySlot0":	
+		$mintsyncServer->retrieveKeySlot();
     break;
-	case "retrieve":			//GET or POST Request
-	default:
-		$mintsyncServer->retrieve();
+    case "setKeySlot": 	//PUT Request
+        global $_PUT;
+		if(empty($_PUT['newKeySlot']) || empty($_PUT['newKeySlot0PassHash']) ) 
+		{
+			$this->restTool->sendResponse(array(
+									"status"=>"fail",
+									"action"=>"setKeySlot",
+									"data"=>array (
+										"reason"=>"Required data was missing"
+									)
+								),400);	//Bad Request
+		}
+		
+        $mintsyncServer->setKeySlot(0, $_PUT['newKeySlot'], $_PUT['newKeySlot0PassHash']);
+	break;
 }
+
+$this->restTool->sendResponse(array(
+                                "status" => "fail",
+                                "action" => $action,
+                                "data" => array (
+                                    "reason" => "Required data was missing"
+                                )
+                            ),400);	//Bad Request
 
 ?>
