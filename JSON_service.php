@@ -5,8 +5,8 @@ require_once 'server_components.php';
 //check for HTTPs, if not then JSON an error
 if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS']==="off")	//off is the value when using IIS+ISAPI
 {
-    $restTools = new restTools();
-	$restTools->sendResponse(array(
+    $restTool = new restTools();
+	$restTool->sendResponse(array(
 								"status"=>"fail",
 								"action"=>"",
 								"data"=>array(
@@ -80,69 +80,38 @@ switch($action)
         $mintsyncServer->listCredentials();
 	break;
 	case "save":		//POST
-        if(isset($_REQUEST['URL']) && isset($_REQUEST['rowSalt']) && isset($_REQUEST['Credentials']))
+        if(!empty($_REQUEST['URL']) && !empty($_REQUEST['rowSalt']) && !empty($_REQUEST['Credentials']))
             $mintsyncServer->save();
 	break;
 	case "remove":			//DELETE Request
-        if(empty($_REQUEST['ID']))
-		{
-			$this->restTool->sendResponse(array(
-					"status"=>"fail", 
-					"action"=>"remove",
-					"data"=> array(
-						"reason" => "A piece of information is missing: ID"
-					)
-				),400);	//Bad Request
-		}
-        
-        $mintsyncServer->remove($_REQUEST['ID']);
+        if(!empty($_REQUEST['ID']))
+            $mintsyncServer->remove($_REQUEST['ID']);
 	break;
 	case "rename":			//PUT Request
-		if(empty($_PUT['newURL']) || empty($_PUT['ID']) || $_PUT['newURL']==="null") 
-		{
-			$this->restTool->sendResponse(array(
-									"status"=>"fail",
-									"action"=>"rename",
-									"data"=>array (
-										"reason"=>"Required data was missing"
-									)
-								),400);	//Bad Request
-		}
-        
-		$mintsyncServer->rename($_PUT['ID'], $_PUT['newURL']);
+		if(!empty($_PUT['newURL']) && !empty($_PUT['ID']) && !$_PUT['newURL']==="null") 
+            $mintsyncServer->rename($_PUT['ID'], $_PUT['newURL']);
 	break;
 	case "check":			//GET or POST Request
-        if(isset($_REQUEST['URL']))
+        if(!empty($_REQUEST['URL']))
 		{
             $domain = strtolower($_REQUEST['URL']);
             $mintsyncServer->check($domain);
         }
 	break;
 	case "confirmCrypto":		//check that the hash serverside is the same as the sent one
-        if(isset($_GET['cryptoHash']))
+        if(!empty($_GET['cryptoHash']))
             $mintsyncServer->confirmCrypto($_GET['cryptoHash']);
 	break;
 	case "retrieveKeySlot0":	
 		$mintsyncServer->retrieveKeySlot();
     break;
     case "setKeySlot": 	//PUT Request
-        global $_PUT;
-		if(empty($_PUT['newKeySlot']) || empty($_PUT['newKeySlot0PassHash']) ) 
-		{
-			$this->restTool->sendResponse(array(
-									"status"=>"fail",
-									"action"=>"setKeySlot",
-									"data"=>array (
-										"reason"=>"Required data was missing"
-									)
-								),400);	//Bad Request
-		}
-		
-        $mintsyncServer->setKeySlot(0, $_PUT['newKeySlot'], $_PUT['newKeySlot0PassHash']);
+		if(!empty($_PUT['newKeySlot']) && !empty($_PUT['newKeySlot0PassHash']) ) 
+            $mintsyncServer->setKeySlot(0, $_PUT['newKeySlot'], $_PUT['newKeySlot0PassHash']);
 	break;
 }
-
-$this->restTool->sendResponse(array(
+$restTool = new restTools();
+$restTool->sendResponse(array(
                                 "status" => "fail",
                                 "action" => $action,
                                 "data" => array (
