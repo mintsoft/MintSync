@@ -60,7 +60,7 @@ class mintsync_server {
 						"status"=>"ok", 
 						"action"=>"retrieve",
 						"data"=> $rows[0]
-					),200);		//OK
+					),restTools::$HTTPCodes['OK']);
         }		
 		else 
 		{
@@ -70,7 +70,7 @@ class mintsync_server {
 						"data" => array(
 							"reason"=>"URL was not found"
 							)
-					),404);	//Not Found
+					),restTools::$HTTPCodes['NOT_FOUND']);
         }
     }
     
@@ -92,7 +92,7 @@ class mintsync_server {
 						"status"=>"ok", 
 						"action"=>"check",
 						"data"=> $rows[0]['num']
-					),200);
+					),restTools::$HTTPCodes['OK']);
         }
 		else 
         {
@@ -102,7 +102,7 @@ class mintsync_server {
 						"data" => array(
 							"reason"=>"An Unexpected Error Occurred"
 							)
-					),400);	//Bad Request
+					),restTools::$HTTPCodes['BAD_REQUEST']);
         }
     }
     
@@ -123,7 +123,7 @@ class mintsync_server {
 						"status"=>"ok", 
 						"action"=>"list",
 						"data"=> $rows
-					),200);	//OK
+					),restTools::$HTTPCodes['OK']);
         }		
 		else 
 		{
@@ -133,21 +133,25 @@ class mintsync_server {
 						"data" => array(
 							"reason"=>"No Records Found"
 							)
-					),404);	//Not Found
+					),restTools::$HTTPCodes['NOT_FOUND']);
         }
     }
     
     /**
      * Saves a credentialsObject against a URL
+     * @param string $url
+     * @param string $credentialsObj
+     * @param string $rowSalt
+     * @param string $cryptoHash
+     * @param bool $force
      */
-    public function save()
+    public function save($url, $credentialsObj, $rowSalt, $cryptoHash, $force)
     {
-
-        if(!empty($_REQUEST['cryptoHash']))
+        if(!empty($cryptoHash))
         {
             $stmt = $this->db->prepare("SELECT * FROM User WHERE ID=:userID AND keySlot0PassHash=:cryptoHash");
-            $stmt->bindValue(":cryptoHash",$_REQUEST['cryptoHash']);
-            $stmt->bindValue(":userID",$this->userID);
+            $stmt->bindValue(":cryptoHash", $cryptoHash);
+            $stmt->bindValue(":userID", $this->userID);
             $stmt->execute();
             $rows = $stmt->fetchAll();
             if(!isset($rows[0]))
@@ -157,16 +161,16 @@ class mintsync_server {
                                 "data"=>array(
                                     "reason"=>"Inconsistent Encryption Key"
                                 )
-                            ),417);		//Expectation Failed
+                            ),restTools::$HTTPCodes['EXPECTATION_FAILED']);
         }
 
         $stmt = $this->db->prepare("SELECT COUNT(*) AS Freq FROM auth WHERE :url LIKE URL AND userID=:userID;");
-        $stmt->bindValue(":url",strtolower($_REQUEST['URL']));
-        $stmt->bindValue(":userID",$this->userID);
+        $stmt->bindValue(":url", $url);
+        $stmt->bindValue(":userID", $this->userID);
         $stmt->execute();
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        if((int)$row['Freq']>0 && empty($_REQUEST['force']))
+        if((int)$row['Freq']>0 && !$force)
         {
             $this->restTool->sendResponse(array(
                                 "status"=>"fail",
@@ -174,20 +178,20 @@ class mintsync_server {
                                 "data"=>array(
                                     "reason"=>"Record already exists"
                                 )
-                            ),409);		//Conflict
+                            ),restTools::$HTTPCodes['CONFLICT']);
         }
-        elseif((int)$row['Freq']>0 && !empty($_REQUEST['force']))
+        elseif((int)$row['Freq']>0 && $force)
         {
             $stmt = $this->db->prepare("UPDATE auth SET Salt=:salt, Credentials=:credentials WHERE :url LIKE URL AND userID=:userID;");
 
-            $stmt->bindValue(":url", strtolower($_REQUEST['URL']));
+            $stmt->bindValue(":url", strtolower($url));
             $stmt->bindValue(":userID", $this->userID);
-            $stmt->bindValue(":salt", $_REQUEST['rowSalt']);
-            $stmt->bindValue(":credentials", $_REQUEST['Credentials']);
+            $stmt->bindValue(":salt", $rowSalt);
+            $stmt->bindValue(":credentials", $credentialsObj);
             $stmt->execute();
 
             $stmt = $this->db->prepare("SELECT * FROM auth WHERE URL=:url AND userID=:userID;");
-            $stmt->bindValue(":url", strtolower($_REQUEST['URL']), PDO::PARAM_STR );
+            $stmt->bindValue(":url", strtolower($url), PDO::PARAM_STR );
             $stmt->bindValue(":userID", $this->userID);
             $stmt->execute();
 
@@ -197,7 +201,7 @@ class mintsync_server {
                                 "status"=>"ok",
                                 "action"=>"update",
                                 "data"=>array()
-                            ),205);		//Reset Content
+                            ),restTools::$HTTPCodes['RESET_CONTENT']);
         }
         else
         {
@@ -206,15 +210,15 @@ class mintsync_server {
             $stmt->bindValue(":url", str_replace(
                                     array("%"),
                                     array("%%"),
-                                    strtolower($_REQUEST['URL']))
+                                    strtolower($url))
                             );
-            $stmt->bindValue(":salt", $_REQUEST['rowSalt']);
-            $stmt->bindValue(":credentials", $_REQUEST['Credentials']);
+            $stmt->bindValue(":salt", $rowSalt);
+            $stmt->bindValue(":credentials", $credentialsObj);
             $stmt->bindValue(":userID", $this->userID);
             $stmt->execute();
 
             $stmt = $this->db->prepare("SELECT * FROM auth WHERE URL=:url AND userID=:userID");
-            $stmt->bindValue(":url", strtolower($_REQUEST['URL']), PDO::PARAM_STR );
+            $stmt->bindValue(":url", strtolower($url), PDO::PARAM_STR );
             $stmt->bindValue(":userID", $this->userID);
             $stmt->execute();
 
@@ -224,7 +228,7 @@ class mintsync_server {
                                 "status"=>"ok",
                                 "action"=>"insert",
                                 "data"=>array()
-                            ),200);		//OK
+                            ),restTools::$HTTPCodes['OK']);
         }
     }
     
@@ -242,7 +246,7 @@ class mintsync_server {
 					"status"=>"ok", 
 					"action"=>"remove",
 					"data"=> 1
-				),200);	//OK
+				),restTools::$HTTPCodes['OK']);
 		
     }
     
@@ -286,7 +290,7 @@ class mintsync_server {
 							"data"=>array (
 								"reason" => "The LIKE pattern conflicts with another LIKE pattern ({$rows[0]['URL']})" 
 							)
-						),409);	//Conflict
+						),restTools::$HTTPCodes['CONFLICT']);
 			}
 		}
 		
@@ -311,7 +315,7 @@ class mintsync_server {
 							"status"=>"ok",
 							"action"=>"rename",
 							"data"=>array()
-						),200);	//OK
+						),restTools::$HTTPCodes['OK']);	//OK
 		}
 		else
 		{
@@ -321,7 +325,7 @@ class mintsync_server {
 							"data"=>array (
 								"reason" => "SELECT After UPDATE failed, check the database for integrity!" 
 							)
-						),410);	//Gone
+						),restTools::$HTTPCodes['GONE']);	//Gone
 		}
     }
     
@@ -354,7 +358,7 @@ class mintsync_server {
 							"status"=>"ok",
 							"action"=>"setKeySlot",
 							"data"=>array()
-						),200);	//OK
+						),restTools::$HTTPCodes['OK']);
 		}
 		else
 		{
@@ -364,7 +368,7 @@ class mintsync_server {
 							"data"=>array (
 								"reason" => "SELECT After UPDATE failed, check the database for integrity!" 
 							)
-						),410);	//Gone
+						),restTools::$HTTPCodes['GONE']);
 		}
 	
     }
@@ -387,7 +391,7 @@ class mintsync_server {
 						"status"=>"ok", 
 						"action"=>"confirmCrypto",
 						"data"=> $rows[0]
-					),200);	//OK
+					),restTools::$HTTPCodes['OK']);
         }
         else
         {
@@ -395,7 +399,7 @@ class mintsync_server {
 						"status"=>"fail", 
 						"action"=>"confirmCrypto",
 						"data"=> false
-					),417);	//Expectation Failed
+					),restTools::$HTTPCodes['EXPECTATION_FAILED']);
         }    
     }
     
@@ -416,7 +420,7 @@ class mintsync_server {
 						"status"=>"ok", 
 						"action"=>"retrieveKeySlot0",
 						"data"=> $rows[0]
-					),200);	//OK
+					),restTools::$HTTPCodes['OK']);	//OK
         }
 		else
         {
@@ -424,7 +428,7 @@ class mintsync_server {
 						"status"=>"fail", 
 						"action"=>"retrieveKeySlot0",
 						"data"=> false
-					),417);	//Expectation Failed
+					),restTools::$HTTPCodes['EXPECTATION_FAILED']);	//Expectation Failed
         }
     }
     
