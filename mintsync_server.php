@@ -224,7 +224,7 @@ class mintsync_server {
 
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            echo json_encode(array(
+            $this->restTool->sendResponse(array(
                                 "status"=>"ok",
                                 "action"=>"insert",
                                 "data"=>array()
