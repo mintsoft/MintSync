@@ -12,7 +12,7 @@ if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") //off is the value 
 		"data" => array(
 			"reason" => "HTTPS is required, if it is already enabled then ensure that SSL environmental variables are exported to PHP (SSLOptions +StdEnvVars in Apache)"
 		)
-			), 412);
+			), restTools::$HTTPCodes['PRECONDITION_FAILED']);
 }
 
 $userID = user_login::validate();
@@ -37,23 +37,23 @@ $action = "";
 $request = strtolower($_SERVER['REQUEST_METHOD']);
 switch ($request)
 {
-	case "get":	   //RETRIEVE for old Versions
+	case "get": //RETRIEVE for old Versions
 		if (isset($_GET['action']))
 			$action = $_GET['action'];
-		break;
-	case "post":	  //INSERT or RETRIEVE or CHECK (works for all length URLs)
+	break;
+	case "post":   //INSERT or RETRIEVE or CHECK (works for all length URLs)
 		if (isset($_GET['action']))
 			$action = $_GET['action'];
-		break;
-	case "put":	   //UPDATE 
+	break;
+	case "put": //UPDATE 
 		$action = $_GET['action'];
 		$put_vars = "";
 		parse_str(file_get_contents('php://input'), $put_vars);
 		$_PUT = $put_vars;
-		break;
-	case "delete":	  //DELETE
+	break;
+	case "delete":   //DELETE
 		$action = "remove";
-		break;
+	break;
 }
 
 //do logging if enabled
@@ -78,40 +78,40 @@ switch ($action)
 	case "retrieve":   //GET or POST Request
 		if (!empty($_REQUEST['ID']) || !empty($_REQUEST['URL']))
 			$mintsyncServer->retrieve($_REQUEST);
-		break;
+	break;
 	case "list":   //GET Request
 		$mintsyncServer->listCredentials();
-		break;
+	break;
 	case "save":  //POST
 		if (!empty($_REQUEST['URL']) && !empty($_REQUEST['rowSalt']) && !empty($_REQUEST['Credentials']))
 			$mintsyncServer->save($_REQUEST['URL'], $_REQUEST['Credentials'], $_REQUEST['rowSalt'], $_REQUEST['cryptoHash'], !empty($_REQUEST['force']));
-		break;
+	break;
 	case "remove":   //DELETE Request
 		if (!empty($_REQUEST['ID']))
 			$mintsyncServer->remove($_REQUEST['ID']);
-		break;
+	break;
 	case "rename":   //PUT Request
 		if (!empty($_PUT['newURL']) && !empty($_PUT['ID']) && !$_PUT['newURL'] === "null")
 			$mintsyncServer->rename($_PUT['ID'], $_PUT['newURL']);
-		break;
+	break;
 	case "check":   //GET or POST Request
 		if (!empty($_REQUEST['URL']))
 		{
 			$domain = strtolower($_REQUEST['URL']);
 			$mintsyncServer->check($domain);
 		}
-		break;
+	break;
 	case "confirmCrypto":  //check that the hash serverside is the same as the sent one
 		if (!empty($_GET['cryptoHash']))
 			$mintsyncServer->confirmCrypto($_GET['cryptoHash']);
-		break;
+	break;
 	case "retrieveKeySlot0":
 		$mintsyncServer->retrieveKeySlot();
-		break;
+	break;
 	case "setKeySlot":  //PUT Request
 		if (!empty($_PUT['newKeySlot']) && !empty($_PUT['newKeySlot0PassHash']))
 			$mintsyncServer->setKeySlot(0, $_PUT['newKeySlot'], $_PUT['newKeySlot0PassHash']);
-		break;
+	break;
 }
 
 $restTool = new restTools();
