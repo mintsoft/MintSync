@@ -31,6 +31,7 @@ function setupLightboxes()
 				<p class='centeredContents'><input type='hidden' id='IC_closedDialogState' value='0' />\
 					<input type='submit' value='OK' class='close' /> \
 					<input type='submit' value='OK + Next' class='close' id='IC_OKNextButton' /> \
+					<input type='submit' value='OK + Submit' class='close' id='IC_OKSubmitButton' /> \
 					<input type='submit' value='Close' class='close' id='IC_closeButton' />\
 				</p>\
 			</form>\
@@ -120,6 +121,9 @@ function chooseInputForInject(inputs, valueName, completeCallback)
 	
 	$("#IC_OKNextButton").one('click',function(){
 		$("#IC_closedDialogState").val("2");	//Close+Next
+	});
+	$("#IC_OKSubmitButton").one('click',function(){
+		$("#IC_closedDialogState").val("3");	//Close+Next
 	});
 	$("#IC_ExpandLink").one('click' ,function(event){
 		event.preventDefault();
@@ -216,7 +220,7 @@ function chooseInputForInject(inputs, valueName, completeCallback)
 			{
 				//get the selected item
 				var selectedIndex = $("#IC_ID option:selected").val();
-				completeCallback(inputs[selectedIndex], $("#IC_closedDialogState").val()=="2" );
+				completeCallback(inputs[selectedIndex], $("#IC_closedDialogState").val()=="2", $("#IC_closedDialogState").val()=="3");
 			}
 			else
 			{
