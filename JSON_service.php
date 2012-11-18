@@ -91,7 +91,7 @@ switch ($action)
 			$mintsyncServer->remove($_REQUEST['ID']);
 	break;
 	case "rename":   //PUT Request
-		if (!empty($_PUT['newURL']) && !empty($_PUT['ID']) && !$_PUT['newURL'] === "null")
+		if (!empty($_PUT['newURL']) && !empty($_PUT['ID']) && $_PUT['newURL'] !== "null")
 			$mintsyncServer->rename($_PUT['ID'], $_PUT['newURL']);
 	break;
 	case "check":   //GET or POST Request
