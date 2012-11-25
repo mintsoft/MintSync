@@ -7,7 +7,7 @@ function setupLightboxes()
 	//add the ask for a password box
 	$("body").append("<div class='modalDialog' id='passwordPrompt'>\
 			<h2 id='dialogPasswordInstruction'>Enter your password</h2>\
-			<form>\
+			<form novalidate>\
 				<p><input name='dialogPassPassword' id='dialogPassPassword'type='password' value='' required /></p>\
 				<p class='centeredContents'><input type='submit' class='close'></p>\
 			</form>\
@@ -16,7 +16,7 @@ function setupLightboxes()
 	//user login box
 	$("body").append("<div class='modalDialog' id='authenticationPrompt'>\
 			<h2 id='authenticationInstruction'>Enter your username and password</h2>\
-			<form>\
+			<form novalidate>\
 				<p><label for='dialogAuthUsername'>Username</label><input name='dialogAuthUsername' id='dialogAuthUsername' type='text' value='' placeholder='Username' required /></p>\
 				<p><label for='dialogAuthPassword'>Password</label><input name='dialogAuthPassword' id='dialogAuthPassword' type='password' value='' required /></p>\
 				<p class='centeredContents'><input type='submit' class='close'></p>\
@@ -26,7 +26,7 @@ function setupLightboxes()
 	//input tag selector for value injection
 	$("body").append("<div class='modalDialog' id='InputChooserPrompt'>\
 			<h2 id='InputChooserInstruction'>Select the correct input tag using the properties below:</h2>\
-			<form>\
+			<form novalidate>\
 				<div id='InputChooserTableContainer' ></div>\
 				<p class='centeredContents'><input type='hidden' id='IC_closedDialogState' value='0' />\
 					<input type='submit' value='OK' class='close' /> \
@@ -40,6 +40,7 @@ function setupLightboxes()
 	//add onsubmit handlers to do nothing
 	$("#passwordPrompt form, #authenticationPrompt form, #InputChooserPrompt form").submit(function(event){
 		event.preventDefault();
+		return false;
 	});
 	
 	$(".modalDialog").overlay({
