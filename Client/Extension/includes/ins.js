@@ -121,9 +121,23 @@
 					iteratorElement = iteratorElement.parentNode;
 				}
 				
-				//Submit the form
+				//Submit the form in the best way possible
+				var doneSubmitAlready = false;
 				if (iteratorElement && iteratorElement.tagName.toLowerCase() == "form")
-					iteratorElement.submit();
+				{
+					var buttons = window.Sizzle("input[type=submit],button[type=submit]",iteratorElement);
+					for (var button in buttons)
+					{
+						buttons[button].click();
+						doneSubmitAlready = true;
+					}
+					
+					//Fail over to dodgey form submit 
+					if( ! doneSubmitAlready )
+					{
+						iteratorElement.submit();
+					}
+				}
 			}
 		}
 		else if (e.data.action == 'hilightInput')
