@@ -7,7 +7,7 @@ if (SERVER_UI_LOCKED)
 
 $db = new PDO(PDO_DSN);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$stmt = $db->prepare("SELECT * FROM User WHERE username=:username");
+$stmt = $db->prepare("SELECT * FROM user WHERE username=:username");
 $stmt->bindValue(":username", $_POST['username']);
 $stmt->execute();
 
@@ -24,7 +24,7 @@ if (isset($results[0]))
 			), restTools::$HTTPCodes['CONFLICT']); //Conflict
 
 
-$stmt = $db->prepare("INSERT INTO User(username, password, keySlot0PassHash, keySlot0) VALUES(:user, :pass, :cpasshash, :keySlot0);");
+$stmt = $db->prepare("INSERT INTO user(username, password, keySlot0PassHash, keySlot0) VALUES(:user, :pass, :cpasshash, :keySlot0);");
 $stmt->bindValue(":user", $_POST['username']);
 $stmt->bindValue(":pass", $_POST['password']);
 $stmt->bindValue(":cpasshash", $_POST['cryptopassword']);

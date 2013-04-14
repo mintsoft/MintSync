@@ -60,7 +60,7 @@ switch ($request)
 //if log level is undefined, then assume we wish to log
 if (LOGGING && !(isset($LOGLEVEL[$action]) && $LOGLEVEL[$action] == false))
 {
-	$stmt = $db->prepare("INSERT INTO AccessLog(Timestamp,RemoteIP,Request,UserID)
+	$stmt = $db->prepare("INSERT INTO accesslog(Timestamp,RemoteIP,Request,UserID)
                           VALUES(strftime('%s','now'),:IP,:request,:userID);");
 	$stmt->bindValue(":IP", ip2long($_SERVER['REMOTE_ADDR']));
 	$stmt->bindValue(":request", $_SERVER['REQUEST_METHOD'] . ": " .

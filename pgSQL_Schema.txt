@@ -1,5 +1,5 @@
 CREATE TABLE accesslog (
-	ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	ID serial PRIMARY KEY NOT NULL,
 	Timestamp INTEGER NOT NULL,
 	RemoteIP INTEGER NOT NULL,
 	Request TEXT NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE accesslog (
 );
 
 CREATE TABLE user ( 
-	ID INTEGER PRIMARY KEY AUTOINCREMENT, 
+	ID serial PRIMARY KEY, 
 	username TEXT NOT NULL, 
 	password TEXT NOT NULL,
 	keySlot0PassHash TEXT NOT NULL,
@@ -15,11 +15,16 @@ CREATE TABLE user (
 );
 
 CREATE TABLE auth (
-	ID INTEGER PRIMARY KEY AUTOINCREMENT,
-	userID INTEGER REFERENCES user(ID),
+	ID serial PRIMARY KEY,
+	userID INTEGER REFERENCES "user"(ID),
 	URL TEXT,
 	Salt TEXT,
 	Credentials TEXT
 );
 CREATE INDEX auth_user ON auth(userID);
 CREATE INDEX accesslog_user ON accesslog(userID);
+
+CREATE TABLE schema_version ( 
+	versionNo INTEGER PRIMARY KEY
+);
+INSERT INTO schema_version(0);

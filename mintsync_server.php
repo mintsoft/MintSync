@@ -39,16 +39,16 @@ class mintsync_server
 	{
 		if (isset($request['ID']))
 		{
-			$stmt = $this->db->prepare("SELECT auth.*, User.keySlot0 FROM auth 
-									INNER JOIN User ON(User.ID=auth.userID) 
+			$stmt = $this->db->prepare("SELECT auth.*, user.keySlot0 FROM auth 
+									INNER JOIN user ON(user.ID=auth.userID) 
 									WHERE auth.ID=:authID AND userID=:userID;");
 			$stmt->bindValue(":authID", $request['ID'], PDO::PARAM_INT);
 		}
 		else
 		{
 			$domain = strtolower($request['URL']);
-			$stmt = $this->db->prepare("SELECT auth.*, User.keySlot0 FROM auth 
-									INNER JOIN User ON(User.ID=auth.userID) 
+			$stmt = $this->db->prepare("SELECT auth.*, user.keySlot0 FROM auth 
+									INNER JOIN user ON(user.ID=auth.userID) 
 									WHERE :url LIKE URL AND userID=:userID;");
 			$stmt->bindValue(":url", $domain, PDO::PARAM_STR);
 		}
@@ -153,7 +153,7 @@ class mintsync_server
 	{
 		if (!empty($cryptoHash))
 		{
-			$stmt = $this->db->prepare("SELECT * FROM User WHERE ID=:userID AND keySlot0PassHash=:cryptoHash");
+			$stmt = $this->db->prepare("SELECT * FROM user WHERE ID=:userID AND keySlot0PassHash=:cryptoHash");
 			$stmt->bindValue(":cryptoHash", $cryptoHash);
 			$stmt->bindValue(":userID", $this->userID);
 			$stmt->execute();
@@ -336,14 +336,14 @@ class mintsync_server
 	 */
 	public function setKeySlot($keySlotIndex, $newKeySlot, $newKeySlotPassHash)
 	{
-		$stmt = $this->db->prepare("UPDATE User SET keySlot0=:keySlot, keySlot0PassHash=:keySlotPassHash WHERE ID=:userID;");
+		$stmt = $this->db->prepare("UPDATE user SET keySlot0=:keySlot, keySlot0PassHash=:keySlotPassHash WHERE ID=:userID;");
 
 		$stmt->bindValue(":keySlot", $newKeySlot, PDO::PARAM_STR);
 		$stmt->bindValue(":keySlotPassHash", $newKeySlotPassHash, PDO::PARAM_STR);
 		$stmt->bindValue(":userID", $this->userID, PDO::PARAM_INT);
 		$stmt->execute();
 
-		$stmt = $this->db->prepare("SELECT * FROM User WHERE keySlot0=:keySlot AND keySlot0PassHash=:keySlotPassHash AND ID=:userID;");
+		$stmt = $this->db->prepare("SELECT * FROM user WHERE keySlot0=:keySlot AND keySlot0PassHash=:keySlotPassHash AND ID=:userID;");
 		$stmt->bindValue(":keySlot", $newKeySlot, PDO::PARAM_STR);
 		$stmt->bindValue(":keySlotPassHash", $newKeySlotPassHash, PDO::PARAM_STR);
 		$stmt->bindValue(":userID", $this->userID, PDO::PARAM_INT);
@@ -377,7 +377,7 @@ class mintsync_server
 	 */
 	public function confirmCrypto($cryptoHash)
 	{
-		$stmt = $this->db->prepare("SELECT keySlot0PassHash AS cryptoPassHash FROM User WHERE ID=:userID AND keySlot0PassHash=:hash;");
+		$stmt = $this->db->prepare("SELECT keySlot0PassHash AS cryptoPassHash FROM user WHERE ID=:userID AND keySlot0PassHash=:hash;");
 		$stmt->bindValue(":userID", $this->userID, PDO::PARAM_INT);
 		$stmt->bindValue(":hash", $cryptoHash, PDO::PARAM_STR);
 		$stmt->execute();
@@ -407,7 +407,7 @@ class mintsync_server
 	 */
 	public function retrieveKeySlot($keySlotIndex = 0)
 	{
-		$stmt = $this->db->prepare("SELECT keySlot0PassHash, keySlot0 FROM User WHERE ID=:userID");
+		$stmt = $this->db->prepare("SELECT keySlot0PassHash, keySlot0 FROM user WHERE ID=:userID");
 		$stmt->bindValue(":userID", $this->userID, PDO::PARAM_INT);
 		$stmt->execute();
 

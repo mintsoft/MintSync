@@ -17,7 +17,7 @@ class user_login
 		$db = new PDO(PDO_DSN);
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-		$stmt = $db->prepare("SELECT * FROM User WHERE username=:username;");
+		$stmt = $db->prepare("SELECT * FROM user WHERE username=:username;");
 		$stmt->bindValue(":username", $username);
 		$stmt->execute();
 
