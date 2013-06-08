@@ -11,6 +11,22 @@ var mintSyncGlobals = {
 };
 
 /**
+ Helper function for badge management
+*/
+function setBadgeStatus(textContent, bgColour, mouseoverText, textcolour)
+{
+	
+}
+
+/**
+ Helper function for badge reset
+*/
+function resetBadgeStatus()
+{
+	setBadgetStatus("", "#CCCCCC", "", "#FFFFFF");
+}
+
+/**
 	Callback executed by the AJAX request, 	
 */
 function mint_handleNotificationIcon(data)
@@ -27,30 +43,19 @@ function mint_handleNotificationIcon(data)
 		case "ok":
 			if(parsedResult.data>0)
 			{
-				mintSyncGlobals.theButton.badge.textContent="   ";
-				mintSyncGlobals.theButton.badge.backgroundColor='#00D100';
-				mintSyncGlobals.theButton.badge.color = '#FFFFFF';
-				mintSyncGlobals.theButton.title = "Credentials are available";
+				setBadgeStatus("   ", '#00D100', "Credentials are available", '#FFFFFF' );
 			}
 			else
 			{
-				mintSyncGlobals.theButton.badge.textContent="";
-				mintSyncGlobals.theButton.badge.backgroundColor='#cccccc';
-				mintSyncGlobals.theButton.title = "";
+				resetBadgeStatus();
 			}
 		break;
 		case "fail":
-			mintSyncGlobals.theButton.badge.textContent="!";
-			mintSyncGlobals.theButton.badge.backgroundColor='#FFFF00';
-			mintSyncGlobals.theButton.badge.color = '#FFFFFF';
-			mintSyncGlobals.theButton.title = "There was an error, checking this URL";
+			setBadgeStatus("!", '#FFFF00', "There was an error, checking this URL", "#FFFFFF");
 			console.error("Failed: "+parsedResult.data.reason);
 		break;
 		default:
-			mintSyncGlobals.theButton.badge.textContent="X!";
-			mintSyncGlobals.theButton.badge.color = '#FFFFFF';
-			mintSyncGlobals.theButton.badge.backgroundColor='#DD0000';
-			mintSyncGlobals.theButton.title = "There was a serious error, check the Error Console";
+			setBadgeStatus("X!", '#FFFFFF', "There was a serious error, check the Error Console", "#DD0000");
 			console.error("An unknown state has been reached: "+data);
 	}
 }
@@ -65,10 +70,7 @@ function mint_handleNotify(URL)
 		var preferences = genericRetrieve_preferencesObj();
 		if(!$MS.checkForSavedAuth())
 		{
-				mintSyncGlobals.theButton.badge.textContent=" ? ";
-				mintSyncGlobals.theButton.badge.color = '#CCCCCC';
-				mintSyncGlobals.theButton.badge.backgroundColor='#FFFCCA';
-				mintSyncGlobals.theButton.title = "You have not logged in";
+			setBadgeStatus(" ? ", "#FFFCCA", "You have not logged in", "#CCCCCC" )
 			return;
 		}
 		
@@ -148,10 +150,7 @@ function mint_handleNotify(URL)
 	}
 	else
 	{	//reset to no notification visible
-		mintSyncGlobals.theButton.badge.textContent="";
-		mintSyncGlobals.theButton.badge.backgroundColor='#cccccc';
-		mintSyncGlobals.theButton.badge.color = '#FFFFFF';
-		mintSyncGlobals.theButton.title = "";
+		resetBadgeStatus();
 	}
 }
 
@@ -179,10 +178,7 @@ function updateLocalURLCache()
 		error: function(jq,textStatus,errorThrown){
 			console.error("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
 			console.error(jq);
-			mintSyncGlobals.theButton.badge.textContent="X!";
-			mintSyncGlobals.theButton.badge.backgroundColor='#DD0000';
-			mintSyncGlobals.theButton.badge.color = '#FFFFFF';
-			mintSyncGlobals.theButton.title = "There was an error updating the local cache";
+			setBadgeStatus("X!", '#FFFFFF', "There was an error updating the local cache!", "#DD0000");
 		},
 	});
 	
