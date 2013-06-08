@@ -15,7 +15,13 @@ var mintSyncGlobals = {
 */
 function setBadgeStatus(textContent, bgColour, mouseoverText, textcolour)
 {
+	//O12 Implementation:
+	mintSyncGlobals.theButton.badge.textContent = textContent;
+	mintSyncGlobals.theButton.badge.backgroundColor = bgColour;
+	mintSyncGlobals.theButton.title = mouseoverText;
 	
+	if(textcolour !== undefined)
+		mintSyncGlobals.theButton.badge.color = textcolour;	
 }
 
 /**
