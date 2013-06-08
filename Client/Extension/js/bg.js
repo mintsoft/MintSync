@@ -23,7 +23,7 @@ function setBadgeStatus(textContent, bgColour, mouseoverText, textcolour)
 */
 function resetBadgeStatus()
 {
-	setBadgetStatus("", "#CCCCCC", "", "#FFFFFF");
+	setBadgeStatus("", "#CCCCCC", "", "#FFFFFF");
 }
 
 /**
