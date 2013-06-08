@@ -69,6 +69,13 @@ function mint_handleNotify(URL)
 				mintSyncGlobals.theButton.badge.color = '#CCCCCC';
 				mintSyncGlobals.theButton.badge.backgroundColor='#FFFCCA';
 				mintSyncGlobals.theButton.title = "You have not logged in";
+				
+				chrome.browserAction.setBadgeText({
+					'text': ' ? ',
+				});
+				chrome.browserAction.setBadgeBackgroundColor({
+					'color' : '#FFFCCA',
+				});
 			return;
 		}
 		
@@ -216,6 +223,7 @@ function startPasswdResetTimer()
 
 
 /** Entry Point **/
+/*
 window.addEventListener("load", function(){
 	var newWindow,
 		ToolbarUIItemProperties = {
@@ -259,19 +267,22 @@ window.addEventListener("load", function(){
 			console.error("There was an error with the Opera Extension OnConnect callback:",error);
 		}
 	}
-
+*/
 	//add handler for tab notifications
-	opera.extension.tabs.onfocus = function() {
+	chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab) {
+		console.log("onUpdated executed!");
+	
 		try {
-			if(opera.extension.tabs.getFocused())	//on some operations this object is not quite set yet
-				mint_handleNotify(opera.extension.tabs.getFocused().url);
+			genericRetrieve_currentTab(function(currentTab){
+				mint_handleNotify(currentTab.url);
+			})
 		}
 		catch(error) {
 			//ignore it for now
 			console.error("There was an error with the Opera Extension onfocus callback:",error);
 		}
-	}
-	
+	});
+	/*
 	//add handler for messages, including injected JS
 	opera.extension.onmessage = function(event) {
 		console.debug("Received extension message:", event);
@@ -334,5 +345,5 @@ window.addEventListener("load", function(){
 		//updates the cache and retriggers the timeout
 		updateLocalURLCache();		
 	}
-	
-}, false);
+	*/
+//}, false);

@@ -6,7 +6,7 @@ function genericPostMessage(objToSend){
 
 //stub to access opera.extension.bgProcess.mintSyncGlobals
 function genericRetrieve_mintSyncGlobals(){
-	return {};
+	return chrome.extension.getBackgroundPage().mintSyncGlobals;
 }
 
 function genericRetrieve_preferencesObj(){

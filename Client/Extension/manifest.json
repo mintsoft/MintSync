@@ -12,5 +12,9 @@
     "tabs",
 	"<all_urls>"
   ],
-  "options_page": "options.html"
+  "options_page": "options.html",
+  "background": { 
+	  "persistent": true, 
+	  "page": "index.html" 
+  }
 }
