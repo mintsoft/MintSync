@@ -15,7 +15,10 @@ var mintSyncGlobals = {
 */
 function setBadgeStatus(textContent, bgColour, mouseoverText, textcolour)
 {
-	
+	chrome.browserAction.setBadgeText({ 'text' : textContent });
+	chrome.browserAction.setBadgeBackgroundColor({ 'color' : bgColour });
+	chrome.browserAction.setTitle({ 'title' : mouseoverText });
+	//textColour not supported - workaround is to draw on a canvas and use .setIcon to render it. awesome.
 }
 
 /**
@@ -23,7 +26,7 @@ function setBadgeStatus(textContent, bgColour, mouseoverText, textcolour)
 */
 function resetBadgeStatus()
 {
-	setBadgetStatus("", "#CCCCCC", "", "#FFFFFF");
+	setBadgeStatus("", "#CCCCCC", "", "#FFFFFF");
 }
 
 /**
@@ -258,9 +261,7 @@ window.addEventListener("load", function(){
 	}
 */
 	//add handler for tab notifications
-	chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab) {
-		console.log("onUpdated executed!");
-	
+	function badgeShouldBeUpdated() {
 		try {
 			genericRetrieve_currentTab(function(currentTab){
 				mint_handleNotify(currentTab.url);
@@ -268,9 +269,11 @@ window.addEventListener("load", function(){
 		}
 		catch(error) {
 			//ignore it for now
-			console.error("There was an error with the Opera Extension onfocus callback:",error);
+			console.error("There was an error with the badge updating:", error);
 		}
-	});
+	}
+	chrome.tabs.onUpdated.addListener(badgeShouldBeUpdated);
+	chrome.tabs.onActivated.addListener(badgeShouldBeUpdated);
 	/*
 	//add handler for messages, including injected JS
 	opera.extension.onmessage = function(event) {
