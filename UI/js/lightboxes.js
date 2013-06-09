@@ -7,7 +7,7 @@ function setupLightboxes()
 	//add the ask for a password box
 	$("body").append("<div class='modalDialog' id='passwordPrompt'>\
 			<h2 id='dialogPasswordInstruction'>Enter your password</h2>\
-			<form>\
+			<form novalidate>\
 				<p><input name='dialogPassPassword' id='dialogPassPassword'type='password' value='' required /></p>\
 				<p class='centeredContents'><input type='submit' class='close'></p>\
 			</form>\
@@ -27,11 +27,12 @@ function setupLightboxes()
 	//input tag selector for value injection
 	$("body").append("<div class='modalDialog' id='InputChooserPrompt'>\
 			<h2 id='InputChooserInstruction'>Select the correct input tag using the properties below:</h2>\
-			<form>\
+			<form novalidate>\
 				<div id='InputChooserTableContainer' ></div>\
 				<p class='centeredContents'><input type='hidden' id='IC_closedDialogState' value='0' />\
 					<input type='submit' value='OK' class='close' /> \
 					<input type='submit' value='OK + Next' class='close' id='IC_OKNextButton' /> \
+					<input type='submit' value='OK + Submit' class='close' id='IC_OKSubmitButton' /> \
 					<input type='submit' value='Close' class='close' id='IC_closeButton' />\
 				</p>\
 			</form>\
@@ -40,6 +41,7 @@ function setupLightboxes()
 	//add onsubmit handlers to do nothing
 	$("#passwordPrompt form, #authenticationPrompt form, #InputChooserPrompt form").submit(function(event){
 		event.preventDefault();
+		return false;
 	});
 	
 	$(".modalDialog").overlay({
@@ -122,6 +124,9 @@ function chooseInputForInject(inputs, valueName, completeCallback)
 	
 	$("#IC_OKNextButton").one('click',function(){
 		$("#IC_closedDialogState").val("2");	//Close+Next
+	});
+	$("#IC_OKSubmitButton").one('click',function(){
+		$("#IC_closedDialogState").val("3");	//Close+Next
 	});
 	$("#IC_ExpandLink").one('click' ,function(event){
 		event.preventDefault();
@@ -218,7 +223,7 @@ function chooseInputForInject(inputs, valueName, completeCallback)
 			{
 				//get the selected item
 				var selectedIndex = $("#IC_ID option:selected").val();
-				completeCallback(inputs[selectedIndex], $("#IC_closedDialogState").val()=="2" );
+				completeCallback(inputs[selectedIndex], $("#IC_closedDialogState").val()=="2", $("#IC_closedDialogState").val()=="3");
 			}
 			else
 			{

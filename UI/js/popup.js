@@ -43,7 +43,7 @@ function handleMessageFromInjectedJS(e)
 			valueName = $(g_clickedImg).parent().siblings("input[name=inputPassName]").val();
 				
 		//display lightbox for the user to decide where its going into
-		chooseInputForInject(e.data.inputs, valueName, function(input, doNext){
+		chooseInputForInject(e.data.inputs, valueName, function(input, doNext, doSubmit){
 		
 			var injectedValue = $(g_clickedImg).parent().parent().find("input.injectValueSourceElement").val();
 			
@@ -51,9 +51,10 @@ function handleMessageFromInjectedJS(e)
 				'action'	: "injectValue",
 				'src'		: 'popup',
 				'target'	: {
-					'name'	:	input.name,
-					'id'	:	input.id,
-					'value'	:	injectedValue,
+					'name'		: input.name,
+					'id'		: input.id,
+					'value'		: injectedValue,
+					'doSubmit'	: doSubmit,
 					}
 			});
 			injectedValue = "";
@@ -216,6 +217,10 @@ function addPopupEventHandlers()
 		event.preventDefault();
 		setPassword(this);
 	});
+	$("#addPairP").click(function(event){
+		event.preventDefault();
+		addPair();
+	});
 }
 
 /** 
@@ -230,7 +235,7 @@ function addPair()
 	
 	tmpObj = document.createElement(source.firstElementChild.tagName);
 	tmpObj.innerHTML = source.firstElementChild.innerHTML;
-	
+		
 	//if it's the fullscreen popup then don't display the inject button
 	if(g_isFullscreen)
 	{	//using hide here causes some sort of clash with jQuery-Tools
@@ -238,6 +243,23 @@ function addPair()
 		$(tmpObj).find("img.hidden_when_max").css({'display' : 'none'});
 	}
 	
+	
+	//add the correct event handlers
+	$(tmpObj).find("img.delPair").click(function(event){
+		event.preventDefault();
+		delPair(this);
+	});
+	$(tmpObj).find("img.injectPass").click(function(event){
+		event.preventDefault();
+		injectPass(this);
+	});
+	$(tmpObj).find(".inputPass").focus(function(event){
+		revealPassword(this);
+	});
+	$(tmpObj).find(".inputPass").blur(function(event){
+		rehidePassword(this);
+	});
+		
 	target.appendChild(tmpObj);
 	
 	var passwordLength = $MS.getGeneratedPasswordLength();
