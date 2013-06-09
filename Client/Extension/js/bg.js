@@ -280,10 +280,9 @@ window.addEventListener("load", function(){
 					//currently highlighted one, then it'll display the notification for the 
 					//background navigation; therefore we must check again for the currently 
 					//focused tab
-					
-					var focusedTab = opera.extension.tabs.getFocused();
-					mint_handleNotify(focusedTab?focusedTab.url:"");
-					
+					genericRetrieve_currentTab(function(currentTab){
+						mint_handleNotify(currentTab?currentTab.url:"");
+					});			
 				}
 				else if(event.data.action == 'inputList')
 				{
