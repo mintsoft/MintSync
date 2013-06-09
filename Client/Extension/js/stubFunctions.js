@@ -1,7 +1,7 @@
 
 //function stub for opera.extension.postMessage
 function genericPostMessage(objToSend){
-	
+	chrome.runtime.sendMessage(objToSend);
 }
 
 //stub to access opera.extension.bgProcess.mintSyncGlobals
