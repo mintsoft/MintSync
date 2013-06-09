@@ -211,151 +211,77 @@ function startPasswdResetTimer()
 		mintSyncGlobals.passwdResetTimer = setTimeout(clearCachedPasswd,60000*preferences["SavePassBDuration"]);
 }
 
-
-
-
-/** Entry Point **/
 /*
-window.addEventListener("load", function(){
-	var newWindow,
-		ToolbarUIItemProperties = {
-			title: "MintSync",
-			icon: "img/button_icon.png",
-			badge: {},
-			popup: {
-				href: "popup.html",
-				width: 330,
-				height: 260
-			}
-		};
-	
-	var preferences = genericRetrieve_preferencesObj();
-	
-	mintSyncGlobals.theButton = opera.contexts.toolbar.createItem(ToolbarUIItemProperties);
-	opera.contexts.toolbar.addItem(mintSyncGlobals.theButton);
+	Callback for all badge notifications
 */
-	//OnConnect for both injectJS and popups
-	/*
-	chrome.runtime.onConnect.addListener(function(port) {
-		console.debug("1. Handling onconnect message: ",port);
-		//try {
-			//if it's our Popup
-			//if ( event.origin.indexOf("popup.html") > -1 && event.origin.indexOf("widget://") > -1)
-			if(!port.sender.tab)
-			{
-								genericRetrieve_currentTab(function(tab){
-					if(tab)
-					{
-						//send a message to the injectedJS with the messageChannel to the popup
-						tab.sendMessage('popupConnect', port);
-					}
-				});
-				console.debug("2. Not a tab: ");
-				if(mintSyncGlobals.activeTabChannel)
-				{
-					console.debug("3. activeChannel IS configured sending message");
-					mintSyncGlobals.activeTabChannel.postMessage({}, "popupconnect");
-				}
-				else
-					console.debug("4. activeChannel not configured - doing nothing");
-			}
-			else
-			{
-				mintSyncGlobals.activeTabChannel = port;
-				console.debug("9. onConnect received from something not popup.html", port);
-			}
-	//	}
-	/*	catch(error) {
-			//ignore it for now
-			console.error("There was an error with the extension OnConnect callback:",error);
-		}*/
-	//});*/
+function badgeShouldBeUpdated() {
+	try {
+		genericRetrieve_currentTab(function(currentTab){
+			mint_handleNotify(currentTab.url);
+		})
+	}
+	catch(error) {
+		//ignore it for now
+		console.error("There was an error with the badge updating:", error);
+	}
+}
 
-	//add handler for tab notifications
-	function badgeShouldBeUpdated() {
-		try {
-			genericRetrieve_currentTab(function(currentTab){
-				mint_handleNotify(currentTab.url);
-			})
-		}
-		catch(error) {
-			//ignore it for now
-			console.error("There was an error with the badge updating:", error);
-		}
-	}
-	chrome.tabs.onUpdated.addListener(badgeShouldBeUpdated);
-	chrome.tabs.onActivated.addListener(badgeShouldBeUpdated);
-	
-	//add handler for messages, including injected JS
-	chrome.extension.onMessage.addListener(function(event) {
-		console.debug("Received extension message:", event);
-		//hack for compatibility for now.
-		event.data = event;
-		switch(event.data.src)
-		{
-			//message from the Inject JS
-			case "injectedJS":
-				if(event.data.action == 'updateIconBadge')	// got the URL from the injected script
-				{	//if one uses the URL from the injected script here, and the tab isn't the
-					//currently highlighted one, then it'll display the notification for the 
-					//background navigation; therefore we must check again for the currently 
-					//focused tab
-					/*
-					var focusedTab = opera.extension.tabs.getFocused();
-					mint_handleNotify(focusedTab?focusedTab.url:"");
-					*/
-				}
-				else if(event.data.action == 'inputList')
-				{
-					console.log("background Process Received:",event.data.inputs);
-				}
-				
-			break;
-			case "options":
-				if(event.data.action == 'stopLocalCache')
-				{
-					clearTimeout(mintSyncGlobals.cacheTimer);
-					mintSyncGlobals.urlCache = [];
-				}
-				else if(event.data.action == 'startLocalCache')
-				{
-					updateLocalURLCache();		
-				}
-			break;
-			case "popup":
-				if(event.data.action == "requestInputList")
-				{
-					//post message to the injectedJS --no longer used
-				}
-			break;
-			case "all":
-				if (event.data.action == 'startPasswdResetTimer')
-				{
-					startPasswdResetTimer();
-				}
-			break;
-			default:
-			//messages from any other source
-				if(event.data.action == 'updateLocalCache')
-				{
-					updateLocalURLCache();
-				}
-		}
-	});
-	/*
-	//TODO check if this works etc
-	//Optional NotifySource system,
-	// if the notifysource is configured to local cache, then maintain a local cache every x mins
-	if($MS.getNotify() && preferences["NotifySource"] === "cache")
+chrome.tabs.onUpdated.addListener(badgeShouldBeUpdated);
+chrome.tabs.onActivated.addListener(badgeShouldBeUpdated);
+
+//add handler for messages, including injected JS
+chrome.extension.onMessage.addListener(function(event) {
+	console.debug("Received extension message:", event);
+	//hack for compatibility for now.
+	event.data = event;
+	switch(event.data.src)
 	{
-		//updates the cache and retriggers the timeout
-		updateLocalURLCache();		
+		//message from the Inject JS
+		case "injectedJS":
+			if(event.data.action == 'updateIconBadge')	// got the URL from the injected script
+			{	//if one uses the URL from the injected script here, and the tab isn't the
+				//currently highlighted one, then it'll display the notification for the 
+				//background navigation; therefore we must check again for the currently 
+				//focused tab
+				/*
+				var focusedTab = opera.extension.tabs.getFocused();
+				mint_handleNotify(focusedTab?focusedTab.url:"");
+				*/
+			}
+			else if(event.data.action == 'inputList')
+			{
+				console.log("background Process Received:",event.data.inputs);
+			}
+
+		break;
+		case "options":
+			if(event.data.action == 'stopLocalCache')
+			{
+				clearTimeout(mintSyncGlobals.cacheTimer);
+				mintSyncGlobals.urlCache = [];
+			}
+			else if(event.data.action == 'startLocalCache')
+			{
+				updateLocalURLCache();		
+			}
+		break;
+		case "popup":
+			if(event.data.action == "requestInputList")
+			{
+				//post message to the injectedJS --no longer used
+			}
+		break;
+		case "all":
+			if (event.data.action == 'startPasswdResetTimer')
+			{
+				startPasswdResetTimer();
+			}
+		break;
+		default:
+		//messages from any other source
+			if(event.data.action == 'updateLocalCache')
+			{
+				updateLocalURLCache();
+			}
 	}
-	*/
-//}, false);
-/*
-if (chrome.tab.url.indexOf("chrome-devtools://") == -1) {
-	chrome.tabs.executeScript(null, {
-		file: "includes/ins.js"
-	});
-}*/
+});
