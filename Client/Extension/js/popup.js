@@ -7,14 +7,14 @@ var g_currentURL ="",
 //used to parse GET variables from the current URL when opened "fullscreen"
 function getParameterByName(name)
 {
-  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-  var regexS = "[\\?&]" + name + "=([^&#]*)";
-  var regex = new RegExp(regexS);
-  var results = regex.exec(window.location.href);
-  if(results == null)
-    return "";
-  else
-    return decodeURIComponent(results[1].replace(/\+/g, " "));
+	name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+	var regexS = "[\\?&]" + name + "=([^&#]*)";
+	var regex = new RegExp(regexS);
+	var results = regex.exec(window.location.href);
+	if(results == null)
+		return "";
+	else
+		return decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
 //returns a "representative" string if str > maxlength
@@ -32,7 +32,9 @@ function truncateInputAttribute(str)
 //Callback for handling messages sent over the MessageChannel from InjectedJS
 function handleMessageFromInjectedJS(e)
 {
-	console.debug("Popup received Message from Injected Script:",e)
+	console.debug("Popup received Message from Injected Script:");
+	console.debug(e);
+	e.data = e;	//compatibility hack for now
 	if(e.data.action == "inputList")
 	{	
 		//get the label for the clicked input
@@ -69,15 +71,9 @@ function handleMessageFromInjectedJS(e)
 //Use configured messageChannel to send a message to the InjectedJS
 function sendMessageToInjectedJS(message)
 {
-	var sendStr = message;
-	if(g_injectedPort)
-	{
-		g_injectedPort.postMessage(sendStr);
-	}
-	else
-	{
-		console.error("MessageChannel not yet configured, message not sent", message);
-	}
+	chrome.tabs.getSelected(null, function(tab){
+		chrome.tabs.sendMessage(tab.id, message, handleMessageFromInjectedJS);
+	});
 }
 
 /** jQuery Entry Point **/
@@ -139,22 +135,7 @@ $(document).ready(function(){
 // runs AFTER jQuery(document).ready();
 //insert the currently selected tab into the box by default
 window.addEventListener('load', function() {
-/*
-	if(!opera.extension)
-		return;
-	
-	//if it has been clicked, then the message will contain the URL etc
-	opera.extension.onmessage = function(event) {
-		if (event.data == "popupConnect")
-		{
-			if(event.ports.length > 0)
-			{
-				g_injectedPort = event.ports[0];
-				g_injectedPort.onmessage = handleMessageFromInjectedJS;
-			}
-		}
-	};
-*/	
+
 	//if running as a standard popup
 	if(!g_isFullscreen)
 	{
@@ -238,7 +219,7 @@ function addPair()
 	//if it's the fullscreen popup then don't display the inject button
 	if(g_isFullscreen)
 	{	//using hide here causes some sort of clash with jQuery-Tools
-		//and it un-hides them ¬_¬
+		//and it un-hides them
 		$(tmpObj).find("img.hidden_when_max").css({'display' : 'none'});
 	}
 	

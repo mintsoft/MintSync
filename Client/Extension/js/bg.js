@@ -46,7 +46,7 @@ function mint_handleNotificationIcon(data)
 		case "ok":
 			if(parsedResult.data>0)
 			{
-				setBadgeStatus("   ", '#00D100', "Credentials are available", '#FFFFFF' );
+				setBadgeStatus(" ", '#00D100', "Credentials are available", '#FFFFFF' );
 			}
 			else
 			{
@@ -73,7 +73,7 @@ function mint_handleNotify(URL)
 		var preferences = genericRetrieve_preferencesObj();
 		if(!$MS.checkForSavedAuth())
 		{
-			setBadgeStatus(" ? ", "#FFFCCA", "You have not logged in", "#CCCCCC" )
+			setBadgeStatus("?", "#FFF230", "You have not logged in", "#CCCCCC" )
 			return;
 		}
 		
@@ -233,33 +233,44 @@ window.addEventListener("load", function(){
 	
 	mintSyncGlobals.theButton = opera.contexts.toolbar.createItem(ToolbarUIItemProperties);
 	opera.contexts.toolbar.addItem(mintSyncGlobals.theButton);
-
+*/
 	//OnConnect for both injectJS and popups
-	opera.extension.onconnect = function(event) {
-		console.debug("Handling onconnect message",event);
-		try {
+	/*
+	chrome.runtime.onConnect.addListener(function(port) {
+		console.debug("1. Handling onconnect message: ",port);
+		//try {
 			//if it's our Popup
-			if ( event.origin.indexOf("popup.html") > -1 && event.origin.indexOf("widget://") > -1)
+			//if ( event.origin.indexOf("popup.html") > -1 && event.origin.indexOf("widget://") > -1)
+			if(!port.sender.tab)
 			{
-			
-				var tab = opera.extension.tabs.getFocused();
-				if(tab)
+								genericRetrieve_currentTab(function(tab){
+					if(tab)
+					{
+						//send a message to the injectedJS with the messageChannel to the popup
+						tab.sendMessage('popupConnect', port);
+					}
+				});
+				console.debug("2. Not a tab: ");
+				if(mintSyncGlobals.activeTabChannel)
 				{
-					//send a message to the injectedJS with the messageChannel to the popup
-					tab.postMessage('popupConnect', [event.source]);
+					console.debug("3. activeChannel IS configured sending message");
+					mintSyncGlobals.activeTabChannel.postMessage({}, "popupconnect");
 				}
+				else
+					console.debug("4. activeChannel not configured - doing nothing");
 			}
 			else
 			{
-				console.debug("onconnect received from something not popup.html, event");
+				mintSyncGlobals.activeTabChannel = port;
+				console.debug("9. onConnect received from something not popup.html", port);
 			}
-		}
-		catch(error) {
+	//	}
+	/*	catch(error) {
 			//ignore it for now
-			console.error("There was an error with the Opera Extension OnConnect callback:",error);
-		}
-	}
-*/
+			console.error("There was an error with the extension OnConnect callback:",error);
+		}*/
+	//});*/
+
 	//add handler for tab notifications
 	function badgeShouldBeUpdated() {
 		try {
@@ -274,10 +285,12 @@ window.addEventListener("load", function(){
 	}
 	chrome.tabs.onUpdated.addListener(badgeShouldBeUpdated);
 	chrome.tabs.onActivated.addListener(badgeShouldBeUpdated);
-	/*
+	
 	//add handler for messages, including injected JS
-	opera.extension.onmessage = function(event) {
+	chrome.extension.onMessage.addListener(function(event) {
 		console.debug("Received extension message:", event);
+		//hack for compatibility for now.
+		event.data = event;
 		switch(event.data.src)
 		{
 			//message from the Inject JS
@@ -287,10 +300,10 @@ window.addEventListener("load", function(){
 					//currently highlighted one, then it'll display the notification for the 
 					//background navigation; therefore we must check again for the currently 
 					//focused tab
-					
+					/*
 					var focusedTab = opera.extension.tabs.getFocused();
 					mint_handleNotify(focusedTab?focusedTab.url:"");
-					
+					*/
 				}
 				else if(event.data.action == 'inputList')
 				{
@@ -328,8 +341,9 @@ window.addEventListener("load", function(){
 					updateLocalURLCache();
 				}
 		}
-	}
-	
+	});
+	/*
+	//TODO check if this works etc
 	//Optional NotifySource system,
 	// if the notifysource is configured to local cache, then maintain a local cache every x mins
 	if($MS.getNotify() && preferences["NotifySource"] === "cache")
@@ -339,3 +353,9 @@ window.addEventListener("load", function(){
 	}
 	*/
 //}, false);
+/*
+if (chrome.tab.url.indexOf("chrome-devtools://") == -1) {
+	chrome.tabs.executeScript(null, {
+		file: "includes/ins.js"
+	});
+}*/
