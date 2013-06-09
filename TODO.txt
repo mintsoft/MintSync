@@ -1,7 +1,11 @@
-Things to fix if possible
-=========================
 
-Fix the "close the popup whilst the input is highlighted issue"
-	- not really possible until opera add popup.onclose callback
-Reset the status of the button text/colour on Speeddial pages
-	- does not appear to be possible currently
+-> Settings are broken in Opera 15 (display at least)
+	This is due to buggy webkit: <input type='radio' style='box-shadow: inset 1px 1px 2px #666;' />
+
+There are no default settings anywhere - move these into the stubs?
+
+Test features I don't really use
+	-	Cache
+
+Popup has a slight rendering bug on the hanging tabs
+Injection/Message passing needs refactoring to make it more generic between implementations
