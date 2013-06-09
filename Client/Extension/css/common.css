@@ -97,6 +97,7 @@ input[type='checkbox']
 input[type='radio'] 
 {
 	margin-left: 1em;
+	box-shadow: none;	/* Looks just awful with box-shadow in webkit */
 }
 input[type='radio']:nth-of-type(1) 
 {
@@ -116,7 +117,7 @@ input[type='submit'], button, input[type='button']
 }
 
 /* Disable chromium's irritating outline on selected boxes */
-input:focus {
+input:focus, select:focus {
 	outline: none;
 }
 

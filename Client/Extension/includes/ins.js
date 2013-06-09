@@ -116,6 +116,35 @@
 				elements[x].value = e.data.target.value;
 			}
 			
+			if (e.data.target.doSubmit && elements.length > 0)
+			{
+				console.log("Submitting Form");
+				
+				//Get parent for the item
+				var iteratorElement = elements[0];
+				while (iteratorElement.parentNode && iteratorElement.tagName.toLowerCase() != "form")
+				{
+					iteratorElement = iteratorElement.parentNode;
+				}
+				
+				//Submit the form in the best way possible
+				var doneSubmitAlready = false;
+				if (iteratorElement && iteratorElement.tagName.toLowerCase() == "form")
+				{
+					var buttons = window.Sizzle("input[type=submit],button[type=submit]",iteratorElement);
+					for (var button in buttons)
+					{
+						buttons[button].click();
+						doneSubmitAlready = true;
+					}
+					
+					//Fail over to dodgey form submit 
+					if( ! doneSubmitAlready )
+					{
+						iteratorElement.submit();
+					}
+				}
+			}
 		}
 		else if (e.data.action == 'hilightInput')
 		{
