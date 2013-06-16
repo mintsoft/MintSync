@@ -37,8 +37,8 @@ function resetBadgeStatus()
 */
 function mint_handleNotificationIcon(data)
 {
-	var parsedResult = data;	//already an object
-	if(typeof data=="string")	//this should never happen, probably means there was an error
+	var parsedResult = data;		//already an object
+	if(typeof data === "string")	//this should never happen, probably means there was an error
 	{
 		console.error("You have reached an undefined state: bg.js:20");
 		console.error(data);
@@ -76,7 +76,7 @@ function mint_handleNotify(URL)
 		var preferences = genericRetrieve_preferencesObj();
 		if(!$MS.checkForSavedAuth())
 		{
-			setBadgeStatus(" ? ", "#FFFCCA", "You have not logged in", "#CCCCCC" )
+			setBadgeStatus(" ? ", "#FFFCCA", "You have not logged in", "#CCCCCC" );
 			return;
 		}
 		
@@ -90,7 +90,7 @@ function mint_handleNotify(URL)
 				
 				//console.info("Source URL: "+srcURL);
 				
-				for(urlIndex in mintSyncGlobals.urlCache)
+				for(var urlIndex in mintSyncGlobals.urlCache)
 				{
 					regexEquivalent = mintSyncGlobals.urlCache[urlIndex];
 					//escape regex characters
@@ -128,7 +128,9 @@ function mint_handleNotify(URL)
 						break;
 					}
 					else
+					{
 						URLExists=0;
+					}
 				}
 				
 				mint_handleNotificationIcon({
@@ -211,7 +213,9 @@ function startPasswdResetTimer()
 	console.debug("StartPasswordResettimer");
 	clearTimeout(mintSyncGlobals.passwdResetTimer);
 	if(preferences["SavePassBDuration"]*1 > 0)
+	{
 		mintSyncGlobals.passwdResetTimer = setTimeout(clearCachedPasswd,60000*preferences["SavePassBDuration"]);
+	}
 }
 
 
@@ -260,7 +264,7 @@ window.addEventListener("load", function(){
 			//ignore it for now
 			console.error("There was an error with the Opera Extension OnConnect callback:",error);
 		}
-	}
+	};
 
 	//add handler for tab notifications
 	opera.extension.tabs.onfocus = function() {
@@ -272,7 +276,7 @@ window.addEventListener("load", function(){
 			//ignore it for now
 			console.error("There was an error with the Opera Extension onfocus callback:",error);
 		}
-	}
+	};
 	
 	//add handler for messages, including injected JS
 	opera.extension.onmessage = function(event) {
@@ -326,7 +330,7 @@ window.addEventListener("load", function(){
 					updateLocalURLCache();
 				}
 		}
-	}
+	};
 	
 	//Optional NotifySource system,
 	// if the notifysource is configured to local cache, then maintain a local cache every x mins
