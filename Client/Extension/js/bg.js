@@ -33,7 +33,7 @@ function resetBadgeStatus()
 }
 
 /**
-	Callback executed by the AJAX request, 	
+	Callback executed by the AJAX request,
 */
 function mint_handleNotificationIcon(data)
 {
@@ -90,8 +90,8 @@ function mint_handleNotify(URL)
 				
 				//console.info("Source URL: "+srcURL);
 				
-				for(urlIndex in mintSyncGlobals.urlCache) 
-				{ 
+				for(urlIndex in mintSyncGlobals.urlCache)
+				{
 					regexEquivalent = mintSyncGlobals.urlCache[urlIndex];
 					//escape regex characters
 					//? * [ ] { } ( ) . ^ $ - | / \
@@ -197,7 +197,7 @@ function updateLocalURLCache()
 function clearCachedPasswd()
 {
 	console.debug("clearCachedPasswd being called, BG saved passwd cleared");
-	//passwdResetTimer	
+	//passwdResetTimer
 	mintSyncGlobals.passwd = undefined;
 	clearTimeout(mintSyncGlobals.passwdResetTimer);
 }
@@ -230,9 +230,9 @@ window.addEventListener("load", function(){
 				height: 260
 			}
 		};
-	
+
 	var preferences = genericRetrieve_preferencesObj();
-	
+
 	mintSyncGlobals.theButton = opera.contexts.toolbar.createItem(ToolbarUIItemProperties);
 	opera.contexts.toolbar.addItem(mintSyncGlobals.theButton);
 
@@ -243,7 +243,7 @@ window.addEventListener("load", function(){
 			//if it's our Popup
 			if ( event.origin.indexOf("popup.html") > -1 && event.origin.indexOf("widget://") > -1)
 			{
-			
+
 				var tab = opera.extension.tabs.getFocused();
 				if(tab)
 				{
@@ -283,12 +283,12 @@ window.addEventListener("load", function(){
 			case "injectedJS":
 				if(event.data.action == 'updateIconBadge')	// got the URL from the injected script
 				{	//if one uses the URL from the injected script here, and the tab isn't the
-					//currently highlighted one, then it'll display the notification for the 
-					//background navigation; therefore we must check again for the currently 
+					//currently highlighted one, then it'll display the notification for the
+					//background navigation; therefore we must check again for the currently
 					//focused tab
 					genericRetrieve_currentTab(function(currentTab){
 						mint_handleNotify(currentTab?currentTab.url:"");
-					});			
+					});
 				}
 				else if(event.data.action == 'inputList')
 				{
@@ -304,7 +304,7 @@ window.addEventListener("load", function(){
 				}
 				else if(event.data.action == 'startLocalCache')
 				{
-					updateLocalURLCache();		
+					updateLocalURLCache();
 				}
 			break;
 			case "popup":
@@ -333,7 +333,7 @@ window.addEventListener("load", function(){
 	if($MS.getNotify() && preferences["NotifySource"] === "cache")
 	{
 		//updates the cache and retriggers the timeout
-		updateLocalURLCache();		
+		updateLocalURLCache();
 	}
 	
 }, false);
