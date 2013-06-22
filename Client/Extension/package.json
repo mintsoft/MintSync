@@ -1,0 +1,9 @@
+{
+  "name": "mintsync",
+  "fullName": "MintSync",
+  "id": "jid1-MDrySqrG0vuQlw",
+  "description": "Secure, self-hosted client-side decrypted password storage",
+  "author": "Rob Emery",
+  "license": "Apache 2.0",
+  "version": "0.1"
+}
