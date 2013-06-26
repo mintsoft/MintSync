@@ -1,3 +1,4 @@
+/* jshint sub:true */
 /** Background Process File **/
 
 /** Persistant variables for browserSession */
@@ -134,7 +135,7 @@ function mint_handleNotify(URL)
 				
 			break;
 
-			case "ajax":
+//			case "ajax":
 			default:
 
 				//console.info("Processing Notification Request from: AJAX");

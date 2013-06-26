@@ -1,3 +1,4 @@
+/* jshint sub:true */
 //required otherwise jQuery attempts to stop the cross domain request
 jQuery.support.cors = true;
 
@@ -8,7 +9,7 @@ var g_ctrlDown = false;
 	MintSync Object
 */
 function MintSync() {
-	this.rememberedPassword = undefined,
+	this.rememberedPassword = undefined;
 	/*
 		Retrieve passwords for the passed domain
 	*/
@@ -28,11 +29,11 @@ function MintSync() {
 					//add the headers for the auth:
 					$MS.configureAuth(jq,settings,authObj);
 					
-					if(callbacks.beforeSend != undefined)
+					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
 				},
 				complete: function(jq,textStatus) {
-					if(callbacks.complete != undefined)
+					if(callbacks.complete !== undefined)
 						callbacks.complete(jq,textStatus);
 				},
 				error: function(jq,textStatus,errorThrown) {
@@ -41,17 +42,17 @@ function MintSync() {
 					{
 						$MS.resetSavedCredentials();
 					}
-					if(callbacks.error != undefined)
+					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
 				},
 				success: function(data,textStatus,jq) {
-					if(callbacks.success != undefined)
+					if(callbacks.success !== undefined)
 						callbacks.success(data);
 				}
 			});
 		});
 		
-	},
+	};
 	/*
 		Retrieve passwords for the passed ID
 	*/
@@ -71,11 +72,11 @@ function MintSync() {
 					//add the headers for the auth:
 					$MS.configureAuth(jq,settings,authObj);
 					
-					if(callbacks.beforeSend != undefined)
+					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
 				},
 				complete: function(jq,textStatus) {
-					if(callbacks.complete != undefined)
+					if(callbacks.complete !== undefined)
 						callbacks.complete(jq,textStatus);
 				},
 				error: function(jq,textStatus,errorThrown) {
@@ -84,17 +85,17 @@ function MintSync() {
 					{
 						$MS.resetSavedCredentials();
 					}
-					if(callbacks.error != undefined)
+					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
 				},
 				success: function(data,textStatus,jq) {
-					if(callbacks.success != undefined)
+					if(callbacks.success !== undefined)
 						callbacks.success(data);
 				}
 			});
 		});
 		
-	},
+	};
 	/*
 		Retrieve passwords for the passed domain
 	*/
@@ -123,15 +124,15 @@ function MintSync() {
 					if(!$MS.configureAuth(jq,settings,authObj))
 					{
 						//console.info("Check URL Request cancelled, no auth");
-						return false
+						return false;
 					}
 					//console.info("Check URL Request  sent, auth available");
-					if(callbacks.beforeSend != undefined)
+					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
 				},
 				complete: function(jq,textStatus) {
 				//console.info("Check URL Request  complete");
-					if(callbacks.complete != undefined)
+					if(callbacks.complete !== undefined)
 						callbacks.complete(jq,textStatus);
 				},
 				error: function(jq,textStatus,errorThrown) {
@@ -140,18 +141,18 @@ function MintSync() {
 						$MS.resetSavedCredentials();
 					}
 				//console.info("Check URL Request  errors");
-					if(callbacks.error != undefined)
+					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
 				},
 				success: function(data,textStatus,jq) {
 				//console.info("Check URL Request  success");
-					if(callbacks.success != undefined)
+					if(callbacks.success !== undefined)
 						callbacks.success(data);
 				}
 			});
 		});
 		
-	},
+	};
 	/*
 		Retrieve passwords for the passed domain
 	*/
@@ -171,11 +172,11 @@ function MintSync() {
 					//add the headers for the auth:
 					$MS.configureAuth(jq,settings,authObj);
 					
-					if(callbacks.beforeSend != undefined)
+					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
 				},
 				complete: function(jq,textStatus) {
-					if(callbacks.complete != undefined)
+					if(callbacks.complete !== undefined)
 						callbacks.complete(jq,textStatus);
 				},
 				error: function(jq,textStatus,errorThrown) {
@@ -183,16 +184,16 @@ function MintSync() {
 					{
 						$MS.resetSavedCredentials();
 					}
-					if(callbacks.error != undefined)
+					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
 				},
 				success: function(data,textStatus,jq) {
-					if(callbacks.success != undefined)
+					if(callbacks.success !== undefined)
 						callbacks.success(data);
 				}
 			});
 		});
-	},
+	};
 	/**
 		Performs the AJAX request saving the password
 	*/
@@ -218,11 +219,11 @@ function MintSync() {
 					//add the headers for the auth:
 					$MS.configureAuth(jq,settings,authObj);
 					
-					if(callbacks.beforeSend != undefined)
+					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
 				},
 				complete: function(jq,textStatus) {
-					if(callbacks.complete != undefined)
+					if(callbacks.complete !== undefined)
 						callbacks.complete(jq,textStatus);
 				},
 				error: function(jq,textStatus,errorThrown) {
@@ -230,17 +231,17 @@ function MintSync() {
 					{
 						$MS.resetSavedCredentials();
 					}
-					if(callbacks.error != undefined)
+					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
 				},
 				success: function(data,textStatus,jq) {
-					if(callbacks.success != undefined)
+					if(callbacks.success !== undefined)
 						callbacks.success(data,textStatus,jq);
 				}
 			});
 		});
 		
-	},	
+	};	
 	/** removes the password with the request ID */
 	
 	this.removePasswords = function(ID,url,callbacks) {
@@ -258,11 +259,11 @@ function MintSync() {
 					//add the headers for the auth:
 					$MS.configureAuth(jq,settings,authObj);
 					
-					if(callbacks.beforeSend != undefined)
+					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
 				},
 				complete: function(jq,textStatus) {
-					if(callbacks.complete != undefined)
+					if(callbacks.complete !== undefined)
 						callbacks.complete(jq,textStatus);
 				},
 				error: function(jq,textStatus,errorThrown) {
@@ -270,17 +271,17 @@ function MintSync() {
 					{
 						$MS.resetSavedCredentials();
 					}
-					if(callbacks.error != undefined)
+					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
 				},
 				success: function(data,textStatus,jq) {
-					if(callbacks.success != undefined)
+					if(callbacks.success !== undefined)
 						callbacks.success(data);
 				}
 			});
 		});
 		
-	},
+	};
 	/**
 		Performs the AJAX request renaming the URL with the ID passed
 	*/
@@ -300,11 +301,11 @@ function MintSync() {
 					//add the headers for the auth:
 					$MS.configureAuth(jq,settings,authObj);
 					
-					if(callbacks.beforeSend != undefined)
+					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
 				},
 				complete: function(jq,textStatus) {
-					if(callbacks.complete != undefined)
+					if(callbacks.complete !== undefined)
 						callbacks.complete(jq,textStatus);
 				},
 				error: function(jq,textStatus,errorThrown) {
@@ -312,16 +313,16 @@ function MintSync() {
 					{
 						$MS.resetSavedCredentials();
 					}
-					if(callbacks.error != undefined)
+					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
 				},
 				success: function(data,textStatus,jq) {
-					if(callbacks.success != undefined)
+					if(callbacks.success !== undefined)
 						callbacks.success(data);
 				}
 			});
 		});
-	},
+	};
 	/**
 		Takes a password hash and verifies it against the copy kept serverside
 	*/
@@ -345,11 +346,11 @@ function MintSync() {
 					//add the headers for the auth:
 					$MS.configureAuth(jq,settings,authObj);
 					
-					if(callbacks.beforeSend != undefined)
+					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
 				},
 				complete: function(jq,textStatus) {
-					if(callbacks.complete != undefined)
+					if(callbacks.complete !== undefined)
 						callbacks.complete(jq,textStatus);
 				},
 				error: function(jq,textStatus,errorThrown) {
@@ -361,17 +362,17 @@ function MintSync() {
 					{
 							
 					}
-					if(callbacks.error != undefined)
+					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
 				},
 				success: function(data,textStatus,jq) {
-					if(callbacks.success != undefined)
+					if(callbacks.success !== undefined)
 						callbacks.success(data);
 				}
 			});
 		});
 		
-	},
+	};
 	/** 
 		Retrieves the keySlot password for the user 
 	*/
@@ -390,11 +391,11 @@ function MintSync() {
 					//add the headers for the auth:
 					$MS.configureAuth(jq,settings,authObj);
 					
-					if(callbacks.beforeSend != undefined)
+					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
 				},
 				complete: function(jq,textStatus) {
-					if(callbacks.complete != undefined)
+					if(callbacks.complete !== undefined)
 						callbacks.complete(jq,textStatus);
 				},
 				error: function(jq,textStatus,errorThrown) {
@@ -402,16 +403,16 @@ function MintSync() {
 					{
 						$MS.resetSavedCredentials();
 					}
-					if(callbacks.error != undefined)
+					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
 				},
 				success: function(data,textStatus,jq) {
-					if(callbacks.success != undefined)
+					if(callbacks.success !== undefined)
 						callbacks.success(data);
 				}
 			});
 		});
-	},
+	};
 	/**
 		Performs the AJAX request saving the password
 	*/
@@ -434,11 +435,11 @@ function MintSync() {
 					//add the headers for the auth:
 					$MS.configureAuth(jq,settings,authObj);
 					
-					if(callbacks.beforeSend != undefined)
+					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
 				},
 				complete: function(jq,textStatus) {
-					if(callbacks.complete != undefined)
+					if(callbacks.complete !== undefined)
 						callbacks.complete(jq,textStatus);
 				},
 				error: function(jq,textStatus,errorThrown) {
@@ -446,17 +447,17 @@ function MintSync() {
 					{
 						$MS.resetSavedCredentials();
 					}
-					if(callbacks.error != undefined)
+					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
 				},
 				success: function(data,textStatus,jq) {
-					if(callbacks.success != undefined)
+					if(callbacks.success !== undefined)
 						callbacks.success(data,textStatus,jq);
 				}
 			});
 		});
 		
-	},	
+	};	
 	/** 
 		Takes a jQuery AJAX object and does the voodoo to the headers for auth 
 		last argument is whether to prompt or not
@@ -471,21 +472,21 @@ function MintSync() {
 			authStr = "",
 			nonce = $MS.generateRowSalt();
 		
-		authStr	 = AuthObject.username+"|"+nonce+"|";
+		authStr = AuthObject.username+"|"+nonce+"|";
 		hash = AuthObject.password;
 		
-		shaObj	 = new jsSHA(hash+":"+nonce,"ASCII");
+		shaObj = new jsSHA(hash+":"+nonce,"ASCII");
 		authStr	+= shaObj.getHash("SHA-512","B64");
 		jqXHR.setRequestHeader("X-MS-Authorisation", "MintSync1 "+authStr);
 		return true;
-	},
+	};
 	/**
 		Returns the hash of the password as a string of hex digits
 	*/
 	this.hashPass = function(passwd) {
 		var shaObj = new jsSHA(passwd, "ASCII");
 		return shaObj.getHash("SHA-512", "HEX");
-	},	
+	};	
 	/**
 		Returns a string type that contains a hex representation of 
 			the password hash (SHA-512), this is the MASTER Key used
@@ -512,7 +513,7 @@ function MintSync() {
 			var passwd;
 			//get the password from the background process
 			passwd = genericRetrieve_mintSyncGlobals().passwd;
-			if(passwd==undefined)
+			if(passwd === undefined)
 			{
 				askForPassword(strPrompt,function(password){
 					var hash  = $MS.hashPass(password);
@@ -541,7 +542,7 @@ function MintSync() {
 		else if (preferences["SavePassword"]==0.5)
 		{
 			//request password and store in global
-			if($MS.rememberedPassword==undefined)
+			if($MS.rememberedPassword === undefined)
 				askForPassword(strPrompt,function(password){
 					$MS.rememberedPassword = $MS.hashPass(password);
 					successCallback($MS.rememberedPassword);
@@ -555,7 +556,7 @@ function MintSync() {
 				successCallback($MS.hashPass(password));
 			});
 		}
-	},
+	};
 	/**
 		Returns a boolean representing whether or not we have any credentials saved
 	**/
@@ -566,7 +567,6 @@ function MintSync() {
 		{
 			case "1":
 				return !(preferences["SavedAuthentication"]=="undefined" && preferences["SavedAuthentication"]);
-			break;
 			case "0.8":
 				if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess
 				{
@@ -578,13 +578,12 @@ function MintSync() {
 				}
 			break;
 			case "0.5":
-				return $MS.rememberedAuthentication!==undefined
-			break;
-			case "0":
+				return $MS.rememberedAuthentication !== undefined;
+//			case "0":
 			default:
 				return false;
 		}
-	},
+	};
 	
 	/**
 		Will retrieve the authentication credentials if saved and request for them if not
@@ -677,7 +676,7 @@ function MintSync() {
 				authCallback(authObj);
 			});
 		}
-	},	
+	};	
 	/**
 		Resets the credentials saved (however they are)
 	*/
@@ -701,12 +700,12 @@ function MintSync() {
 				
 			break;
 			case "0.5":
-				$MS.rememberedAuthentication=undefined
+				$MS.rememberedAuthentication = undefined;
 			break;
-			case "0":
+//			case "0":
 			default:
 		}
-	},	
+	};	
 	/**
 		Resets the crypto password saved (however they are)
 	*/
@@ -729,12 +728,12 @@ function MintSync() {
 				
 			break;
 			case "0.5":
-				$MS.rememberedPassword=undefined
+				$MS.rememberedPassword = undefined;
 			break;
-			case "0":
+//			case "0":
 			default:
 		}
-	},
+	};
 	/** 
 		Returns whether or not a password should be automatically 
 		retrieved when the pop up is launched or not.
@@ -742,7 +741,7 @@ function MintSync() {
 	this.getAutoFetch = function() {
 		var preferences = genericRetrieve_preferencesObj();
 		return preferences["AutoFetch"];
-	},
+	};
 	/** 
 		Returns whether or not the user wants to be notified when 
 		there is a password on the page or not
@@ -750,27 +749,27 @@ function MintSync() {
 	this.getNotify = function() {
 		var preferences = genericRetrieve_preferencesObj();
 		return preferences["Notify"]=="1";
-	},
+	};
 	/**
 		Get the Server's base URL
 	*/
 	this.getServerURL = function() {
 		var preferences = genericRetrieve_preferencesObj();
 		return preferences["ServerURL"];
-	},
+	};
 	/**
 		Returns the password length configured
 	*/
 	this.getGeneratedPasswordLength = function() {
 		var preferences = genericRetrieve_preferencesObj();
 		return (typeof(preferences)==="undefined")?16:preferences["GeneratedPasswordLength"];
-	},
+	};
 	/**
 		Returns the length the row salt should be generated to
 	*/
 	this.getGeneratedRowSaltLength = function() {
 		return 32;
-	},
+	};
 	/**
 	Generates a random salt string
 	*/
@@ -788,16 +787,16 @@ function MintSync() {
 		}
 		
 		return salt;
-	},
+	};
 	/**
 	Generates a random password string
 	*/
 	this.generatePassword = function(length) {
-		var sourceSet = { 	"num"	: "1234567890", 
+		var sourceSet = {	"num"	: "1234567890", 
 							"alpha"	: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
 							"punc1"	: ";'#,./[]-=\\",
 							"punc2"	: "`~@$%^&*()_+{}|:\"<>!?",
-						 },
+						},
 			password="",
 			sourceString="",
 			preferences = genericRetrieve_preferencesObj();
@@ -805,9 +804,9 @@ function MintSync() {
 		//build	sourceString from preferences
 		sourceString = sourceSet.alpha;
 		
-		sourceString += preferences["passwordStrengthNum"]	== "true"?sourceSet.num:"";
-		sourceString += preferences["passwordStrengthPunc1"]	== "true"?sourceSet.punc1:"";
-		sourceString += preferences["passwordStrengthPunc2"]	== "true"?sourceSet.punc2:"";
+		sourceString += preferences["passwordStrengthNum"] == "true"?sourceSet.num:"";
+		sourceString += preferences["passwordStrengthPunc1"] == "true"?sourceSet.punc1:"";
+		sourceString += preferences["passwordStrengthPunc2"] == "true"?sourceSet.punc2:"";
 		
 		for(var x=0;x<length;++x)
 		{
@@ -816,9 +815,6 @@ function MintSync() {
 		}
 		
 		return password;
-	},
-	
-	//placeholder for the last element
-	this.empty=null
-};
+	};
+}
 $MS = new MintSync();
