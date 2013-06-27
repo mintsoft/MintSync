@@ -1,4 +1,4 @@
-BAsed on Amazon S3 authentication
+Based on Amazon S3 authentication
 
 Authorisation: MintSync Username+"|"+Nonce+"|"+ Base64EncodedAuthString
 

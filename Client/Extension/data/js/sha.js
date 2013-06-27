@@ -86,7 +86,7 @@
 	 *
 	 * @private
 	 * @param {Array} binarray Array of integers to be converted to hexidecimal
-	 *	 representation
+	 *		representation
 	 * @return Hexidecimal representation of the parameter in String form
 	 */
 	binb2hex = function (binarray)
@@ -109,7 +109,7 @@
 	 *
 	 * @private
 	 * @param {Array} binarray Array of integers to be converted to base-64
-	 *	 representation
+	 *		representation
 	 * @return Base-64 encoded representation of the parameter in String form
 	 */
 	binb2b64 = function (binarray)
@@ -579,7 +579,7 @@
 	 *
 	 * @private
 	 * @param {Array} message The binary array representation of the string to
-	 *	 hash
+	 *		hash
 	 * @param {Number} messageLen The number of bits in the message
 	 * @return The array of integers representing the SHA-1 hash of message
 	 */
@@ -947,7 +947,7 @@
 			this.strToHash = hex2binb(srcString);
 		}
 		else if (("ASCII" === inputFormat) ||
-			 ('undefined' === typeof(inputFormat)))
+				('undefined' === typeof(inputFormat)))
 		{
 			this.strBinLen = srcString.length * charSize;
 			this.strToHash = str2binb(srcString);
@@ -964,7 +964,7 @@
 		 * using the specified parameters
 		 *
 		 * @param {String} variant The desired SHA variant (SHA-1, SHA-224,
-		 *	 SHA-256, SHA-384, or SHA-512)
+		 *		SHA-256, SHA-384, or SHA-512)
 		 * @param {String} format The desired output formatting (B64 or HEX)
 		 * @return The string representation of the hash in the format specified
 		 */
@@ -1028,9 +1028,9 @@
 		 * @param {String} key The key used to calculate the HMAC
 		 * @param {String} inputFormat The format of key, ASCII or HEX
 		 * @param {String} variant The desired SHA variant (SHA-1, SHA-224,
-		 *	 SHA-256, SHA-384, or SHA-512)
+		 *		SHA-256, SHA-384, or SHA-512)
 		 * @param {String} outputFormat The desired output formatting
-		 *	 (B64 or HEX)
+		 *		(B64 or HEX)
 		 * @return The string representation of the hash in the format specified
 		 */
 		getHMAC : function (key, inputFormat, variant, outputFormat)
