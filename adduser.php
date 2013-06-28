@@ -16,13 +16,14 @@ $results = $stmt->fetchAll();
 $restTools = new restTools();
 
 if (isset($results[0]))
+{
 	$restTools->sendResponse(array(
-		"status" => "fail",
-		"data" => array(
-			"reason" => "User Exists"
-		)
-			), restTools::$HTTPCodes['CONFLICT']); //Conflict
-
+			"status" => "fail",
+			"data" => array(
+				"reason" => "User Exists"
+			)
+		), restTools::$HTTPCodes['CONFLICT']);
+}
 
 $stmt = $db->prepare("INSERT INTO user(username, password, keySlot0PassHash, keySlot0) VALUES(:user, :pass, :cpasshash, :keySlot0);");
 $stmt->bindValue(":user", $_POST['username']);
@@ -31,9 +32,9 @@ $stmt->bindValue(":cpasshash", $_POST['cryptopassword']);
 $stmt->bindValue(":keySlot0", $_POST['keySlot0']);
 $stmt->execute();
 $restTools->sendResponse(array(
-	"status" => "ok",
-	"data" => array(
-		"description" => "User Added"
-	)
-		), restTools::$HTTPCodes['OK']); //OK
+		"status" => "ok",
+		"data" => array(
+			"description" => "User Added"
+		)
+	), restTools::$HTTPCodes['OK']);
 ?>
