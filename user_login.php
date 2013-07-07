@@ -32,9 +32,17 @@ class user_login
 	 */
 	public static function validate()
 	{
-
+		$restTools = new restTools();
 		$headers = apache_request_headers();
-
+		if(empty($headers['X-MS-Authorisation']))
+		{
+			$restTools->sendResponse(array(
+						"status" => "fail",
+						"data" => array(
+							"reason" => "Authentication Error; X-MS-Authorisation headers must be provided"
+						)
+							), 403);
+		}
 		list($method, $authHeader) = explode(" ", $headers['X-MS-Authorisation']);
 
 		switch ($method)
@@ -48,7 +56,6 @@ class user_login
 
 				$srcString = "{$passhash}:{$rowSalt}";
 				$ourAuthStr = base64_encode(hash("sha512", $srcString, true));
-				$restTools = new restTools();
 				if ($ourAuthStr !== $authString)
 				{
 					$restTools->sendResponse(array(
