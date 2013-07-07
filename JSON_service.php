@@ -7,12 +7,12 @@ if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") //off is the value 
 {
 	$restTool = new restTools();
 	$restTool->sendResponse(array(
-		"status" => "fail",
-		"action" => "",
-		"data" => array(
-			"reason" => "HTTPS is required, if it is already enabled then ensure that SSL environmental variables are exported to PHP (SSLOptions +StdEnvVars in Apache)"
-		)
-			), restTools::$HTTPCodes['PRECONDITION_FAILED']);
+			"status" => "fail",
+			"action" => "",
+			"data" => array(
+				"reason" => "HTTPS is required, if it is already enabled then ensure that SSL environmental variables are exported to PHP (SSLOptions +StdEnvVars in Apache)"
+			)
+		), restTools::$HTTPCodes['PRECONDITION_FAILED']);
 }
 
 $userID = user_login::validate();

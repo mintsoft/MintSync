@@ -1,7 +1,7 @@
 <?php
 
 /**
- * MintSync Server object, handles all responses with 
+ * MintSync Server object, handles all responses with
  *
  */
 class mintsync_server
@@ -9,13 +9,13 @@ class mintsync_server
 
 	/**
 	 * PDO Database Connection
-	 * @var PDO 
+	 * @var PDO
 	 */
 	private $db;
 
 	/**
-	 * 
-	 * @var Integer The currently logged in UserID 
+	 *
+	 * @var Integer The currently logged in UserID
 	 */
 	private $userID;
 	private $restTool;
@@ -39,16 +39,16 @@ class mintsync_server
 	{
 		if (isset($request['ID']))
 		{
-			$stmt = $this->db->prepare("SELECT auth.*, user.keySlot0 FROM auth 
-									INNER JOIN user ON(user.ID=auth.userID) 
+			$stmt = $this->db->prepare("SELECT auth.*, user.keySlot0 FROM auth
+									INNER JOIN user ON(user.ID=auth.userID)
 									WHERE auth.ID=:authID AND userID=:userID;");
 			$stmt->bindValue(":authID", $request['ID'], PDO::PARAM_INT);
 		}
 		else
 		{
 			$domain = strtolower($request['URL']);
-			$stmt = $this->db->prepare("SELECT auth.*, user.keySlot0 FROM auth 
-									INNER JOIN user ON(user.ID=auth.userID) 
+			$stmt = $this->db->prepare("SELECT auth.*, user.keySlot0 FROM auth
+									INNER JOIN user ON(user.ID=auth.userID)
 									WHERE :url LIKE URL AND userID=:userID;");
 			$stmt->bindValue(":url", $domain, PDO::PARAM_STR);
 		}
@@ -263,7 +263,7 @@ class mintsync_server
 		{
 			//check that this isn't a LIKE pattern that conflicts with another LIKE pattern
 			//this will deal with *most* eventualities, however in some specific situations it will not detect a conflict
-			// e.g. SELECT "https://my.%.com/specific/" LIKE "https://%.opera.com/%" 
+			// e.g. SELECT "https://my.%.com/specific/" LIKE "https://%.opera.com/%"
 			//will return false despite the potential for a conflict
 			//actual solution is going to be to check for non-negative intersection between the patterns
 			// similiar issues with REGEX rather than simple PATTERNS:
