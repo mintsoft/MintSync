@@ -140,8 +140,9 @@ $(document).ready(function(){
 //Window onload handler
 // runs AFTER jQuery(document).ready();
 //insert the currently selected tab into the box by default
-window.addEventListener('load', function() {
-		
+//window.addEventListener('load', function() {
+self.port.on("onload_equivilent", function() {
+/*
 	if(!opera.extension)
 		return;
 	
@@ -156,11 +157,12 @@ window.addEventListener('load', function() {
 			}
 		}
 	};
-	
+*/
 	//if running as a standard popup
 	if(!g_isFullscreen)
 	{
 		genericRetrieve_currentTab(function(currentTab){	
+			console.log(currentTab);
 			if(!currentTab)
 				return;
 			document.getElementById("domainInput").value = currentTab.url;
@@ -193,8 +195,8 @@ window.addEventListener('load', function() {
 			getPasswords(g_currentURL);
 		}
 	}
-	
-},false);
+},
+false);
 
 /** Global Function Handlers **/
 

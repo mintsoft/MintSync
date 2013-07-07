@@ -164,15 +164,15 @@
 
 	/**
 	 * send the URL to the extension, this doesn't depend on the DOM being loaded, so do it asap
-	 */
+	 *//*
 	opera.extension.postMessage({
 			'action'	: 'updateIconBadge',
 			'src' 		: 'injectedJS'
 		});
-
+*/
 	/**
 	 * Handler for messages from the BackgroundProcess
-	 */
+	 *//*
 	opera.extension.onmessage = function(e) {
 	//	console.debug("InjectedJS Received", e);
 		try 
@@ -189,4 +189,5 @@
 			console.error("There was an error with the onmessage callback in the InjectedJS", error);
 		}
 	};
+	*/
 })();
