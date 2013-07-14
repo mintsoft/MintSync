@@ -14,9 +14,9 @@ function genericRetrieve_preferencesObj(){
 
 function genericRetrieve_currentTab(callback){
 	alert("genericRetrieve_currentTab called");
-	self.port.on("currentURL", function(e) {
+	addon.port.on("currentURL", function(e) {
 		alert("currentURL callback fired! "+e);
 		callback(e);
 	});
-	self.port.emit("getURL");
+	addon.port.emit("getURL");
 }

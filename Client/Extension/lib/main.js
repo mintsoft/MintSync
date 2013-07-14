@@ -30,6 +30,7 @@ popup.on("show", function() {
 popup.port.on("getURL", function(){
 	console.log("getURL called, " + tabs.activeTab.url);
 	popup.port.emit("currentURL", tabs.activeTab.url);
+	console.log("getURL: after the emit");
 });
 
 /*
