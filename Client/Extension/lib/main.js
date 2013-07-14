@@ -10,8 +10,8 @@ var tabs = require('sdk/tabs');
 var popup = require("sdk/panel").Panel({
 	width: 330,
 	height: 260,
-	contentURL: data.url("popup.html"),
-	contentScriptFile: data.url("includes/ins.js")
+	contentURL: data.url("popup.html")
+//	contentScriptFile: data.url("includes/ins.js")
 });
  
 // Create a widget, and attach the panel to it, so the panel is

@@ -142,6 +142,7 @@ $(document).ready(function(){
 //insert the currently selected tab into the box by default
 //window.addEventListener('load', function() {
 self.port.on("onload_equivilent", function() {
+	console.log("onload_equivilent fired");
 /*
 	if(!opera.extension)
 		return;
