@@ -134,4 +134,4 @@ function MintCrypto() {
 	};
 }
 
-$MC=new MintCrypto();
+var $MC = new MintCrypto();

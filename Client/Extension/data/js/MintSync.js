@@ -817,4 +817,4 @@ function MintSync() {
 		return password;
 	};
 }
-$MS = new MintSync();
+var $MS = new MintSync();
