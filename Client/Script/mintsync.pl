@@ -70,14 +70,32 @@ elsif($verb =~ /retrieve/)
 {
 	$obj=hit_mintsync_service({URL => $ARGV[1]});
 	my $cryptoPassword="myverysecurepassword";
-	
-	my $keyslotkey = sha256_hex($cryptoPassword);
+	my $passwordhash = sha512_hex($cryptoPassword);
+#	print $passwordhash.$/;
+	my $keyslotkey = pack("H*", sha256_hex($passwordhash));
 	my $cypher = Crypt::Rijndael->new($keyslotkey, Crypt::Rijndael::MODE_CBC() );
-	my $rawKey = $cypher->decrypt($$obj->{'data'}{'keySlot0'}) . $$obj->{'data'}{'rowSalt'};
+	my %data = %{$obj->{'data'}};
 	
-	my $actualKey = sha256_hex($rawKey);
+	#print $data{'keySlot0'}." : ".$data{'Salt'};
+	#printf ("\n %s \t %s \n", %{$obj->{'data'}}->{'keySlot0'}, %{$obj->{'data'}}->{'Salt'} );
+	my $keySlot = %{$obj->{'data'}}->{'keySlot0'};
+	
+	my $rawKey = $cypher->decrypt($keySlot).%{$obj->{'data'}}->{'Salt'};
+	print $rawKey.$/.$/;
+	my $actualKey = pack("H*", sha256_hex($rawKey));
+	print $actualKey.$/.$/;
 	$cypher = Crypt::Rijndael->new($actualKey, Crypt::Rijndael::MODE_CBC() );
-	my $base64Decoded = decode_base64($$obj->{'data'}{'Credentials'});
-	my $decryptedJson = $cypher->decrypted($base64Decoded);
-	print dump($decryptedJson);
+	
+	my $credentials = %{$obj->{'data'}}->{'Credentials'};
+	my $base64Decoded = decode_base64(decode_base64($credentials));
+=for	
+	while(length($base64Decoded)%16)
+	{
+		$base64Decoded.="\0" ;	#nice bit of NULL padding? is this required?
+	}
+=cut
+	print $base64Decoded.$/.$/;
+	my $decryptedJson = $cypher->decrypt($base64Decoded);
+	#print dump($decryptedJson);
+	print $decryptedJson;
 }
