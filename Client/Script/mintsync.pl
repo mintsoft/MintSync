@@ -9,7 +9,8 @@ use Crypt::Rijndael;	#Debian Package: libcrypt-rijndael-perl
 use JSON::PP;			#Debian Packagelibjson-perl 
 use MIME::Base64;
 #use WWW::Curl::Easy;	#libwww-curl-perl
-use IO::Prompt;			#libio-prompt-perl
+#use IO::Prompt;			#libio-prompt-perl
+#use utf8;
 
 my $username = "robtest";
 my $password = "password";
@@ -18,7 +19,19 @@ my $debug=1;
 
 my $verb = "list";
 $verb = $ARGV[0] if($#ARGV>=0);
+=for
+#Testing stuffs
 
+my $cypher = Crypt::Rijndael->new("12345678901234567890123456789012", Crypt::Rijndael::MODE_CTR() );
+my $temp = decode_base64("WAEr/B007FEDaoRsAAAAAA==");
+
+#print length($temp)."\t".unpack("H*",$temp);
+
+print $cypher->decrypt($temp);
+#print encode_base64($cypher->encrypt("helloworld!!!!!!"));
+
+die;
+=cut
 sub hit_mintsync_service
 {
 	my ($args) = @_;
@@ -60,6 +73,17 @@ sub decrypt_credentials_object
 	
 }
 
+sub base64decode_pad
+{
+	my $a = pop;
+	$a=decode_base64($a);
+	while(length($a)%16)
+	{
+		$a.="\0";
+	}
+	return $a;
+}
+
 my $obj;
 if($verb =~ /list/)
 {
@@ -71,31 +95,34 @@ elsif($verb =~ /retrieve/)
 	$obj=hit_mintsync_service({URL => $ARGV[1]});
 	my $cryptoPassword="myverysecurepassword";
 	my $passwordhash = sha512_hex($cryptoPassword);
-#	print $passwordhash.$/;
+	
+	print "keyslotkey_hex ".sha256_hex($passwordhash).$/;
+	
 	my $keyslotkey = pack("H*", sha256_hex($passwordhash));
-	my $cypher = Crypt::Rijndael->new($keyslotkey, Crypt::Rijndael::MODE_CBC() );
-	my %data = %{$obj->{'data'}};
+	my $cypher = Crypt::Rijndael->new($keyslotkey, Crypt::Rijndael::MODE_CTR() );
 	
-	#print $data{'keySlot0'}." : ".$data{'Salt'};
-	#printf ("\n %s \t %s \n", %{$obj->{'data'}}->{'keySlot0'}, %{$obj->{'data'}}->{'Salt'} );
 	my $keySlot = %{$obj->{'data'}}->{'keySlot0'};
+	print "keySlot $keySlot\n";
+	$keySlot=base64decode_pad($keySlot);
+	print "keySlotRaw ".unpack("H*",$keySlot)."\n";
 	
-	my $rawKey = $cypher->decrypt($keySlot).%{$obj->{'data'}}->{'Salt'};
-	print $rawKey.$/.$/;
+	my $decrypted = $cypher->decrypt($keySlot);
+	my $salt = %{$obj->{'data'}}->{'Salt'};
+	
+	my $rawKey = "$decrypted$salt";
+	print "rawKey_hex ".unpack("H*",$rawKey).$/;
+	
+	print "rawKey sha256_hex ".sha256_hex($rawKey).$/;
+	
 	my $actualKey = pack("H*", sha256_hex($rawKey));
-	print $actualKey.$/.$/;
-	$cypher = Crypt::Rijndael->new($actualKey, Crypt::Rijndael::MODE_CBC() );
+	$cypher = Crypt::Rijndael->new($actualKey, Crypt::Rijndael::MODE_CTR() );
 	
 	my $credentials = %{$obj->{'data'}}->{'Credentials'};
-	my $base64Decoded = decode_base64(decode_base64($credentials));
-=for	
-	while(length($base64Decoded)%16)
-	{
-		$base64Decoded.="\0" ;	#nice bit of NULL padding? is this required?
-	}
-=cut
-	print $base64Decoded.$/.$/;
+#	print "\t$credentials\n";
+	my $base64Decoded = base64decode_pad(decode_base64($credentials));	
+
+	#print $base64Decoded.$/.$/;
 	my $decryptedJson = $cypher->decrypt($base64Decoded);
-	#print dump($decryptedJson);
-	print $decryptedJson;
+	print dump($decryptedJson);
+	#print $decryptedJson;
 }
