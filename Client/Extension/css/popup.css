@@ -234,6 +234,8 @@ ul#tabBar {
 
 .hangingTab input[type='checkbox'] {
 	margin-left: 0px;
+	vertical-align: text-bottom;
+/*	height: 2.2ex;	*/
 }
 
 .hangingTab label {
