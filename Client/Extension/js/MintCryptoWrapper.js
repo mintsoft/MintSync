@@ -109,7 +109,7 @@ function MintCrypto() {
 		then completely changed to make it work
 	*/
 	this.dec2hexChar = function(d){
-		return (d<10 ? "0" : "") + d.toString(16);
+		return (d<16 ? "0" : "") + d.toString(16);
 	};
 	this.hex2decChar = function(h){
 		return parseInt(h,16);
