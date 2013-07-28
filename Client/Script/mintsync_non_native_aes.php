@@ -28,14 +28,14 @@ $cmd = "curl -sS --header '$header' \"$targetUrl\"";
 $result=`curl -sS --header '$header' "$targetUrl"`;
 
 //echo $result;
-$result = json_decode($result,true);
+$result = json_decode($result);
 
 $passwordHash = mhash(MHASH_SHA512,"myverysecurepassword");
 
-echo "passHash, ".strToHex($passwordHash)."\n";
+//echo "passHash, ".strToHex($passwordHash)."\n";
 
 $keySlotKey = utf8_encode(mhash(MHASH_SHA256, strToHex($passwordHash)));
-echo "keySlotKey_hex, ".strToHex($keySlotKey)."\n";
+//echo"keySlotKey_hex, ".strToHex($keySlotKey)."\n";
 //echo "keySlotKey_hex in one line:  ".strToHex(mhash(MHASH_SHA256, strToHex(mhash(MHASH_SHA512, "myverysecurepassword"))))."\n";
 
 
@@ -47,16 +47,17 @@ echo "keySlotKey_hex, ".strToHex($keySlotKey)."\n";
 //					256);
 //print "hackery: ".base64_encode($x)."\n";
 
-$keyslot = $result["data"]["keySlot0"];
-echo "keyslot, ".$keyslot."\n";
+//$keyslot = $result["data"]["keySlot0"];
+$keyslot = $result->data->keySlot0;
+//echo "keyslot, ".$keyslot."\n";
 
 $keyslot_decrypted = AesCtr::decrypt($keyslot, $keySlotKey, 256);
 
-$rawKey = $keyslot_decrypted.$result['data']['Salt'];
-echo "rawKey_base64, ".base64_encode($rawKey)."\n";
+$rawKey = $keyslot_decrypted.$result->data->Salt;
+//echo "rawKey_base64, ".base64_encode($rawKey)."\n";
 
 $rowDecryptionKey = utf8_encode(mhash(MHASH_SHA256, utf8_decode($rawKey)));
-echo "key_base64, ".base64_encode($rowDecryptionKey)."\n";
+//echo "key_base64, ".base64_encode($rowDecryptionKey)."\n";
 
 /*
 print "\n\n\n";
@@ -72,11 +73,17 @@ die;
 //$result = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $rowDecryptionKey, base64_decode($result["data"]["Credentials"]),"ecb");
 // we correct to here! ----------------------------------------------------------------------
 
-$result = AesCtr::decrypt(base64_decode($result["data"]["Credentials"]), $rowDecryptionKey,256);
-
-echo "\n\n----\n";
-var_dump($result);
-echo "\n----\n";
-
+$result = AesCtr::decrypt(base64_decode($result->data->Credentials), $rowDecryptionKey,256);
+$credentials = json_decode($result);
+if($credentials)
+{
+//echo "\n\n----\n";
+var_dump($credentials);
+//echo "\n----\n";
+}
+else
+{
+	echo "\n\nThe object could not be decoded - the crypto password was incorrect\n";
+}
 
 ?>
