@@ -13,7 +13,7 @@ function genericRetrieve_preferencesObj(){
 }
 
 function genericRetrieve_currentTab(callback){
-	alert("genericRetrieve_currentTab called");
+	console.log("genericRetrieve_currentTab called");
 	addon.port.on("currentURL", function(e) {
 		console.log("currentURL callback fired! " , e);
 		callback(e);
