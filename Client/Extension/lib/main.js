@@ -3,7 +3,6 @@
 */
 var data = require("sdk/self").data;
 var tabs = require('sdk/tabs');
-var ss = require("sdk/simple-storage");
 
 //http://stackoverflow.com/questions/9098828/how-to-reload-a-widget-popup-panel-with-firefox-addon-sdk
 
