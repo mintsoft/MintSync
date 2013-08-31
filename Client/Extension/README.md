@@ -4,12 +4,17 @@ ToDo
 To actually implement at all
 ----------------------------
 	Value Injection - works, but highlight box changes do not display?
-	Default values (or lack thereof) for the settings are not handled properly
-	Move the Button to the correct place! (and move popup too)
-	Popup is displayed unattached?
+	Default values (or lack thereof) for the settings are not handled properly - see below?
+	Move the Button to the correct place?! (and move popup too)
+	Background process not currently implemented - needs merging with main.js?
+		Notification Icons
+		Save per browser session etc
 
 To Check is implemented correctly
 ---------------------------------
 
+	Is it possible to setup a port between the popup and the
+		content script directly without main.js proxying
+	Popup is displayed unattached?
 	CORS issues - are these fixed correctly?
 	Saving Configuration - is this implemented correctly for an addon?
