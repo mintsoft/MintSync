@@ -34,6 +34,8 @@ function truncateInputAttribute(str)
 function handleMessageFromInjectedJS(e)
 {
 	console.debug("Popup received Message from Injected Script:",e);
+	//hack for compatibility
+	e.data = e;
 	if(e.data.action == "inputList")
 	{	
 		//get the label for the clicked input
@@ -71,15 +73,7 @@ function handleMessageFromInjectedJS(e)
 //Use configured messageChannel to send a message to the InjectedJS
 function sendMessageToInjectedJS(message)
 {
-	var sendStr = message;
-	if(g_injectedPort)
-	{
-		g_injectedPort.postMessage(sendStr);
-	}
-	else
-	{
-		console.error("MessageChannel not yet configured, message not sent", message);
-	}
+	addon.port.emit("popup-to-injected", message);
 }
 
 /** jQuery Entry Point **/
@@ -158,6 +152,8 @@ window.addEventListener('load', function() {
 		}
 	};
 */
+
+	addon.port.on("injected-to-popup", handleMessageFromInjectedJS);
 	//if running as a standard popup
 	if(!g_isFullscreen)
 	{
@@ -197,14 +193,6 @@ window.addEventListener('load', function() {
 	}
 },
 false);
-
-/*
-	Firefox popup display callback
-*/
-addon.port.on("onload_equivilent", function() {
-	console.log("onload_equivilent fired");
-	//window.location.reload(false);
-});
 
 /** Global Function Handlers **/
 

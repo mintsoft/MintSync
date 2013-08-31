@@ -53,7 +53,7 @@
 		}
 
 		//send the array to the popup
-		e.source.postMessage({
+		self.port.emit("injected-to-popup", {
 			'action'		: 'inputList',
 			'src'			: 'injectedJS',
 			'inputs'		: serialInputs,
@@ -89,6 +89,8 @@
 	 */
 	function MS_handlePopupMessage(e)
 	{
+		//hack for compatibility
+		e.data = e;
 		//opera.postError(e);
 		if (e.data.action == 'requestInputList')
 		{
@@ -172,22 +174,6 @@
 */
 	/**
 	 * Handler for messages from the BackgroundProcess
-	 *//*
-	opera.extension.onmessage = function(e) {
-	//	console.debug("InjectedJS Received", e);
-		try 
-		{	
-			if(e.data == "popupConnect")
-			{
-				MS_PopupChannel = new MessageChannel();
-				e.ports[0].postMessage("popupConnect", [MS_PopupChannel.port2]);
-				MS_PopupChannel.port1.onmessage = MS_handlePopupMessage;
-			}
-		}
-		catch (error)
-		{
-			console.error("There was an error with the onmessage callback in the InjectedJS", error);
-		}
-	};
-	*/
+	 */
+	self.port.on("popup-to-injected", MS_handlePopupMessage);
 })();

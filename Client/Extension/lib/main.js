@@ -34,11 +34,20 @@ var widget = require("sdk/widget").Widget({
 	contentURL: data.url("img/button_icon.png"),
 	onClick: function() {
 		var newPanel = getPanel(data.url("popup.html"));
-		newPanel.show();
-		tabs.activeTab.attach({
+		var contentscriptworker = tabs.activeTab.attach({
 			contentScriptFile: [data.url("includes/sizzle.js"),
 								data.url("includes/ins.js")]
 		});
+
+		//set up the messages between content and popup:
+		contentscriptworker.port.on("injected-to-popup", function(e) {
+			newPanel.port.emit("injected-to-popup", e);
+		});
+		newPanel.port.on("popup-to-injected", function(e) {
+			contentscriptworker.port.emit("popup-to-injected", e);
+		});
+				
+		newPanel.show();
 	}
 });
 
