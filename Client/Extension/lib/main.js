@@ -15,7 +15,6 @@ function getPanel(contentURL, contentScriptFile, contentScript){
 		width: 330,
 		height: 260,
 		contentURL: contentURL
-	//	contentScriptFile: data.url("includes/ins.js")
 	});
 
 	popupPanel.port.on("getURL", function(){
@@ -36,5 +35,28 @@ var widget = require("sdk/widget").Widget({
 	onClick: function() {
 		var newPanel = getPanel(data.url("popup.html"));
 		newPanel.show();
+		tabs.activeTab.attach({
+			contentScriptFile: [data.url("includes/sizzle.js"),
+								data.url("includes/ins.js")]
+		});
 	}
 });
+
+/**
+ This is one way of doing content scripts, it might be necessary yet!
+*/
+/*
+var data = require("sdk/self").data;
+var pageMod = require("sdk/page-mod");
+pageMod.PageMod({
+	include: "*",
+	contentScriptFile:	[	data.url("includes/sizzle.js"),
+							data.url("includes/ins.js")
+						],
+	onAttach: function(worker) {
+		worker.port.emit("function", "data");
+		worker.port.on("callbackname", function(callbackData) {
+		});
+	}
+});
+*/
