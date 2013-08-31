@@ -3,46 +3,39 @@
 */
 var data = require("sdk/self").data;
 var tabs = require('sdk/tabs');
+var ss = require("sdk/simple-storage");
 
-// Construct a panel, loading its content from the "text-entry.html"
-// file in the "data" directory, and loading the "get-text.js" script
-// into it.
-var popup = require("sdk/panel").Panel({
-	width: 330,
-	height: 260,
-	contentURL: data.url("popup.html")
-//	contentScriptFile: data.url("includes/ins.js")
-});
+//http://stackoverflow.com/questions/9098828/how-to-reload-a-widget-popup-panel-with-firefox-addon-sdk
+
+function getPanel(contentURL, contentScriptFile, contentScript){
+	var popupPanel = require("sdk/panel").Panel({
+		position: {
+			bottom: 5,
+			right: 8
+		},
+		width: 330,
+		height: 260,
+		contentURL: contentURL
+	//	contentScriptFile: data.url("includes/ins.js")
+	});
+
+	popupPanel.port.on("getURL", function(){
+		console.log("getURL called, " + tabs.activeTab.url);
+		popupPanel.port.emit("currentURL", tabs.activeTab.url);
+		console.log("getURL: after the emit");
+	});
+	
+	return popupPanel;
+}
  
 // Create a widget, and attach the panel to it, so the panel is
 // shown when the user clicks the widget.
-require("sdk/widget").Widget({
+var widget = require("sdk/widget").Widget({
 	label: "MintSync Popup",
 	id: "mintsync-popup",
 	contentURL: data.url("img/button_icon.png"),
-	panel: popup
+	onClick: function() {
+		var newPanel = getPanel(data.url("popup.html"));
+		newPanel.show();
+	}
 });
-
-popup.on("show", function() {
-	popup.port.emit("onload_equivilent");
-});
-
-popup.port.on("getURL", function(){
-	console.log("getURL called, " + tabs.activeTab.url);
-	popup.port.emit("currentURL", tabs.activeTab.url);
-	console.log("getURL: after the emit");
-});
-
-/*
-require("sdk/tabs").on("ready", logURL);
-require("sdk/tabs").on("activate", logURL);
-function logURL(tab) {
-  runScript(tab);
-}
- 
-function runScript(tab) {
-  tab.attach({
-    contentScript: "if (document.body) document.body.style.border = '5px solid red';"
-  });
-}
-*/

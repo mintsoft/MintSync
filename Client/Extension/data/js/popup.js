@@ -140,9 +140,8 @@ $(document).ready(function(){
 //Window onload handler
 // runs AFTER jQuery(document).ready();
 //insert the currently selected tab into the box by default
-//window.addEventListener('load', function() {
-addon.port.on("onload_equivilent", function() {
-	console.log("onload_equivilent fired");
+window.addEventListener('load', function() {
+
 /*
 	if(!opera.extension)
 		return;
@@ -198,6 +197,14 @@ addon.port.on("onload_equivilent", function() {
 	}
 },
 false);
+
+/*
+	Firefox popup display callback
+*/
+addon.port.on("onload_equivilent", function() {
+	console.log("onload_equivilent fired");
+	//window.location.reload(false);
+});
 
 /** Global Function Handlers **/
 
