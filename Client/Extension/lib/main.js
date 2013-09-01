@@ -3,6 +3,8 @@
 */
 var data = require("sdk/self").data;
 var tabs = require('sdk/tabs');
+//Source the background JS
+var bg = require("bg.js");
 
 //http://stackoverflow.com/questions/9098828/how-to-reload-a-widget-popup-panel-with-firefox-addon-sdk
 
