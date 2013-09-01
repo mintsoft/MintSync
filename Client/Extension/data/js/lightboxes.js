@@ -153,8 +153,12 @@ function MS_Lightboxes() {
 						}
 				});
 			
+		}).keyup(function() {
+			//Firefox doesn't throw change events when select boxes 
+			// are changed with the keyboard, so Hack!
+			$(this).change();
 		});
-		
+	
 		//Used to find the best match later
 		var alreadyAutoSelected = 0;
 		
