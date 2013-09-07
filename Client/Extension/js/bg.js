@@ -1,3 +1,4 @@
+/* jshint sub:true */
 /** Background Process File **/
 
 /** Persistant variables for browserSession */
@@ -30,12 +31,12 @@ function resetBadgeStatus()
 }
 
 /**
-	Callback executed by the AJAX request, 	
+	Callback executed by the AJAX request,
 */
 function mint_handleNotificationIcon(data)
 {
-	var parsedResult = data;	//already an object
-	if(typeof data=="string")	//this should never happen, probably means there was an error
+	var parsedResult = data;		//already an object
+	if(typeof data === "string")	//this should never happen, probably means there was an error
 	{
 		console.error("You have reached an undefined state: bg.js:20");
 		console.error(data);
@@ -73,7 +74,7 @@ function mint_handleNotify(URL)
 		var preferences = genericRetrieve_preferencesObj();
 		if(!$MS.checkForSavedAuth())
 		{
-			setBadgeStatus("?", "#FFF230", "You have not logged in", "#CCCCCC" )
+			setBadgeStatus("?", "#FFF230", "You have not logged in", "#CCCCCC" );
 			return;
 		}
 		
@@ -87,8 +88,8 @@ function mint_handleNotify(URL)
 				
 				//console.info("Source URL: "+srcURL);
 				
-				for(urlIndex in mintSyncGlobals.urlCache) 
-				{ 
+				for(var urlIndex in mintSyncGlobals.urlCache)
+				{
 					regexEquivalent = mintSyncGlobals.urlCache[urlIndex];
 					//escape regex characters
 					//? * [ ] { } ( ) . ^ $ - | / \
@@ -125,7 +126,9 @@ function mint_handleNotify(URL)
 						break;
 					}
 					else
+					{
 						URLExists=0;
+					}
 				}
 				
 				mint_handleNotificationIcon({
@@ -135,7 +138,7 @@ function mint_handleNotify(URL)
 				
 			break;
 
-			case "ajax":
+//			case "ajax":
 			default:
 
 				//console.info("Processing Notification Request from: AJAX");
@@ -194,7 +197,7 @@ function updateLocalURLCache()
 function clearCachedPasswd()
 {
 	console.debug("clearCachedPasswd being called, BG saved passwd cleared");
-	//passwdResetTimer	
+	//passwdResetTimer
 	mintSyncGlobals.passwd = undefined;
 	clearTimeout(mintSyncGlobals.passwdResetTimer);
 }
@@ -208,7 +211,9 @@ function startPasswdResetTimer()
 	console.debug("StartPasswordResettimer");
 	clearTimeout(mintSyncGlobals.passwdResetTimer);
 	if(preferences["SavePassBDuration"]*1 > 0)
+	{
 		mintSyncGlobals.passwdResetTimer = setTimeout(clearCachedPasswd,60000*preferences["SavePassBDuration"]);
+	}
 }
 
 /*
