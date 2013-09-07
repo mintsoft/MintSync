@@ -47,7 +47,7 @@ function changePassword() {
 			//verify keySlot0PassHash first
 			
 			//hash the entered password
-			masterKey 			= doHash($("#currentPassword").val(),"SHA-512");
+			masterKey			= doHash($("#currentPassword").val(),"SHA-512");
 			oldKeySlot0PassHash	= doHash(masterKey,"SHA-512");
 
 			if(oldKeySlot0PassHash!==data.data.keySlot0PassHash)
@@ -57,14 +57,14 @@ function changePassword() {
 			}
 			
 			//old key
-			oldKeySlot0CryptoKey 		= $MC.Hex2Str(doHash(masterKey,"SHA-256"));
+			oldKeySlot0CryptoKey = $MC.Hex2Str(doHash(masterKey,"SHA-256"));
 			
 			//new key - form SHA256 encryption key from the new password
-			newKeySlot0CryptoKey	= $MC.Hex2Str(doHash(doHash($("#newPassword1").val(),"SHA-512"),"SHA-256"));	
-			newKeySlot0PassHash		= doHash(doHash($("#newPassword1").val(),"SHA-512"),"SHA-512");	
+			newKeySlot0CryptoKey = $MC.Hex2Str(doHash(doHash($("#newPassword1").val(),"SHA-512"),"SHA-256"));	
+			newKeySlot0PassHash = doHash(doHash($("#newPassword1").val(),"SHA-512"),"SHA-512");	
 			
 			//decrypt keySlot0
-			rawKey 		= $MC.Decrypt_strings(data.data.keySlot0,oldKeySlot0CryptoKey,"AES",256);
+			rawKey = $MC.Decrypt_strings(data.data.keySlot0,oldKeySlot0CryptoKey,"AES",256);
 			
 			//recrypt with new password
 			newKeySlot0 = $MC.Encrypt_strings(rawKey,newKeySlot0CryptoKey,"AES",256);

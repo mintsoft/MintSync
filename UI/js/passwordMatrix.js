@@ -25,7 +25,7 @@ jQuery.fn.single_double_click = function(single_click_callback, double_click_cal
       }
     });
   });
-}
+};
 
 /** jQuery entry point */
 $(document).ready(function(){
@@ -87,7 +87,7 @@ $(document).ready(function(){
 	}).keydown(function(e) {
 		if(e.which == 17)
 			g_ctrlDown=true;
-		else if(g_ctrlDown == true && e.which == 70) {		//ctrl+f
+		else if(g_ctrlDown === true && e.which == 70) {		//ctrl+f
 			event.preventDefault();
 			$("#searchValue").focus();
 			return false;
@@ -241,8 +241,8 @@ function togglePasswordsForURL(srcH3)
 			beforeSend: function() {},
 			complete: function(jq,textStatus,errorThrown) {},
 			success: function(requestdata,textStatus,jq) {
-				 $MC.decodeAndDecrypt(requestdata.data.Credentials,requestdata.data.Salt,requestdata.data.keySlot0,{
-					 success:function(credentialsObj){
+				$MC.decodeAndDecrypt(requestdata.data.Credentials,requestdata.data.Salt,requestdata.data.keySlot0,{
+					success:function(credentialsObj){
 						
 						//object of key-value pairs
 						var table = $(srcH3).parent().find("table"),
@@ -250,7 +250,7 @@ function togglePasswordsForURL(srcH3)
 						
 						tableBody.empty();
 						
-						for(index in credentialsObj)
+						for(var index in credentialsObj)
 						{
 							tableBody.append(
 								$("<tr>").append(
@@ -279,12 +279,12 @@ function togglePasswordsForURL(srcH3)
 						
 						$(srcH3).parent().find(".dropDownContent").slideDown(0);
 						$(srcH3).addClass('expanded');
-					 },
-					 error: function(){
+					},
+					error: function(){
 						alert("That decryption password is incorrect. Please try again");
 						$MS.resetSavedCryptoPassword();
-					 }
-				 });
+					}
+				});
 			},
 			error: function(jq,textStatus,errorThrown){
 				switch(jq.status)

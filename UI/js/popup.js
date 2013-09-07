@@ -1,5 +1,6 @@
+/* jshint sub:true */
 /** Popup specific JS in this file */
-var g_currentURL ="",
+var g_currentURL = "",
 	g_isFullscreen = false,
 	g_injectedPort,
 	g_clickedImg;
@@ -7,14 +8,14 @@ var g_currentURL ="",
 //used to parse GET variables from the current URL when opened "fullscreen"
 function getParameterByName(name)
 {
-  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-  var regexS = "[\\?&]" + name + "=([^&#]*)";
-  var regex = new RegExp(regexS);
-  var results = regex.exec(window.location.href);
-  if(results == null)
-    return "";
-  else
-    return decodeURIComponent(results[1].replace(/\+/g, " "));
+	name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+	var regexS = "[\\?&]" + name + "=([^&#]*)";
+	var regex = new RegExp(regexS);
+	var results = regex.exec(window.location.href);
+	if(results === null)
+		return "";
+	else
+		return decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
 //returns a "representative" string if str > maxlength
@@ -23,7 +24,7 @@ function truncateInputAttribute(str)
 {
 	var maxLength=25,
 		thisLength = str.length;
-	if ( thisLength <= maxLength)
+	if(thisLength <= maxLength)
 		return str;
 	else
 		return str.substring(0,11) + "..." + str.substring(thisLength-11,thisLength);
@@ -32,7 +33,7 @@ function truncateInputAttribute(str)
 //Callback for handling messages sent over the MessageChannel from InjectedJS
 function handleMessageFromInjectedJS(e)
 {
-	console.debug("Popup received Message from Injected Script:",e)
+	console.debug("Popup received Message from Injected Script:",e);
 	if(e.data.action == "inputList")
 	{	
 		//get the label for the clicked input
@@ -127,7 +128,7 @@ $(document).ready(function(){
 	}).keydown(function(e) {
 		if(e.which == 17)
 			g_ctrlDown=true;
-		else if(g_ctrlDown == true && e.which == 68) {		//ctrl+d
+		else if(g_ctrlDown === true && e.which == 68) {		//ctrl+d
 			event.preventDefault();
 			addPair();
 			return false;
@@ -239,7 +240,7 @@ function addPair()
 	//if it's the fullscreen popup then don't display the inject button
 	if(g_isFullscreen)
 	{	//using hide here causes some sort of clash with jQuery-Tools
-		//and it un-hides them ¬_¬
+		//and it un-hides them
 		$(tmpObj).find("img.hidden_when_max").css({'display' : 'none'});
 	}
 	
@@ -267,7 +268,7 @@ function addPair()
 	//add click handler
 	//using contextmenu instead of click so that it can be cancelled on the maximised version
 	$(tmpObj).find("input[name='inputPassValue']").bind("contextmenu", function(event){
-		if($(this).val()=="" )
+		if($(this).val() === "")
 		{
 			$(this).val($MS.generatePassword(passwordLength));
 			event.preventDefault();
@@ -276,12 +277,12 @@ function addPair()
 	}).keydown(function(e) {
 		if(e.which == 17)
 			g_ctrlDown=true;
-		else if(g_ctrlDown == true && e.which == 71) {		//ctrl+g
+		else if(g_ctrlDown === true && e.which == 71) {		//ctrl+g
 			event.preventDefault();
 			$(this).val($MS.generatePassword(passwordLength));
 			return false;
 		}
-		else if(g_ctrlDown == true && e.which == 73) {		//ctrl+i
+		else if(g_ctrlDown === true && e.which == 73) {		//ctrl+i
 			event.preventDefault();
 			//"click" the inject button
 			$(this).parent().find("img.injectPW").click();
@@ -304,7 +305,7 @@ function delPair(fromHere)
 */
 function getPasswords(domainName) {
 	domainName=$.trim(domainName);
-	if($.trim(domainName)=="")
+	if($.trim(domainName) === "")
 	{
 		$("#fetchErrorDiv").text("No URL entered, try refreshing the tab");
 		return;
@@ -415,10 +416,10 @@ function setPassword() {
 	var domainName=$.trim($("#domainName").val()),
 		RowSalt = $MS.generateRowSalt(),
 		encryptedData = "",
-		CredentialsObj = new Object(),
+		CredentialsObj = {},
 		force = false;
 		
-	if(domainName=="")
+	if(domainName === "")
 	{
 		$("#saveOutput").text("Error: No URL entered, no save has occurred");
 		return;
@@ -428,8 +429,8 @@ function setPassword() {
 	$("#inputPassContainer").children("p").each(function(index,Element){
 		var name = "", password="";
 		
-		name 		= $(this).children("input[name='inputPassName']").val(); 
-		password 	= $(this).children("input[name='inputPassValue']").val();
+		name		= $(this).children("input[name='inputPassName']").val(); 
+		password	= $(this).children("input[name='inputPassValue']").val();
 		
 		CredentialsObj[name]=password;
 	});
@@ -437,7 +438,7 @@ function setPassword() {
 	$MS.getKeySlot({
 		success: function(returnedData){
 			$MC.encodeAndEncrypt(CredentialsObj,RowSalt,returnedData.data.keySlot0,function(encryptedData,cryptoHash){
-				CredentialsObj = new Object();
+				CredentialsObj = {};
 				
 				//check is overwrites are allowed (force)
 				force = $("#canForceWrite:checked").val();
@@ -508,7 +509,7 @@ function openPopupFullScreen(thisA)
 			'URL': g_currentURL
 		});
 		
-	window.open(thisA.href+"?"+urlData,"Mintsync Popup - Fullscreen")
+	window.open(thisA.href+"?"+urlData,"Mintsync Popup - Fullscreen");
 	
 	return false;
 }
@@ -518,7 +519,7 @@ function openPopupFullScreen(thisA)
 */
 function openNewTabFromPopup(thisA)
 {
-	window.open(thisA.href,"Mintsync Popup - Fullscreen")
+	window.open(thisA.href,"Mintsync Popup - Fullscreen");
 	
 	return false;
 }

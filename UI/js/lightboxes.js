@@ -187,21 +187,21 @@ function chooseInputForInject(inputs, valueName, completeCallback)
 		// * ID
 		// * Name
 		valueName = valueName.toLowerCase();
-		if	(	inputs[x].labelText.toLowerCase(valueName).indexOf(valueName) != -1 
-				&& alreadyAutoSelected < 4	)
+		if	(	inputs[x].labelText.toLowerCase(valueName).indexOf(valueName) != -1 && 
+				alreadyAutoSelected < 4	)
 		{
 			$("#IC_LabelText").val(x).change();
 			
 			alreadyAutoSelected = 4;
 		}
-		else if (	inputs[x].id.toLowerCase(valueName).indexOf(valueName) != -1 
-						&& alreadyAutoSelected < 2	)
+		else if (	inputs[x].id.toLowerCase(valueName).indexOf(valueName) != -1 && 
+					alreadyAutoSelected < 2	)
 		{
 			$("#IC_ID").val(x).change();
 			alreadyAutoSelected = 2;
 		}
-		else if	(	inputs[x].name.toLowerCase(valueName).indexOf(valueName) != -1 
-							&& alreadyAutoSelected < 1	)
+		else if	(	inputs[x].name.toLowerCase(valueName).indexOf(valueName) != -1 && 
+					alreadyAutoSelected < 1	)
 		{
 			$("#IC_name").val(x).change();
 			alreadyAutoSelected = 1;
@@ -209,7 +209,7 @@ function chooseInputForInject(inputs, valueName, completeCallback)
 	}
 	//if no box was automatically selected then trigger the change event to make the first
 	//box the current option
-	if ( alreadyAutoSelected == 0 )
+	if(alreadyAutoSelected === 0)
 		$("#IC_ID").change();
 		
 	var overlay = $("#InputChooserPrompt").data("overlay").load();

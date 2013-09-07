@@ -1,3 +1,4 @@
+/* jshint sub:true */
 /** 
 	Options.js file.
 	Contains javascript for the options pages
@@ -61,18 +62,18 @@ function savePrefs() {
 	if(serverUrl.charAt(serverUrl.length-1)!="/")
 		serverUrl+="/";
 		
-	preferences["ServerURL"] 					= serverUrl;
+	preferences["ServerURL"]					= serverUrl;
 	preferences["SavePassword"]					= $("input[type=radio][name=SavePass]:checked").val();
 	preferences["SaveAuthentication"]			= $("input[type=radio][name=SaveAuth]:checked").val();
-	preferences["Cipher"] 						= $("input[type=radio][name=Cipher]:checked").val();
-	preferences["KeyLength"] 					= $("input[type=radio][name=KeyLength]:checked").val();
+	preferences["Cipher"]						= $("input[type=radio][name=Cipher]:checked").val();
+	preferences["KeyLength"]					= $("input[type=radio][name=KeyLength]:checked").val();
 	preferences["AutoFetch"]					= $("input[type=radio][name=AutoFetch]:checked").val();
 	preferences["Notify"]						= $("input[type=radio][name=Notify]:checked").val();
 	preferences["NotifySource"]					= $("input[type=radio][name=NotifySource]:checked").val();
-	preferences["NotifySourceUpdatePeriod"] 	= $("#NotifySourceUpdatePeriod").val();
-	preferences["GeneratedPasswordLength"] 		= $("#GeneratedPasswordLength").val();
+	preferences["NotifySourceUpdatePeriod"]		= $("#NotifySourceUpdatePeriod").val();
+	preferences["GeneratedPasswordLength"]		= $("#GeneratedPasswordLength").val();
 	
-	preferences["SavePassBDuration"] 			= $("#SavePassBDuration").val() ? $("#SavePassBDuration").val() : 0;
+	preferences["SavePassBDuration"]			= $("#SavePassBDuration").val() ? $("#SavePassBDuration").val() : 0;
 	
 	/* generation options */
 	preferences["passwordStrengthNum"]			= $("#passwordStrengthNum").is(":checked");
@@ -157,7 +158,7 @@ function addPreferencesEventHandlers()
 {
 	$("#moreOptionsA").click(function(event){
 		event.preventDefault();
-		toggleAdvancedOptions(this)
+		toggleAdvancedOptions(this);
 	});
 	
 	$("#saveButtonInput").click(function(event){
