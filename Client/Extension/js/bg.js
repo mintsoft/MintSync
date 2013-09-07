@@ -1,3 +1,4 @@
+/* jshint sub:true */
 /** Background Process File **/
 
 /** Persistant variables for browserSession */
@@ -29,7 +30,7 @@ function setBadgeStatus(textContent, bgColour, mouseoverText, textcolour)
 */
 function resetBadgeStatus()
 {
-	setBadgetStatus("", "#CCCCCC", "", "#FFFFFF");
+	setBadgeStatus("", "#CCCCCC", "", "#FFFFFF");
 }
 
 /**
@@ -140,7 +141,7 @@ function mint_handleNotify(URL)
 				
 			break;
 
-			case "ajax":
+//			case "ajax":
 			default:
 
 				//console.info("Processing Notification Request from: AJAX");
