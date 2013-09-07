@@ -5,9 +5,11 @@
  */
 class schema_version
 {
-
 	private $db;
 
+	/**
+	 * @param $pdo PDO Database Object
+	 */
 	function __construct($pdo)
 	{
 		$this->db = $pdo;
@@ -20,10 +22,38 @@ class schema_version
 	 */
 	public function checkAndMigrate()
 	{
+		$dh = @opendir(MIGRATIONS_DIRECTORY);
+		if(!$dh)
+			return false;
+
+		$maxMigration = 0;
+		while(($filename = readdir($dh)) !== false) {
+			$matches = array();
+			if(preg_match("/^([1-9][0-9]*)\.sql$/", $filename, $matches)) {
+				if($maxMigration < $matches[1])
+					$maxMigration = (int)$matches[1];
+			}
+		}
+		@closedir($dh);
+
 		$maxVer = $this->retrieveCurrentSchemaVersion();
-		if ($maxVer < 0)  //replace 0 with dynamically retrieved migration count
+
+		if($maxVer < $maxMigration)
 			return $this->doMigration();
+
 		return false;
+	}
+
+	/**
+	 * Returns whether or not the table exists
+	 */
+	private function tableExists($tableName)
+	{
+		//check if table exists
+		$stmt = $this->db->prepare("SELECT COUNT(*) AS doesExist FROM sqlite_master WHERE type='table' AND name=?;");
+		$stmt->execute(array($tableName));
+		$resultSet = $stmt->fetchAll();
+		return $resultSet[0]['doesExist'] != 0;
 	}
 
 	/**
@@ -33,14 +63,8 @@ class schema_version
 	 */
 	public function retrieveCurrentSchemaVersion()
 	{
-		//check if table exists
-		$stmt = $this->db->prepare("SELECT COUNT(*) AS doesExist FROM sqlite_master WHERE type='table' AND name='schema_version';");
-		$stmt->execute();
-		$resultSet = $stmt->fetchAll();
-
 		//if not then create it and initialise to version 0
-		if ($resultSet[0]['doesExist'] == 0)
-		{
+		if(!$this->tableExists("schema_version")) {
 			$this->db->exec("CREATE TABLE schema_version(versionNo INTEGER PRIMARY KEY);");
 			$this->db->exec("INSERT INTO schema_version(versionNo) VALUES(0);");
 		}

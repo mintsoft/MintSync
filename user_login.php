@@ -28,7 +28,7 @@ class user_login
 
 	/**
 	 * Validates the a user by the authorisation header
-	 * @return type
+	 * @return integer
 	 */
 	public static function validate()
 	{
