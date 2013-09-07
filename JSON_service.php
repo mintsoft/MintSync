@@ -26,8 +26,7 @@ $dbSchema->checkAndMigrate();
 $mintsyncServer = new mintsync_server($db, $userID);
 
 //add header for matching server version against client version
-$serverSchemaVersion = $dbSchema->retrieveCurrentSchemaVersion();
-$mintsyncServer->addheader("X-MS-Server-Version: " . $serverSchemaVersion);
+$mintsyncServer->setSchemaVersion($dbSchema->retrieveCurrentSchemaVersion());
 
 //REST services:
 //Convert Type of request into the relevant action
@@ -73,7 +72,7 @@ if (LOGGING && !(isset($LOGLEVEL[$action]) && $LOGLEVEL[$action] == false))
 
 switch ($action)
 {
-	case NULL:
+	case null:
 	case "":
 	case "retrieve":   //GET or POST Request
 		if (!empty($_REQUEST['ID']) || !empty($_REQUEST['URL']))

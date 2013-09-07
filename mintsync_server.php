@@ -19,9 +19,11 @@ class mintsync_server
 	 */
 	private $userID;
 	private $restTool;
+	private $schemaVersion;
 
 	/**
 	 * Create a new server instance
+	 *
 	 * @param PDO $php_dbo PDO representing the database connection to use
 	 * @param integer $userID The ID of the logged in User
 	 */
@@ -37,15 +39,12 @@ class mintsync_server
 	 */
 	public function retrieve($request)
 	{
-		if (isset($request['ID']))
-		{
+		if(isset($request['ID'])) {
 			$stmt = $this->db->prepare("SELECT auth.*, user.keySlot0 FROM auth
 									INNER JOIN user ON(user.ID=auth.userID)
 									WHERE auth.ID=:authID AND userID=:userID;");
 			$stmt->bindValue(":authID", $request['ID'], PDO::PARAM_INT);
-		}
-		else
-		{
+		} else {
 			$domain = strtolower($request['URL']);
 			$stmt = $this->db->prepare("SELECT auth.*, user.keySlot0 FROM auth
 									INNER JOIN user ON(user.ID=auth.userID)
@@ -58,23 +57,20 @@ class mintsync_server
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
-		if (isset($rows[0]))
-		{
+		if(isset($rows[0])) {
 			$this->restTool->sendResponse(array(
 				"status" => "ok",
 				"action" => "retrieve",
 				"data" => $rows[0]
-					), restTools::$HTTPCodes['OK']);
-		}
-		else
-		{
+			), restTools::$HTTPCodes['OK']);
+		} else {
 			$this->restTool->sendResponse(array(
 				"status" => "fail",
 				"action" => "retrieve",
 				"data" => array(
 					"reason" => "URL was not found"
 				)
-					), restTools::$HTTPCodes['NOT_FOUND']);
+			), restTools::$HTTPCodes['NOT_FOUND']);
 		}
 	}
 
@@ -90,23 +86,20 @@ class mintsync_server
 
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-		if (isset($rows[0]))
-		{
+		if(isset($rows[0])) {
 			$this->restTool->sendResponse(array(
 				"status" => "ok",
 				"action" => "check",
 				"data" => $rows[0]['num']
-					), restTools::$HTTPCodes['OK']);
-		}
-		else
-		{
+			), restTools::$HTTPCodes['OK']);
+		} else {
 			$this->restTool->sendResponse(array(
 				"status" => "fail",
 				"action" => "check",
 				"data" => array(
 					"reason" => "An Unexpected Error Occurred"
 				)
-					), restTools::$HTTPCodes['BAD_REQUEST']);
+			), restTools::$HTTPCodes['BAD_REQUEST']);
 		}
 	}
 
@@ -121,28 +114,26 @@ class mintsync_server
 
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-		if (isset($rows[0]))
-		{
+		if(isset($rows[0])) {
 			$this->restTool->sendResponse(array(
 				"status" => "ok",
 				"action" => "list",
 				"data" => $rows
-					), restTools::$HTTPCodes['OK']);
-		}
-		else
-		{
+			), restTools::$HTTPCodes['OK']);
+		} else {
 			$this->restTool->sendResponse(array(
 				"status" => "fail",
 				"action" => "list",
 				"data" => array(
 					"reason" => "No Records Found"
 				)
-					), restTools::$HTTPCodes['NOT_FOUND']);
+			), restTools::$HTTPCodes['NOT_FOUND']);
 		}
 	}
 
 	/**
 	 * Saves a credentialsObject against a URL
+	 *
 	 * @param string $url
 	 * @param string $credentialsObj
 	 * @param string $rowSalt
@@ -151,21 +142,20 @@ class mintsync_server
 	 */
 	public function save($url, $credentialsObj, $rowSalt, $cryptoHash, $force)
 	{
-		if (!empty($cryptoHash))
-		{
+		if(!empty($cryptoHash)) {
 			$stmt = $this->db->prepare("SELECT * FROM user WHERE ID=:userID AND keySlot0PassHash=:cryptoHash");
 			$stmt->bindValue(":cryptoHash", $cryptoHash);
 			$stmt->bindValue(":userID", $this->userID);
 			$stmt->execute();
 			$rows = $stmt->fetchAll();
-			if (!isset($rows[0]))
+			if(!isset($rows[0]))
 				$this->restTool->sendResponse(array(
 					"status" => "fail",
 					"action" => "insert",
 					"data" => array(
 						"reason" => "Inconsistent Encryption Key"
 					)
-						), restTools::$HTTPCodes['EXPECTATION_FAILED']);
+				), restTools::$HTTPCodes['EXPECTATION_FAILED']);
 		}
 
 		$stmt = $this->db->prepare("SELECT COUNT(*) AS Freq FROM auth WHERE :url LIKE URL AND userID=:userID;");
@@ -174,18 +164,15 @@ class mintsync_server
 		$stmt->execute();
 
 		$row = $stmt->fetch(PDO::FETCH_ASSOC);
-		if ((int) $row['Freq'] > 0 && !$force)
-		{
+		if((int)$row['Freq'] > 0 && !$force) {
 			$this->restTool->sendResponse(array(
 				"status" => "fail",
 				"action" => "insert",
 				"data" => array(
 					"reason" => "Record already exists"
 				)
-					), restTools::$HTTPCodes['CONFLICT']);
-		}
-		elseif ((int) $row['Freq'] > 0 && $force)
-		{
+			), restTools::$HTTPCodes['CONFLICT']);
+		} elseif((int)$row['Freq'] > 0 && $force) {
 			$stmt = $this->db->prepare("UPDATE auth SET Salt=:salt, Credentials=:credentials WHERE :url LIKE URL AND userID=:userID;");
 
 			$stmt->bindValue(":url", strtolower($url));
@@ -205,14 +192,12 @@ class mintsync_server
 				"status" => "ok",
 				"action" => "update",
 				"data" => array()
-					), restTools::$HTTPCodes['RESET_CONTENT']);
-		}
-		else
-		{
+			), restTools::$HTTPCodes['RESET_CONTENT']);
+		} else {
 			$stmt = $this->db->prepare("INSERT INTO auth(URL,Salt,Credentials,userID) VALUES(:url,:salt,:credentials,:userID);");
 
 			$stmt->bindValue(":url", str_replace(
-							array("%"), array("%%"), strtolower($url))
+					array("%"), array("%%"), strtolower($url))
 			);
 			$stmt->bindValue(":salt", $rowSalt);
 			$stmt->bindValue(":credentials", $credentialsObj);
@@ -230,7 +215,7 @@ class mintsync_server
 				"status" => "ok",
 				"action" => "insert",
 				"data" => array()
-					), restTools::$HTTPCodes['OK']);
+			), restTools::$HTTPCodes['OK']);
 		}
 	}
 
@@ -248,19 +233,19 @@ class mintsync_server
 			"status" => "ok",
 			"action" => "remove",
 			"data" => 1
-				), restTools::$HTTPCodes['OK']);
+		), restTools::$HTTPCodes['OK']);
 	}
 
 	/**
 	 * Changes the URL for a credentialsObject
+	 *
 	 * @param integer $ID The UniqueID of the credentialsObject
-	 * @param string $newURL The New URL 
+	 * @param string $newURL The New URL
 	 */
 	public function rename($ID, $newURL)
 	{
 		//is this new URL a LIKE pattern?
-		if (preg_match("/([^%]%[^%])|(^%[^%])|([^%]%$)|(^%$)/", $newURL))
-		{
+		if(preg_match("/([^%]%[^%])|(^%[^%])|([^%]%$)|(^%$)/", $newURL)) {
 			//check that this isn't a LIKE pattern that conflicts with another LIKE pattern
 			//this will deal with *most* eventualities, however in some specific situations it will not detect a conflict
 			// e.g. SELECT "https://my.%.com/specific/" LIKE "https://%.opera.com/%"
@@ -281,15 +266,14 @@ class mintsync_server
 			$stmt->execute();
 
 			$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-			if (isset($rows[0]))
-			{
+			if(isset($rows[0])) {
 				$this->restTool->sendResponse(array(
 					"status" => "fail",
 					"action" => "rename",
 					"data" => array(
 						"reason" => "The LIKE pattern conflicts with another LIKE pattern ({$rows[0]['URL']})"
 					)
-						), restTools::$HTTPCodes['CONFLICT']);
+				), restTools::$HTTPCodes['CONFLICT']);
 			}
 		}
 
@@ -308,28 +292,26 @@ class mintsync_server
 
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-		if (isset($rows[0]))
-		{
+		if(isset($rows[0])) {
 			$this->restTool->sendResponse(array(
 				"status" => "ok",
 				"action" => "rename",
 				"data" => array()
-					), restTools::$HTTPCodes['OK']); //OK
-		}
-		else
-		{
+			), restTools::$HTTPCodes['OK']); //OK
+		} else {
 			$this->restTool->sendResponse(array(
 				"status" => "fail",
 				"action" => "rename",
 				"data" => array(
 					"reason" => "SELECT After UPDATE failed, check the database for integrity!"
 				)
-					), restTools::$HTTPCodes['GONE']); //Gone
+			), restTools::$HTTPCodes['GONE']); //Gone
 		}
 	}
 
 	/**
 	 * Replaces a user's keyslot with a new one
+	 *
 	 * @param integer $keySlotIndex        Currently unused, reserved for future use
 	 * @param string $newKeySlot          The new keyslot value
 	 * @param string $newKeySlotPassHash  The Hash of the new keyslot encryption key
@@ -351,29 +333,27 @@ class mintsync_server
 
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-		if (isset($rows[0]))
-		{
+		if(isset($rows[0])) {
 			$this->restTool->sendResponse(array(
 				"status" => "ok",
 				"action" => "setKeySlot",
 				"data" => array()
-					), restTools::$HTTPCodes['OK']);
-		}
-		else
-		{
+			), restTools::$HTTPCodes['OK']);
+		} else {
 			$this->restTool->sendResponse(array(
 				"status" => "fail",
 				"action" => "setKeySlot",
 				"data" => array(
 					"reason" => "SELECT After UPDATE failed, check the database for integrity!"
 				)
-					), restTools::$HTTPCodes['GONE']);
+			), restTools::$HTTPCodes['GONE']);
 		}
 	}
 
 	/**
 	 * Verify the hash of the Cryptopassword against the stored one in the db
-	 * @param type $cryptoHash  The 
+	 *
+	 * @param type $cryptoHash  The
 	 */
 	public function confirmCrypto($cryptoHash)
 	{
@@ -383,26 +363,24 @@ class mintsync_server
 		$stmt->execute();
 
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		if (isset($rows[0]))
-		{
+		if(isset($rows[0])) {
 			$this->restTool->sendResponse(array(
 				"status" => "ok",
 				"action" => "confirmCrypto",
 				"data" => $rows[0]
-					), restTools::$HTTPCodes['OK']);
-		}
-		else
-		{
+			), restTools::$HTTPCodes['OK']);
+		} else {
 			$this->restTool->sendResponse(array(
 				"status" => "fail",
 				"action" => "confirmCrypto",
 				"data" => false
-					), restTools::$HTTPCodes['EXPECTATION_FAILED']);
+			), restTools::$HTTPCodes['EXPECTATION_FAILED']);
 		}
 	}
 
 	/**
 	 * Retrieves the key for a keyslot
+	 *
 	 * @param integer $keySlotIndex Currently unused, reserved for future use
 	 */
 	public function retrieveKeySlot($keySlotIndex = 0)
@@ -412,30 +390,38 @@ class mintsync_server
 		$stmt->execute();
 
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		if (isset($rows[0]))
-		{
+		if(isset($rows[0])) {
 			$this->restTool->sendResponse(array(
 				"status" => "ok",
 				"action" => "retrieveKeySlot0",
 				"data" => $rows[0]
-					), restTools::$HTTPCodes['OK']); //OK
-		}
-		else
-		{
+			), restTools::$HTTPCodes['OK']); //OK
+		} else {
 			$this->restTool->sendResponse(array(
 				"status" => "fail",
 				"action" => "retrieveKeySlot0",
 				"data" => false
-					), restTools::$HTTPCodes['EXPECTATION_FAILED']); //Expectation Failed
+			), restTools::$HTTPCodes['EXPECTATION_FAILED']); //Expectation Failed
 		}
 	}
 
 	/**
-	 * Exposes the addheader method of the private restTools instance
+	 * Exposes the addHeader method of the private restTools instance
+	 * @param $header string RAW HTTP header to add
 	 */
-	public function addheader($header)
+	public function addHeader($header)
 	{
-		return $this->restTool->addHeader($header);
+		$this->restTool->addHeader($header);
+	}
+
+	/*
+	 * Injects a header for the supported version, currently this is the schema version
+	 * This will eventually be a protocol version
+	 * @param $serverSchemaVersion int The Server Version
+	 */
+	public function setSchemaVersion($serverSchemaVersion)
+	{
+		$this->addHeader("X-MS-Server-Version: " . $serverSchemaVersion);
 	}
 
 }
