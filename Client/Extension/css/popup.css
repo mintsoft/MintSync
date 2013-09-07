@@ -229,11 +229,13 @@ ul#tabBar {
 	background-image: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 90%);
 	background-image: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 90%);
 	background-image: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 90%);
-	min-height: 16px;
+	height: 18px;
+	line-height: 18px;
 }
 
 .hangingTab input[type='checkbox'] {
 	margin-left: 0px;
+	vertical-align: middle;
 }
 
 .hangingTab label {
