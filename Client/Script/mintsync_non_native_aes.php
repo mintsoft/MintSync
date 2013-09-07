@@ -9,11 +9,14 @@ function strToHex($string)
 	return $array[1];
 }
 
+$options = getopt("u:p:P:",array("username:", "password:", "crypto-password:"));
+$username = $options['u'] || $options['username'];
+$password = $options['p'] || $options['password'];
+$cryptoPassword = $options['P'] || $options['crypto-password'];
+
 //AesCtr::decrypt($_POST['message'], 'L0ck it up saf3', 256)
 require_once("aes-php.php");
 
-$username="robtest";
-$password="password";
 $server_base="https://set.mintsoft.net/code/MintSync/ServerUI/";
 $targetUrl="$server_base?AJAX=true&action=retrieve&URL=".urlencode("https://github.com/");
 
@@ -30,22 +33,13 @@ $result=`curl -sS --header '$header' "$targetUrl"`;
 //echo $result;
 $result = json_decode($result);
 
-$passwordHash = mhash(MHASH_SHA512,"myverysecurepassword");
+$passwordHash = mhash(MHASH_SHA512,$cryptoPassword);
 
 //echo "passHash, ".strToHex($passwordHash)."\n";
 
 $keySlotKey = utf8_encode(mhash(MHASH_SHA256, strToHex($passwordHash)));
-//echo"keySlotKey_hex, ".strToHex($keySlotKey)."\n";
-//echo "keySlotKey_hex in one line:  ".strToHex(mhash(MHASH_SHA256, strToHex(mhash(MHASH_SHA512, "myverysecurepassword"))))."\n";
 
-
-//echo "\n\nDEBUGGING SECTION--------------\n\n";
-//$key = utf8_encode(mhash(MHASH_SHA256, strToHex(mhash(MHASH_SHA512, "myverysecurepassword"))));
-//echo "base64 key, ".base64_encode($key)."\n";
-//$x = AesCtr::decrypt("ugIyituTtFEoX3EJ459HRM+15SfgzVjomIb3Bb6jJ8TaOW74CW3tchto4erEg223sCd1YebbcaHIsLM819DnJ1V82a5yHtlkPtVUU8yLoYSCmwSKgoELGRYu3cX4DOes/5KmHaNYMz2qCyiF",
-//					$key,
-//					256);
-//print "hackery: ".base64_encode($x)."\n";
+//echo "keySlotKey : ".base64_encode($keySlotKey)."\n";
 
 //$keyslot = $result["data"]["keySlot0"];
 $keyslot = $result->data->keySlot0;
@@ -54,7 +48,7 @@ $keyslot = $result->data->keySlot0;
 $keyslot_decrypted = AesCtr::decrypt($keyslot, $keySlotKey, 256);
 
 $rawKey = $keyslot_decrypted.$result->data->Salt;
-//echo "rawKey_base64, ".base64_encode($rawKey)."\n";
+echo "rawKey_base64, ".base64_encode($rawKey)."\n";
 
 $rowDecryptionKey = utf8_encode(mhash(MHASH_SHA256, utf8_decode($rawKey)));
 //echo "key_base64, ".base64_encode($rowDecryptionKey)."\n";
@@ -62,7 +56,7 @@ $rowDecryptionKey = utf8_encode(mhash(MHASH_SHA256, utf8_decode($rawKey)));
 /*
 print "\n\n\n";
 print base64_encode(utf8_encode
-	(mhash(MHASH_SHA256, 
+	(mhash(MHASH_SHA256,
 		utf8_decode(base64_decode("woQFbmPDm8KLWMORDmhRJGAVfcK2wonCkkXDucK3Q8OLwr3Cm8OjQsKNwq3Dj8OgwrDCi8KuwqhIw5/CoMKAw55JwppNwrfDrzk0wqfDoCTDjAQVwrdvdsOGw4fDmyR9XMK5VDJYcGVgVUE4eytMP080VGNuQ0hcKyRWdCY8YydUcUU2"))
 	))
 );
@@ -77,13 +71,14 @@ $result = AesCtr::decrypt(base64_decode($result->data->Credentials), $rowDecrypt
 $credentials = json_decode($result);
 if($credentials)
 {
-//echo "\n\n----\n";
-var_dump($credentials);
-//echo "\n----\n";
+	//echo "\n\n----\n";
+	var_dump($credentials);
+	//echo "\n----\n";
 }
 else
 {
 	echo "\n\nThe object could not be decoded - the crypto password was incorrect\n";
 }
+
 
 ?>
