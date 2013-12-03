@@ -29,6 +29,27 @@ test( "Given a plaintext it can be encrypted and decrypted again", function() {
 	);
 });
 
+test( "Given the set of keySlotPassword, rowSalt, keySlot and the encrypted credentials object a valid plaintext JSON credentials object is decrypted", 1, function() {
+	var masterPasswordHash = "1b0461d726e1593a8e7bcb30726c10a89f672f0428726ac1369abb5f1a8a5319892889774d2ed2c760b9b86b4666786590c54636696afdce97416cd7d3bccc88",
+		rowSalt = "2Xpe`UA8{+L?O4TcnCH\\+$Vt&<c'TqE6",	//TWO backslashes 
+		keySlot = "ugIyituTtFEoX3EJ459HRM+15SfgzVjomIb3Bb6jJ8TaOW74CW3tchto4erEg223sCd1YebbcaHIsLM819DnJ1V82a5yHtlkPtVUU8yLoYSCmwSKgoELGRYu3cX4DOes/5KmHaNYMz2qCyiF",
+		base64decoded = "TQKgsE6UtFHRxYY0UITlQn1Q4F0O6VE+cLCJ+xSSpZbbxTG+AbH2C6sGZdQyQjlr5iz4Grct/EhREoRm8I51NHwmiqkcEalb2pqfBpalPk9+E5+eoQgOp59FcNAXSPKuNQRS8y4kUJ6ksJ8OHhyCSKz19144QrfDb0/aC8QJuw==",
+		callbackCount = 0,
+		mc_callbacks = {
+			success: function(credentialsObject) {
+				deepEqual(credentialsObject, 
+					{
+					  "Password": "_zZD<lxcmo0/|cNC",
+					  "Username": "d`e))hG4y2z`aB/A",
+					  "lkjkljklj": "u9,;/Ws<Qi%^Zbxu",
+					  "meila": "O_H-CdOw-UT84^OA"
+					}
+				);
+			}
+		};	
+	$MC.handleDecodeAndDecrypt(masterPasswordHash, rowSalt, keySlot, base64decoded, mc_callbacks, callbackCount);
+});
+
 test( "Given d dec2hexChar(d) returns hexadecimal representation of the value", function() {
 	equal($MC.dec2hexChar(255), "ff");
 	equal($MC.dec2hexChar(254), "fe");
