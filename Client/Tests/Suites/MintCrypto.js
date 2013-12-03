@@ -1,9 +1,8 @@
-module("MintCryptoWrapper");
+module("MintCryptoWrapper -> Core");
 
 var cypher = "AES", keySize = 256;
 
 test( "Given known CypherText and keys, Decrypt_strings returns known plaintext", function() {
-	
 	equal(
 		$MC.Decrypt_strings("", "", cypher, keySize),
 		"",
@@ -22,6 +21,7 @@ test( "Given a plaintext it can be encrypted and decrypted again", function() {
 	var cryptoKey = "ThisIsMyKey", inputStr = "OMG this is my supa secret";
 	
 	var cypherText = $MC.Encrypt_strings(inputStr, cryptoKey, cypher, keySize);
+	
 	equal(
 		$MC.Decrypt_strings(cypherText, cryptoKey, cypher, keySize),
 		inputStr,
@@ -50,6 +50,49 @@ test( "Given the set of keySlotPassword, rowSalt, keySlot and the encrypted cred
 	$MC.handleDecodeAndDecrypt(masterPasswordHash, rowSalt, keySlot, base64decoded, mc_callbacks, callbackCount);
 });
 
+/*
+// This is difficult to test without mocking $MS and it just wraps handleDecodeAndDecrypt anyway
+test( "Given encryptedObject and RowSalt; callbacks are fired?", function() {	//todo make less bs
+	$MC.decodeAndDecrypt(encryptedObject, rowSalt, keySlot, mc_callbacks);
+});
+*/
+
+test( "Given a credentials object, rowSalt and keySlot does encodeAndEncrypt encrypt into a decryptable form?", 2, function() {
+	var srcObject = {
+			"username"	: "robtest",
+			"password"	: "mypassword",
+			"email"		: "robtest@example.com"
+		},
+		rowSalt = ".Uip*M5V~rWMD(oY",
+		keySlot = "ugIyituTtFEoX3EJ459HRM+15SfgzVjomIb3Bb6jJ8TaOW74CW3tchto4erEg223sCd1YebbcaHIsLM819DnJ1V82a5yHtlkPtVUU8yLoYSCmwSKgoELGRYu3cX4DOes/5KmHaNYMz2qCyiF",
+		mc_callback = function(encryptedData, cryptoHash) {
+			deepEqual(cryptoHash, "f2e16cd0df86a558bfd6228b40384d3cd85306c5d828b5f50b930ec1858f98fa5253a58a541328afe82e16d8a63a98d5cd14080b6e5269bba100f584e2476059");
+			
+			//for reasons passing understanding, the output of encodeAndEncrypt is double base64 encoded, yet handleDecodeAndDecrypt only wants it single encoded
+			//TODO: sort this out!
+			base64decoded = base64_decode(encryptedData);
+			//now check that the encryptedData can be decrypted into the original object (copied from the above test basically)
+			$MC.handleDecodeAndDecrypt("1b0461d726e1593a8e7bcb30726c10a89f672f0428726ac1369abb5f1a8a5319892889774d2ed2c760b9b86b4666786590c54636696afdce97416cd7d3bccc88",
+				rowSalt,
+				keySlot,
+				base64decoded,
+				{
+					success: function(credentialsObject) {
+						deepEqual(credentialsObject, srcObject);
+					},
+					error: function(e) {
+						console.log(e)
+					}
+				},
+				0
+			)
+		};
+	
+	$MC.encodeAndEncrypt(srcObject, rowSalt, keySlot, mc_callback);
+});
+
+
+module("MintCryptoWrapper -> HexTools");
 test( "Given d dec2hexChar(d) returns hexadecimal representation of the value", function() {
 	equal($MC.dec2hexChar(255), "ff");
 	equal($MC.dec2hexChar(254), "fe");
@@ -58,6 +101,7 @@ test( "Given d dec2hexChar(d) returns hexadecimal representation of the value", 
 	equal($MC.dec2hexChar(0), "00", "Handles 0 correctly");
 	equal($MC.dec2hexChar(1), "01");
 });
+
 test( "Given h hex2decChar(h) returns decimal representation of the hexadecimal character string", function() {
 	equal($MC.hex2decChar("0a"), 10);
 	equal($MC.hex2decChar("01"), 01);
@@ -68,6 +112,7 @@ test( "Given h hex2decChar(h) returns decimal representation of the hexadecimal 
 	equal($MC.hex2decChar("ab"), 171);
 	equal($MC.hex2decChar("9a"), 154);
 });
+
 test( "Given a plaintext string, Str2Hex(plaintext) returns the hexadecimal representation when interpreted as ASCII", function() {
 	equal(
 		$MC.Str2Hex("Given a plaintext string, returns the hexadecimal representation when interpreted as ASCII"),
@@ -90,6 +135,7 @@ test( "Given a plaintext string, Str2Hex(plaintext) returns the hexadecimal repr
 		"Handles String with control characters in"
 	);
 });
+
 test( "Given a string containing hex representation of bytes Hex2Str(string) returns a string of the raw values", function() {
 	equal(
 		$MC.Hex2Str("476976656e206120737472696e6720636f6e7461696e696e672068657820726570726573656e746174696f6e206f662062797465732072657475726e73206120737472696e67207769746820746865207261772076616c756573"), 
