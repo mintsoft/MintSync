@@ -1,11 +1,31 @@
 module("MintCryptoWrapper");
 
+var cypher = "AES", keySize = 256;
+
 test( "Given known CypherText and keys, Decrypt_strings returns known plaintext", function() {
-	var cypher = "AES", keySize = 256;
+	
 	equal(
 		$MC.Decrypt_strings("", "", cypher, keySize),
 		"",
 		"Empty String input and empty key returns empty string"
+	);
+	
+	equal(
+		$MC.Decrypt_strings("NABcxIUvnlLoYmGkvD1HIB1+X7xymU9FnWyUNU94jz2tEA==", "ThisIsMyKey", cypher, keySize),
+		"OMG this is my supa secret",
+		"Can decrypt a string with a simple key"
+	);
+});
+
+//Note, $MC.Encrypt_strings is untestable by itself as it uses a random CTR
+test( "Given a plaintext it can be encrypted and decrypted again", function() {
+	var cryptoKey = "ThisIsMyKey", inputStr = "OMG this is my supa secret";
+	
+	var cypherText = $MC.Encrypt_strings(inputStr, cryptoKey, cypher, keySize);
+	equal(
+		$MC.Decrypt_strings(cypherText, cryptoKey, cypher, keySize),
+		inputStr,
+		"Can both encrypt and decrypt a string with the same key"
 	);
 });
 
