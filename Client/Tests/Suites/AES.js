@@ -14,7 +14,6 @@ test( "Given a correct text, keys of the correct length and the correct keySize"
 	);
 });
 
-
 test( "Given text and two differing keys the output cannot be decrypted", function() {
 	
 	var clearText = "This is a very, VERY secure string that should be supa encrypted";
@@ -27,5 +26,21 @@ test( "Given text and two differing keys the output cannot be decrypted", functi
 	
 	notEqual(
 		clearText, decrypted, "text cannot be decrypted with a different key"
+	);
+});
+
+
+test( "Given a hashed password show that full hash is required to decrypt the data", function() {
+	var keySize = 256;
+	var shaObj		= new jsSHA("passwordHash","ASCII");
+	var encryptKeyText	= $MC.Hex2Str(shaObj.getHash("SHA-256","HEX"));
+	var decryptKeyText = encryptKeyText.substring(0,keySize/8);
+	var clearText = "This is a very, VERY secure string that should be supa encrypted";
+	
+	var encrypted = Aes.Ctr.encrypt(clearText, encryptKeyText, keySize);
+	var decrypted = Aes.Ctr.decrypt(encrypted, decryptKeyText, keySize);
+	
+	notEqual(
+		clearText, decrypted, "text should require the full key to be decrypted"
 	);
 });
