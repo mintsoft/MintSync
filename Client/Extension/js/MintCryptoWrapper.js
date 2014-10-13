@@ -42,12 +42,6 @@ function MintCrypto() {
 		@param callbackCount the number of times the callback has been executed
 	**/
 	this.handleDecodeAndDecrypt = function(passwordHash, rowSalt, keySlot, base64decoded, mc_callbacks, callbackCount){
-/*
-		console.debug("passHash",passwordHash);
-		console.debug("rowSalt", rowSalt);
-		console.debug("keySlot", keySlot);
-		console.debug("base64Decoded", base64decoded);
-*/
 		//Unlock the KeySlot with SHA-256 of the passwordHash to form half of the
 		//row encryption key
 		shaObj		= new jsSHA(passwordHash,"ASCII");
