@@ -36,7 +36,7 @@ test( "Given a hashed password show that full hash is required to decrypt the da
 	var decryptKeyText = encryptKeyText.substring(0,encryptKeyText.length-8);
 	var clearText = "This is a very, VERY secure string that should be supa encrypted";
 	
-	notEqual(encryptKeyText, decryptKeyText, "encrypt and decrypt keys should not be identical")
+	notEqual(encryptKeyText, decryptKeyText, "encrypt and decrypt keys should not be identical");
 	
 	var encrypted = Aes.Ctr.encrypt(clearText, encryptKeyText, keySize);
 	var decrypted = Aes.Ctr.decrypt(encrypted, decryptKeyText, keySize);
