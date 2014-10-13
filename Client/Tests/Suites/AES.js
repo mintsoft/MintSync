@@ -1,0 +1,31 @@
+module("AES CTR");
+
+test( "Given a correct text, keys of the correct length and the correct keySize", function() {
+	
+	var clearText = "This is a very, VERY secure string that should be supa encrypted";
+	var keyText = "012345678901234567890123459678912";
+	var keySize = 256;
+	
+	var encrypted = Aes.Ctr.encrypt(clearText, keyText, keySize);
+	var decrypted = Aes.Ctr.decrypt(encrypted, keyText, keySize);
+	
+	equal(
+		clearText, decrypted, "text can be encrypted and decrypted!"
+	);
+});
+
+
+test( "Given text and two differing keys the output cannot be decrypted", function() {
+	
+	var clearText = "This is a very, VERY secure string that should be supa encrypted";
+	var encryptKeyText = "012345678901234567890123459678912";
+	var decryptKeyText = "01234567890123456789";
+	var keySize = 256;
+	
+	var encrypted = Aes.Ctr.encrypt(clearText, encryptKeyText, keySize);
+	var decrypted = Aes.Ctr.decrypt(encrypted, decryptKeyText, keySize);
+	
+	notEqual(
+		clearText, decrypted, "text cannot be decrypted with a different key"
+	);
+});
