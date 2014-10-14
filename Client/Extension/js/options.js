@@ -25,9 +25,9 @@ $(document).ready(function(){
 	$("#SavePassBDuration").val(preferences["SavePassBDuration"] ? preferences["SavePassBDuration"] : 0);
 
 	/* generation options */
-	$('#passwordStrengthNum').prop('checked',		preferences["passwordStrengthNum"]=="true");
-	$('#passwordStrengthPunc1').prop('checked',	preferences["passwordStrengthPunc1"]=="true");
-	$('#passwordStrengthPunc2').prop('checked',	preferences["passwordStrengthPunc2"]=="true");
+	$('#passwordStrengthNum').prop('checked', preferences["passwordStrengthNum"]=="true");
+	$('#passwordStrengthPunc1').prop('checked', preferences["passwordStrengthPunc1"]=="true");
+	$('#passwordStrengthPunc2').prop('checked', preferences["passwordStrengthPunc2"]=="true");
 	
 	/* Bind the local cache update */
 	$("#localCacheUpdateButton").click(function(){
@@ -62,23 +62,23 @@ function savePrefs() {
 	if(serverUrl.charAt(serverUrl.length-1)!="/")
 		serverUrl+="/";
 		
-	preferences["ServerURL"]					= serverUrl;
-	preferences["SavePassword"]					= $("input[type=radio][name=SavePass]:checked").val();
-	preferences["SaveAuthentication"]			= $("input[type=radio][name=SaveAuth]:checked").val();
-	preferences["Cipher"]						= $("input[type=radio][name=Cipher]:checked").val();
-	preferences["KeyLength"]					= $("input[type=radio][name=KeyLength]:checked").val();
-	preferences["AutoFetch"]					= $("input[type=radio][name=AutoFetch]:checked").val();
-	preferences["Notify"]						= $("input[type=radio][name=Notify]:checked").val();
-	preferences["NotifySource"]					= $("input[type=radio][name=NotifySource]:checked").val();
-	preferences["NotifySourceUpdatePeriod"]		= $("#NotifySourceUpdatePeriod").val();
-	preferences["GeneratedPasswordLength"]		= $("#GeneratedPasswordLength").val();
+	preferences["ServerURL"] = serverUrl;
+	preferences["SavePassword"] = $("input[type=radio][name=SavePass]:checked").val();
+	preferences["SaveAuthentication"] = $("input[type=radio][name=SaveAuth]:checked").val();
+	preferences["Cipher"] = $("input[type=radio][name=Cipher]:checked").val();
+	preferences["KeyLength"] = $("input[type=radio][name=KeyLength]:checked").val();
+	preferences["AutoFetch"] = $("input[type=radio][name=AutoFetch]:checked").val();
+	preferences["Notify"] = $("input[type=radio][name=Notify]:checked").val();
+	preferences["NotifySource"] = $("input[type=radio][name=NotifySource]:checked").val();
+	preferences["NotifySourceUpdatePeriod"] = $("#NotifySourceUpdatePeriod").val() <= 0 ? 1 : $("#NotifySourceUpdatePeriod").val();
+	preferences["GeneratedPasswordLength"] = $("#GeneratedPasswordLength").val();
 	
-	preferences["SavePassBDuration"]			= $("#SavePassBDuration").val() ? $("#SavePassBDuration").val() : 0;
+	preferences["SavePassBDuration"] = $("#SavePassBDuration").val() ? $("#SavePassBDuration").val() : 0;
 	
 	/* generation options */
-	preferences["passwordStrengthNum"]			= $("#passwordStrengthNum").is(":checked");
-	preferences["passwordStrengthPunc1"]		= $("#passwordStrengthPunc1").is(":checked");
-	preferences["passwordStrengthPunc2"]		= $("#passwordStrengthPunc2").is(":checked");
+	preferences["passwordStrengthNum"] = $("#passwordStrengthNum").is(":checked");
+	preferences["passwordStrengthPunc1"] = $("#passwordStrengthPunc1").is(":checked");
+	preferences["passwordStrengthPunc2"] = $("#passwordStrengthPunc2").is(":checked");
 	
 	
 	//clear saved data if applicable
