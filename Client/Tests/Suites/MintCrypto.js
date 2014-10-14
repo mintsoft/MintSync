@@ -154,6 +154,23 @@ test( "Given a string containing hex representation of bytes Hex2Str(string) ret
 	
 });
 
+test("Given a string containing a hex representation of bytes Hex2Array(string) returns an array of the raw values", function() {
+	deepEqual(
+		$MC.Hex2Array("303132333435"), 
+		[48,49,50,51,52,53], 
+		"Handles list of bytes"
+	);
+	deepEqual(
+		$MC.Hex2Array("000102030405"),
+		[0,1,2,3,4,5],
+		"Handles basic string with values < 10"
+	);
+	deepEqual($MC.Hex2Array("48656c6c6f09486f77417265596f753f0d49276d47726561740a457863656c6c656e746100596573"),
+		[72,101,108,108,111,9,72,111,119,65,114,101,89,111,117,63,13,73,39,109,71,114,101,97,116,10,69,120,99,101,108,108,101,110,116,97,0,89,101,115],
+		"Handles String with control characters in"
+	);
+});
+
 module("MintCryptoWrapper + SHA");
 test ("The hash function produces a key of the correct length", function() {
 	var shaObj = new jsSHA("this is the password to be hashed innit","ASCII");
