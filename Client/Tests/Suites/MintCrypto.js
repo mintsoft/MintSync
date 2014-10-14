@@ -151,7 +151,6 @@ test( "Given a string containing hex representation of bytes Hex2Str(string) ret
 		"Hello\tHowAreYou?\rI'mGreat\nExcellent\a\0Yes",
 		"Handles String with control characters in"
 	);
-	
 });
 
 test("Given a string containing a hex representation of bytes Hex2Array(string) returns an array of the raw values", function() {
