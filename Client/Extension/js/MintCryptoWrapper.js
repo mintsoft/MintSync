@@ -134,6 +134,14 @@ function MintCrypto() {
 		}
 		return bytes;
 	};
+	this.Array2Hex = function(array){
+		var str = "";
+		for(var i=0; i<array.length; i++)
+		{
+			str += $MC.dec2hexChar(array[i]) + '';
+		}
+		return str;
+	};
 }
 
 var $MC = new MintCrypto();
