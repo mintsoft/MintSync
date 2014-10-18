@@ -9,10 +9,13 @@ function strToHex($string)
 	return $array[1];
 }
 
-$options = getopt("u:p:P:",array("username:", "password:", "crypto-password:"));
-$username = $options['u'] || $options['username'];
-$password = $options['p'] || $options['password'];
-$cryptoPassword = $options['P'] || $options['crypto-password'];
+$options = getopt("",array("username:", "password:", "crypto-password:"));
+$username = $options['username'];
+$password = $options['password'];
+$cryptoPassword = $options['crypto-password'];
+
+if(!($username && $password && $cryptoPassword))
+	die("Username : $username ; Password : $password ; Crypto: $cryptoPassword ; all need to be specified\n");
 
 require_once("aes-php.php");
 
@@ -25,11 +28,11 @@ $a = strToHex(mhash(MHASH_SHA512, $password));
 $authString = base64_encode(mhash(MHASH_SHA512,$a.":".$nonce));
 
 $header="X-MS-Authorisation: MintSync1 $username|$nonce|$authString";
-$cmd = "curl -sS --header '$header' \"$targetUrl\"";
 $result=`curl -sS --header '$header' "$targetUrl"`;
 
-//echo $result;
 $result = json_decode($result);
+if($result->status == "fail")
+	die($result->data->reason);
 
 $passwordHash = mhash(MHASH_SHA512,$cryptoPassword);
 
