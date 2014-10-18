@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>MintSync Core Unit Tests</title>
+		<link rel="stylesheet" href="QUnit/qunit-1.12.0.css">
+	</head>
+	<body>
+		<div id="qunit"></div>
+		<div id="qunit-fixture"></div>
+		<script src="QUnit/qunit-1.12.0.js"></script>
+		
+		<!-- MintSync Dependencies -->
+		<script src="../../../master/Client/Extension/js/jquery.js"></script>		
+		
+		<!-- MintSync Modules -->
+		<script src="../../../master/Client/Extension/js/AES.js"></script>
+		<script src="../../../master/Client/Extension/js/sha.js"></script>
+		<script src="../../../master/Client/Extension/js/php_js/base64_encode.js"></script>
+		<script src="../../../master/Client/Extension/js/php_js/base64_decode.js"></script>
+		<script src="../../../master/Client/Extension/js/php_js/utf8_encode.js"></script>
+		<script src="../../../master/Client/Extension/js/php_js/utf8_decode.js"></script>
+		<script src="../../../master/Client/Extension/js/MintCryptoWrapper.js"></script>
+		<script src="../../../master/Client/Extension/js/MintSync.js"></script>
+		
+		<!-- "Mocks" - actually hacks -->
+		<script src="Mocks/integrationStubFunctions.js"></script>
+		
+		<!-- Actual Tests -->
+		<script src="Suites/integration.js"></script>
+	</body>
+</html>

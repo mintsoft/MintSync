@@ -201,4 +201,4 @@ test ("The hash function produces a key of the correct length", function() {
 	var shaObj = new jsSHA("this is the password to be hashed innit","ASCII");
 	var encryptKeyText	= $MC.Hex2Str(shaObj.getHash("SHA-256","HEX"));
 	equal(encryptKeyText.length, 256/8, "Key is 256 bits long")
-})
+});
