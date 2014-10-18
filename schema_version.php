@@ -39,7 +39,7 @@ class schema_version
 		$maxVer = $this->retrieveCurrentSchemaVersion();
 
 		if($maxVer < $maxMigration)
-			return $this->doMigration();
+			return $this->doMigrations();
 
 		return false;
 	}
@@ -75,13 +75,13 @@ class schema_version
 		$resultSet = $stmt->fetchAll();
 		return $resultSet[0]['currentVersion'];
 	}
-
+	
 	/**
 	 * Will perform migrations on the database from a source
 	 * TODO: Implement and decide on structure
 	 * @return boolean
 	 */
-	public function doMigration()
+	public function doMigrations()
 	{
 		return true;
 	}
