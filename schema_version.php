@@ -108,7 +108,7 @@ class schema_version
 		
 		$this->db->exec($migrationText);
 		
-		$stmt = $this->db->prepare("INSERT INTO schema_vesion (versionNo) VALUES (?);");
+		$stmt = $this->db->prepare("INSERT INTO schema_version (versionNo) VALUES (?);");
 		$stmt->execute(array($migrationNumber));
 		return true;
 	}
