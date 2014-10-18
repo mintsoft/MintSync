@@ -77,7 +77,7 @@ switch ($action)
 			fputcsv($stdout, $row, ',', '"');
 		}
 
-		break;
+	break;
 	case "dbdump":
 		$db = new PDO(PDO_DSN);
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -88,7 +88,7 @@ switch ($action)
 		echo "<pre>";
 		echo htmlentities(print_r($rows, true));
 		echo "</pre>";
-		break;
+	break;
 	case "adduser":
 		header_html();
 		?>
@@ -115,7 +115,7 @@ switch ($action)
 		</form>
 		<?php
 		footer_html();
-		break;
+	break;
 	case "ui":
 	default:
 		header_html();
@@ -126,6 +126,7 @@ switch ($action)
 			<li><span><a href='?action=backup'>Backup Password Database (encrypted)</a> - <a href='?action=backup&amp;output=browser'>View in browser</a></span></li>
 			<li><a href='?action=dbdump'>Debug Database View (encrypted)</a></li>
 			<li><a href='?action=adduser'>Add User</a></li>
+			<li><a href='migrate.php'>Perform Migrations</a></li>
 		</ul>
 		<?php
 		footer_html();
