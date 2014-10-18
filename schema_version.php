@@ -36,10 +36,10 @@ class schema_version
 		}
 		@closedir($dh);
 
-		$maxVer = $this->retrieveCurrentSchemaVersion();
+		$schemaVersion = $this->retrieveCurrentSchemaVersion();
 
-		if($maxVer < $maxMigration)
-			return $this->doMigrations();
+		if($schemaVersion < $maxMigration)
+			return $this->doMigrations($schemaVersion, $maxMigration);
 
 		return false;
 	}
@@ -83,9 +83,34 @@ class schema_version
 	 */
 	public function doMigrations()
 	{
+		$dh = @opendir(MIGRATIONS_DIRECTORY);
+		if(!$dh)
+			return false;
+
+		$maxMigration = 0;
+		while(($filename = readdir($dh)) !== false) {
+			$matches = array();
+			if(preg_match("/^([1-9][0-9]*)\.sql$/", $filename, $matches)) {
+				if($maxMigration < $matches[1]){
+					$this->doMigration($matches[1]);
+					$maxMigration++;
+				}
+			}
+		}
+		@closedir($dh);
+	
 		return true;
 	}
-
+	
+	public function doMigration($migrationNumber)
+	{
+		$migrationText = file_get_contents(MIGRATIONS_DIRECTORY . "/" . $migrationNumber . ".sql");
+		
+		$this->db->exec($migrationText);
+		
+		$stmt = $this->db->prepare("INSERT INTO schema_vesion (versionNo) VALUES (?);");
+		$stmt->execute(array($migrationNumber));
+	}
 }
 
 ?>
