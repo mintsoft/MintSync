@@ -1,22 +1,24 @@
 /**
 	This is firefox's equivilent to bg.js
 */
+var {ToggleButton} = require('sdk/ui/button/toggle');
 var data = require("sdk/self").data;
 var tabs = require('sdk/tabs');
+var panels = require("sdk/panel");
 //Source the background JS
-var bg = require("bg.js");
 
 //http://stackoverflow.com/questions/9098828/how-to-reload-a-widget-popup-panel-with-firefox-addon-sdk
 
 function getPanel(contentURL, contentScriptFile, contentScript){
-	var popupPanel = require("sdk/panel").Panel({
+	var popupPanel = panels.Panel({
 		position: {
 			bottom: 5,
 			right: 8
 		},
 		width: 330,
 		height: 260,
-		contentURL: contentURL
+		contentURL: contentURL,
+		onHide: handleHide
 	});
 
 	popupPanel.port.on("getURL", function(){
@@ -30,12 +32,21 @@ function getPanel(contentURL, contentScriptFile, contentScript){
  
 // Create a widget, and attach the panel to it, so the panel is
 // shown when the user clicks the widget.
-var widget = require("sdk/widget").Widget({
+
+var button = ToggleButton({
 	label: "MintSync Popup",
 	id: "mintsync-popup",
-	contentURL: data.url("img/button_icon.png"),
-	onClick: function() {
+	icon: {
+		'16': './img/button_icon16.png',
+		'32': './img/button_icon.png'
+	},
+	badge: 0,
+	badgeColor: '#AAA',
+	onChange: function(state) {
+		if(!state.checked)
+			return;
 		var newPanel = getPanel(data.url("popup.html"));
+				
 		var contentscriptworker = tabs.activeTab.attach({
 			contentScriptFile: [data.url("includes/sizzle.js"),
 								data.url("includes/ins.js")]
@@ -48,14 +59,16 @@ var widget = require("sdk/widget").Widget({
 		newPanel.port.on("popup-to-injected", function(e) {
 			contentscriptworker.port.emit("popup-to-injected", e);
 		});
-				
-		newPanel.show();
+		
+		newPanel.show({position: button});
 	}
 });
 
-/**
- This is one way of doing content scripts, it might be necessary yet!
-*/
+function handleHide() {
+	button.state('window', {checked: false});
+}
+
+
 /*
 var data = require("sdk/self").data;
 var pageMod = require("sdk/page-mod");
@@ -71,3 +84,20 @@ pageMod.PageMod({
 	}
 });
 */
+/* jshint sub:true */
+// Persistant variables for browserSession
+/*
+var mintSyncGlobals = {
+	'passwd': undefined,			//saved crypto password
+	'authentication': undefined,	//save auth details
+	'cacheTimer': undefined,		//URL Cache timer
+	'urlCache': [],				//array of URLS
+	'passwdResetTimer': undefined,	//URL Cache timer
+	'theButton': undefined			//the button on the toolbar
+};
+
+function genericRetrieve_preferencesObj(){
+	var ss = require("sdk/simple-storage");
+	return ss.storage;
+}*/
+var bg = require("bg.js");
