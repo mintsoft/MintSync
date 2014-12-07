@@ -68,7 +68,7 @@ function MintCrypto() {
 			//parse error, incorrect password
 			if(callbackCount<5)
 				$MS.getEncryptionPasswordHash(function(newPasswordHash){
-					$MC.handleDecodeAndDecrypt(newPasswordHash, rowSalt, keySlot, base64decoded, mc_callbacks, ++callbackCount);
+					$MC.handleDecodeAndDecrypt(newPasswordHash, rowSalt, keySlot, base64decoded, cryptoScheme, mc_callbacks, ++callbackCount);
 				});
 			else	//error callback triggered if failed request 5 times
 				mc_callbacks.error();
