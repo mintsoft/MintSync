@@ -140,7 +140,7 @@ class mintsync_server
 	 * @param string $cryptoHash
 	 * @param bool $force
 	 */
-	public function save($url, $credentialsObj, $rowSalt, $cryptoHash, $force)
+	public function save($url, $credentialsObj, $rowSalt, $cryptoHash, $cryptoScheme, $force)
 	{
 		if(!empty($cryptoHash)) {
 			$stmt = $this->db->prepare("SELECT * FROM user WHERE ID=:userID AND keySlot0PassHash=:cryptoHash");
@@ -173,12 +173,13 @@ class mintsync_server
 				)
 			), restTools::$HTTPCodes['CONFLICT']);
 		} elseif((int)$row['Freq'] > 0 && $force) {
-			$stmt = $this->db->prepare("UPDATE auth SET Salt=:salt, Credentials=:credentials WHERE :url LIKE URL AND userID=:userID;");
+			$stmt = $this->db->prepare("UPDATE auth SET Salt=:salt, Credentials=:credentials, cryptoScheme=:cryptoScheme WHERE :url LIKE URL AND userID=:userID;");
 
 			$stmt->bindValue(":url", strtolower($url));
 			$stmt->bindValue(":userID", $this->userID);
 			$stmt->bindValue(":salt", $rowSalt);
 			$stmt->bindValue(":credentials", $credentialsObj);
+			$stmt->bindValue(":cryptoScheme", $cryptoScheme);
 			$stmt->execute();
 
 			$stmt = $this->db->prepare("SELECT * FROM auth WHERE URL=:url AND userID=:userID;");
@@ -194,13 +195,14 @@ class mintsync_server
 				"data" => array()
 			), restTools::$HTTPCodes['RESET_CONTENT']);
 		} else {
-			$stmt = $this->db->prepare("INSERT INTO auth(URL,Salt,Credentials,userID) VALUES(:url,:salt,:credentials,:userID);");
+			$stmt = $this->db->prepare("INSERT INTO auth(URL,Salt,Credentials,cryptoScheme,userID) VALUES(:url,:salt,:credentials,:cryptoScheme,:userID);");
 
 			$stmt->bindValue(":url", str_replace(
 					array("%"), array("%%"), strtolower($url))
 			);
 			$stmt->bindValue(":salt", $rowSalt);
 			$stmt->bindValue(":credentials", $credentialsObj);
+			$stmt->bindValue(":cryptoScheme", $cryptoScheme);
 			$stmt->bindValue(":userID", $this->userID);
 			$stmt->execute();
 

@@ -83,7 +83,7 @@ switch ($action)
 	break;
 	case "save":  //POST
 		if (!empty($_REQUEST['URL']) && !empty($_REQUEST['rowSalt']) && !empty($_REQUEST['Credentials']))
-			$mintsyncServer->save($_REQUEST['URL'], $_REQUEST['Credentials'], $_REQUEST['rowSalt'], $_REQUEST['cryptoHash'], !empty($_REQUEST['force']));
+			$mintsyncServer->save($_REQUEST['URL'], $_REQUEST['Credentials'], $_REQUEST['rowSalt'], $_REQUEST['cryptoHash'], (int)$_REQUEST['cryptoScheme'], !empty($_REQUEST['force']));
 	break;
 	case "remove":   //DELETE Request
 		if (!empty($_REQUEST['ID']))
