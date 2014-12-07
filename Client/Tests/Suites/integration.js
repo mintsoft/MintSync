@@ -91,3 +91,24 @@ QUnit.asyncTest("The client can decrypt the credentials object for an URL", func
 		}
 	});
 });
+/*
+QUnit.asyncTest("The client can save and decrypt the credentials object for an URL", function (assert) {
+	assert.expect(9);
+	// this.setPassword = function(Domain,Credentials,rowSalt,cryptoHash,force,callbacks) {
+	var testDomain = "test_"+Date.now();
+	var credentials = { };
+	var rowSalt = $MS.generateRowSalt();
+	var cryptoPassword = $MS.generatePassword(16);
+	$MC.encodeAndEncrypt(CredentialsObj,RowSalt,returnedData.data.keySlot0,function(encryptedData,cryptoHash) {
+		$MS.setPassword(testDomain, credentials, rowSalt, cryptoPassword, true, {
+			error : function(e) {
+				assert.equal(1,0, "error in setPassword : " + e);
+			},
+			success: function(response)
+			{
+
+			}
+		});
+	});
+});
+*/

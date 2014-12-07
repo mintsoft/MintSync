@@ -35,6 +35,7 @@ test( "Given the set of keySlotPassword, rowSalt, keySlot and the encrypted cred
 		keySlot = "ugIyituTtFEoX3EJ459HRM+15SfgzVjomIb3Bb6jJ8TaOW74CW3tchto4erEg223sCd1YebbcaHIsLM819DnJ1V82a5yHtlkPtVUU8yLoYSCmwSKgoELGRYu3cX4DOes/5KmHaNYMz2qCyiF",
 		base64decoded = "TQKgsE6UtFHRxYY0UITlQn1Q4F0O6VE+cLCJ+xSSpZbbxTG+AbH2C6sGZdQyQjlr5iz4Grct/EhREoRm8I51NHwmiqkcEalb2pqfBpalPk9+E5+eoQgOp59FcNAXSPKuNQRS8y4kUJ6ksJ8OHhyCSKz19144QrfDb0/aC8QJuw==",
 		callbackCount = 0,
+		cryptoScheme = 0,
 		mc_callbacks = {
 			success: function(credentialsObject) {
 				deepEqual(credentialsObject, 
@@ -47,7 +48,7 @@ test( "Given the set of keySlotPassword, rowSalt, keySlot and the encrypted cred
 				);
 			}
 		};	
-	$MC.handleDecodeAndDecrypt(masterPasswordHash, rowSalt, keySlot, base64decoded, mc_callbacks, callbackCount);
+	$MC.handleDecodeAndDecrypt(masterPasswordHash, rowSalt, keySlot, base64decoded, cryptoScheme, mc_callbacks, callbackCount);
 });
 
 /*
@@ -63,6 +64,7 @@ test( "Given a credentials object, rowSalt and keySlot does encodeAndEncrypt enc
 			"password"	: "mypassword",
 			"email"		: "robtest@example.com"
 		},
+		cryptoScheme = 0,
 		rowSalt = ".Uip*M5V~rWMD(oY",
 		keySlot = "ugIyituTtFEoX3EJ459HRM+15SfgzVjomIb3Bb6jJ8TaOW74CW3tchto4erEg223sCd1YebbcaHIsLM819DnJ1V82a5yHtlkPtVUU8yLoYSCmwSKgoELGRYu3cX4DOes/5KmHaNYMz2qCyiF",
 		mc_callback = function(encryptedData, cryptoHash) {
@@ -76,6 +78,7 @@ test( "Given a credentials object, rowSalt and keySlot does encodeAndEncrypt enc
 				rowSalt,
 				keySlot,
 				base64decoded,
+				cryptoScheme,
 				{
 					success: function(credentialsObject) {
 						deepEqual(credentialsObject, srcObject);
