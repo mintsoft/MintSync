@@ -122,8 +122,8 @@ function processRecord(record)
 						var newCryptoScheme = 1;
 						$MC.encodeAndEncrypt(CredentialsObj, rowSalt, keySlot, newCryptoScheme, function(encryptedData, cryptoHash) {
 							CredentialsObj = {};
-
-							$MS.setPassword(domainName, encryptedData, rowSalt, cryptoHash, true, {
+							
+							$MS.setPassword(domainName, encryptedData, rowSalt, cryptoHash, true, newCryptoScheme, {
 								error: function(jq,textStatus,errorThrown) {
 									$(record).find("span.status").addClass("borderred");
 
