@@ -48,7 +48,7 @@ function MintCrypto() {
 		//row encryption key
 		shaObj		= new jsSHA(passwordHash,"ASCII");
 		keySlotKey	= $MC.Hex2Str(shaObj.getHash("SHA-256","HEX"));
-		cryptoCypher = cryptoScheme ? "AESRAW" : "AES";
+		cryptoCypher = (1*cryptoScheme) ? "AESRAW" : "AES";
 		//keySlot is stored BASE64 but it will be base64_decoded by the AES Library
 		rawKey = $MC.Decrypt_strings(keySlot, keySlotKey, cryptoCypher, 256) + "" + rowSalt;
 		
