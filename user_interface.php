@@ -127,6 +127,7 @@ switch ($action)
 			<li><a href='?action=dbdump'>Debug Database View (encrypted)</a></li>
 			<li><a href='?action=adduser'>Add User</a></li>
 			<li><a href='migrate.php'>Perform Migrations</a></li>
+			<li><a href='cryptoSchemeMigration.php'>cryptoScheme Migration (0->1)</a></li>
 		</ul>
 		<?php
 		footer_html();

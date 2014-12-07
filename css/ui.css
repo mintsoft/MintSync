@@ -21,3 +21,23 @@ li label {
 	display: inline-block;
 	width: 15em;
 }
+
+#PasswordList span.status {
+	float: right;
+	position: relative;
+	top: -2ex;
+	margin-right: 0.5em;
+	border: 2px solid grey;
+	height: 10px;
+	width: 10px;
+}
+
+.bordergreen {
+	border-color: green !important;
+}
+.borderred{
+	border-color: red !important;
+}
+.borderyellow{
+	border-color: rgb(255,205,0) !important;
+}
