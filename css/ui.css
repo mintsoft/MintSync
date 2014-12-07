@@ -37,6 +37,11 @@ li label {
 }
 .borderred{
 	border-color: red !important;
+	float: none !important;
+	position: static !important;
+	display: block;
+	height: auto !important;
+	width: 100% !important;
 }
 .borderyellow{
 	border-color: rgb(255,205,0) !important;

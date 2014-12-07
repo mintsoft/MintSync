@@ -88,86 +88,94 @@ $(document).ready(function(){
 		success: function(requestdata,textStatus,jq) {
 			//create list of domains
 			updatePasswordMatrix(requestdata.data);
-		},
-	});
-	/*
-	$("#adduser").submit(function(){
-		var passwd = "", 
-			cryptopasswd = "",
-			masterKey = "",
-			keySlot0CryptoKey="",
-			keySlot0="",
-			myHexObj = new hexObj();
-		
-		if(	$("#password1").val()==="" ||
-			$("#password2").val()==="" ||
-			$("#cryptopassword1").val()==="" ||
-			$("#cryptopassword2").val()==="" ||
-			$("#username").val()==="" )
-			return false;
-		
-		if($("#password1").val()!==$("#password2").val())
-		{
-			return false;
 		}
-		passwd = doHash($("#password1").val(),"SHA-512");
-		
-		if($("#cryptopassword1").val()!==$("#cryptopassword2").val())
-		{
-			return false;
-		}
-		
-		masterKey = doHash($("#cryptopassword1").val(),"SHA-512");
-		cryptopasswdVerifyHash	= 	doHash(masterKey,"SHA-512");
-		keySlot0CryptoKey 		= 	myHexObj.Hex2Str(doHash(masterKey,"SHA-256"));
-		
-		keySlot0 = generateMasterKey();					//keySlot decryption key
-		keySlot0 = AESencrypt(keySlot0,keySlot0CryptoKey);	//encrypt with the master password
-		
-		console.log("Sending Add User Request");
-		//ajax and add the user
-		$.ajax({
-			url: 'adduser.php',
-			type: 'POST',
-			data: {
-				'username' : 		$("#username").val(),
-				'password' : 		passwd,
-				'cryptopassword' : 	cryptopasswdVerifyHash,
-				'keySlot0': 		keySlot0
-			},
-			beforeSend: function(){
-				$("#adduser").hide();
-			},
-			success: function(data, textStatus, jq){
-				alert("Success!");
-				console.log(data);
-			},
-			error: function(jq,textStatus,errorThrown){
-				alert("There was an error! See the console for more information");
-				console.log(jq);
-				console.log(textStatus);
-				console.log(errorThrown);
-			},
-			complete: function(){
-				$("#adduser").show();
-				$("input").val("");
-			}
-		});		
 	});
-	*/
-	
+
 	$("#recrypt").click(function(e){
 		e.preventDefault();
 		
 		$("#PasswordList li").each(function(){
-			var id = $(this).find("div.dropDownContent input").val();
-			var title = $(this).find("h3").text();
-			
-			console.log(id + ": " + title);
-			$(this).find("span.status").addClass("bordergreen");
+			processRecord(this);
 		});
 	});
 });
+
+function processRecord(record)
+{
+	var id = $(record).find("div.dropDownContent input").val();
+	var domainName = $(record).find("h3").text();
+	console.log(id + ": " + domainName);
+
+	$MS.getEncryptionPasswordHash(function(passwordHash){
+		//get using old mechanism
+		$MS.getPasswordsByID(id,{
+			success: function(requestdata, textStatus, jq) {
+				if(requestdata.data.cryptoScheme == 1)
+					return;
+				var rowSalt = requestdata.data.Salt,
+					keySlot = requestdata.data.keySlot0,
+					base64decoded = base64_decode(requestdata.data.Credentials);
+
+				$MC.handleDecodeAndDecrypt(passwordHash, rowSalt, keySlot, base64decoded, requestdata.data.cryptoScheme, {
+					success: function(CredentialsObj) {
+						//Save using new scheme
+						var newCryptoScheme = 1;
+						$MC.encodeAndEncrypt(CredentialsObj, rowSalt, keySlot, newCryptoScheme, function(encryptedData, cryptoHash) {
+							CredentialsObj = {};
+
+							$MS.setPassword(domainName, encryptedData, rowSalt, cryptoHash, true, {
+								error: function(jq,textStatus,errorThrown) {
+									$(record).find("span.status").addClass("borderred");
+
+									switch(jq.status)
+									{
+										case 401:
+											$(record).find("span.status").text("Save Failed: Incorrect Login, please try again");
+											break;
+										case 409:
+											$(record).find("span.status").text("Save Failed: This URL Already exists");
+											break;
+										case 417:
+											$(record).find("span.status").text("Save Failed: Inconsistent Crypto Password");
+											//update the saved crypto password if it is set to anything other than no
+											$MS.resetSavedCryptoPassword();
+											break;
+										default:
+
+											$(record).find("span.status").text("An undefined error has occurred, see the error console for more information");
+											console.error("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);
+											console.error(jq);
+									}
+								},
+								success: function(requestdata,textStatus,jq) {
+									$(record).find("span.status").addClass("bordergreen");
+								}
+							});
+						});
+
+					},
+					error: function(){
+						alert("That decryption password is incorrect. Please try again");
+						$MS.resetSavedCryptoPassword();
+					}
+				},0);
+			},
+			beforeSend: function() {},
+			complete: function(jq,textStatus,errorThrown) {},
+			error: function(jq,textStatus,errorThrown){
+				switch(jq.status)
+				{
+					case 401:	//incorrect login
+						alert("Retrieve failed due to incorrect Login, please try again");
+						break;
+					default:
+						alert("An Error Has Occurred, see the error console for more information");
+						console.error("An unexpected error has occurred ("+jq.status+" "+textStatus+"): " + errorThrown);
+				}
+			}
+		});
+	});
+}
 
 function updatePasswordMatrix(sourceArray)
 {
