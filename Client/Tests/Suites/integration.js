@@ -70,6 +70,7 @@ QUnit.asyncTest("The client can decrypt the credentials object for an URL", func
 					var	base64decoded = base64_decode(response.data.Credentials);
 					var rowSalt = response.data.Salt;
 					var keySlot = response.data.keySlot0;
+					var cryptoScheme = response.data.cryptoScheme;
 
 					var passwordHash = $MS.hashPass("myverysecurepassword");
 
@@ -85,7 +86,7 @@ QUnit.asyncTest("The client can decrypt the credentials object for an URL", func
 						}
 					};
 
-					$MC.handleDecodeAndDecrypt(passwordHash, rowSalt, keySlot, base64decoded, mc_callbacks, 0);
+					$MC.handleDecodeAndDecrypt(passwordHash, rowSalt, keySlot, base64decoded, cryptoScheme, mc_callbacks, 0);
 				}
 			});
 		}
