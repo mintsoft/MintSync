@@ -311,8 +311,8 @@ function getPasswords(domainName) {
 				innerHTML="";
 /*				
 				console.debug("salt",requestdata.data.Salt);
-*/				
-				$MC.decodeAndDecrypt(requestdata.data.Credentials, requestdata.data.Salt, requestdata.data.keySlot0, {
+*/
+				$MC.decodeAndDecrypt(requestdata.data.Credentials, requestdata.data.Salt, requestdata.data.keySlot0, requestdata.data.cryptoScheme, {
 					success:function(credentialsObj){
 						$("#retrieveOutput tbody").empty();
 						
