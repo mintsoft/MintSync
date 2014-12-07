@@ -241,7 +241,7 @@ function togglePasswordsForURL(srcH3)
 			beforeSend: function() {},
 			complete: function(jq,textStatus,errorThrown) {},
 			success: function(requestdata,textStatus,jq) {
-				$MC.decodeAndDecrypt(requestdata.data.Credentials,requestdata.data.Salt,requestdata.data.keySlot0,{
+				$MC.decodeAndDecrypt(requestdata.data.Credentials, requestdata.data.Salt, requestdata.data.keySlot0, requestdata.data.cryptoScheme, {
 					success:function(credentialsObj){
 						
 						//object of key-value pairs
