@@ -28,7 +28,7 @@ test( "Given text and two differing keys the output cannot be decrypted", functi
 		clearText, decrypted, "text cannot be decrypted with a different key"
 	);
 });
-
+/*
 test( "Given a hashed password show that full hash is required to decrypt the data", function() {
 	var keySize = 256;
 	var shaObj = new jsSHA("passwordHash","ASCII");
@@ -45,7 +45,7 @@ test( "Given a hashed password show that full hash is required to decrypt the da
 		clearText, decrypted, "decrypted should not be equal to clearText"
 	);
 });
-
+*/
 
 module("AES CTR Raw");
 
