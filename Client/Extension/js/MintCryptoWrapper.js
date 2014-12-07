@@ -5,7 +5,8 @@
 function MintCrypto() {
 	this.Decrypt_strings = function(cipherText,keyText,Cipher,keySize){
 		switch(Cipher.toUpperCase()){
-//			case "AES":
+			case "AESRAW":
+				return Aes.Ctr.decryptWithRawKey(cipherText,keyText);
 			default:
 				return Aes.Ctr.decrypt(cipherText, keyText, keySize);
 		}
@@ -14,7 +15,8 @@ function MintCrypto() {
 
 	this.Encrypt_strings = function(cipherText,keyText,Cipher,keySize){
 		switch(Cipher.toUpperCase()){
-//			case "AES":
+			case "AESRAW":
+				return Aes.Ctr.encryptWithRawKey(cipherText,keyText);
 			default:
 				return Aes.Ctr.encrypt(cipherText, keyText, keySize);
 		}
@@ -22,13 +24,13 @@ function MintCrypto() {
 	/** 
 		Takes an base64encoded & encrypted JSON object and returns the decrypted object
 	*/
-	this.decodeAndDecrypt = function(encryptedObject, rowSalt, keySlot, mc_callbacks){
+	this.decodeAndDecrypt = function(encryptedObject, rowSalt, keySlot, cryptoScheme, mc_callbacks){
 		var		base64decoded = base64_decode(encryptedObject),
 				decryptedJSON = "", 
 				credentialsObj = {};
 				
 		$MS.getEncryptionPasswordHash(function(passwordHash){
-			$MC.handleDecodeAndDecrypt(passwordHash, rowSalt, keySlot, base64decoded, mc_callbacks, 0);
+			$MC.handleDecodeAndDecrypt(passwordHash, rowSalt, keySlot, base64decoded, cryptoScheme, mc_callbacks, 0);
 		});
 	};
 	/** 
@@ -41,20 +43,20 @@ function MintCrypto() {
 		@param mc_callbacks an object containing jQuery AJAX callback functions
 		@param callbackCount the number of times the callback has been executed
 	**/
-	this.handleDecodeAndDecrypt = function(passwordHash, rowSalt, keySlot, base64decoded, mc_callbacks, callbackCount){
+	this.handleDecodeAndDecrypt = function(passwordHash, rowSalt, keySlot, base64decoded, cryptoScheme, mc_callbacks, callbackCount){
 		//Unlock the KeySlot with SHA-256 of the passwordHash to form half of the
 		//row encryption key
 		shaObj		= new jsSHA(passwordHash,"ASCII");
 		keySlotKey	= $MC.Hex2Str(shaObj.getHash("SHA-256","HEX"));
-		
+		cryptoCypher = cryptoScheme ? "AESRAW" : "AES";
 		//keySlot is stored BASE64 but it will be base64_decoded by the AES Library
-		rawKey = $MC.Decrypt_strings(keySlot,keySlotKey,"AES",256)+""+rowSalt;
+		rawKey = $MC.Decrypt_strings(keySlot, keySlotKey, cryptoCypher, 256) + "" + rowSalt;
 		
 		//SHA-256 the KeySlot+rowSalt to form the row decryption key
 		shaObj	= new jsSHA(rawKey,"ASCII");
 		key		= $MC.Hex2Str(shaObj.getHash("SHA-256","HEX"));
 		
-		decryptedJSON = $MC.Decrypt_strings(base64decoded,key,"AES",256);
+		decryptedJSON = $MC.Decrypt_strings(base64decoded, key, cryptoCypher, 256);
 		try 
 		{
 			credentialsObj = $.parseJSON(decryptedJSON);	
