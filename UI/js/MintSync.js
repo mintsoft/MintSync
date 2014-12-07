@@ -197,7 +197,7 @@ function MintSync() {
 	/**
 		Performs the AJAX request saving the password
 	*/
-	this.setPassword = function(Domain,Credentials,rowSalt,cryptoHash,force,callbacks) {
+	this.setPassword = function(Domain,Credentials,rowSalt,cryptoHash,force,cryptoScheme,callbacks) {
 		$MS.getAuthenticationObject(function(authObj){
 			$.ajax({
 				type: "POST",
@@ -206,6 +206,7 @@ function MintSync() {
 					"Credentials":Credentials,
 					"rowSalt":rowSalt,
 					"cryptoHash":cryptoHash,
+					"cryptoScheme": cryptoScheme,
 					"force":force
 				},
 				cache: false,

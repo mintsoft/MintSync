@@ -443,7 +443,7 @@ function setPassword() {
 				
 				//check is overwrites are allowed (force)
 				force = $("#canForceWrite:checked").val();
-				$MS.setPassword(domainName,encryptedData,RowSalt,cryptoHash,force,{
+				$MS.setPassword(domainName,encryptedData,RowSalt,cryptoHash,force,cryptoScheme,{
 					error: function(jq,textStatus,errorThrown) {
 						
 						switch(jq.status)
