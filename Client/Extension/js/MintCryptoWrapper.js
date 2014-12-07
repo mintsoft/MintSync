@@ -78,24 +78,24 @@ function MintCrypto() {
 	/**
 		Takes an object and a salt, JSONs the objected, encrypts it then BASE64 and returns the string
 	*/
-	this.encodeAndEncrypt = function(srcObject,rowSalt,keySlot,mc_callback){
+	this.encodeAndEncrypt = function(srcObject,rowSalt,keySlot,cryptoScheme,mc_callback){
 		//Generate JSON String
 		var Credentials = JSON.stringify(srcObject);
 		$MS.getEncryptionPasswordHash(function(passwordHash){
-			
+			var cypher = (1*cryptoScheme) ? "AESRAW" : "AES";
 			//Unlock the KeySlot with SHA-256 of the passwordHash to form half of the
 			//row encryption key
 			shaObj		= new jsSHA(passwordHash,"ASCII");
 			keySlotKey	= $MC.Hex2Str(shaObj.getHash("SHA-256","HEX"));
 			
 			//keySlot is stored BASE64 but it will be base64_decoded by the AES Library
-			rawKey = $MC.Decrypt_strings(keySlot,keySlotKey,"AES",256)+""+rowSalt;
+			rawKey = $MC.Decrypt_strings(keySlot,keySlotKey,cypher,256)+""+rowSalt;
 
 			//SHA-256 the KeySlot+rowSalt to form the row decryption key
 			shaObj			= new jsSHA(rawKey,"ASCII");
 			encryptionKey	= $MC.Hex2Str(shaObj.getHash("SHA-256","HEX"));
 			
-			encryptedData = base64_encode($MC.Encrypt_strings(Credentials,encryptionKey,"AES",256));
+			encryptedData = base64_encode($MC.Encrypt_strings(Credentials,encryptionKey,cypher,256));
 			mc_callback(encryptedData,$MS.hashPass(passwordHash));
 		});
 	};

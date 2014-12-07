@@ -437,7 +437,8 @@ function setPassword() {
 	
 	$MS.getKeySlot({
 		success: function(returnedData){
-			$MC.encodeAndEncrypt(CredentialsObj,RowSalt,returnedData.data.keySlot0,function(encryptedData,cryptoHash){
+			var cryptoScheme = 0;
+			$MC.encodeAndEncrypt(CredentialsObj, RowSalt, returnedData.data.keySlot0, cryptoScheme, function(encryptedData,cryptoHash){
 				CredentialsObj = {};
 				
 				//check is overwrites are allowed (force)
