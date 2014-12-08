@@ -93,12 +93,39 @@ $(document).ready(function(){
 
 	$("#recrypt").click(function(e){
 		e.preventDefault();
-		
+		$("#recrypt").attr("disabled", "disabled");
 		$("#PasswordList li").each(function(){
 			processRecord(this);
 		});
 	});
 });
+
+function checkIfComplete()
+{
+	var counts = {
+		red: 0,
+		green: 0,
+		yellow: 0,
+		grey: 0,
+		total: 0
+	};
+	$("#PasswordList li span.status").each(function() {
+		counts.total++;
+		if($(this).hasClass("borderyellow")) {
+			counts.yellow++;
+		} else if($(this).hasClass("bordergreen")) {
+			counts.green++;
+		} else if($(this).hasClass("borderred")) {
+			counts.red++;
+		} else {
+			counts.grey++;
+		}
+	});
+	if(counts.grey == 0) {
+		alert("COMPLETE\n========\n"+counts.green+" successful\n"+counts.yellow+" already converted\n"+counts.red+" FAILED");
+		$("#recrypt").removeAttr("disabled");
+	}
+}
 
 function processRecord(record)
 {
@@ -148,10 +175,12 @@ function processRecord(record)
 											console.error("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);
 											console.error(jq);
 									}
+									checkIfComplete();
 								},
 								success: function(requestdata,textStatus,jq) {
 									$(record).find("span.status").addClass("bordergreen");
-								}
+									checkIfComplete();
+								},
 							});
 						});
 
