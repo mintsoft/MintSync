@@ -93,6 +93,7 @@ $(document).ready(function(){
 
 	$("#recrypt").click(function(e){
 		e.preventDefault();
+		alert("Recrypting everything; it would be inadvisable to navigate away from this page.\nAll being well, it will popup with a summary when complete");
 		$("#recrypt").attr("disabled", "disabled");
 		$("#PasswordList li").each(function(){
 			processRecord(this);
