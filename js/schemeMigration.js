@@ -110,8 +110,10 @@ function processRecord(record)
 		//get using old mechanism
 		$MS.getPasswordsByID(id,{
 			success: function(requestdata, textStatus, jq) {
-				if(requestdata.data.cryptoScheme == 1)
+				if(requestdata.data.cryptoScheme == 1) {
+					$(record).find("span.status").addClass("borderyellow");
 					return;
+				}
 				var rowSalt = requestdata.data.Salt,
 					keySlot = requestdata.data.keySlot0,
 					base64decoded = base64_decode(requestdata.data.Credentials);

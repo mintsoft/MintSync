@@ -27,16 +27,12 @@ li label {
 	position: relative;
 	top: -2ex;
 	margin-right: 0.5em;
-/*	border: 5px solid rgb(255,255,255);	*/
 	height: 10px;
 	width: 10px;
 	background: white;
 }
 
 .bordergreen {
-/*
-	border-color: rgb(0, 255, 0) !important;
-*/
 	background: rgb(0,255,0) !important;
 }
 .borderred {
@@ -48,6 +44,5 @@ li label {
 	width: 100% !important;
 }
 .borderyellow {
-/*	border-color: rgb(255,205,0) !important;	*/
-	background: rgba(255,205,0) !important;
+	background: rgb(255,205,0) !important;
 }
