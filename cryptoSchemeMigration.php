@@ -21,7 +21,7 @@
 		<script type="text/javascript" src="UI/js/globalfunctions.js"></script>
 		<script type="text/javascript" src="UI/js/json2.js"></script>
 
-		<script type="text/javascript" src='UI/js/lightboxes.js'></script>
+		<script type="text/javascript" src='js/schemeMigrateLightboxes.js'></script>
 		<script type="text/javascript" src="js/schemeMigration.js"></script>
 		
 	</head>
