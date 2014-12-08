@@ -27,22 +27,27 @@ li label {
 	position: relative;
 	top: -2ex;
 	margin-right: 0.5em;
-	border: 2px solid grey;
+/*	border: 5px solid rgb(255,255,255);	*/
 	height: 10px;
 	width: 10px;
+	background: white;
 }
 
 .bordergreen {
-	border-color: green !important;
+/*
+	border-color: rgb(0, 255, 0) !important;
+*/
+	background: rgb(0,255,0) !important;
 }
-.borderred{
-	border-color: red !important;
+.borderred {
+	border: 2px solid rgb(255,0,0) !important;
 	float: none !important;
 	position: static !important;
 	display: block;
 	height: auto !important;
 	width: 100% !important;
 }
-.borderyellow{
-	border-color: rgb(255,205,0) !important;
+.borderyellow {
+/*	border-color: rgb(255,205,0) !important;	*/
+	background: rgba(255,205,0) !important;
 }
