@@ -328,8 +328,8 @@ function getPasswords(domainName) {
 				innerHTML="";
 /*				
 				console.debug("salt",requestdata.data.Salt);
-*/				
-				$MC.decodeAndDecrypt(requestdata.data.Credentials, requestdata.data.Salt, requestdata.data.keySlot0, {
+*/
+				$MC.decodeAndDecrypt(requestdata.data.Credentials, requestdata.data.Salt, requestdata.data.keySlot0, requestdata.data.cryptoScheme, {
 					success:function(credentialsObj){
 						$("#retrieveOutput tbody").empty();
 						
@@ -435,12 +435,13 @@ function setPassword() {
 	
 	$MS.getKeySlot({
 		success: function(returnedData){
-			$MC.encodeAndEncrypt(CredentialsObj,RowSalt,returnedData.data.keySlot0,function(encryptedData,cryptoHash){
+			var cryptoScheme = 1;
+			$MC.encodeAndEncrypt(CredentialsObj, RowSalt, returnedData.data.keySlot0, cryptoScheme, function(encryptedData,cryptoHash){
 				CredentialsObj = {};
 				
 				//check is overwrites are allowed (force)
 				force = $("#canForceWrite:checked").val();
-				$MS.setPassword(domainName,encryptedData,RowSalt,cryptoHash,force,{
+				$MS.setPassword(domainName,encryptedData,RowSalt,cryptoHash,force,cryptoScheme,{
 					error: function(jq,textStatus,errorThrown) {
 						
 						switch(jq.status)
