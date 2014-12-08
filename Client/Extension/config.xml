@@ -18,7 +18,7 @@
 	<preference name = "passwordStrengthPunc1" value = "true" readonly = "false" />
 	<preference name = "passwordStrengthPunc2" value = "true" readonly = "false" />
 	<preference name = "GeneratedPasswordLength" value = "16" readonly = "false" />
-	<update-description href="http://mintsoft.github.com/mintsync_updater/1.25.xml"/>
+	<update-description href="http://mintsoft.github.com/mintsync_updater/1.30.xml"/>
 	<license href='http://www.apache.org/licenses/LICENSE-2.0'>Copyright 2011 Mintsoft
 
 Licensed under the Apache License, Version 2.0 (the "License");
