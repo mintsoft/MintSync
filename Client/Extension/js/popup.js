@@ -437,7 +437,7 @@ function setPassword() {
 	
 	$MS.getKeySlot({
 		success: function(returnedData){
-			var cryptoScheme = 0;
+			var cryptoScheme = 1;
 			$MC.encodeAndEncrypt(CredentialsObj, RowSalt, returnedData.data.keySlot0, cryptoScheme, function(encryptedData,cryptoHash){
 				CredentialsObj = {};
 				
