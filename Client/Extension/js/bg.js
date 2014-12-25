@@ -71,7 +71,7 @@ function mint_handleNotify(URL)
 {
 	if($MS.getNotify())
 	{
-		var preferences = genericRetrieve_preferencesObj();
+		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		if(!$MS.checkForSavedAuth())
 		{
 			setBadgeStatus("?", "#FFF230", "You have not logged in", "#CCCCCC" );
@@ -165,7 +165,7 @@ function mint_handleNotify(URL)
 */
 function updateLocalURLCache()
 {
-	var preferences = genericRetrieve_preferencesObj();
+	var preferences = stubFunctions.genericRetrieve_preferencesObj();
 	
 	clearTimeout(mintSyncGlobals.cacheTimer);
 	console.info("Updating local URL cache");
@@ -207,7 +207,7 @@ function clearCachedPasswd()
 */
 function startPasswdResetTimer()
 {
-	var preferences = genericRetrieve_preferencesObj();
+	var preferences = stubFunctions.genericRetrieve_preferencesObj();
 	console.debug("StartPasswordResettimer");
 	clearTimeout(mintSyncGlobals.passwdResetTimer);
 	if(preferences["SavePassBDuration"]*1 > 0)
@@ -221,7 +221,7 @@ function startPasswdResetTimer()
 */
 function badgeShouldBeUpdated() {
 	try {
-		genericRetrieve_currentTab(function(currentTab){
+		stubFunctions.genericRetrieve_currentTab(function(currentTab){
 			mint_handleNotify(currentTab.url);
 		})
 	}
@@ -267,7 +267,7 @@ chrome.extension.onMessage.addListener(function(event) {
 			}
 			else if(event.data.action == 'startLocalCache')
 			{
-				updateLocalURLCache();		
+				updateLocalURLCache();
 			}
 		break;
 		case "popup":

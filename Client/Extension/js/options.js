@@ -10,7 +10,7 @@ $(document).ready(function(){
 
 	addPreferencesEventHandlers();
 
-	var preferences = genericRetrieve_preferencesObj();
+	var preferences = stubFunctions.genericRetrieve_preferencesObj();
 	/* Load Preferences */
 	$("#ServerURL").val(preferences["ServerURL"]);
 	$('input[name="SaveAuth"][value="'+preferences["SaveAuthentication"]+'"]').prop('checked', true);
@@ -35,7 +35,7 @@ $(document).ready(function(){
 	});
 	/* console display the local cache */
 	$("#dumpLocalCacheButton").click(function(){
-		var localCache = genericRetrieve_mintSyncGlobals().urlCache;
+		var localCache = stubFunctions.genericRetrieve_mintSyncGlobals().urlCache;
 		console.debug(localCache);
 		for(var URL in localCache)
 		{
@@ -47,7 +47,7 @@ $(document).ready(function(){
 	$("#forgetSavedCryptoPass").click(function(){
 		console.log("Forgetting Saved Crypto Password");
 		//For BG Process/Browser session
-		genericRetrieve_mintSyncGlobals().passwd = undefined;
+		stubFunctions.genericRetrieve_mintSyncGlobals().passwd = undefined;
 		//For "yes"
 		preferences["SavedPassword"] = undefined;
 	});
@@ -56,7 +56,7 @@ $(document).ready(function(){
 /** Set Save Preferences */
 function savePrefs() {
 
-	var preferences = genericRetrieve_preferencesObj();
+	var preferences = stubFunctions.genericRetrieve_preferencesObj();
 	//check if the last character is a /, if not append one!
 	var serverUrl = $("#ServerURL").val();
 	if(serverUrl.charAt(serverUrl.length-1)!="/")
@@ -89,7 +89,7 @@ function savePrefs() {
 	if(preferences["SaveAuthentication"]!=0.8)
 	{
 		console.info("Resetting saved authentication credentials");
-		genericRetrieve_mintSyncGlobals().authentication = undefined;
+		stubFunctions.genericRetrieve_mintSyncGlobals().authentication = undefined;
 	}
 	
 	if(preferences["SavePassword"]!=1)
@@ -99,7 +99,7 @@ function savePrefs() {
 	if(preferences["SavePassword"]!=0.8)
 	{
 		console.info("Resetting saved encryption key");
-		genericRetrieve_mintSyncGlobals().passwd = undefined;
+		stubFunctions.genericRetrieve_mintSyncGlobals().passwd = undefined;
 	}
 
 	cacheUpdateHandling();
@@ -112,7 +112,7 @@ function cacheUpdateHandling(){
 	/**
 		This is so the effects of a change to the notification caching are immediate
 	*/
-	var preferences = genericRetrieve_preferencesObj();
+	var preferences = stubFunctions.genericRetrieve_preferencesObj();
 	if(		preferences["Notify"]=="0" || 
 			preferences["Notify"]=="1"  && preferences["NotifySource"]!="cache"		)
 	{
@@ -120,7 +120,7 @@ function cacheUpdateHandling(){
 		//this uses a message because it does not work if clearTimeout is used from here
 		
 		//stopLocalCache
-		genericPostMessage({
+		stubFunctions.genericPostMessage({
 			'action': 'stopLocalCache',
 			'src' : 'options',
 		});
@@ -129,7 +129,7 @@ function cacheUpdateHandling(){
 	{
 		//the cache should be kept, so start the timeout
 		
-		genericPostMessage({
+		stubFunctions.genericPostMessage({
 			'action': 'startLocalCache',
 			'src' : 'options',
 		});
