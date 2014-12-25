@@ -30,7 +30,7 @@ jQuery.fn.single_double_click = function(single_click_callback, double_click_cal
 /** jQuery entry point */
 $(document).ready(function(){
 	
-	setupLightboxes();
+	lightboxes.setupLightboxes();
 	
 	//add variable width button
 	$("#variableWidth").click(function(){

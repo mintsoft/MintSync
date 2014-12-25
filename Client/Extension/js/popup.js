@@ -92,7 +92,7 @@ $(document).ready(function(){
 	if(getParameterByName("fullscreen"))
 		g_isFullscreen = true;
 	
-	setupLightboxes();
+	lightboxes.setupLightboxes();
 
 	$("#tabBar").tabs("#tabContent > fieldset");
 	
