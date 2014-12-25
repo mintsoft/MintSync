@@ -3,7 +3,7 @@
 /** jQuery entry point */
 $(document).ready(function() {
 	
-	setupLightboxes();
+	lightboxes.setupLightboxes();
 	
 });
 

@@ -1,20 +1,24 @@
+function MS_StubFunctions(){
 /**
 	Opera Specific implementation of generic 
 	stub functions
 */
 
-function genericPostMessage(objToSend){
+this.genericPostMessage = function(objToSend){
 	opera.extension.postMessage(objToSend);
 }
 
-function genericRetrieve_mintSyncGlobals(){
+this.genericRetrieve_mintSyncGlobals = function(){
 	return opera.extension.bgProcess.mintSyncGlobals;
 }
 
-function genericRetrieve_preferencesObj(){
+this.genericRetrieve_preferencesObj = function(){
 	return typeof(widget)!=="undefined"?widget.preferences:{};
 }
 
-function genericRetrieve_currentTab(callback){
+this.genericRetrieve_currentTab = function(callback){
 	callback(opera.extension.bgProcess.opera.extension.tabs.getFocused());
 }
+}
+
+var stubFunctions = new MS_StubFunctions();
