@@ -35,7 +35,7 @@ $(document).ready(function(){
 	});
 	/* console display the local cache */
 	$("#dumpLocalCacheButton").click(function(){
-		var localCache = genericRetrieve_mintSyncGlobals().urlCache;
+		var localCache = stubFunctions.genericRetrieve_mintSyncGlobals().urlCache;
 		console.debug(localCache);
 		for(var URL in localCache)
 		{
@@ -47,7 +47,7 @@ $(document).ready(function(){
 	$("#forgetSavedCryptoPass").click(function(){
 		console.log("Forgetting Saved Crypto Password");
 		//For BG Process/Browser session
-		genericRetrieve_mintSyncGlobals().passwd = undefined;
+		stubFunctions.genericRetrieve_mintSyncGlobals().passwd = undefined;
 		//For "yes"
 		preferences["SavedPassword"] = undefined;
 	});
@@ -89,7 +89,7 @@ function savePrefs() {
 	if(preferences["SaveAuthentication"]!=0.8)
 	{
 		console.info("Resetting saved authentication credentials");
-		genericRetrieve_mintSyncGlobals().authentication = undefined;
+		stubFunctions.genericRetrieve_mintSyncGlobals().authentication = undefined;
 	}
 	
 	if(preferences["SavePassword"]!=1)
@@ -99,7 +99,7 @@ function savePrefs() {
 	if(preferences["SavePassword"]!=0.8)
 	{
 		console.info("Resetting saved encryption key");
-		genericRetrieve_mintSyncGlobals().passwd = undefined;
+		stubFunctions.genericRetrieve_mintSyncGlobals().passwd = undefined;
 	}
 
 	cacheUpdateHandling();

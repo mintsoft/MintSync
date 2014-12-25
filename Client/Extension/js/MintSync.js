@@ -513,14 +513,14 @@ function MintSync() {
 		{
 			var passwd;
 			//get the password from the background process
-			passwd = genericRetrieve_mintSyncGlobals().passwd;
+			passwd = stubFunctions.genericRetrieve_mintSyncGlobals().passwd;
 			if(passwd === undefined)
 			{
 				askForPassword(strPrompt,function(password){
 					var hash  = $MS.hashPass(password);
 					
 					//set the password in the background process
-					genericRetrieve_mintSyncGlobals().passwd = hash;
+					stubFunctions.genericRetrieve_mintSyncGlobals().passwd = hash;
 					
 					//if required, start the background process timer
 					if(preferences["SavePassBDuration"])
@@ -575,7 +575,7 @@ function MintSync() {
 				}
 				else
 				{
-					return genericRetrieve_mintSyncGlobals().authentication !== undefined;
+					return stubFunctions.genericRetrieve_mintSyncGlobals().authentication !== undefined;
 				}
 			break;
 			case "0.5":
@@ -623,7 +623,7 @@ function MintSync() {
 					if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess
 						mintSyncGlobals.authentication = authObj;
 					else
-						genericRetrieve_mintSyncGlobals().authentication = authObj;
+						stubFunctions.genericRetrieve_mintSyncGlobals().authentication = authObj;
 					
 					
 					//start the password reset timer if applicable
@@ -647,7 +647,7 @@ function MintSync() {
 				}
 				else
 				{	
-					authCallback(genericRetrieve_mintSyncGlobals().authentication);
+					authCallback(stubFunctions.genericRetrieve_mintSyncGlobals().authentication);
 				}
 				
 			}
@@ -696,7 +696,7 @@ function MintSync() {
 				}
 				else
 				{
-					genericRetrieve_mintSyncGlobals().authentication = undefined;
+					stubFunctions.genericRetrieve_mintSyncGlobals().authentication = undefined;
 				}
 				
 			break;
@@ -724,7 +724,7 @@ function MintSync() {
 				}
 				else
 				{
-					genericRetrieve_mintSyncGlobals().passwd = undefined;
+					stubFunctions.genericRetrieve_mintSyncGlobals().passwd = undefined;
 				}
 				
 			break;
