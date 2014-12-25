@@ -4,7 +4,7 @@ function MS_Lightboxes() {
 	/** 
 	Initialise the lightboxes
 	*/
-	function setupLightboxes()
+	this.setupLightboxes = function()
 	{
 		//add the ask for a password box
 		$("body").append("<div class='modalDialog' id='passwordPrompt'>\
@@ -64,7 +64,7 @@ function MS_Lightboxes() {
 	/**
 		Substitute for Prompt, used for passwords
 	*/
-	function askForPassword(prompt,completeCallback)
+	this.askForPassword = function(prompt,completeCallback)
 	{
 		$("#dialogPassPassword").val("");
 		$("#dialogPasswordInstruction").text(prompt);
@@ -78,7 +78,7 @@ function MS_Lightboxes() {
 	/**
 		Substitute for Prompt used for authentication (un/pass)
 	*/
-	function askForUsernamePassword(prompt,completeCallback)
+	this.askForUsernamePassword = function(prompt,completeCallback)
 	{
 		$("#dialogAuthUsername").val("");
 		$("#dialogAuthPassword").val("");
@@ -95,7 +95,7 @@ function MS_Lightboxes() {
 	/**
 		Select the correct input box to inject the values into!
 	 */
-	function chooseInputForInject(inputs, valueName, completeCallback)
+	this.chooseInputForInject = function(inputs, valueName, completeCallback)
 	{
 		$("#IC_closedDialogState").val("1");	//OK
 	
