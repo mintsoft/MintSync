@@ -525,7 +525,7 @@ function MintSync() {
 					//if required, start the background process timer
 					if(preferences["SavePassBDuration"])
 					{
-						genericPostMessage({
+						stubFunctions.genericPostMessage({
 							'action': 'startPasswdResetTimer',
 							'src' : 'all',
 						});
@@ -630,7 +630,7 @@ function MintSync() {
 					if(preferences["SavePassBDuration"] > 0)
 					{
 						//start the timer
-						genericPostMessage({
+						stubFunctions.genericPostMessage({
 							'action': 'startPasswdResetTimer',
 							'src' : 'popup',
 						});	

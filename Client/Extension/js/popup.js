@@ -113,7 +113,7 @@ $(document).ready(function(){
 			//retrigger a cache update if enabled
 			if(preferences["Notify"]=="1"  && preferences["NotifySource"]=="cache")
 			{
-				genericPostMessage({
+				stubFunctions.genericPostMessage({
 					'action': 'startLocalCache',
 					'src' : 'options',
 				});
@@ -473,7 +473,7 @@ function setPassword() {
 						$("#canForceWrite").attr("checked",false);
 						
 						//update the local cache
-						genericPostMessage({
+						stubFunctions.genericPostMessage({
 							'action': 'updateLocalCache',
 							'src' : 'passwordMatrix',
 						});

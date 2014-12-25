@@ -1,19 +1,19 @@
 function MS_StubFunctions(){
 //function stub for opera.extension.postMessage
-function genericPostMessage(objToSend){
+this.genericPostMessage = function(objToSend){
 	
 }
 
 //stub to access opera.extension.bgProcess.mintSyncGlobals
-function genericRetrieve_mintSyncGlobals(){
+this.genericRetrieve_mintSyncGlobals = function(){
 
 }
 
-function genericRetrieve_preferencesObj(){
+this.genericRetrieve_preferencesObj = function(){
 
 }
 
-function genericRetrieve_currentTab(callback){
+this.genericRetrieve_currentTab = function(callback){
 	callback(null);
 }
 }

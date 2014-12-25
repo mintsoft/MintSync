@@ -120,7 +120,7 @@ function cacheUpdateHandling(){
 		//this uses a message because it does not work if clearTimeout is used from here
 		
 		//stopLocalCache
-		genericPostMessage({
+		stubFunctions.genericPostMessage({
 			'action': 'stopLocalCache',
 			'src' : 'options',
 		});
@@ -129,7 +129,7 @@ function cacheUpdateHandling(){
 	{
 		//the cache should be kept, so start the timeout
 		
-		genericPostMessage({
+		stubFunctions.genericPostMessage({
 			'action': 'startLocalCache',
 			'src' : 'options',
 		});
