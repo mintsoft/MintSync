@@ -1,4 +1,4 @@
-
+function MS_StubFunctions(){
 //function stub for opera.extension.postMessage
 function genericPostMessage(objToSend){
 	
@@ -16,3 +16,6 @@ function genericRetrieve_preferencesObj(){
 function genericRetrieve_currentTab(callback){
 	callback(null);
 }
+}
+
+var stubFunctions = new MS_StubFunctions();
