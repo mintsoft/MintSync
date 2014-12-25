@@ -10,7 +10,7 @@ $(document).ready(function(){
 
 	addPreferencesEventHandlers();
 
-	var preferences = genericRetrieve_preferencesObj();
+	var preferences = stubFunctions.genericRetrieve_preferencesObj();
 	/* Load Preferences */
 	$("#ServerURL").val(preferences["ServerURL"]);
 	$('input[name="SaveAuth"][value="'+preferences["SaveAuthentication"]+'"]').prop('checked', true);
@@ -56,7 +56,7 @@ $(document).ready(function(){
 /** Set Save Preferences */
 function savePrefs() {
 
-	var preferences = genericRetrieve_preferencesObj();
+	var preferences = stubFunctions.genericRetrieve_preferencesObj();
 	//check if the last character is a /, if not append one!
 	var serverUrl = $("#ServerURL").val();
 	if(serverUrl.charAt(serverUrl.length-1)!="/")
@@ -112,7 +112,7 @@ function cacheUpdateHandling(){
 	/**
 		This is so the effects of a change to the notification caching are immediate
 	*/
-	var preferences = genericRetrieve_preferencesObj();
+	var preferences = stubFunctions.genericRetrieve_preferencesObj();
 	if(		preferences["Notify"]=="0" || 
 			preferences["Notify"]=="1"  && preferences["NotifySource"]!="cache"		)
 	{

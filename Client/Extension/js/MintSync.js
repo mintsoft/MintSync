@@ -562,7 +562,7 @@ function MintSync() {
 		Returns a boolean representing whether or not we have any credentials saved
 	**/
 	this.checkForSavedAuth = function() {
-		var preferences = genericRetrieve_preferencesObj();
+		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		
 		switch(preferences["SaveAuthentication"])
 		{
@@ -591,7 +591,7 @@ function MintSync() {
 	*/
 	this.getAuthenticationObject = function(authCallback) {
 		var promptStr = "Please enter your login details";
-		var preferences = genericRetrieve_preferencesObj();
+		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		
 		if(preferences["SaveAuthentication"]==1)
 		{
@@ -682,7 +682,7 @@ function MintSync() {
 		Resets the credentials saved (however they are)
 	*/
 	this.resetSavedCredentials = function() {
-		var preferences = genericRetrieve_preferencesObj();
+		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		
 		switch(preferences["SaveAuthentication"])
 		{
@@ -711,7 +711,7 @@ function MintSync() {
 		Resets the crypto password saved (however they are)
 	*/
 	this.resetSavedCryptoPassword = function() {
-		var preferences = genericRetrieve_preferencesObj();
+		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		switch(preferences["SavePassword"])
 		{
 			case "1":
@@ -740,7 +740,7 @@ function MintSync() {
 		retrieved when the pop up is launched or not.
 	**/
 	this.getAutoFetch = function() {
-		var preferences = genericRetrieve_preferencesObj();
+		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		return preferences["AutoFetch"];
 	};
 	/** 
@@ -748,21 +748,21 @@ function MintSync() {
 		there is a password on the page or not
 	**/
 	this.getNotify = function() {
-		var preferences = genericRetrieve_preferencesObj();
+		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		return preferences["Notify"]=="1";
 	};
 	/**
 		Get the Server's base URL
 	*/
 	this.getServerURL = function() {
-		var preferences = genericRetrieve_preferencesObj();
+		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		return preferences["ServerURL"];
 	};
 	/**
 		Returns the password length configured
 	*/
 	this.getGeneratedPasswordLength = function() {
-		var preferences = genericRetrieve_preferencesObj();
+		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		return (typeof(preferences)==="undefined")?16:preferences["GeneratedPasswordLength"];
 	};
 	/**
@@ -800,7 +800,7 @@ function MintSync() {
 						},
 			password="",
 			sourceString="",
-			preferences = genericRetrieve_preferencesObj();
+			preferences = stubFunctions.genericRetrieve_preferencesObj();
 		
 		//build	sourceString from preferences
 		sourceString = sourceSet.alpha;

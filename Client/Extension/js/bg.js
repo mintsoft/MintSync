@@ -68,7 +68,7 @@ function mint_handleNotify(URL)
 {
 	if($MS.getNotify())
 	{
-		var preferences = genericRetrieve_preferencesObj();
+		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		if(!$MS.checkForSavedAuth())
 		{
 			setBadgeStatus(" ? ", "#FFFCCA", "You have not logged in", "#CCCCCC" );
@@ -162,7 +162,7 @@ function mint_handleNotify(URL)
 */
 function updateLocalURLCache()
 {
-	var preferences = genericRetrieve_preferencesObj();
+	var preferences = stubFunctions.genericRetrieve_preferencesObj();
 	
 	clearTimeout(mintSyncGlobals.cacheTimer);
 	console.info("Updating local URL cache");
@@ -204,7 +204,7 @@ function clearCachedPasswd()
 */
 function startPasswdResetTimer()
 {
-	var preferences = genericRetrieve_preferencesObj();
+	var preferences = stubFunctions.genericRetrieve_preferencesObj();
 	console.debug("StartPasswordResettimer");
 	clearTimeout(mintSyncGlobals.passwdResetTimer);
 	if(preferences["SavePassBDuration"]*1 > 0)
@@ -230,7 +230,7 @@ window.addEventListener("load", function(){
 			}
 		};
 
-	var preferences = genericRetrieve_preferencesObj();
+	var preferences = stubFunctions.genericRetrieve_preferencesObj();
 
 	mintSyncGlobals.theButton = opera.contexts.toolbar.createItem(ToolbarUIItemProperties);
 	opera.contexts.toolbar.addItem(mintSyncGlobals.theButton);
@@ -285,7 +285,7 @@ window.addEventListener("load", function(){
 					//currently highlighted one, then it'll display the notification for the
 					//background navigation; therefore we must check again for the currently
 					//focused tab
-					genericRetrieve_currentTab(function(currentTab){
+					stubFunctions.genericRetrieve_currentTab(function(currentTab){
 						mint_handleNotify(currentTab?currentTab.url:"");
 					});
 				}

@@ -109,7 +109,7 @@ $(document).ready(function(){
 		//ask for it then
 		console.info("Requesting Login Credentials");
 		$MS.getAuthenticationObject(function(){
-			var preferences = genericRetrieve_preferencesObj();
+			var preferences = stubFunctions.genericRetrieve_preferencesObj();
 			//retrigger a cache update if enabled
 			if(preferences["Notify"]=="1"  && preferences["NotifySource"]=="cache")
 			{
@@ -160,7 +160,7 @@ window.addEventListener('load', function() {
 	//if running as a standard popup
 	if(!g_isFullscreen)
 	{
-		genericRetrieve_currentTab(function(currentTab){	
+		stubFunctions.genericRetrieve_currentTab(function(currentTab){	
 			if(!currentTab)
 				return;
 			document.getElementById("domainInput").value = currentTab.url;
