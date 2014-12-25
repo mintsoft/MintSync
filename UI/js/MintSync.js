@@ -513,19 +513,19 @@ function MintSync() {
 		{
 			var passwd;
 			//get the password from the background process
-			passwd = genericRetrieve_mintSyncGlobals().passwd;
+			passwd = stubFunctions.genericRetrieve_mintSyncGlobals().passwd;
 			if(passwd === undefined)
 			{
 				askForPassword(strPrompt,function(password){
 					var hash  = $MS.hashPass(password);
 					
 					//set the password in the background process
-					genericRetrieve_mintSyncGlobals().passwd = hash;
+					stubFunctions.genericRetrieve_mintSyncGlobals().passwd = hash;
 					
 					//if required, start the background process timer
 					if(preferences["SavePassBDuration"])
 					{
-						genericPostMessage({
+						stubFunctions.genericPostMessage({
 							'action': 'startPasswdResetTimer',
 							'src' : 'all',
 						});
@@ -562,7 +562,7 @@ function MintSync() {
 		Returns a boolean representing whether or not we have any credentials saved
 	**/
 	this.checkForSavedAuth = function() {
-		var preferences = genericRetrieve_preferencesObj();
+		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		
 		switch(preferences["SaveAuthentication"])
 		{
@@ -575,7 +575,7 @@ function MintSync() {
 				}
 				else
 				{
-					return genericRetrieve_mintSyncGlobals().authentication !== undefined;
+					return stubFunctions.genericRetrieve_mintSyncGlobals().authentication !== undefined;
 				}
 			break;
 			case "0.5":
@@ -591,7 +591,7 @@ function MintSync() {
 	*/
 	this.getAuthenticationObject = function(authCallback) {
 		var promptStr = "Please enter your login details";
-		var preferences = genericRetrieve_preferencesObj();
+		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		
 		if(preferences["SaveAuthentication"]==1)
 		{
@@ -623,14 +623,14 @@ function MintSync() {
 					if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess
 						mintSyncGlobals.authentication = authObj;
 					else
-						genericRetrieve_mintSyncGlobals().authentication = authObj;
+						stubFunctions.genericRetrieve_mintSyncGlobals().authentication = authObj;
 					
 					
 					//start the password reset timer if applicable
 					if(preferences["SavePassBDuration"] > 0)
 					{
 						//start the timer
-						genericPostMessage({
+						stubFunctions.genericPostMessage({
 							'action': 'startPasswdResetTimer',
 							'src' : 'popup',
 						});	
@@ -647,7 +647,7 @@ function MintSync() {
 				}
 				else
 				{	
-					authCallback(genericRetrieve_mintSyncGlobals().authentication);
+					authCallback(stubFunctions.genericRetrieve_mintSyncGlobals().authentication);
 				}
 				
 			}
@@ -682,7 +682,7 @@ function MintSync() {
 		Resets the credentials saved (however they are)
 	*/
 	this.resetSavedCredentials = function() {
-		var preferences = genericRetrieve_preferencesObj();
+		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		
 		switch(preferences["SaveAuthentication"])
 		{
@@ -696,7 +696,7 @@ function MintSync() {
 				}
 				else
 				{
-					genericRetrieve_mintSyncGlobals().authentication = undefined;
+					stubFunctions.genericRetrieve_mintSyncGlobals().authentication = undefined;
 				}
 				
 			break;
@@ -711,7 +711,7 @@ function MintSync() {
 		Resets the crypto password saved (however they are)
 	*/
 	this.resetSavedCryptoPassword = function() {
-		var preferences = genericRetrieve_preferencesObj();
+		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		switch(preferences["SavePassword"])
 		{
 			case "1":
@@ -724,7 +724,7 @@ function MintSync() {
 				}
 				else
 				{
-					genericRetrieve_mintSyncGlobals().passwd = undefined;
+					stubFunctions.genericRetrieve_mintSyncGlobals().passwd = undefined;
 				}
 				
 			break;
@@ -740,7 +740,7 @@ function MintSync() {
 		retrieved when the pop up is launched or not.
 	**/
 	this.getAutoFetch = function() {
-		var preferences = genericRetrieve_preferencesObj();
+		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		return preferences["AutoFetch"];
 	};
 	/** 
@@ -748,21 +748,21 @@ function MintSync() {
 		there is a password on the page or not
 	**/
 	this.getNotify = function() {
-		var preferences = genericRetrieve_preferencesObj();
+		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		return preferences["Notify"]=="1";
 	};
 	/**
 		Get the Server's base URL
 	*/
 	this.getServerURL = function() {
-		var preferences = genericRetrieve_preferencesObj();
+		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		return preferences["ServerURL"];
 	};
 	/**
 		Returns the password length configured
 	*/
 	this.getGeneratedPasswordLength = function() {
-		var preferences = genericRetrieve_preferencesObj();
+		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		return (typeof(preferences)==="undefined")?16:preferences["GeneratedPasswordLength"];
 	};
 	/**
@@ -800,7 +800,7 @@ function MintSync() {
 						},
 			password="",
 			sourceString="",
-			preferences = genericRetrieve_preferencesObj();
+			preferences = stubFunctions.genericRetrieve_preferencesObj();
 		
 		//build	sourceString from preferences
 		sourceString = sourceSet.alpha;
