@@ -501,7 +501,7 @@ function MintSync() {
 		if(preferences["SavePassword"]==1)
 		{
 			if(!preferences["SavedPassword"] || preferences["SavedPassword"]==="undefined")
-				askForPassword(strPrompt,function(password){
+				lightboxes.askForPassword(strPrompt,function(password){
 					var hash  = $MS.hashPass(password);
 					preferences["SavedPassword"] = hash;
 					successCallback(preferences["SavedPassword"]);
@@ -516,7 +516,7 @@ function MintSync() {
 			passwd = stubFunctions.genericRetrieve_mintSyncGlobals().passwd;
 			if(passwd === undefined)
 			{
-				askForPassword(strPrompt,function(password){
+				lightboxes.askForPassword(strPrompt,function(password){
 					var hash  = $MS.hashPass(password);
 					
 					//set the password in the background process
@@ -544,7 +544,7 @@ function MintSync() {
 		{
 			//request password and store in global
 			if($MS.rememberedPassword === undefined)
-				askForPassword(strPrompt,function(password){
+				lightboxes.askForPassword(strPrompt,function(password){
 					$MS.rememberedPassword = $MS.hashPass(password);
 					successCallback($MS.rememberedPassword);
 				});
@@ -553,7 +553,7 @@ function MintSync() {
 		}
 		else 
 		{
-			askForPassword(strPrompt,function(password){
+			lightboxes.askForPassword(strPrompt,function(password){
 				successCallback($MS.hashPass(password));
 			});
 		}
