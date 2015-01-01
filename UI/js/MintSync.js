@@ -496,7 +496,7 @@ function MintSync() {
 	this.getEncryptionPasswordHash = function(successCallback) {
 		//text to appear on the password prompt
 		var strPrompt = "Enter your crypto password",
-			preferences = genericRetrieve_preferencesObj();	//generic preferences object
+			preferences = stubFunctions.genericRetrieve_preferencesObj();	//generic preferences object
 		
 		if(preferences["SavePassword"]==1)
 		{
