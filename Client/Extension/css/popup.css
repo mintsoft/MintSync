@@ -11,7 +11,6 @@
 
 body, #popupContainer {
 	overflow: hidden;
-/*	background:  transparent !important;	*/
 }
 
 /* headings */
@@ -108,23 +107,6 @@ input {
 	text-decoration: underline;
 }
 
-/** Internal Scrolling **/
-#tabContent #inputPassContainer {
-	max-height: 98px;
-	overflow-y: auto;
-	overflow-x: hidden;
-	border: 1px solid #aaa;
-	border-left: 0px;
-	border-right: 0px;
-	padding: 1ex;
-}
-#tabContent #inputPassContainer p {
-	margin-left: 0ex;
-	margin-top: 0ex;
-	margin-right: 0ex;
-	margin-bottom: 0.25ex;
-}
-
 /** Loading Stuff **/
 #loadingDiv {
 	text-align: center;
@@ -209,50 +191,6 @@ ul#tabBar {
 	border-radius: 3px;
 	background: rgba(160,160,160,0.2);
 	height: 231px;
-}
-
-/** Add icon tab **/
-#addPairP {
-	cursor: pointer;
-}
-
-.hangingTab {
-	display: inline-block;
-	margin-top: -1px !important;
-	border: 1px solid #aaa;
-	border-top-color: #ececec;	/* must match bg colour */
-	padding: 0ex 0.5em 0.5ex 0.5em;
-	border-bottom-left-radius: 5px;
-	border-bottom-right-radius: 5px;
-	background-image: linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 90%);
-	background-image: -o-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 90%);
-	background-image: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 90%);
-	background-image: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 90%);
-	background-image: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 90%);
-	height: 18px;
-	line-height: 18px;
-}
-
-.hangingTab input[type='checkbox'] {
-	margin-left: 0px;
-	vertical-align: middle;
-}
-
-.hangingTab label {
-	width: auto;
-}
-
-#tabContent .submitContainer {
-	margin-top: 2ex;
-	float: left;
-}
-
-#saveOutput {
-
-}
-
-#tabContent p {
-	margin: 0 1ex;
 }
 
 /*

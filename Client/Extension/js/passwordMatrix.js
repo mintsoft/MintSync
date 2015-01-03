@@ -35,8 +35,8 @@ $(document).ready(function(){
 		
 		lightboxes.setupLightboxes();
 			
-		$("#addButton").click(function(e){
-			lightboxes.modalThis(saveFormMarkup, function(event){
+		$("#addCredentialButton").click(function(e){
+			lightboxes.modalThis($("#saveFormContainer"), function(event){
 				console.log("Modal Closed");
 			});
 		});
