@@ -94,6 +94,9 @@ $(document).ready(function(){
 	
 	lightboxes.setupLightboxes();
 
+	var saveFormMarkup = Handlebars.compile($("#partial_SaveForm").html());
+	$("#save").html(saveFormMarkup(new Object));
+	
 	$("#tabBar").tabs("#tabContent > fieldset");
 	
 	//create a credentials box by default:

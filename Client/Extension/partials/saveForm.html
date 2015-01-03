@@ -1,0 +1,25 @@
+<form action='#' id='passwordSaveForm' unselectable='on' >
+        <p><label unselectable='on' >URL/Domain:</label> <input type='text' name='domainName' id='domainName' /></p>
+        <p unselectable='on' ><label unselectable='on' >Credentials:</label> <span class='mini-instructions' unselectable='on' >Generate: Right Click (Ctrl+G), Inject: Ctrl+I</span></p>
+        <div id='inputPassContainer'>
+        </div>
+        <p id='addPairP' class='hangingTab' unselectable='on'  >
+                <img src='img/add.png' alt='Add Pair' class='jsAction' /> A<span class='underline'>d</span>d More
+        </p>
+        <p class='hangingTab'  unselectable='on' >
+                <input type='checkbox' name='force' id='canForceWrite' /><label for='canForceWrite'><span class='mini-instructions' unselectable='on' >Allow Overwrite</span></label>
+        </p>
+        <!-- the template used for the new rows: -->
+        <div id='rowTemplate' class='hidden' >
+                <p> 
+                        <input type='text' name='inputPassName' class='inputLabel'  /> 
+                        <input type='password' name='inputPassValue' class='inputPass injectValueSourceElement' />
+                        <!-- span around the img is a hack to make the XPath to the password box analogous to the one used on retrieve -->
+                        <img src='img/del.png' alt='Delete Pair' class='delPair jsAction saveBin' /><span><img src='img/document_import.png' alt='Insert Password'  class='injectPass jsAction injectPW hidden_when_max' /></span>
+                </p>
+        </div>
+        <div>
+                <p class='submitContainer'><input type='submit' value='Save' id='saveButton'/></p>
+                <div id='saveOutput'></div>
+        </div>
+</form>

@@ -239,6 +239,13 @@ function MS_Lightboxes() {
 				}
 			});
 	}
+	this.modalThis = function(modalTarget, completeCallback)
+	{
+		$(modalTarget).data("overlay").load().onClose(function(e){
+			completeCallback(e);
+			$(this).unbind(event);
+		});
+	}
 }
 
 var lightboxes = new MS_Lightboxes();
