@@ -496,12 +496,12 @@ function MintSync() {
 	this.getEncryptionPasswordHash = function(successCallback) {
 		//text to appear on the password prompt
 		var strPrompt = "Enter your crypto password",
-			preferences = genericRetrieve_preferencesObj();	//generic preferences object
+			preferences = stubFunctions.genericRetrieve_preferencesObj();	//generic preferences object
 		
 		if(preferences["SavePassword"]==1)
 		{
 			if(!preferences["SavedPassword"] || preferences["SavedPassword"]==="undefined")
-				askForPassword(strPrompt,function(password){
+				lightboxes.askForPassword(strPrompt,function(password){
 					var hash  = $MS.hashPass(password);
 					preferences["SavedPassword"] = hash;
 					successCallback(preferences["SavedPassword"]);
@@ -516,7 +516,7 @@ function MintSync() {
 			passwd = stubFunctions.genericRetrieve_mintSyncGlobals().passwd;
 			if(passwd === undefined)
 			{
-				askForPassword(strPrompt,function(password){
+				lightboxes.askForPassword(strPrompt,function(password){
 					var hash  = $MS.hashPass(password);
 					
 					//set the password in the background process
@@ -544,7 +544,7 @@ function MintSync() {
 		{
 			//request password and store in global
 			if($MS.rememberedPassword === undefined)
-				askForPassword(strPrompt,function(password){
+				lightboxes.askForPassword(strPrompt,function(password){
 					$MS.rememberedPassword = $MS.hashPass(password);
 					successCallback($MS.rememberedPassword);
 				});
@@ -553,7 +553,7 @@ function MintSync() {
 		}
 		else 
 		{
-			askForPassword(strPrompt,function(password){
+			lightboxes.askForPassword(strPrompt,function(password){
 				successCallback($MS.hashPass(password));
 			});
 		}
@@ -597,7 +597,7 @@ function MintSync() {
 		{
 			if(!$MS.checkForSavedAuth())
 			{
-				askForUsernamePassword(promptStr,function(authObj){
+				lightboxes.askForUsernamePassword(promptStr,function(authObj){
 					authObj.password = $MS.hashPass(authObj.password);
 					preferences["SavedAuthentication"] = JSON.stringify(authObj);
 					authCallback($.parseJSON(preferences["SavedAuthentication"]));
@@ -616,7 +616,7 @@ function MintSync() {
 				if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess so don't prompt!
 					return;
 				
-				askForUsernamePassword(promptStr,function(authObj){
+				lightboxes.askForUsernamePassword(promptStr,function(authObj){
 					authObj.password = $MS.hashPass(authObj.password);
 					//set the password in the background process
 					
@@ -659,7 +659,7 @@ function MintSync() {
 			//request password and store in global
 			if(!$MS.checkForSavedAuth())
 			{
-				askForUsernamePassword(promptStr,function(authObj){
+				lightboxes.askForUsernamePassword(promptStr,function(authObj){
 					authObj.password = $MS.hashPass(authObj.password);
 					$MS.rememberedAuthentication = authObj;
 					authCallback(authObj);
@@ -672,7 +672,7 @@ function MintSync() {
 		}
 		else
 		{
-			askForUsernamePassword(promptStr, function(authObj){
+			lightboxes.askForUsernamePassword(promptStr, function(authObj){
 				authObj.password = $MS.hashPass(authObj.password);
 				authCallback(authObj);
 			});
