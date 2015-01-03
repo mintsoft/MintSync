@@ -1,6 +1,24 @@
 /* jshint multistr:true */
 
 function MS_Lightboxes() {
+	
+	function initModal(selector) {
+		$(selector).overlay({
+			// some mask tweaks suitable for modal dialogs
+			mask: {
+				color: '#000',
+				loadSpeed: 0,
+				closeSpeed: 0,
+				opacity: 0.7,
+			},
+			top: 'center',
+			closeOnClick: false,
+			closeOnEsc: false,
+			load: false,
+			speed: 'fast'
+		});	
+	}
+	
 	/** 
 	Initialise the lightboxes
 	*/
@@ -44,22 +62,7 @@ function MS_Lightboxes() {
 			event.preventDefault();
 			return false;
 		});
-		
-		$(".modalDialog").overlay({
-	
-			// some mask tweaks suitable for modal dialogs
-			mask: {
-				color: '#000',
-				loadSpeed: 0,
-				closeSpeed: 0,
-				opacity: 0.7,
-			},
-			top: 'center',
-			closeOnClick: false,
-			closeOnEsc: false,
-			load: false,
-			speed: 'fast'
-		});	
+		initModal(".modalDialog");
 	}
 	/**
 		Substitute for Prompt, used for passwords
@@ -241,10 +244,21 @@ function MS_Lightboxes() {
 	}
 	this.modalThis = function(modalTarget, completeCallback)
 	{
-		$(modalTarget).data("overlay").load().onClose(function(e){
-			completeCallback(e);
-			$(this).unbind(event);
-		});
+		if (! modalTarget instanceof jQuery) {
+			return;
+		}
+		if (typeof $(modalTarget).data("overlay") === 'undefined') {
+			initModal(modalTarget);
+		}
+
+		$(modalTarget)
+			.addClass("modalDialog")
+			.data("overlay")
+			.load()
+			.onClose(function(e){
+				completeCallback(e);
+				$(this).unbind(event);
+			});
 	}
 }
 
