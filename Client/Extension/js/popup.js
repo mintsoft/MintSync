@@ -86,6 +86,9 @@ function sendMessageToInjectedJS(message)
 // runs before window.load();
 $(document).ready(function(){
 	$(document).autoBars(function() {
+		var saveFormMarkup = $.handlebarTemplates['saveForm']({});
+		$("#save").html(saveFormMarkup);
+		
 		addPopupEventHandlers();
 	
 		//detect fullscreen popup 
@@ -93,9 +96,6 @@ $(document).ready(function(){
 			g_isFullscreen = true;
 		
 		lightboxes.setupLightboxes();
-	
-		var saveFormMarkup = $.handlebarTemplates['saveForm']({});
-		$("#save").html(saveFormMarkup);
 		
 		$("#tabBar").tabs("#tabContent > fieldset");
 		
