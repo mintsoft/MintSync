@@ -1,6 +1,24 @@
 /* jshint multistr:true */
 
 function MS_Lightboxes() {
+	
+	function initModal(selector) {
+		$(selector).overlay({
+			// some mask tweaks suitable for modal dialogs
+			mask: {
+				color: '#000',
+				loadSpeed: 0,
+				closeSpeed: 0,
+				opacity: 0.7,
+			},
+			top: 'center',
+			closeOnClick: false,
+			closeOnEsc: false,
+			load: false,
+			speed: 'fast'
+		});	
+	}
+	
 	/** 
 	Initialise the lightboxes
 	*/
@@ -14,7 +32,7 @@ function MS_Lightboxes() {
 					<p class='centeredContents'><input type='submit' class='close'></p>\
 				</form>\
 			</div>");
-	
+		
 		//user login box
 		$("body").append("<div class='modalDialog' id='authenticationPrompt'>\
 				<h2 id='authenticationInstruction'>Enter your username and password</h2>\
@@ -25,7 +43,7 @@ function MS_Lightboxes() {
 					<p class='centeredContents'><input type='submit' class='close'></p>\
 				</form>\
 			</div>");	
-	
+		
 		//input tag selector for value injection
 		$("body").append("<div class='modalDialog' id='InputChooserPrompt'>\
 				<h2 id='InputChooserInstruction'>Select the correct input tag using the properties below:</h2>\
@@ -45,22 +63,7 @@ function MS_Lightboxes() {
 			event.preventDefault();
 			return false;
 		});
-	
-		$(".modalDialog").overlay({
-	
-			// some mask tweaks suitable for modal dialogs
-			mask: {
-				color: '#000',
-				loadSpeed: 0,
-				closeSpeed: 0,
-				opacity: 0.7,
-			},
-			top: 'center',
-			closeOnClick: false,
-			closeOnEsc: false,
-			load: false,
-			speed: 'fast'
-		});	
+		initModal(".modalDialog");
 	}
 	/**
 		Substitute for Prompt, used for passwords
@@ -238,6 +241,24 @@ function MS_Lightboxes() {
 							}
 					});
 				}
+			});
+	}
+	this.modalThis = function(modalTarget, completeCallback)
+	{
+		if (! modalTarget instanceof jQuery) {
+			return;
+		}
+		if (typeof $(modalTarget).data("overlay") === 'undefined') {
+			initModal(modalTarget);
+		}
+
+		$(modalTarget)
+			.addClass("modalDialog")
+			.data("overlay")
+			.load()
+			.onClose(function(e){
+				completeCallback(e);
+				$(this).unbind(event);
 			});
 	}
 }

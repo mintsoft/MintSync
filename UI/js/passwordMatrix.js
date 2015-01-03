@@ -9,91 +9,100 @@ containerWidth = {0:"50em", 1:"90%"}, containerWidthKey = 0, varWidthButtonText 
 	https://gist.github.com/399624
 */
 jQuery.fn.single_double_click = function(single_click_callback, double_click_callback, timeout) {
-  return this.each(function(){
-    var clicks = 0, self = this;
-    jQuery(this).click(function(event){
-      clicks++;
-      if (clicks == 1) {
-        setTimeout(function(){
-          if(clicks == 1) {
-            single_click_callback.call(self, event);
-          } else {
-            double_click_callback.call(self, event);
-          }
-          clicks = 0;
-        }, timeout || 300);
-      }
-    });
-  });
+	return this.each(function(){
+		var clicks = 0, self = this;
+		jQuery(this).click(function(event){
+			clicks++;
+			if (clicks == 1) {
+				setTimeout(function(){
+					if(clicks == 1) {
+						single_click_callback.call(self, event);
+					} else {
+						double_click_callback.call(self, event);
+					}
+					clicks = 0;
+				}, timeout || 300);
+			}
+		});
+	});
 };
 
 /** jQuery entry point */
 $(document).ready(function(){
-	
-	lightboxes.setupLightboxes();
-	
-	//add variable width button
-	$("#variableWidth").click(function(){
-		containerWidthKey = 1-containerWidthKey;
+	$(document).autoBars(function() {
+		var saveFormMarkup = $.handlebarTemplates['saveForm']({});
+		$("#saveFormContainer").html(saveFormMarkup);
 		
-		$('#mint_matrixContainer').animate({
-			width: containerWidth[containerWidthKey]
-			}, 'slow', 'swing');
-
-		tmp = varWidthButtonText;
-		varWidthButtonText=$("#variableWidth").text();
-		$("#variableWidth").text(tmp);
-		
-	});
-	
-	//load the list of urls
-	$MS.listURLS({
-		beforeSend: function() {
-			$("#matrixLoading").fadeIn(0);
-		},
-		complete: function() {
-			$("#matrixLoading").fadeOut(0);
-		},
-		error: function(jq,textStatus,errorThrown) {
-			switch(jq.status)
-			{
-				case 401:	//incorrect login
-					alert("List URLs failed due to incorrect Login, please try again");
-				break;
-				default:
-					alert("An error occurred whilst listing URLs, this is probably due to not having any saved credentials. See the error console for more information");
-					console.error("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
-			}
-		},
-		success: function(requestdata,textStatus,jq) {
-			//create list of domains
-			updatePasswordMatrix(requestdata.data);
-		},
-	});
-	
-	//add search handler with a timeout
-	$("#searchValue").keypress(function(event){
-		if(event.which === 13 ) //enter key
-			event.preventDefault();
+		lightboxes.setupLightboxes();
 			
-		clearTimeout(keyTimer);
-		keyTimer = setTimeout(doListFiltering,200);	//TODO: get the duration from a preference
-	});
+		$("#addCredentialButton").click(function(e){
+			lightboxes.modalThis($("#saveFormContainer"), function(event){
+				console.log("Modal Closed");
+			});
+		});
+		
+		//add variable width button
+		$("#variableWidth").click(function(){
+			containerWidthKey = 1-containerWidthKey;
+			
+			$('#mint_matrixContainer').animate({
+				width: containerWidth[containerWidthKey]
+				}, 'slow', 'swing');
 	
-	//add ctrl+f shortcut
-	$(document).keyup(function(e) {
-		if(e.which == 17)
-			g_ctrlDown = false;
-	}).keydown(function(e) {
-		if(e.which == 17)
-			g_ctrlDown=true;
-		else if(g_ctrlDown === true && e.which == 70) {		//ctrl+f
-			event.preventDefault();
-			$("#searchValue").focus();
-			return false;
-		}
+			tmp = varWidthButtonText;
+			varWidthButtonText=$("#variableWidth").text();
+			$("#variableWidth").text(tmp);
+			
+		});
+			
+		//load the list of urls
+		$MS.listURLS({
+			beforeSend: function() {
+				$("#matrixLoading").fadeIn(0);
+			},
+			complete: function() {
+				$("#matrixLoading").fadeOut(0);
+			},
+			error: function(jq,textStatus,errorThrown) {
+				switch(jq.status)
+				{
+					case 401:	//incorrect login
+						alert("List URLs failed due to incorrect Login, please try again");
+					break;
+					default:
+						alert("An error occurred whilst listing URLs, this is probably due to not having any saved credentials. See the error console for more information");
+						console.error("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
+				}
+			},
+			success: function(requestdata,textStatus,jq) {
+				//create list of domains
+				updatePasswordMatrix(requestdata.data);
+			},
+		});
+		
+		//add search handler with a timeout
+		$("#searchValue").keypress(function(event){
+			if(event.which === 13 ) //enter key
+				event.preventDefault();
+				
+			clearTimeout(keyTimer);
+			keyTimer = setTimeout(doListFiltering,200);	//TODO: get the duration from a preference
+		});
+		
+		//add ctrl+f shortcut
+		$(document).keyup(function(e) {
+			if(e.which == 17)
+				g_ctrlDown = false;
+		}).keydown(function(e) {
+			if(e.which == 17)
+				g_ctrlDown=true;
+			else if(g_ctrlDown === true && e.which == 70) {		//ctrl+f
+				event.preventDefault();
+				$("#searchValue").focus();
+				return false;
+			}
+		});
 	});
-
 });
 
 
