@@ -44,7 +44,7 @@ function handleMessageFromInjectedJS(e)
 			valueName = $(g_clickedImg).parent().siblings("input[name=inputPassName]").val();
 				
 		//display lightbox for the user to decide where its going into
-		chooseInputForInject(e.data.inputs, valueName, function(input, doNext, doSubmit){
+		lightboxes.chooseInputForInject(e.data.inputs, valueName, function(input, doNext, doSubmit){
 		
 			var injectedValue = $(g_clickedImg).parent().parent().find("input.injectValueSourceElement").val();
 			
