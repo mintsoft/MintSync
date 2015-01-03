@@ -137,6 +137,43 @@ $(document).ready(function(){
 				return false;
 			}
 		});
+		
+		//if running as a standard popup
+		if(!g_isFullscreen)
+		{
+			stubFunctions.genericRetrieve_currentTab(function(currentTab){	
+				if(!currentTab)
+					return;
+				document.getElementById("domainInput").value = currentTab.url;
+				document.getElementById("domainName").value = currentTab.url;
+				g_currentURL = currentTab.url;
+				
+				//if the user has selected the autofetch option:
+				if($MS.getAutoFetch() == 1)
+				{
+					getPasswords(g_currentURL);
+				}
+				
+			});
+		}
+		//if its a "fullscreen" window then the target URL is URIEncoded as a GET string
+		else
+		{
+			var URL = getParameterByName("URL");
+			
+			$("a.hidden_when_max, img.hidden_when_max").hide(0);
+			$("#fullscreen_url").text("Target: "+URL);
+			console.debug("Fullscreen URL:", URL);
+			document.getElementById("domainInput").value = URL;
+			document.getElementById("domainName").value = URL;
+			g_currentURL = URL;
+		
+			//if the user has selected the autofetch option:
+			if($MS.getAutoFetch() == 1)
+			{
+				getPasswords(g_currentURL);
+			}
+		}
 	});
 });
 
@@ -144,7 +181,7 @@ $(document).ready(function(){
 // runs AFTER jQuery(document).ready();
 //insert the currently selected tab into the box by default
 window.addEventListener('load', function() {
-		
+
 	if(!opera.extension)
 		return;
 	
@@ -159,44 +196,6 @@ window.addEventListener('load', function() {
 			}
 		}
 	};
-	
-	//if running as a standard popup
-	if(!g_isFullscreen)
-	{
-		stubFunctions.genericRetrieve_currentTab(function(currentTab){	
-			if(!currentTab)
-				return;
-			document.getElementById("domainInput").value = currentTab.url;
-			document.getElementById("domainName").value = currentTab.url;
-			g_currentURL = currentTab.url;
-			
-			//if the user has selected the autofetch option:
-			if($MS.getAutoFetch() == 1)
-			{
-				getPasswords(g_currentURL);
-			}
-			
-		});
-	}
-	//if its a "fullscreen" window then the target URL is URIEncoded as a GET string
-	else
-	{
-		var URL = getParameterByName("URL");
-		
-		$("a.hidden_when_max, img.hidden_when_max").hide(0);
-		$("#fullscreen_url").text("Target: "+URL);
-		console.debug("Fullscreen URL:", URL);
-		document.getElementById("domainInput").value = URL;
-		document.getElementById("domainName").value = URL;
-		g_currentURL = URL;
-	
-		//if the user has selected the autofetch option:
-		if($MS.getAutoFetch() == 1)
-		{
-			getPasswords(g_currentURL);
-		}
-	}
-	
 },false);
 
 /** Global Function Handlers **/
