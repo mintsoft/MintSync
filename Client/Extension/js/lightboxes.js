@@ -79,6 +79,7 @@ function MS_Lightboxes() {
 		$("#dialogPassPassword").focus();
 		
 	}
+	
 	/**
 		Substitute for Prompt used for authentication (un/pass)
 	*/
@@ -243,13 +244,13 @@ function MS_Lightboxes() {
 				}
 			});
 	}
-	this.modalThis = function(modalTarget, completeCallback, abortCallback)
+	this.modalThis = function(modalTarget, completeCallback)
 	{
 		if (! modalTarget instanceof jQuery) {
 			return;
 		}
 		if (typeof $(modalTarget).data("overlay") === 'undefined') {
-			initModal(modalTarget, true);
+			initModal(modalTarget);
 		}
 
 		$(modalTarget)
