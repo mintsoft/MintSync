@@ -64,6 +64,7 @@ function MS_Lightboxes() {
 		});
 		initModal(".modalDialog");
 	}
+	
 	/**
 		Substitute for Prompt, used for passwords
 	*/
@@ -242,13 +243,13 @@ function MS_Lightboxes() {
 				}
 			});
 	}
-	this.modalThis = function(modalTarget, completeCallback)
+	this.modalThis = function(modalTarget, completeCallback, abortCallback)
 	{
 		if (! modalTarget instanceof jQuery) {
 			return;
 		}
 		if (typeof $(modalTarget).data("overlay") === 'undefined') {
-			initModal(modalTarget);
+			initModal(modalTarget, true);
 		}
 
 		$(modalTarget)
