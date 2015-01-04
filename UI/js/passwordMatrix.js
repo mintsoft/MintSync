@@ -36,10 +36,12 @@ $(document).ready(function(){
 		lightboxes.setupLightboxes();
 			
 		$("#addCredentialButton").click(function(e){
+			e.preventDefault();
 			lightboxes.modalThis($("#saveFormContainer"), function(event){
 				console.log("Modal Closed");
 			});
 		});
+		addCredentialForm.AddBindings("#addPairP");
 		
 		//add variable width button
 		$("#variableWidth").click(function(){
