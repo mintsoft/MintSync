@@ -64,6 +64,7 @@ function MS_Lightboxes() {
 		});
 		initModal(".modalDialog");
 	}
+	
 	/**
 		Substitute for Prompt, used for passwords
 	*/
@@ -78,6 +79,7 @@ function MS_Lightboxes() {
 		$("#dialogPassPassword").focus();
 		
 	}
+	
 	/**
 		Substitute for Prompt used for authentication (un/pass)
 	*/

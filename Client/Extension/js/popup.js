@@ -30,6 +30,16 @@ function truncateInputAttribute(str)
 		return str.substring(0,11) + "..." + str.substring(thisLength-11,thisLength);
 }
 
+function addCredentialPair() {
+	//if it's the fullscreen popup then don't display the inject button
+	if(g_isFullscreen)
+	{	//using hide here causes some sort of clash with jQuery-Tools
+		//and it un-hides them
+		$(tmpObj).find("img.hidden_when_max").css({'display' : 'none'});
+	}
+	addCredentialForm.addPair();
+}
+
 //Callback for handling messages sent over the MessageChannel from InjectedJS
 function handleMessageFromInjectedJS(e)
 {
@@ -96,8 +106,8 @@ $(document).ready(function(){
 		$("#tabBar").tabs("#tabContent > fieldset");
 		
 		//create a credentials box by default:
-		addPair();
-		addPair();
+		addCredentialPair();
+		addCredentialPair();
 		$("input[name='inputPassName']").eq(0).val("Username");
 		$("input[name='inputPassName']").eq(1).val("Password");
 		
@@ -129,7 +139,7 @@ $(document).ready(function(){
 				g_ctrlDown=true;
 			else if(g_ctrlDown === true && e.which == 68) {		//ctrl+d
 				event.preventDefault();
-				addPair();
+				addCredentialPair();
 				return false;
 			}
 		});
@@ -203,87 +213,8 @@ function addPopupEventHandlers()
 		event.preventDefault();
 		setPassword(this);
 	});
-	$("#addPairP").click(function(event){
-		event.preventDefault();
-		addPair();
-	});
+	addCredentialForm.AddBindings("#addPairP");
 }
-
-/** 
-	Adds a new input pair to the popup and defines the click handlers
-*/
-
-function addPair() 
-{
-	var target	= document.getElementById("inputPassContainer"),
-		source	= document.getElementById("rowTemplate"),
-		tmpObj;
-	
-	tmpObj = document.createElement(source.firstElementChild.tagName);
-	tmpObj.innerHTML = source.firstElementChild.innerHTML;
-		
-	//if it's the fullscreen popup then don't display the inject button
-	if(g_isFullscreen)
-	{	//using hide here causes some sort of clash with jQuery-Tools
-		//and it un-hides them
-		$(tmpObj).find("img.hidden_when_max").css({'display' : 'none'});
-	}
-	
-	
-	//add the correct event handlers
-	$(tmpObj).find("img.delPair").click(function(event){
-		event.preventDefault();
-		delPair(this);
-	});
-	$(tmpObj).find("img.injectPass").click(function(event){
-		event.preventDefault();
-		injectPass(this);
-	});
-	$(tmpObj).find(".inputPass").focus(function(event){
-		revealPassword(this);
-	});
-	$(tmpObj).find(".inputPass").blur(function(event){
-		rehidePassword(this);
-	});
-		
-	target.appendChild(tmpObj);
-	
-	var passwordLength = $MS.getGeneratedPasswordLength();
-	
-	//add click handler
-	//using contextmenu instead of click so that it can be cancelled on the maximised version
-	$(tmpObj).find("input[name='inputPassValue']").bind("contextmenu", function(event){
-		if($(this).val() === "")
-		{
-			$(this).val($MS.generatePassword(passwordLength));
-			event.preventDefault();
-			return false;
-		}
-	}).keydown(function(e) {
-		if(e.which == 17)
-			g_ctrlDown=true;
-		else if(g_ctrlDown === true && e.which == 71) {		//ctrl+g
-			event.preventDefault();
-			$(this).val($MS.generatePassword(passwordLength));
-			return false;
-		}
-		else if(g_ctrlDown === true && e.which == 73) {		//ctrl+i
-			event.preventDefault();
-			//"click" the inject button
-			$(this).parent().find("img.injectPW").click();
-			return false;
-		}
-	});
-	}
-
-/**
-	Deletes the pair from the passed element
-*/
-function delPair(fromHere)
-{
-	fromHere.parentNode.parentNode.removeChild(fromHere.parentNode);
-}
-
 
 /**
 	Retrieve passwords for domain name
@@ -322,7 +253,7 @@ function getPasswords(domainName) {
 						
 						//also wipe out the save dialog and remove any boxes already there
 						$("#inputPassContainer img.saveBin").each(function(index,Element){
-							delPair(this);
+							addCredentialForm.delPair(this);
 						});
 						
 						var counter=0;
@@ -358,7 +289,7 @@ function getPasswords(domainName) {
 								)
 							);
 							//also add this into the save dialog for easy updates
-							addPair();
+							addCredentialPair();
 							$("#inputPassContainer input[name='inputPassName']").eq(counter).val(index);
 							$("#inputPassContainer input[name='inputPassValue']").eq(counter++).val(credentialsObj[index]);
 							
