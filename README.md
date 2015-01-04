@@ -333,3 +333,7 @@ REST utils: Originally http://www.gen-x-design.com/archives/create-a-rest-api-wi
 Icons: Creative Commons 3.0: http://www.fatcow.com/free-icons
 	
 GET String parameter parsing in JS: Thanks to Nathan Campos; http://stackoverflow.com/questions/901115/get-query-string-values-in-javascript
+
+handlebars.js : MIT license : http://handlebarsjs.com/
+
+jquery-autobars: ? : https://github.com/cultofmetatron/jquery-autobars

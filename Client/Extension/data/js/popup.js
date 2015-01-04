@@ -46,7 +46,7 @@ function handleMessageFromInjectedJS(e)
 			valueName = $(g_clickedImg).parent().siblings("input[name=inputPassName]").val();
 				
 		//display lightbox for the user to decide where its going into
-		chooseInputForInject(e.data.inputs, valueName, function(input, doNext, doSubmit){
+		lightboxes.chooseInputForInject(e.data.inputs, valueName, function(input, doNext, doSubmit){
 		
 			var injectedValue = $(g_clickedImg).parent().parent().find("input.injectValueSourceElement").val();
 			
@@ -79,118 +79,103 @@ function sendMessageToInjectedJS(message)
 /** jQuery Entry Point **/
 // runs before window.load();
 $(document).ready(function(){
-
-	addPopupEventHandlers();
-
-	//detect fullscreen popup 
-	if(getParameterByName("fullscreen"))
-		g_isFullscreen = true;
+	$(document).autoBars(function() {
+		var saveFormMarkup = $.handlebarTemplates['saveForm']({});
+		$("#save").html(saveFormMarkup);
+		
+		addPopupEventHandlers();
 	
-	lightboxes.setupLightboxes();
-
-	$("#tabBar").tabs("#tabContent > fieldset");
-	
-	//create a credentials box by default:
-	addPair();
-	addPair();
-	$("input[name='inputPassName']").eq(0).val("Username");
-	$("input[name='inputPassName']").eq(1).val("Password");
-	
-	//check if the notify icon is on and trigger a request
-	//for the login details
-	if($MS.getNotify() && !$MS.checkForSavedAuth())
-	{
-		//ask for it then
-		console.info("Requesting Login Credentials");
-		$MS.getAuthenticationObject(function(){
-			var preferences = stubFunctions.genericRetrieve_preferencesObj();
-			//retrigger a cache update if enabled
-			if(preferences["Notify"]=="1"  && preferences["NotifySource"]=="cache")
-			{
-				stubFunctions.genericPostMessage({
-					'action': 'startLocalCache',
-					'src' : 'options',
-				});
+		//detect fullscreen popup 
+		if(getParameterByName("fullscreen"))
+			g_isFullscreen = true;
+		
+		lightboxes.setupLightboxes();
+		
+		$("#tabBar").tabs("#tabContent > fieldset");
+		
+		//create a credentials box by default:
+		addPair();
+		addPair();
+		$("input[name='inputPassName']").eq(0).val("Username");
+		$("input[name='inputPassName']").eq(1).val("Password");
+		
+		//check if the notify icon is on and trigger a request
+		//for the login details
+		if($MS.getNotify() && !$MS.checkForSavedAuth())
+		{
+			//ask for it then
+			console.info("Requesting Login Credentials");
+			$MS.getAuthenticationObject(function(){
+				var preferences = stubFunctions.genericRetrieve_preferencesObj();
+				//retrigger a cache update if enabled
+				if(preferences["Notify"]=="1"  && preferences["NotifySource"]=="cache")
+				{
+					stubFunctions.genericPostMessage({
+						'action': 'startLocalCache',
+						'src' : 'options',
+					});
+				}
+			});
+		}
+		
+		//Add keyboard shortcut for add
+		$(document).keyup(function(e) {
+			if(e.which == 17)
+				g_ctrlDown = false;
+		}).keydown(function(e) {
+			if(e.which == 17)
+				g_ctrlDown=true;
+			else if(g_ctrlDown === true && e.which == 68) {		//ctrl+d
+				event.preventDefault();
+				addPair();
+				return false;
 			}
 		});
-	}
-	
-	//Add keyboard shortcut for add
-	$(document).keyup(function(e) {
-		if(e.which == 17)
-			g_ctrlDown = false;
-	}).keydown(function(e) {
-		if(e.which == 17)
-			g_ctrlDown=true;
-		else if(g_ctrlDown === true && e.which == 68) {		//ctrl+d
-			event.preventDefault();
-			addPair();
-			return false;
+		
+		//if running as a standard popup
+		if(!g_isFullscreen)
+		{
+			stubFunctions.genericRetrieve_currentTab(function(currentTab){	
+				if(!currentTab)
+					return;
+				document.getElementById("domainInput").value = currentTab.url;
+				document.getElementById("domainName").value = currentTab.url;
+				g_currentURL = currentTab.url;
+				
+				//if the user has selected the autofetch option:
+				if($MS.getAutoFetch() == 1)
+				{
+					getPasswords(g_currentURL);
+				}
+				
+			});
+		}
+		//if its a "fullscreen" window then the target URL is URIEncoded as a GET string
+		else
+		{
+			var URL = getParameterByName("URL");
+			
+			$("a.hidden_when_max, img.hidden_when_max").hide(0);
+			$("#fullscreen_url").text("Target: "+URL);
+			console.debug("Fullscreen URL:", URL);
+			document.getElementById("domainInput").value = URL;
+			document.getElementById("domainName").value = URL;
+			g_currentURL = URL;
+		
+			//if the user has selected the autofetch option:
+			if($MS.getAutoFetch() == 1)
+			{
+				getPasswords(g_currentURL);
+			}
 		}
 	});
-
 });
 
 //Window onload handler
 // runs AFTER jQuery(document).ready();
 //insert the currently selected tab into the box by default
 window.addEventListener('load', function() {
-
-/*
-	if(!opera.extension)
-		return;
-	
-	//if it has been clicked, then the message will contain the URL etc
-	opera.extension.onmessage = function(event) {
-		if (event.data == "popupConnect")
-		{
-			if(event.ports.length > 0)
-			{
-				g_injectedPort = event.ports[0];
-				g_injectedPort.onmessage = handleMessageFromInjectedJS;
-			}
-		}
-	};
-*/
-
 	addon.port.on("injected-to-popup", handleMessageFromInjectedJS);
-	//if running as a standard popup
-	if(!g_isFullscreen)
-	{
-		stubFunctions.genericRetrieve_currentTab(function(currentTab){	
-			console.log(currentTab);
-			if(!currentTab)
-				return;
-			document.getElementById("domainInput").value = currentTab.url;
-			document.getElementById("domainName").value = currentTab.url;
-			g_currentURL = currentTab.url;
-			
-			//if the user has selected the autofetch option:
-			if($MS.getAutoFetch() == 1)
-			{
-				getPasswords(g_currentURL);
-			}
-			
-		});
-	}
-	//if its a "fullscreen" window then the target URL is URIEncoded as a GET string
-	else
-	{
-		var URL = getParameterByName("URL");
-		
-		$("a.hidden_when_max, img.hidden_when_max").hide(0);
-		$("#fullscreen_url").text("Target: "+URL);
-		console.debug("Fullscreen URL:", URL);
-		document.getElementById("domainInput").value = URL;
-		document.getElementById("domainName").value = URL;
-		g_currentURL = URL;
-	
-		//if the user has selected the autofetch option:
-		if($MS.getAutoFetch() == 1)
-		{
-			getPasswords(g_currentURL);
-		}
-	}
 },false);
 
 /** Global Function Handlers **/

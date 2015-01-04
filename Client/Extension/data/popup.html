@@ -1,12 +1,14 @@
 <!DOCTYPE HTML>
 <html>
-  <head>
+<head>
 	<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' lang='en-gb' />
   	<title>MintSync</title>
 	<link rel="stylesheet" href="css/common.css" type="text/css" />
 	<link rel="stylesheet" href="css/popup.css" type="text/css" />
 	<script type="text/javascript" src='js/jquery.js'></script>
 	<script type="text/javascript" src='js/jquery.tools.min.1.2.5.js'></script>
+	<script type="text/javascript" src='js/handlebars.js'></script>
+	<script type="text/javascript" src='js/jquery-autobars.js'></script>
 	
 	<script type="text/javascript" src="js/sha.js"></script>
 	<script type="text/javascript" src="js/AES.js"></script>
@@ -24,8 +26,11 @@
 
 	<script type="text/javascript" src='js/lightboxes.js'></script>
 	<script type="text/javascript" src='js/popup.js'></script>
-  </head>
-  <body>
+	
+	<!-- Handlebars partials -->
+	<script src='partials/saveForm.html' type="text/x-handlebars-template"></script>
+</head>
+<body>
 	<div id='popupContainer ' unselectable='on' >
 
 		<div id='iconBar'>
@@ -77,35 +82,9 @@
 				</div>
 			</fieldset>
 			
-			<fieldset id='save' class='hidden'  unselectable='on' >
-				<form action='#' id='passwordSaveForm' unselectable='on' >
-					<p><label unselectable='on' >URL/Domain:</label> <input type='text' name='domainName' id='domainName' /></p>
-					<p unselectable='on' ><label unselectable='on' >Credentials:</label> <span class='mini-instructions' unselectable='on' >Generate: Right Click (Ctrl+G), Inject: Ctrl+I</span></p>
-					<div id='inputPassContainer'>
-					</div>
-					<p id='addPairP' class='hangingTab' unselectable='on'  >
-						<img src='img/add.png' alt='Add Pair' class='jsAction' /> A<span class='underline'>d</span>d More
-					</p>
-					<p class='hangingTab'  unselectable='on' >
-						<input type='checkbox' name='force' id='canForceWrite' /><label for='canForceWrite'><span class='mini-instructions' unselectable='on' >Allow Overwrite</span></label>
-					</p>
-					<!-- the template used for the new rows: -->
-					<div id='rowTemplate' class='hidden' >
-						<p> 
-							<input type='text' name='inputPassName' class='inputLabel'  /> 
-							<input type='password' name='inputPassValue' class='inputPass injectValueSourceElement' />
-							<!-- span around the img is a hack to make the XPath to the password box analogous to the one used on retrieve -->
-							<img src='img/del.png' alt='Delete Pair' class='delPair jsAction saveBin' /><span><img src='img/document_import.png' alt='Insert Password'  class='injectPass jsAction injectPW hidden_when_max' /></span>
-						</p>
-					</div>
-					<div>
-						<p class='submitContainer'><input type='submit' value='Save' id='saveButton'/></p>
-						<div id='saveOutput'></div>
-					</div>
-				</form>
-				
+			<fieldset id='save' class='hidden'  unselectable='on' >			
 			</fieldset>
 		</ul>
 	</div>
-  </body>
+</body>
 </html>
