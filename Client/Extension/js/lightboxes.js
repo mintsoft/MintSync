@@ -124,6 +124,32 @@ function MS_Lightboxes() {
 			return false;
 		});
 		
+		$("#IC_LabelText").focus();
+		
+		$("#InputChooserPrompt input.close").click(function(event){
+			event.preventDefault();
+			if($("#IC_closedDialogState").val()!="0")	//if not "close"
+			{
+				//get the selected item
+				var selectedIndex = $("#IC_ID option:selected").val();
+				completeCallback(inputs[selectedIndex], $("#IC_closedDialogState").val() == "2", $("#IC_closedDialogState").val()=="3");
+				$("#InputChooserPrompt").remove();
+				self.forceCloseLightbox("#InputChooserPrompt");
+			}
+			else
+			{
+				//send message to injected JS to trigger an unhighlight
+				sendMessageToInjectedJS({
+					'action'	: "hilightInput",
+					'src'		: 'popup',
+					'target'	: {
+						'name'	:	"",
+						'id'	:	"",
+						}
+				});
+			}
+		});
+		
 		$("#IC_closedDialogState").val("1");	//OK
 	
 		$("#InputChooserTableContainer").html("<table>\
@@ -238,34 +264,6 @@ function MS_Lightboxes() {
 		//box the current option
 		if(alreadyAutoSelected === 0)
 			$("#IC_ID").change();
-			
-		var overlay = $("#InputChooserPrompt").data("overlay").load();
-		
-		$(overlay).one('onLoad',function(){
-				//focus on the default displayed box (Label text)
-				$("#IC_LabelText").focus();
-			})
-			.one('onClose',function(event){
-				if($("#IC_closedDialogState").val()!="0")	//if not "close"
-				{
-					//get the selected item
-					var selectedIndex = $("#IC_ID option:selected").val();
-					completeCallback(inputs[selectedIndex], $("#IC_closedDialogState").val()=="2", $("#IC_closedDialogState").val()=="3");
-					$("#InputChooserPrompt").remove();
-				}
-				else
-				{
-					//send message to injected JS to trigger an unhighlight
-					sendMessageToInjectedJS({
-						'action'	: "hilightInput",
-						'src'		: 'popup',
-						'target'	: {
-							'name'	:	"",
-							'id'	:	"",
-							}
-					});
-				}
-			});
 	}
 	this.modalThis = function(modalTarget, callbacks)
 	{
