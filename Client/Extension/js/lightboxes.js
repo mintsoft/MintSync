@@ -2,30 +2,20 @@
 
 function MS_Lightboxes() {
 	
-	function initModal(selector) {
-		$(selector).append("<div class='modalClose'><span>x</span></div>");
-		$(selector).overlay({
-			// some mask tweaks suitable for modal dialogs
-			mask: {
-				color: '#000',
-				loadSpeed: 0,
-				closeSpeed: 0,
-				opacity: 0.7,
-			},
-			top: 'center',
-			closeOnClick: false,
-			closeOnEsc: false,
-			load: false,
-			speed: 'fast'
-		});
-		$(selector).each(function(index) {
-			var modalInstance = this;
-			$(this).find(".modalClose").bind("click",function(e) {
-				e.preventDefault();
-				var overlay = $(modalInstance).overlay();
-				overlay.close();
-			})
-		});
+	function initModal(selector, callbacks) {
+		$(selector)
+			.addClass("modalDialog")
+			.modal({
+				overlayClose: true,
+				escClose: true,
+				minWidth: 500,
+				onClose: function (dialog) {
+					if (callbacks && callbacks.abort)
+						callbacks.abort();
+					$.modal.close();
+					$(selector).remove();
+				},
+			});
 	}
 	
 	/** 
@@ -33,8 +23,15 @@ function MS_Lightboxes() {
 	*/
 	this.setupLightboxes = function()
 	{
+	}
+	
+	/**
+		Substitute for Prompt, used for passwords
+	*/
+	this.askForPassword = function(prompt, completeCallback)
+	{
 		//add the ask for a password box
-		$("body").append("<div class='modalDialog' id='passwordPrompt'>\
+		$("body").append("<div id='passwordPrompt'>\
 				<h2 id='dialogPasswordInstruction'>Enter your password</h2>\
 				<form novalidate>\
 					<p><input name='dialogPassPassword' id='dialogPassPassword'type='password' value='' required /></p>\
@@ -42,18 +39,68 @@ function MS_Lightboxes() {
 				</form>\
 			</div>");
 		
+		initModal("#passwordPrompt");
+		
+		//add onsubmit handlers to do nothing
+		$("#passwordPrompt form").submit(function(event){
+			event.preventDefault();
+			return false;
+		});
+		
+		$("#dialogPassPassword").val("");
+		$("#dialogPasswordInstruction").text(prompt);
+		$("#passwordPrompt").data("overlay").load().onClose(function(event){
+			completeCallback($("#dialogPassPassword").val());
+			$(this).unbind(event);
+			("#passwordPrompt").remove();
+		});
+		$("#dialogPassPassword").focus();
+		
+	}
+	
+	/**
+		Substitute for Prompt used for authentication (un/pass)
+	*/
+	this.askForUsernamePassword = function(prompt,completeCallback)
+	{
 		//user login box
-		$("body").append("<div class='modalDialog' id='authenticationPrompt'>\
+		$("body").append("<div id='authenticationPrompt'>\
 				<h2 id='authenticationInstruction'>Enter your username and password</h2>\
 				<form novalidate>\
 					<p><label for='dialogAuthUsername'>Username</label><input name='dialogAuthUsername' id='dialogAuthUsername' type='text' value='' placeholder='Username' required /></p>\
 					<p><label for='dialogAuthPassword'>Password</label><input name='dialogAuthPassword' id='dialogAuthPassword' type='password' value='' required /></p>\
 					<p class='centeredContents'><input type='submit' class='close'></p>\
 				</form>\
-			</div>");	
+			</div>");
 		
+		initModal("#authenticationPrompt");
+		
+		//add onsubmit handlers to do nothing
+		$("#authenticationPrompt form").submit(function(event){
+			event.preventDefault();
+			return false;
+		});
+		
+		$("#dialogAuthUsername").val("");
+		$("#dialogAuthPassword").val("");
+		$("#authenticationPrompt").data("overlay").load().onClose(function(event){
+			completeCallback({
+				'username': $("#dialogAuthUsername").val(),
+				'password':	$("#dialogAuthPassword").val()
+			});
+			$(this).unbind(event);
+			$("#authenticationPrompt").remove();
+		});
+		$("#dialogAuthUsername").focus();
+	}
+	
+	/**
+		Select the correct input box to inject the values into!
+	 */
+	this.chooseInputForInject = function(inputs, valueName, completeCallback)
+	{
 		//input tag selector for value injection
-		$("body").append("<div class='modalDialog' id='InputChooserPrompt'>\
+		$("body").append("<div id='InputChooserPrompt'>\
 				<h2 id='InputChooserInstruction'>Select the correct input tag using the properties below:</h2>\
 				<form novalidate>\
 					<div id='InputChooserTableContainer' ></div>\
@@ -66,51 +113,14 @@ function MS_Lightboxes() {
 				</form>\
 			</div>");
 		
+		initModal("#InputChooserPrompt");
+		
 		//add onsubmit handlers to do nothing
-		$("#passwordPrompt form, #authenticationPrompt form, #InputChooserPrompt form").submit(function(event){
+		$("#InputChooserPrompt form").submit(function(event){
 			event.preventDefault();
 			return false;
 		});
-		initModal(".modalDialog");
-	}
-	
-	/**
-		Substitute for Prompt, used for passwords
-	*/
-	this.askForPassword = function(prompt,completeCallback)
-	{
-		$("#dialogPassPassword").val("");
-		$("#dialogPasswordInstruction").text(prompt);
-		$("#passwordPrompt").data("overlay").load().onClose(function(event){
-			completeCallback($("#dialogPassPassword").val());
-			$(this).unbind(event);
-		});
-		$("#dialogPassPassword").focus();
 		
-	}
-	
-	/**
-		Substitute for Prompt used for authentication (un/pass)
-	*/
-	this.askForUsernamePassword = function(prompt,completeCallback)
-	{
-		$("#dialogAuthUsername").val("");
-		$("#dialogAuthPassword").val("");
-		$("#authenticationPrompt").data("overlay").load().onClose(function(event){
-			completeCallback({
-				'username': $("#dialogAuthUsername").val(),
-				'password':	$("#dialogAuthPassword").val()
-			});
-			$(this).unbind(event);
-		});
-		$("#dialogAuthUsername").focus();
-	}
-	
-	/**
-		Select the correct input box to inject the values into!
-	 */
-	this.chooseInputForInject = function(inputs, valueName, completeCallback)
-	{
 		$("#IC_closedDialogState").val("1");	//OK
 	
 		$("#InputChooserTableContainer").html("<table>\
@@ -238,6 +248,7 @@ function MS_Lightboxes() {
 					//get the selected item
 					var selectedIndex = $("#IC_ID option:selected").val();
 					completeCallback(inputs[selectedIndex], $("#IC_closedDialogState").val()=="2", $("#IC_closedDialogState").val()=="3");
+					$("#InputChooserPrompt").remove();
 				}
 				else
 				{
@@ -253,23 +264,15 @@ function MS_Lightboxes() {
 				}
 			});
 	}
-	this.modalThis = function(modalTarget, completeCallback)
+	this.modalThis = function(modalTarget, callbacks)
 	{
 		if (! modalTarget instanceof jQuery) {
 			return;
 		}
-		if (typeof $(modalTarget).data("overlay") === 'undefined') {
-			initModal(modalTarget);
-		}
-
-		$(modalTarget)
-			.addClass("modalDialog")
-			.data("overlay")
-			.load()
-			.onClose(function(e){
-				completeCallback(e);
-				$(this).unbind(event);
-			});
+		initModal(modalTarget, callbacks);
+	}
+	this.forceCloseLightbox = function(modalTarget) {
+		$.modal.close();
 	}
 }
 

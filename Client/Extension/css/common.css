@@ -289,6 +289,11 @@ ul.styled li table
 	
 }
 
+/* simple modal */
+/*
+#simplemodal-container {background-color:#333; border:8px solid #444; padding:12px;}
+*/
+#simplemodal-overlay {background-color:#000;}
 /** Lightboxes **/
 .modalDialog {
 	display:none;
@@ -318,10 +323,13 @@ ul.styled li table
 	margin-bottom: 0ex;
 }
 
-.modalDialog .modalClose {
+.modalDialog .modalCloseImg {
 	position: absolute;
 	top: 0px;
 	right: 6px;
+	width: 1em;
+	height: 1em;
+	content: "x";
 	font-size: larger;
 	color: grey;
 	cursor: pointer;
@@ -451,4 +459,5 @@ table.digits td:not(:last-of-type), table.digits th:not(:last-of-type)
 	margin-top: 0ex;
 	margin-right: 0ex;
 	margin-bottom: 0.25ex;
+	white-space: nowrap;
 }
