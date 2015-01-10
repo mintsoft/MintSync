@@ -318,6 +318,14 @@ ul.styled li table
 	margin-bottom: 0ex;
 }
 
+.modalDialog .modalClose {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	font-size: larger;
+	color: grey;
+}
+
 /**
 	Single digit table and inputs
 */

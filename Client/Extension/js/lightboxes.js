@@ -3,6 +3,7 @@
 function MS_Lightboxes() {
 	
 	function initModal(selector) {
+		$(selector).append("<div class='modalClose'><span>x</span></div>");
 		$(selector).overlay({
 			// some mask tweaks suitable for modal dialogs
 			mask: {
@@ -16,7 +17,15 @@ function MS_Lightboxes() {
 			closeOnEsc: false,
 			load: false,
 			speed: 'fast'
-		});	
+		});
+		$(selector).each(function(index) {
+			var modalInstance = this;
+			$(this).find(".modalClose").bind("click",function(e) {
+				e.preventDefault();
+				var overlay = $(modalInstance).overlay();
+				overlay.close();
+			})
+		});
 	}
 	
 	/** 
