@@ -320,10 +320,11 @@ ul.styled li table
 
 .modalDialog .modalClose {
 	position: absolute;
-	top: 5px;
-	right: 5px;
+	top: 0px;
+	right: 6px;
 	font-size: larger;
 	color: grey;
+	cursor: pointer;
 }
 
 /**
