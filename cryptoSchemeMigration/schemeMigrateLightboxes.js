@@ -1,7 +1,7 @@
 /* jshint multistr:true */
 
 function MS_Lightboxes() {
-	
+	var self = this;
 	function initModal(selector, callbacks) {
 		$(selector)
 			.addClass("modalDialog")
@@ -35,7 +35,7 @@ function MS_Lightboxes() {
 				<h2 id='dialogPasswordInstruction'>Enter your password</h2>\
 				<form novalidate>\
 					<p><input name='dialogPassPassword' id='dialogPassPassword'type='password' value='' required /></p>\
-					<p class='centeredContents'><input type='submit' class='close'></p>\
+					<p class='centeredContents'><input type='submit' class='close'/></p>\
 				</form>\
 			</div>");
 		
@@ -49,13 +49,14 @@ function MS_Lightboxes() {
 		
 		$("#dialogPassPassword").val("");
 		$("#dialogPasswordInstruction").text(prompt);
-		$("#passwordPrompt").data("overlay").load().onClose(function(event){
+		$("#passwordPrompt input.close").click(function(event){
+			event.preventDefault();
 			completeCallback($("#dialogPassPassword").val());
 			$(this).unbind(event);
-			("#passwordPrompt").remove();
+			$("#passwordPrompt").remove();
+			self.forceCloseLightbox("#passwordPrompt");
 		});
 		$("#dialogPassPassword").focus();
-		
 	}
 	
 	/**
@@ -84,13 +85,15 @@ function MS_Lightboxes() {
 		
 		$("#dialogAuthUsername").val("");
 		$("#dialogAuthPassword").val("");
-		$("#authenticationPrompt").data("overlay").load().onClose(function(event){
+		$("#authenticationPrompt input.close").click(function(event){
+			event.preventDefault();
 			completeCallback({
 				'username': $("#dialogAuthUsername").val(),
 				'password':	$("#dialogAuthPassword").val()
 			});
 			$(this).unbind(event);
 			$("#authenticationPrompt").remove();
+			self.forceCloseLightbox("#authenticationPrompt");
 		});
 		$("#dialogAuthUsername").focus();
 	}
@@ -270,12 +273,10 @@ function MS_Lightboxes() {
 		if (! modalTarget instanceof jQuery) {
 			return;
 		}
-		if (typeof $(modalTarget).data("overlay") === 'undefined') {
 		initModal(modalTarget, callbacks);
 	}
 	this.forceCloseLightbox = function(modalTarget) {
 		$.modal.close();
-			});
 	}
 }
 
