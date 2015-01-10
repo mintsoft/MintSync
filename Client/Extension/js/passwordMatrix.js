@@ -37,8 +37,13 @@ $(document).ready(function(){
 			
 		$("#addCredentialButton").click(function(e){
 			e.preventDefault();
-			lightboxes.modalThis($("#saveFormContainer"), function(event){
-				console.log("Modal Closed");
+			lightboxes.modalThis($("#saveFormContainer"), {
+				complete: function(event){
+					console.log("Modal Button Clicked");
+				},
+				abort: function(event) {
+					console.log("Modal Closed/Aborted");
+				}
 			});
 		});
 		addCredentialForm.AddBindings("#addPairP");
