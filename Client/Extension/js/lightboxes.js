@@ -108,7 +108,7 @@ function MS_Lightboxes() {
 				<form novalidate>\
 					<div id='InputChooserTableContainer' ></div>\
 					<p class='centeredContents'><input type='hidden' id='IC_closedDialogState' value='0' />\
-						<input type='submit' value='OK' class='close' /> \
+						<input type='submit' value='OK' class='close' id='IC_OKButton'/> \
 						<input type='submit' value='OK + Next' class='close' id='IC_OKNextButton' /> \
 						<input type='submit' value='OK + Submit' class='close' id='IC_OKSubmitButton' /> \
 						<input type='submit' value='Close' class='close' id='IC_closeButton' />\
@@ -116,7 +116,19 @@ function MS_Lightboxes() {
 				</form>\
 			</div>");
 		
-		initModal("#InputChooserPrompt");
+		initModal("#InputChooserPrompt",{
+			abort: function() {
+				//send message to injected JS to trigger an unhighlight
+				sendMessageToInjectedJS({
+					'action'	: "hilightInput",
+					'src'		: 'popup',
+					'target'	: {
+						'name'	:	"",
+						'id'	:	"",
+					}
+				});
+			}
+		});
 		
 		//add onsubmit handlers to do nothing
 		$("#InputChooserPrompt form").submit(function(event){
@@ -125,31 +137,7 @@ function MS_Lightboxes() {
 		});
 		
 		$("#IC_LabelText").focus();
-		
-		$("#InputChooserPrompt input.close").click(function(event){
-			event.preventDefault();
-			if($("#IC_closedDialogState").val()!="0")	//if not "close"
-			{
-				//get the selected item
-				var selectedIndex = $("#IC_ID option:selected").val();
-				completeCallback(inputs[selectedIndex], $("#IC_closedDialogState").val() == "2", $("#IC_closedDialogState").val()=="3");
-				$("#InputChooserPrompt").remove();
-				self.forceCloseLightbox("#InputChooserPrompt");
-			}
-			else
-			{
-				//send message to injected JS to trigger an unhighlight
-				sendMessageToInjectedJS({
-					'action'	: "hilightInput",
-					'src'		: 'popup',
-					'target'	: {
-						'name'	:	"",
-						'id'	:	"",
-						}
-				});
-			}
-		});
-		
+				
 		$("#IC_closedDialogState").val("1");	//OK
 	
 		$("#InputChooserTableContainer").html("<table>\
@@ -172,14 +160,32 @@ function MS_Lightboxes() {
 			</table>");
 		
 		$("#IC_closeButton").one('click', function(){
-			$("#IC_closedDialogState").val("0");	//Close
+			self.forceCloseLightbox("#InputChooserPrompt");
 		});
 		
+		$("#IC_OKButton").one('click', function(event){
+			event.preventDefault();
+			//get the selected item
+			var selectedIndex = $("#IC_ID option:selected").val();
+			completeCallback(inputs[selectedIndex], false, false);
+			$("#InputChooserPrompt").remove();
+			self.forceCloseLightbox("#InputChooserPrompt");
+		});
 		$("#IC_OKNextButton").one('click',function(){
-			$("#IC_closedDialogState").val("2");	//Close+Next
+			event.preventDefault();
+			//get the selected item
+			var selectedIndex = $("#IC_ID option:selected").val();
+			completeCallback(inputs[selectedIndex], true, false);
+			$("#InputChooserPrompt").remove();
+			self.forceCloseLightbox("#InputChooserPrompt");
 		});
 		$("#IC_OKSubmitButton").one('click',function(){
-			$("#IC_closedDialogState").val("3");	//Close+Next
+			event.preventDefault();
+			//get the selected item
+			var selectedIndex = $("#IC_ID option:selected").val();
+			completeCallback(inputs[selectedIndex], false, true);
+			$("#InputChooserPrompt").remove();
+			self.forceCloseLightbox("#InputChooserPrompt");
 		});
 		$("#IC_ExpandLink").one('click' ,function(event){
 			event.preventDefault();
