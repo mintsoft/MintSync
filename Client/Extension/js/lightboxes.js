@@ -1,22 +1,21 @@
 /* jshint multistr:true */
 
 function MS_Lightboxes() {
-	
-	function initModal(selector) {
-		$(selector).overlay({
-			// some mask tweaks suitable for modal dialogs
-			mask: {
-				color: '#000',
-				loadSpeed: 0,
-				closeSpeed: 0,
-				opacity: 0.7,
-			},
-			top: 'center',
-			closeOnClick: false,
-			closeOnEsc: false,
-			load: false,
-			speed: 'fast'
-		});	
+	var self = this;
+	function initModal(selector, callbacks) {
+		$(selector)
+			.addClass("modalDialog")
+			.modal({
+				overlayClose: true,
+				escClose: true,
+				minWidth: 500,
+				onClose: function (dialog) {
+					if (callbacks && callbacks.abort)
+						callbacks.abort();
+					$.modal.close();
+					$(selector).remove();
+				},
+			});
 	}
 	
 	/** 
@@ -24,60 +23,40 @@ function MS_Lightboxes() {
 	*/
 	this.setupLightboxes = function()
 	{
-		//add the ask for a password box
-		$("body").append("<div class='modalDialog' id='passwordPrompt'>\
-				<h2 id='dialogPasswordInstruction'>Enter your password</h2>\
-				<form novalidate>\
-					<p><input name='dialogPassPassword' id='dialogPassPassword'type='password' value='' required /></p>\
-					<p class='centeredContents'><input type='submit' class='close'></p>\
-				</form>\
-			</div>");
-		
-		//user login box
-		$("body").append("<div class='modalDialog' id='authenticationPrompt'>\
-				<h2 id='authenticationInstruction'>Enter your username and password</h2>\
-				<form novalidate>\
-					<p><label for='dialogAuthUsername'>Username</label><input name='dialogAuthUsername' id='dialogAuthUsername' type='text' value='' placeholder='Username' required /></p>\
-					<p><label for='dialogAuthPassword'>Password</label><input name='dialogAuthPassword' id='dialogAuthPassword' type='password' value='' required /></p>\
-					<p class='centeredContents'><input type='submit' class='close'></p>\
-				</form>\
-			</div>");	
-		
-		//input tag selector for value injection
-		$("body").append("<div class='modalDialog' id='InputChooserPrompt'>\
-				<h2 id='InputChooserInstruction'>Select the correct input tag using the properties below:</h2>\
-				<form novalidate>\
-					<div id='InputChooserTableContainer' ></div>\
-					<p class='centeredContents'><input type='hidden' id='IC_closedDialogState' value='0' />\
-						<input type='submit' value='OK' class='close' /> \
-						<input type='submit' value='OK + Next' class='close' id='IC_OKNextButton' /> \
-						<input type='submit' value='OK + Submit' class='close' id='IC_OKSubmitButton' /> \
-						<input type='submit' value='Close' class='close' id='IC_closeButton' />\
-					</p>\
-				</form>\
-			</div>");
-		
-		//add onsubmit handlers to do nothing
-		$("#passwordPrompt form, #authenticationPrompt form, #InputChooserPrompt form").submit(function(event){
-			event.preventDefault();
-			return false;
-		});
-		initModal(".modalDialog");
 	}
 	
 	/**
 		Substitute for Prompt, used for passwords
 	*/
-	this.askForPassword = function(prompt,completeCallback)
+	this.askForPassword = function(prompt, completeCallback)
 	{
+		//add the ask for a password box
+		$("body").append("<div id='passwordPrompt'>\
+				<h2 id='dialogPasswordInstruction'>Enter your password</h2>\
+				<form novalidate>\
+					<p><input name='dialogPassPassword' id='dialogPassPassword'type='password' value='' required /></p>\
+					<p class='centeredContents'><input type='submit' class='close'/></p>\
+				</form>\
+			</div>");
+		
+		initModal("#passwordPrompt");
+		
+		//add onsubmit handlers to do nothing
+		$("#passwordPrompt form").submit(function(event){
+			event.preventDefault();
+			return false;
+		});
+		
 		$("#dialogPassPassword").val("");
 		$("#dialogPasswordInstruction").text(prompt);
-		$("#passwordPrompt").data("overlay").load().onClose(function(event){
+		$("#passwordPrompt input.close").click(function(event){
+			event.preventDefault();
 			completeCallback($("#dialogPassPassword").val());
 			$(this).unbind(event);
+			$("#passwordPrompt").remove();
+			self.forceCloseLightbox("#passwordPrompt");
 		});
 		$("#dialogPassPassword").focus();
-		
 	}
 	
 	/**
@@ -85,14 +64,35 @@ function MS_Lightboxes() {
 	*/
 	this.askForUsernamePassword = function(prompt,completeCallback)
 	{
+		//user login box
+		$("body").append("<div id='authenticationPrompt'>\
+				<h2 id='authenticationInstruction'>Enter your username and password</h2>\
+				<form novalidate>\
+					<p><label for='dialogAuthUsername'>Username</label><input name='dialogAuthUsername' id='dialogAuthUsername' type='text' value='' placeholder='Username' required /></p>\
+					<p><label for='dialogAuthPassword'>Password</label><input name='dialogAuthPassword' id='dialogAuthPassword' type='password' value='' required /></p>\
+					<p class='centeredContents'><input type='submit' class='close'/></p>\
+				</form>\
+			</div>");
+		
+		initModal("#authenticationPrompt");
+		
+		//add onsubmit handlers to do nothing
+		$("#authenticationPrompt form").submit(function(event){
+			event.preventDefault();
+			return false;
+		});
+		
 		$("#dialogAuthUsername").val("");
 		$("#dialogAuthPassword").val("");
-		$("#authenticationPrompt").data("overlay").load().onClose(function(event){
+		$("#authenticationPrompt input.close").click(function(event){
+			event.preventDefault();
 			completeCallback({
 				'username': $("#dialogAuthUsername").val(),
 				'password':	$("#dialogAuthPassword").val()
 			});
 			$(this).unbind(event);
+			$("#authenticationPrompt").remove();
+			self.forceCloseLightbox("#authenticationPrompt");
 		});
 		$("#dialogAuthUsername").focus();
 	}
@@ -102,6 +102,42 @@ function MS_Lightboxes() {
 	 */
 	this.chooseInputForInject = function(inputs, valueName, completeCallback)
 	{
+		//input tag selector for value injection
+		$("body").append("<div id='InputChooserPrompt'>\
+				<h2 id='InputChooserInstruction'>Select the correct input tag using the properties below:</h2>\
+				<form novalidate>\
+					<div id='InputChooserTableContainer' ></div>\
+					<p class='centeredContents'><input type='hidden' id='IC_closedDialogState' value='0' />\
+						<input type='submit' value='OK' class='close' id='IC_OKButton'/> \
+						<input type='submit' value='OK + Next' class='close' id='IC_OKNextButton' /> \
+						<input type='submit' value='OK + Submit' class='close' id='IC_OKSubmitButton' /> \
+						<input type='submit' value='Close' class='close' id='IC_closeButton' />\
+					</p>\
+				</form>\
+			</div>");
+		
+		initModal("#InputChooserPrompt",{
+			abort: function() {
+				//send message to injected JS to trigger an unhighlight
+				sendMessageToInjectedJS({
+					'action'	: "hilightInput",
+					'src'		: 'popup',
+					'target'	: {
+						'name'	:	"",
+						'id'	:	"",
+					}
+				});
+			}
+		});
+		
+		//add onsubmit handlers to do nothing
+		$("#InputChooserPrompt form").submit(function(event){
+			event.preventDefault();
+			return false;
+		});
+		
+		$("#IC_LabelText").focus();
+				
 		$("#IC_closedDialogState").val("1");	//OK
 	
 		$("#InputChooserTableContainer").html("<table>\
@@ -124,14 +160,32 @@ function MS_Lightboxes() {
 			</table>");
 		
 		$("#IC_closeButton").one('click', function(){
-			$("#IC_closedDialogState").val("0");	//Close
+			self.forceCloseLightbox("#InputChooserPrompt");
 		});
 		
+		$("#IC_OKButton").one('click', function(event){
+			event.preventDefault();
+			//get the selected item
+			var selectedIndex = $("#IC_ID option:selected").val();
+			completeCallback(inputs[selectedIndex], false, false);
+			$("#InputChooserPrompt").remove();
+			self.forceCloseLightbox("#InputChooserPrompt");
+		});
 		$("#IC_OKNextButton").one('click',function(){
-			$("#IC_closedDialogState").val("2");	//Close+Next
+			event.preventDefault();
+			//get the selected item
+			var selectedIndex = $("#IC_ID option:selected").val();
+			completeCallback(inputs[selectedIndex], true, false);
+			$("#InputChooserPrompt").remove();
+			self.forceCloseLightbox("#InputChooserPrompt");
 		});
 		$("#IC_OKSubmitButton").one('click',function(){
-			$("#IC_closedDialogState").val("3");	//Close+Next
+			event.preventDefault();
+			//get the selected item
+			var selectedIndex = $("#IC_ID option:selected").val();
+			completeCallback(inputs[selectedIndex], false, true);
+			$("#InputChooserPrompt").remove();
+			self.forceCloseLightbox("#InputChooserPrompt");
 		});
 		$("#IC_ExpandLink").one('click' ,function(event){
 			event.preventDefault();
@@ -216,51 +270,16 @@ function MS_Lightboxes() {
 		//box the current option
 		if(alreadyAutoSelected === 0)
 			$("#IC_ID").change();
-			
-		var overlay = $("#InputChooserPrompt").data("overlay").load();
-		
-		$(overlay).one('onLoad',function(){
-				//focus on the default displayed box (Label text)
-				$("#IC_LabelText").focus();
-			})
-			.one('onClose',function(event){
-				if($("#IC_closedDialogState").val()!="0")	//if not "close"
-				{
-					//get the selected item
-					var selectedIndex = $("#IC_ID option:selected").val();
-					completeCallback(inputs[selectedIndex], $("#IC_closedDialogState").val()=="2", $("#IC_closedDialogState").val()=="3");
-				}
-				else
-				{
-					//send message to injected JS to trigger an unhighlight
-					sendMessageToInjectedJS({
-						'action'	: "hilightInput",
-						'src'		: 'popup',
-						'target'	: {
-							'name'	:	"",
-							'id'	:	"",
-							}
-					});
-				}
-			});
 	}
-	this.modalThis = function(modalTarget, completeCallback)
+	this.modalThis = function(modalTarget, callbacks)
 	{
 		if (! modalTarget instanceof jQuery) {
 			return;
 		}
-		if (typeof $(modalTarget).data("overlay") === 'undefined') {
-			initModal(modalTarget);
-		}
-
-		$(modalTarget)
-			.addClass("modalDialog")
-			.data("overlay")
-			.load()
-			.onClose(function(e){
-				completeCallback(e);
-				$(this).unbind(event);
-			});
+		initModal(modalTarget, callbacks);
+	}
+	this.forceCloseLightbox = function(modalTarget) {
+		$.modal.close();
 	}
 }
 
