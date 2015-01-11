@@ -454,10 +454,23 @@ table.digits td:not(:last-of-type), table.digits th:not(:last-of-type)
 	border-right: 0px;
 	padding: 1ex;
 }
+
 #passwordSaveForm #inputPassContainer p {
 	margin-left: 0ex;
 	margin-top: 0ex;
 	margin-right: 0ex;
 	margin-bottom: 0.25ex;
 	white-space: nowrap;
+}
+
+#passwordSaveForm #inputPassContainer input {
+	font-size: x-small;
+}
+
+input.inputLabel {
+	width: 10em !important;
+}
+
+input.inputPass {
+	width: 11.85em !important;
 }

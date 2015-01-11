@@ -70,8 +70,8 @@ function MS_Lightboxes() {
 				<form novalidate>\
 					<p><label for='dialogAuthUsername'>Username</label><input name='dialogAuthUsername' id='dialogAuthUsername' type='text' value='' placeholder='Username' required /></p>\
 					<p><label for='dialogAuthPassword'>Password</label><input name='dialogAuthPassword' id='dialogAuthPassword' type='password' value='' required /></p>\
-					<p><label for='dialogAuthServer'>Server</label><input name='dialogAuthServer' id='dialogAuthServer' type='url' value ='.' required /></p> \
-					<p class='centeredContents'><input type='submit' class='close'></p>\
+					<p><label for='dialogAuthServer'>Server</label><input name='dialogAuthServer' id='dialogAuthServer' type='url' value ='../' required /></p> \
+					<p class='centeredContents'><input type='submit' class='close'/></p>\
 				</form>\
 			</div>");
 		
@@ -146,24 +146,43 @@ function MS_Lightboxes() {
 			</tbody>\
 			</table>");
 		
-		$("#IC_closeButton").one('click', function(){
-			$("#IC_closedDialogState").val("0");	//Close
+		$("#IC_closeButton").one('click', function() {
+			event.preventDefault();
+			self.forceCloseLightbox("#InputChooserPrompt");
 		});
 		
-		$("#IC_OKNextButton").one('click',function(){
-			$("#IC_closedDialogState").val("2");	//Close+Next
+		$("#IC_OKButton").one('click', function(event) {
+			event.preventDefault();
+			//get the selected item
+			var selectedIndex = $("#IC_ID option:selected").val();
+			completeCallback(inputs[selectedIndex], false, false);
+			$("#InputChooserPrompt").remove();
+			self.forceCloseLightbox("#InputChooserPrompt");
 		});
-		$("#IC_OKSubmitButton").one('click',function(){
-			$("#IC_closedDialogState").val("3");	//Close+Next
+		$("#IC_OKNextButton").one('click',function() {
+			event.preventDefault();
+			//get the selected item
+			var selectedIndex = $("#IC_ID option:selected").val();
+			completeCallback(inputs[selectedIndex], true, false);
+			$("#InputChooserPrompt").remove();
+			self.forceCloseLightbox("#InputChooserPrompt");
 		});
-		$("#IC_ExpandLink").one('click' ,function(event){
+		$("#IC_OKSubmitButton").one('click',function() {
+			event.preventDefault();
+			//get the selected item
+			var selectedIndex = $("#IC_ID option:selected").val();
+			completeCallback(inputs[selectedIndex], false, true);
+			$("#InputChooserPrompt").remove();
+			self.forceCloseLightbox("#InputChooserPrompt");
+		});
+		$("#IC_ExpandLink").one('click' ,function(event) {
 			event.preventDefault();
 			$(".expanded").show();
 			$("#IC_ExpandLink").parent().hide();
 			return false;
 		});
 		
-		$("#IC_ID, #IC_name, #IC_LabelText, #IC_Type").change(function(){
+		$("#IC_ID, #IC_name, #IC_LabelText, #IC_Type").change(function() {
 			var selectedVal = $(this).find("option:selected").val();
 	
 			$("#IC_ID").find("option[value='"+selectedVal+"']").attr('selected','selected');

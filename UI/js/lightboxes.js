@@ -8,7 +8,6 @@ function MS_Lightboxes() {
 			.modal({
 				overlayClose: true,
 				escClose: true,
-				minWidth: 500,
 				onClose: function (dialog) {
 					if (callbacks && callbacks.abort)
 						callbacks.abort();
@@ -110,7 +109,7 @@ function MS_Lightboxes() {
 				<form novalidate>\
 					<div id='InputChooserTableContainer' ></div>\
 					<p class='centeredContents'><input type='hidden' id='IC_closedDialogState' value='0' />\
-						<input type='submit' value='OK' class='close' /> \
+						<input type='submit' value='OK' class='close' id='IC_OKButton'/> \
 						<input type='submit' value='OK + Next' class='close' id='IC_OKNextButton' /> \
 						<input type='submit' value='OK + Submit' class='close' id='IC_OKSubmitButton' /> \
 						<input type='submit' value='Close' class='close' id='IC_closeButton' />\
@@ -124,6 +123,32 @@ function MS_Lightboxes() {
 		$("#InputChooserPrompt form").submit(function(event){
 			event.preventDefault();
 			return false;
+		});
+		
+		$("#IC_LabelText").focus();
+		
+		$("#InputChooserPrompt input.close").click(function(event){
+			event.preventDefault();
+			if($("#IC_closedDialogState").val()!="0")	//if not "close"
+			{
+				//get the selected item
+				var selectedIndex = $("#IC_ID option:selected").val();
+				completeCallback(inputs[selectedIndex], $("#IC_closedDialogState").val()=="2", $("#IC_closedDialogState").val()=="3");
+				$("#InputChooserPrompt").remove();
+				self.forceCloseLightbox("#InputChooserPrompt");
+			}
+			else
+			{
+				//send message to injected JS to trigger an unhighlight
+				sendMessageToInjectedJS({
+					'action'	: "hilightInput",
+					'src'		: 'popup',
+					'target'	: {
+						'name'	:	"",
+						'id'	:	"",
+						}
+				});
+			}
 		});
 		
 		$("#IC_closedDialogState").val("1");	//OK
@@ -147,24 +172,43 @@ function MS_Lightboxes() {
 			</tbody>\
 			</table>");
 		
-		$("#IC_closeButton").one('click', function(){
-			$("#IC_closedDialogState").val("0");	//Close
+		$("#IC_closeButton").one('click', function() {
+			event.preventDefault();
+			self.forceCloseLightbox("#InputChooserPrompt");
 		});
 		
-		$("#IC_OKNextButton").one('click',function(){
-			$("#IC_closedDialogState").val("2");	//Close+Next
+		$("#IC_OKButton").one('click', function(event) {
+			event.preventDefault();
+			//get the selected item
+			var selectedIndex = $("#IC_ID option:selected").val();
+			completeCallback(inputs[selectedIndex], false, false);
+			$("#InputChooserPrompt").remove();
+			self.forceCloseLightbox("#InputChooserPrompt");
 		});
-		$("#IC_OKSubmitButton").one('click',function(){
-			$("#IC_closedDialogState").val("3");	//Close+Next
+		$("#IC_OKNextButton").one('click',function() {
+			event.preventDefault();
+			//get the selected item
+			var selectedIndex = $("#IC_ID option:selected").val();
+			completeCallback(inputs[selectedIndex], true, false);
+			$("#InputChooserPrompt").remove();
+			self.forceCloseLightbox("#InputChooserPrompt");
 		});
-		$("#IC_ExpandLink").one('click' ,function(event){
+		$("#IC_OKSubmitButton").one('click',function() {
+			event.preventDefault();
+			//get the selected item
+			var selectedIndex = $("#IC_ID option:selected").val();
+			completeCallback(inputs[selectedIndex], false, true);
+			$("#InputChooserPrompt").remove();
+			self.forceCloseLightbox("#InputChooserPrompt");
+		});
+		$("#IC_ExpandLink").one('click' ,function(event) {
 			event.preventDefault();
 			$(".expanded").show();
 			$("#IC_ExpandLink").parent().hide();
 			return false;
 		});
 		
-		$("#IC_ID, #IC_name, #IC_LabelText, #IC_Type").change(function(){
+		$("#IC_ID, #IC_name, #IC_LabelText, #IC_Type").change(function() {
 			var selectedVal = $(this).find("option:selected").val();
 	
 			$("#IC_ID").find("option[value='"+selectedVal+"']").attr('selected','selected');
@@ -240,34 +284,6 @@ function MS_Lightboxes() {
 		//box the current option
 		if(alreadyAutoSelected === 0)
 			$("#IC_ID").change();
-			
-		var overlay = $("#InputChooserPrompt").data("overlay").load();
-		
-		$(overlay).one('onLoad',function(){
-				//focus on the default displayed box (Label text)
-				$("#IC_LabelText").focus();
-			})
-			.one('onClose',function(event){
-				if($("#IC_closedDialogState").val()!="0")	//if not "close"
-				{
-					//get the selected item
-					var selectedIndex = $("#IC_ID option:selected").val();
-					completeCallback(inputs[selectedIndex], $("#IC_closedDialogState").val()=="2", $("#IC_closedDialogState").val()=="3");
-					$("#InputChooserPrompt").remove();
-				}
-				else
-				{
-					//send message to injected JS to trigger an unhighlight
-					sendMessageToInjectedJS({
-						'action'	: "hilightInput",
-						'src'		: 'popup',
-						'target'	: {
-							'name'	:	"",
-							'id'	:	"",
-							}
-					});
-				}
-			});
 	}
 	this.modalThis = function(modalTarget, callbacks)
 	{

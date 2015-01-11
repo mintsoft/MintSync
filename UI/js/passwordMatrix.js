@@ -38,12 +38,16 @@ $(document).ready(function(){
 		$("#addCredentialButton").click(function(e){
 			e.preventDefault();
 			lightboxes.modalThis($("#saveFormContainer"), {
-				complete: function(event){
-					console.log("Modal Button Clicked");
-				},
 				abort: function(event) {
 					console.log("Modal Closed/Aborted");
 				}
+			});
+			$("#saveButton").click(function(event){
+				event.preventDefault();
+				
+				addCredentialForm.setPassword($("#SaveForm"));
+				
+				lightboxes.forceCloseLightbox($("#saveFormContainer"));
 			});
 		});
 		addCredentialForm.AddBindings("#addPairP");
