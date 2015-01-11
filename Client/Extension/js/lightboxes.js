@@ -158,11 +158,12 @@ function MS_Lightboxes() {
 			</tbody>\
 			</table>");
 		
-		$("#IC_closeButton").one('click', function(){
+		$("#IC_closeButton").one('click', function() {
+			event.preventDefault();
 			self.forceCloseLightbox("#InputChooserPrompt");
 		});
 		
-		$("#IC_OKButton").one('click', function(event){
+		$("#IC_OKButton").one('click', function(event) {
 			event.preventDefault();
 			//get the selected item
 			var selectedIndex = $("#IC_ID option:selected").val();
@@ -170,7 +171,7 @@ function MS_Lightboxes() {
 			$("#InputChooserPrompt").remove();
 			self.forceCloseLightbox("#InputChooserPrompt");
 		});
-		$("#IC_OKNextButton").one('click',function(){
+		$("#IC_OKNextButton").one('click',function() {
 			event.preventDefault();
 			//get the selected item
 			var selectedIndex = $("#IC_ID option:selected").val();
@@ -178,7 +179,7 @@ function MS_Lightboxes() {
 			$("#InputChooserPrompt").remove();
 			self.forceCloseLightbox("#InputChooserPrompt");
 		});
-		$("#IC_OKSubmitButton").one('click',function(){
+		$("#IC_OKSubmitButton").one('click',function() {
 			event.preventDefault();
 			//get the selected item
 			var selectedIndex = $("#IC_ID option:selected").val();
@@ -186,14 +187,14 @@ function MS_Lightboxes() {
 			$("#InputChooserPrompt").remove();
 			self.forceCloseLightbox("#InputChooserPrompt");
 		});
-		$("#IC_ExpandLink").one('click' ,function(event){
+		$("#IC_ExpandLink").one('click' ,function(event) {
 			event.preventDefault();
 			$(".expanded").show();
 			$("#IC_ExpandLink").parent().hide();
 			return false;
 		});
 		
-		$("#IC_ID, #IC_name, #IC_LabelText, #IC_Type").change(function(){
+		$("#IC_ID, #IC_name, #IC_LabelText, #IC_Type").change(function() {
 			var selectedVal = $(this).find("option:selected").val();
 	
 			$("#IC_ID").find("option[value='"+selectedVal+"']").attr('selected','selected');
