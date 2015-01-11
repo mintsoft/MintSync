@@ -100,6 +100,9 @@ function AddCredentialForm() {
 			CredentialsObj[name]=password;
 		});
 		
+		//display throbber
+		$("#saveOutput").addClass("loading_throbber");
+		
 		$MS.getKeySlot({
 			success: function(returnedData){
 				var cryptoScheme = 1;
@@ -110,7 +113,7 @@ function AddCredentialForm() {
 					force = $("#canForceWrite:checked").val();
 					$MS.setPassword(domainName,encryptedData,RowSalt,cryptoHash,force,cryptoScheme,{
 						error: function(jq,textStatus,errorThrown) {
-							
+							$("#saveOutput").removeClass("loading_throbber");
 							switch(jq.status)
 							{
 								case 401:
@@ -132,6 +135,7 @@ function AddCredentialForm() {
 							}
 						},
 						success: function(requestdata,textStatus,jq) {
+							$("#saveOutput").removeClass("loading_throbber");
 							$("#saveOutput").text("Credentials Saved");
 							
 							//uncheck the overwrite box

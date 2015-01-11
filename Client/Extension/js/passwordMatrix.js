@@ -31,23 +31,21 @@ jQuery.fn.single_double_click = function(single_click_callback, double_click_cal
 $(document).ready(function(){
 	$(document).autoBars(function() {
 		var saveFormMarkup = $.handlebarTemplates['saveForm']({});
-		$("#saveFormContainer").html(saveFormMarkup);
-		
+	
 		lightboxes.setupLightboxes();
 			
 		$("#addCredentialButton").click(function(e){
 			e.preventDefault();
+			$("#saveFormContainer").html(saveFormMarkup);
 			lightboxes.modalThis($("#saveFormContainer"), {
 				abort: function(event) {
 					console.log("Modal Closed/Aborted");
+					$("#saveFormContainer").html("");
 				}
 			});
 			$("#saveButton").click(function(event){
 				event.preventDefault();
-				
 				addCredentialForm.setPassword($("#SaveForm"));
-				
-				lightboxes.forceCloseLightbox($("#saveFormContainer"));
 			});
 		});
 		addCredentialForm.AddBindings("#addPairP");
