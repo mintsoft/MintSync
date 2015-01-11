@@ -36,7 +36,10 @@ $(document).ready(function(){
 			
 		$("#addCredentialButton").click(function(e){
 			e.preventDefault();
+			
 			$("#saveFormContainer").html(saveFormMarkup);
+			addCredentialForm.AddBindings("#addPairP");
+			
 			lightboxes.modalThis($("#saveFormContainer"), {
 				abort: function(event) {
 					console.log("Modal Closed/Aborted");
@@ -48,7 +51,6 @@ $(document).ready(function(){
 				addCredentialForm.setPassword($("#SaveForm"));
 			});
 		});
-		addCredentialForm.AddBindings("#addPairP");
 		
 		//add variable width button
 		$("#variableWidth").click(function(){
