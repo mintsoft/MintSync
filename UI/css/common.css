@@ -474,3 +474,8 @@ input.inputLabel {
 input.inputPass {
 	width: 11.85em !important;
 }
+
+.loading_throbber {
+	background: url(img/ajax_load.gif);
+	content: "Saving...";
+}
