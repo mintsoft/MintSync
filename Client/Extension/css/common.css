@@ -250,7 +250,7 @@ ul.styled li>h3, ul.styled li>a, ul.styled li>span
 
 }
 
-ul.styled li .binIcon 
+ul.styled li .rowIcons 
 {
 	float: right;
 	position: relative;
@@ -259,7 +259,7 @@ ul.styled li .binIcon
 	right: 0.5ex;
 }
 
-img.clickable, ul.styled li .binIcon 
+img.clickable, ul.styled li .rowIcons img
 {
 	cursor: pointer;
 }
