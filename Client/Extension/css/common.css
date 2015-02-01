@@ -197,7 +197,7 @@ table tbody tr:nth-child(odd), ul.zebra li:nth-child(even)
 {	/* Light Rows*/
 	background: rgba(255,255,255,0.9);
 }
-table thead th 
+table thead th
 {
 	background: rgba(10,10,10,0.8);
 	background: linear-gradient(rgba(10,10,10,0.8),rgba(10,10,10,0.7));
@@ -208,6 +208,18 @@ table thead th
 	color: rgba(240,240,240,1);
 	text-shadow: rgba(255,255,255,0.2) 1px -1px 2px;
 }
+table tfoot td
+{
+	background: rgba(10,10,10,0.8);
+	background: linear-gradient(rgba(10,10,10,0.7),rgba(10,10,10,0.8));
+	background: -o-linear-gradient(rgba(10,10,10,0.7),rgba(10,10,10,0.8));
+	background: -webkit-linear-gradient(rgba(10,10,10,0.7),rgba(10,10,10,0.8));
+	background: -moz-linear-gradient(rgba(10,10,10,0.7),rgba(10,10,10,0.8));
+	background: -ms-linear-gradient(rgba(10,10,10,0.7),rgba(10,10,10,0.8));
+	color: rgba(240,240,240,1);
+	text-shadow: rgba(255,255,255,0.2) 1px -1px 2px;
+}
+
 table tbody input 
 {
 	display: block;
@@ -222,6 +234,11 @@ table tbody input
 table.results tr td:nth-child(1) 
 {
 	width: 40%;
+}
+
+table.results tfoot td {
+	text-align: right;
+	margin-right: 1em;
 }
 
 /**
@@ -478,4 +495,13 @@ input.inputPass {
 .loading_throbber {
 	background: url(img/ajax_load.gif);
 	content: "Saving...";
+}
+
+/** icons that do things **/
+.jsAction {
+	cursor: pointer;
+}
+img.jsAction {
+	cursor: pointer;
+	vertical-align: middle;
 }
