@@ -133,20 +133,6 @@ $(document).ready(function(){
 			});
 		}
 		
-		//Add keyboard shortcut for add
-		$(document).keyup(function(e) {
-			if(e.which == 17)
-				g_ctrlDown = false;
-		}).keydown(function(e) {
-			if(e.which == 17)
-				g_ctrlDown=true;
-			else if(g_ctrlDown === true && e.which == 68) {		//ctrl+d
-				event.preventDefault();
-				addCredentialPair();
-				return false;
-			}
-		});
-		
 		//if running as a standard popup
 		if(!g_isFullscreen)
 		{

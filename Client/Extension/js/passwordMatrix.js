@@ -292,6 +292,14 @@ function togglePasswordsForURL(srcH3)
 										$("<img src='img/expandDown.png' class='explodeIcon clickable' alt='Explode' title='Explode Password' />").click(function(event){
 											handleShowIndividualCharacters($(this).siblings("input"));
 										})
+									),
+									$("<td class='pm_controls'>").append(
+										$("<img src='img/del.png' alt='Delete Pair' class='removePair jsAction' />").click(function(e){
+											e.preventDefault();
+											$(this).parent().parent().remove();
+											
+											alert("TODO: Implement this actually saving!");
+										})
 									)
 								)
 							);
@@ -299,6 +307,40 @@ function togglePasswordsForURL(srcH3)
 						
 						$(srcH3).parent().find(".dropDownContent").slideDown(0);
 						$(srcH3).addClass('expanded');
+						
+						$(srcH3).parent().find(".save").click(function(e){
+							e.preventDefault();
+							alert("TODO: Implement this!");
+						});
+						$(srcH3).parent().find(".addCredentialPair").click(function(e){
+							e.preventDefault();
+							var clickEventSrc = this;
+							var source	= document.getElementById("template-li");
+							
+							var	newRow = $("<tr>").append(
+								$("<td class='pm_label'>").append(
+									$("<input type='text' name='key' />")
+								),
+								$("<td class='pm_value'>").append(
+									$("<input type='password' >")
+										.dblclick(function(event) {
+											event.preventDefault();
+										})
+										.focus(function(event) {
+											revealPassword(this);
+										})
+										.blur(function(event){
+											rehidePassword(this);
+										}),
+									$("<img src='img/expandDown.png' class='explodeIcon clickable' alt='Explode' title='Explode Password' />").click(function(event){
+										handleShowIndividualCharacters($(this).siblings("input"));
+									})
+								),
+								$("<td class='pm_controls'></td>")
+							);
+							
+							$(this).parents(".results").find("tbody").append(newRow);
+						});
 					},
 					error: function(){
 						alert("That decryption password is incorrect. Please try again");

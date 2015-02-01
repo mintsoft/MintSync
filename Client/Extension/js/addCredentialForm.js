@@ -6,6 +6,21 @@ function AddCredentialForm() {
 			event.preventDefault();
 			self.addPair();
 		});
+		
+		//Add keyboard shortcut for add
+		$(document).keyup(function(e) {
+			if(e.which == 17)
+				g_ctrlDown = false;
+		}).keydown(function(e) {
+			if(e.which == 17) {
+				g_ctrlDown=true;
+			}
+			else if(g_ctrlDown === true && e.which == 68) {		//ctrl+d
+				event.preventDefault();
+				self.addPair();
+				return false;
+			}
+		});
 	}
 	
 	/** 
