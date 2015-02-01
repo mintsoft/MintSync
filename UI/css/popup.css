@@ -110,12 +110,6 @@ input {
 	display: block;
 }
 
-/** icons that do things **/
-img.jsAction {
-	cursor: pointer;
-	vertical-align: middle;
-}
-
 div#retrieveOutput {
 	padding: 2ex 2em;
 }	
