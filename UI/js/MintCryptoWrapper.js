@@ -54,7 +54,7 @@ function MintCrypto() {
 	function generateIV(inputString)
 	{
 		var shaObj = new jsSHA(inputString, "ASCII");
-		var iv = self.Hex2Array(shaObj("SHA-256","HEX"));
+		var iv = self.Hex2Array(shaObj.getHash("SHA-256","HEX"));
 		iv = iv.slice(0,128/8);
 		return iv;
 	}
