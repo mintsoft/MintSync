@@ -120,7 +120,7 @@ function AddCredentialForm() {
 		
 		$MS.getKeySlot({
 			success: function(returnedData){
-				var cryptoScheme = 1;
+				var cryptoScheme = 2;
 				$MC.encodeAndEncrypt(CredentialsObj, RowSalt, returnedData.data.keySlot0, cryptoScheme, function(encryptedData,cryptoHash){
 					CredentialsObj = {};
 					
