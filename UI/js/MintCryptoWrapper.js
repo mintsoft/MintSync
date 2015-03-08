@@ -43,13 +43,17 @@ function MintCrypto() {
 	{
 		var clearBytes = cryptoHelpers.convertStringToByteArray(clearText);
 		var keyBytes = cryptoHelpers.convertStringToByteArray(keyText);
-		return slowAES.decrypt(clearBytes, slowAES.OFB, keyBytes, iv);
+		var decryptArray = slowAES.decrypt(clearBytes, slowAES.modeOfOperation.OFB, keyBytes, iv);
+
+		return cryptoHelpers.convertByteArrayToString(decryptArray);;
 	}
 	function aes_raw_cfb_encrypt(cipherText, keyText, keySize, iv)
 	{
 		var cipherBytes = cryptoHelpers.convertStringToByteArray(cipherText);
 		var keyBytes = cryptoHelpers.convertStringToByteArray(keyText);
-		return slowAES.encrypt(cipherBytes, slowAES.OFB, keyBytes, iv);
+		var encryptArray = slowAES.encrypt(cipherBytes, slowAES.modeOfOperation.OFB, keyBytes, iv);
+
+		return cryptoHelpers.convertByteArrayToString(encryptArray);
 	}
 	function generateIV(inputString)
 	{
