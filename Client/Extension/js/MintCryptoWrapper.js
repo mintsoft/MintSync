@@ -27,7 +27,7 @@ function MintCrypto() {
 		}
 	};
 
-	function (cryptoScheme) {
+	function cryptoSchemeString(cryptoScheme) {
 		switch (1 * cryptoScheme) {
 			case 1:
 				return "AESRAW";
@@ -129,13 +129,11 @@ function MintCrypto() {
 			shaObj		= new jsSHA(passwordHash,"ASCII");
 			keySlotKey	= self.Hex2Str(shaObj.getHash("SHA-256","HEX"));
 
-
 			var iv = generateIV(keySlot);
 			//keySlot is stored BASE64 but it will be base64_decoded by the AES Library
 			rawKey = self.Decrypt_strings(keySlot,keySlotKey,cypher,256,iv)+""+rowSalt;
 
 			var iv = generateIV(rowSalt);
-
 			//SHA-256 the KeySlot+rowSalt to form the row decryption key
 			shaObj			= new jsSHA(rawKey,"ASCII");
 			encryptionKey	= self.Hex2Str(shaObj.getHash("SHA-256","HEX"));
