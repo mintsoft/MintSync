@@ -43,7 +43,7 @@ function changePassword() {
 		//	console.log(jq);
 		},
 		success: function(data,textStatus,jq) {
-			
+			/*
 			//verify keySlot0PassHash first
 			
 			//hash the entered password
@@ -86,6 +86,7 @@ function changePassword() {
 					console.error(jq,textStatus,errorThrown);
 				}
 			});
+			*/
 		},
 		error: function(jq,textStatus,errorThrown) {
 			switch(jq.status)
