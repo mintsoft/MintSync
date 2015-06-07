@@ -49,11 +49,12 @@ function MS_Lightboxes() {
 		$("#dialogPassPassword").val("");
 		$("#dialogPasswordInstruction").text(prompt);
 		$("#passwordPrompt input.close").click(function(event){
+			var enteredPassword = $("#dialogPassPassword").val();
 			event.preventDefault();
-			completeCallback($("#dialogPassPassword").val());
 			$(this).unbind(event);
 			$("#passwordPrompt").remove();
 			self.forceCloseLightbox("#passwordPrompt");
+			completeCallback(enteredPassword);
 		});
 		$("#dialogPassPassword").focus();
 	}
