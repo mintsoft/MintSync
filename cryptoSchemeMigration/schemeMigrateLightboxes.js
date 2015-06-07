@@ -24,7 +24,7 @@ function MS_Lightboxes() {
 	this.setupLightboxes = function()
 	{
 	}
-	
+
 	/**
 		Substitute for Prompt, used for passwords
 	*/
@@ -50,11 +50,12 @@ function MS_Lightboxes() {
 		$("#dialogPassPassword").val("");
 		$("#dialogPasswordInstruction").text(prompt);
 		$("#passwordPrompt input.close").click(function(event){
+			var enteredPassword = $("#dialogPassPassword").val();
 			event.preventDefault();
-			completeCallback($("#dialogPassPassword").val());
 			$(this).unbind(event);
 			$("#passwordPrompt").remove();
 			self.forceCloseLightbox("#passwordPrompt");
+			completeCallback(enteredPassword);
 		});
 		$("#dialogPassPassword").focus();
 	}
@@ -70,7 +71,7 @@ function MS_Lightboxes() {
 				<form novalidate>\
 					<p><label for='dialogAuthUsername'>Username</label><input name='dialogAuthUsername' id='dialogAuthUsername' type='text' value='' placeholder='Username' required /></p>\
 					<p><label for='dialogAuthPassword'>Password</label><input name='dialogAuthPassword' id='dialogAuthPassword' type='password' value='' required /></p>\
-					<p><label for='dialogAuthServer'>Server</label><input name='dialogAuthServer' id='dialogAuthServer' type='url' value ='../' required /></p> \
+					<p><label for='dialogAuthServer'>Server</label><input name='dialogAuthServer' id='dialogAuthServer' type='url' value ='.' required /></p> \
 					<p class='centeredContents'><input type='submit' class='close'/></p>\
 				</form>\
 			</div>");
@@ -87,6 +88,7 @@ function MS_Lightboxes() {
 		$("#dialogAuthPassword").val("");
 		$("#authenticationPrompt input.close").click(function(event){
 			event.preventDefault();
+			g_serverURL = $("#dialogAuthServer").val();
 			completeCallback({
 				'username': $("#dialogAuthUsername").val(),
 				'password':	$("#dialogAuthPassword").val()
@@ -258,34 +260,6 @@ function MS_Lightboxes() {
 		//box the current option
 		if(alreadyAutoSelected === 0)
 			$("#IC_ID").change();
-			
-		var overlay = $("#InputChooserPrompt").data("overlay").load();
-		
-		$(overlay).one('onLoad',function(){
-				//focus on the default displayed box (Label text)
-				$("#IC_LabelText").focus();
-			})
-			.one('onClose',function(event){
-				if($("#IC_closedDialogState").val()!="0")	//if not "close"
-				{
-					//get the selected item
-					var selectedIndex = $("#IC_ID option:selected").val();
-					completeCallback(inputs[selectedIndex], $("#IC_closedDialogState").val()=="2", $("#IC_closedDialogState").val()=="3");
-					$("#InputChooserPrompt").remove();
-				}
-				else
-				{
-					//send message to injected JS to trigger an unhighlight
-					sendMessageToInjectedJS({
-						'action'	: "hilightInput",
-						'src'		: 'popup',
-						'target'	: {
-							'name'	:	"",
-							'id'	:	"",
-							}
-					});
-				}
-			});
 	}
 	this.modalThis = function(modalTarget, callbacks)
 	{

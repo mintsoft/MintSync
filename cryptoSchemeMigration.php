@@ -5,7 +5,9 @@
 		<link rel="stylesheet" href="css/client-common.css" type="text/css" />
 		<link rel="stylesheet" href="css/ui.css" type="text/css" />
 		<script type="text/javascript" src='js/jquery.js'></script>
-		<script type="text/javascript" src='UI/js/jquery.tools.min.1.2.5.js'></script>
+		<script type="text/javascript" src='UI/js/jquery.simplemodal-1.4.4.js'></script>
+		<script type="text/javascript" src='UI/js/handlebars.js'></script>
+		<script type="text/javascript" src='UI/js/jquery-autobars.js'></script>
 		
 		<script type="text/javascript" src="js/sha.js"></script>
 		<script type="text/javascript" src="js/AES.js"></script>

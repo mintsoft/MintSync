@@ -66,7 +66,7 @@ function AESencrypt(text, key)
 */
 $(document).ready(function(){
 
-	setupLightboxes();
+	lightboxes.setupLightboxes();
 	$MS.listURLS({
 		beforeSend: function() {
 			$("#matrixLoading").fadeIn(0);
@@ -138,8 +138,12 @@ function processRecord(record)
 		//get using old mechanism
 		$MS.getPasswordsByID(id,{
 			success: function(requestdata, textStatus, jq) {
-				if(requestdata.data.cryptoScheme == 1) {
+				if(requestdata.data.cryptoScheme == 2 ) {
 					$(record).find("span.status").addClass("borderyellow");
+					return;
+				}
+				if(requestdata.data.cryptoScheme == 0 ) {
+					$(record).find("span.status").addClass("borderred");
 					return;
 				}
 				var rowSalt = requestdata.data.Salt,
@@ -149,7 +153,7 @@ function processRecord(record)
 				$MC.handleDecodeAndDecrypt(passwordHash, rowSalt, keySlot, base64decoded, requestdata.data.cryptoScheme, {
 					success: function(CredentialsObj) {
 						//Save using new scheme
-						var newCryptoScheme = 1;
+						var newCryptoScheme = 2;
 						$MC.encodeAndEncrypt(CredentialsObj, rowSalt, keySlot, newCryptoScheme, function(encryptedData, cryptoHash) {
 							CredentialsObj = {};
 							

@@ -363,3 +363,22 @@ table.digits td:not(:last-of-type), table.digits th:not(:last-of-type)
 {
 	border-right: 1px solid white;
 }
+
+/* simple modal */
+/*
+#simplemodal-container {background-color:#333; border:8px solid #444; padding:12px;}
+*/
+#simplemodal-overlay {background-color:#000;}
+/** Lightboxes **/
+.modalDialog {
+	display:none;
+	padding: 1ex 2ex;
+	background: #fcfcfc;
+	box-shadow: 0px 0px 10px #fcfcfc;
+	border: 1px solid #eee;
+	border-radius:3px;
+}
+
+.modalDialog input[type='password'], .modalDialog input[type='text'], .modalDialog input[type='url'] {
+	width: 14em;
+}
