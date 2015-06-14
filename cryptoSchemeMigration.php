@@ -4,14 +4,18 @@
 		<title>MintSync Server Interface</title>
 		<link rel="stylesheet" href="css/client-common.css" type="text/css" />
 		<link rel="stylesheet" href="css/ui.css" type="text/css" />
-		<script type="text/javascript" src='js/jquery.js'></script>
+		<script type="text/javascript" src='UI/js/jquery.js'></script>
 		<script type="text/javascript" src='UI/js/jquery.simplemodal-1.4.4.js'></script>
 		<script type="text/javascript" src='UI/js/handlebars.js'></script>
 		<script type="text/javascript" src='UI/js/jquery-autobars.js'></script>
 		
-		<script type="text/javascript" src="js/sha.js"></script>
-		<script type="text/javascript" src="js/AES.js"></script>
-		
+		<script type="text/javascript" src="UI/js/sha.js"></script>
+		<script type="text/javascript" src="UI/js/AES.js"></script>
+
+		<script type="text/javascript" src="UI/js/slowAES.js"></script>
+		<script type="text/javascript" src="UI/js/cryptoHelpers.js"></script>
+		<script type="text/javascript" src="UI/js/jsHash.js"></script>
+
 		<script type="text/javascript" src="UI/js/php_js/utf8_decode.js"></script>
 		<script type="text/javascript" src="UI/js/php_js/utf8_encode.js"></script>
 		<script type="text/javascript" src="UI/js/php_js/base64_decode.js"></script>

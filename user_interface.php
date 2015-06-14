@@ -29,9 +29,9 @@ function header_html()
 			<title>MintSync Server Interface</title>
 			<link rel="stylesheet" href="css/client-common.css" type="text/css" />
 			<link rel="stylesheet" href="css/ui.css" type="text/css" />
-			<script type="text/javascript" src='js/jquery.js'></script>
-			<script type="text/javascript" src='js/sha.js'></script>
-			<script type="text/javascript" src='js/AES.js'></script>
+			<script type="text/javascript" src='UI/js/jquery.js'></script>
+			<script type="text/javascript" src='UI/js/sha.js'></script>
+			<script type="text/javascript" src='UI/js/AES.js'></script>
 			<script type="text/javascript" src='js/ui.js'></script>
 		</head>
 		<body>
