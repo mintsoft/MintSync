@@ -33,22 +33,35 @@ $(document).ready(function(){
 		var saveFormMarkup = $.handlebarTemplates['saveForm']({});
 	
 		lightboxes.setupLightboxes();
-			
+
 		$("#addCredentialButton").click(function(e){
 			e.preventDefault();
-			
-			$("#saveFormContainer").html(saveFormMarkup);
-			addCredentialForm.AddBindings("#addPairP");
-			
-			lightboxes.modalThis($("#saveFormContainer"), {
-				abort: function(event) {
-					console.log("Modal Closed/Aborted");
-					$("#saveFormContainer").html("");
-				}
-			});
-			$("#saveButton").click(function(event){
-				event.preventDefault();
-				addCredentialForm.setPassword($("#SaveForm"));
+
+			$MS.getEncryptionPasswordHash(function(passwordHash) {
+				$MS.verifyCryptoPass(passwordHash, {
+					success: function() {
+
+						$("#saveFormContainer").html(saveFormMarkup);
+						addCredentialForm.AddBindings("#addPairP");
+
+						lightboxes.modalThis($("#saveFormContainer"), {
+							abort: function(event) {
+								console.log("Modal Closed/Aborted");
+								$("#saveFormContainer").html("");
+								$("#PasswordList").empty();
+								UpdateMainURLList();
+							}
+						});
+						$("#saveButton").click(function(event){
+							event.preventDefault();
+							addCredentialForm.setPassword($("#SaveForm"));
+						});
+
+					},
+					error: function() {
+						alert("The entered crypto-password was incorrect; hit F5 and go again!")
+					}
+				});
 			});
 		});
 		
@@ -65,32 +78,9 @@ $(document).ready(function(){
 			$("#variableWidth").text(tmp);
 			
 		});
-			
-		//load the list of urls
-		$MS.listURLS({
-			beforeSend: function() {
-				$("#matrixLoading").fadeIn(0);
-			},
-			complete: function() {
-				$("#matrixLoading").fadeOut(0);
-			},
-			error: function(jq,textStatus,errorThrown) {
-				switch(jq.status)
-				{
-					case 401:	//incorrect login
-						alert("List URLs failed due to incorrect Login, please try again");
-					break;
-					default:
-						alert("An error occurred whilst listing URLs, this is probably due to not having any saved credentials. See the error console for more information");
-						console.error("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
-				}
-			},
-			success: function(requestdata,textStatus,jq) {
-				//create list of domains
-				updatePasswordMatrix(requestdata.data);
-			},
-		});
-		
+
+		UpdateMainURLList();
+
 		//add search handler with a timeout
 		$("#searchValue").keypress(function(event){
 			if(event.which === 13 ) //enter key
@@ -116,8 +106,31 @@ $(document).ready(function(){
 	});
 });
 
-
-
+function UpdateMainURLList() {
+	//load the list of urls
+	$MS.listURLS({
+		beforeSend: function () {
+			$("#matrixLoading").fadeIn(0);
+		},
+		complete: function () {
+			$("#matrixLoading").fadeOut(0);
+		},
+		error: function (jq, textStatus, errorThrown) {
+			switch (jq.status) {
+				case 401:	//incorrect login
+					alert("List URLs failed due to incorrect Login, please try again");
+					break;
+				default:
+					alert("An error occurred whilst listing URLs, this is probably due to not having any saved credentials. See the error console for more information");
+					console.error("You have reached an undefined state (" + jq.status + " " + textStatus + "): " + errorThrown);
+			}
+		},
+		success: function (requestdata, textStatus, jq) {
+			//create list of domains
+			updatePasswordMatrix(requestdata.data);
+		}
+	});
+}
 
 /**
 	Updates the password matrix with the passed array
@@ -203,7 +216,7 @@ function updatePasswordMatrix(sourceArray)
 			},200);
 		
 		//add click handler to the bin icon to handle deletion/removal
-		$(tmpObj).find("p.binIcon img.bin").click(function(){
+		$(tmpObj).find("p.rowIcons img.bin").click(function(){
 			var id	= $(this).parent().siblings().find("input[name='ID']").val(),
 				url	= $(this).parent().siblings("h3").text(),
 				srcImg = this;
@@ -212,8 +225,7 @@ function updatePasswordMatrix(sourceArray)
 				return false;
 			
 			$MS.removePasswords(id,url,{
-				beforeSend: function() {
-				},
+				beforeSend: function() {},
 				success: function(requestdata,textStatus) {
 					//remove the entire li
 					$(srcImg).parent().parent().remove();
@@ -298,7 +310,7 @@ function togglePasswordsForURL(srcH3)
 											e.preventDefault();
 											$(this).parent().parent().remove();
 											
-											alert("TODO: Implement this actually saving!");
+											alert("TODO: Implement this actually saving? For now click the save button!");
 										})
 									)
 								)
@@ -311,6 +323,45 @@ function togglePasswordsForURL(srcH3)
 						$(srcH3).parent().find(".save").click(function(e){
 							e.preventDefault();
 							alert("TODO: Implement this!");
+
+							var credTable = $(this).parent().parent().parent().parent(),
+								domainName = $(this).parent().parent().parent().parent().parent().siblings("h3").text(),
+								force = true,
+								credentialsObject = {},
+								rowSalt = $MS.generateRowSalt();
+
+							$(credTable).find("tbody tr").each(function(index, element){
+								var key = $(this).find("td.pm_label input[name=key]").val();
+								if(!key)
+									key = $(this).children("td.pm_label").text();
+
+								var value = $(this).find("td.pm_value input[type=password]").val();
+								credentialsObject[key] = value;
+							});
+
+							$MS.getKeySlot({
+								success: function(returnedKeyslot){
+									var cryptoScheme = 2;
+									$MC.encodeAndEncrypt(credentialsObject, rowSalt, returnedKeyslot.data.keySlot0, cryptoScheme, function(encryptedData, cryptoHash) {
+										credentialsObject = {};
+										$MS.setPassword(domainName, encryptedData, rowSalt, cryptoHash, force, cryptoScheme,{
+											error: function(jq,textStatus,errorThrown) {
+												alert("An undefined error has occurred, see the error console for more information");
+												console.error("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);
+												console.error(jq);
+											},
+											success: function(requestdata,textStatus,jq) {
+												stubFunctions.genericPostMessage({
+													'action': 'updateLocalCache',
+													'src' : 'passwordMatrix'
+												});
+												alert("Credentials saved");
+											},
+											zzz: function(){}
+										});
+									});
+								}
+							});
 						});
 						$(srcH3).parent().find(".addCredentialPair").click(function(e){
 							e.preventDefault();
