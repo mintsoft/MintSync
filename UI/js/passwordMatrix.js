@@ -216,7 +216,7 @@ function updatePasswordMatrix(sourceArray)
 			},200);
 		
 		//add click handler to the bin icon to handle deletion/removal
-		$(tmpObj).find("p.binIcon img.bin").click(function(){
+		$(tmpObj).find("p.rowIcons img.bin").click(function(){
 			var id	= $(this).parent().siblings().find("input[name='ID']").val(),
 				url	= $(this).parent().siblings("h3").text(),
 				srcImg = this;
@@ -225,8 +225,7 @@ function updatePasswordMatrix(sourceArray)
 				return false;
 			
 			$MS.removePasswords(id,url,{
-				beforeSend: function() {
-				},
+				beforeSend: function() {},
 				success: function(requestdata,textStatus) {
 					//remove the entire li
 					$(srcImg).parent().parent().remove();
