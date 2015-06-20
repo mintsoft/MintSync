@@ -330,7 +330,7 @@ function MintSync() {
 	this.verifyCryptoPass = function(passwordHash,callbacks) {
 	
 		//do hash the password again (so it is double hashed)
-		passwordHash = hashPass(passwordHash);
+		passwordHash = $MS.hashPass(passwordHash);
 	
 		$MS.getAuthenticationObject(function(authObj){
 			$.ajax({
