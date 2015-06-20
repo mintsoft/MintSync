@@ -325,28 +325,32 @@ function togglePasswordsForURL(srcH3)
 							alert("TODO: Implement this!");
 
 							var credTable = $(this).parent().parent().parent().parent(),
-								CredentialsObject = {},
-								RowSalt = $MS.generateRowSalt();
+								domainName = $(this).parent().parent().parent().parent().parent().siblings("h3").text(),
+								force = true,
+								credentialsObject = {},
+								rowSalt = $MS.generateRowSalt();
 
 							$(credTable).find("tbody tr").each(function(index, element){
-								var key = $(this).children("input[name=key]").val();
-								var value = $(this).children("input[type=password]").val();
-								CredentialsObject[key] = value;
+								var key = $(this).find("td.pm_label input[name=key]").val();
+								if(!key)
+									key = $(this).children("td.pm_label").text();
+
+								var value = $(this).find("td.pm_value input[type=password]").val();
+								credentialsObject[key] = value;
 							});
 
 							$MS.getKeySlot({
 								success: function(returnedKeyslot){
 									var cryptoScheme = 2;
-									$MC.encodeAndEncrypt(CredentialsObject, RowSalt, returnedKeyslot.data.keySlot0, cryptoScheme, function(encryptedData, cryptoHash) {
-										CredentialsObject = {};
-										$MS.setPassword(domainName,encryptedData,RowSalt,cryptoHash,force,cryptoScheme,{
+									$MC.encodeAndEncrypt(credentialsObject, rowSalt, returnedKeyslot.data.keySlot0, cryptoScheme, function(encryptedData, cryptoHash) {
+										credentialsObject = {};
+										$MS.setPassword(domainName, encryptedData, rowSalt, cryptoHash, force, cryptoScheme,{
 											error: function(jq,textStatus,errorThrown) {
 												alert("An undefined error has occurred, see the error console for more information");
 												console.error("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);
 												console.error(jq);
 											},
 											success: function(requestdata,textStatus,jq) {
-												//update the local cache
 												stubFunctions.genericPostMessage({
 													'action': 'updateLocalCache',
 													'src' : 'passwordMatrix'
