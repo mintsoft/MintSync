@@ -36,19 +36,20 @@ $(document).ready(function(){
 			
 		$("#addCredentialButton").click(function(e){
 			e.preventDefault();
-			
-			$("#saveFormContainer").html(saveFormMarkup);
-			addCredentialForm.AddBindings("#addPairP");
-			
-			lightboxes.modalThis($("#saveFormContainer"), {
-				abort: function(event) {
-					console.log("Modal Closed/Aborted");
-					$("#saveFormContainer").html("");
-				}
-			});
-			$("#saveButton").click(function(event){
-				event.preventDefault();
-				addCredentialForm.setPassword($("#SaveForm"));
+			$MS.getEncryptionPasswordHash(function() {
+				$("#saveFormContainer").html(saveFormMarkup);
+				addCredentialForm.AddBindings("#addPairP");
+
+				lightboxes.modalThis($("#saveFormContainer"), {
+					abort: function(event) {
+						console.log("Modal Closed/Aborted");
+						$("#saveFormContainer").html("");
+					}
+				});
+				$("#saveButton").click(function(event){
+					event.preventDefault();
+					addCredentialForm.setPassword($("#SaveForm"));
+				});
 			});
 		});
 		
