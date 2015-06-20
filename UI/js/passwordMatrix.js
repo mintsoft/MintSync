@@ -33,22 +33,32 @@ $(document).ready(function(){
 		var saveFormMarkup = $.handlebarTemplates['saveForm']({});
 	
 		lightboxes.setupLightboxes();
-			
+
 		$("#addCredentialButton").click(function(e){
 			e.preventDefault();
-			$MS.getEncryptionPasswordHash(function() {
-				$("#saveFormContainer").html(saveFormMarkup);
-				addCredentialForm.AddBindings("#addPairP");
 
-				lightboxes.modalThis($("#saveFormContainer"), {
-					abort: function(event) {
-						console.log("Modal Closed/Aborted");
-						$("#saveFormContainer").html("");
+			$MS.getEncryptionPasswordHash(function(passwordHash) {
+				$MS.verifyCryptoPass(passwordHash, {
+					success: function() {
+
+						$("#saveFormContainer").html(saveFormMarkup);
+						addCredentialForm.AddBindings("#addPairP");
+
+						lightboxes.modalThis($("#saveFormContainer"), {
+							abort: function(event) {
+								console.log("Modal Closed/Aborted");
+								$("#saveFormContainer").html("");
+							}
+						});
+						$("#saveButton").click(function(event){
+							event.preventDefault();
+							addCredentialForm.setPassword($("#SaveForm"));
+						});
+
+					},
+					error: function() {
+						alert("The entered crypto-password was incorrect; hit F5 and go again!")
 					}
-				});
-				$("#saveButton").click(function(event){
-					event.preventDefault();
-					addCredentialForm.setPassword($("#SaveForm"));
 				});
 			});
 		});
