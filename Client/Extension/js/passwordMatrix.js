@@ -48,7 +48,7 @@ $(document).ready(function(){
 							abort: function(event) {
 								console.log("Modal Closed/Aborted");
 								$("#saveFormContainer").html("");
-								// update the main list again
+								$("#PasswordList").empty();
 								UpdateMainURLList();
 							}
 						});
