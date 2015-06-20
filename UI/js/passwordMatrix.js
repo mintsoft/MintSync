@@ -48,6 +48,8 @@ $(document).ready(function(){
 							abort: function(event) {
 								console.log("Modal Closed/Aborted");
 								$("#saveFormContainer").html("");
+								// update the main list again
+								UpdateMainURLList();
 							}
 						});
 						$("#saveButton").click(function(event){
@@ -76,32 +78,9 @@ $(document).ready(function(){
 			$("#variableWidth").text(tmp);
 			
 		});
-			
-		//load the list of urls
-		$MS.listURLS({
-			beforeSend: function() {
-				$("#matrixLoading").fadeIn(0);
-			},
-			complete: function() {
-				$("#matrixLoading").fadeOut(0);
-			},
-			error: function(jq,textStatus,errorThrown) {
-				switch(jq.status)
-				{
-					case 401:	//incorrect login
-						alert("List URLs failed due to incorrect Login, please try again");
-					break;
-					default:
-						alert("An error occurred whilst listing URLs, this is probably due to not having any saved credentials. See the error console for more information");
-						console.error("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
-				}
-			},
-			success: function(requestdata,textStatus,jq) {
-				//create list of domains
-				updatePasswordMatrix(requestdata.data);
-			},
-		});
-		
+
+		UpdateMainURLList();
+
 		//add search handler with a timeout
 		$("#searchValue").keypress(function(event){
 			if(event.which === 13 ) //enter key
@@ -127,8 +106,31 @@ $(document).ready(function(){
 	});
 });
 
-
-
+function UpdateMainURLList() {
+	//load the list of urls
+	$MS.listURLS({
+		beforeSend: function () {
+			$("#matrixLoading").fadeIn(0);
+		},
+		complete: function () {
+			$("#matrixLoading").fadeOut(0);
+		},
+		error: function (jq, textStatus, errorThrown) {
+			switch (jq.status) {
+				case 401:	//incorrect login
+					alert("List URLs failed due to incorrect Login, please try again");
+					break;
+				default:
+					alert("An error occurred whilst listing URLs, this is probably due to not having any saved credentials. See the error console for more information");
+					console.error("You have reached an undefined state (" + jq.status + " " + textStatus + "): " + errorThrown);
+			}
+		},
+		success: function (requestdata, textStatus, jq) {
+			//create list of domains
+			updatePasswordMatrix(requestdata.data);
+		}
+	});
+}
 
 /**
 	Updates the password matrix with the passed array
