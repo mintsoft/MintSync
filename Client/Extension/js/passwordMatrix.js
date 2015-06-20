@@ -310,7 +310,7 @@ function togglePasswordsForURL(srcH3)
 											e.preventDefault();
 											$(this).parent().parent().remove();
 											
-											alert("TODO: Implement this actually saving!");
+											alert("TODO: Implement this actually saving? For now click the save button!");
 										})
 									)
 								)
@@ -323,6 +323,41 @@ function togglePasswordsForURL(srcH3)
 						$(srcH3).parent().find(".save").click(function(e){
 							e.preventDefault();
 							alert("TODO: Implement this!");
+
+							var credTable = $(this).parent().parent().parent().parent(),
+								CredentialsObject = {},
+								RowSalt = $MS.generateRowSalt();
+
+							$(credTable).find("tbody tr").each(function(index, element){
+								var key = $(this).children("input[name=key]").val();
+								var value = $(this).children("input[type=password]").val();
+								CredentialsObject[key] = value;
+							});
+
+							$MS.getKeySlot({
+								success: function(returnedKeyslot){
+									var cryptoScheme = 2;
+									$MC.encodeAndEncrypt(CredentialsObject, RowSalt, returnedKeyslot.data.keySlot0, cryptoScheme, function(encryptedData, cryptoHash) {
+										CredentialsObject = {};
+										$MS.setPassword(domainName,encryptedData,RowSalt,cryptoHash,force,cryptoScheme,{
+											error: function(jq,textStatus,errorThrown) {
+												alert("An undefined error has occurred, see the error console for more information");
+												console.error("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);
+												console.error(jq);
+											},
+											success: function(requestdata,textStatus,jq) {
+												//update the local cache
+												stubFunctions.genericPostMessage({
+													'action': 'updateLocalCache',
+													'src' : 'passwordMatrix'
+												});
+												alert("Credentials saved");
+											},
+											zzz: function(){}
+										});
+									});
+								}
+							});
 						});
 						$(srcH3).parent().find(".addCredentialPair").click(function(e){
 							e.preventDefault();
