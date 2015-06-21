@@ -286,7 +286,16 @@ function togglePasswordsForURL(srcH3)
 						{
 							tableBody.append(
 								$("<tr>").append(
-									$("<td class='pm_label'>").text(index),
+									$("<td class='pm_label'>")
+										.text(index)
+										.dblclick(function(){
+											var name = $(this).text();
+											$(this).empty();
+											$(this).append(
+												$("<input type='text' name='key' />")
+													.val(name)
+											);
+									}),
 									$("<td class='pm_value'>").append(
 										$("<input type='password' readonly='readonly' >")
 											.val(credentialsObj[index])
@@ -309,8 +318,6 @@ function togglePasswordsForURL(srcH3)
 										$("<img src='img/del.png' alt='Delete Pair' class='removePair jsAction' />").click(function(e){
 											e.preventDefault();
 											$(this).parent().parent().remove();
-											
-											alert("TODO: Implement this actually saving? For now click the save button!");
 										})
 									)
 								)
@@ -322,7 +329,6 @@ function togglePasswordsForURL(srcH3)
 						
 						$(srcH3).parent().find(".save").click(function(e){
 							e.preventDefault();
-							alert("TODO: Implement this!");
 
 							var credTable = $(this).parent().parent().parent().parent(),
 								domainName = $(this).parent().parent().parent().parent().parent().siblings("h3").text(),
