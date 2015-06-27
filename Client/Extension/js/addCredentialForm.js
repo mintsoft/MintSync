@@ -6,6 +6,21 @@ function AddCredentialForm() {
 			event.preventDefault();
 			self.addPair();
 		});
+		
+		//Add keyboard shortcut for add
+		$(document).keyup(function(e) {
+			if(e.which == 17)
+				g_ctrlDown = false;
+		}).keydown(function(e) {
+			if(e.which == 17) {
+				g_ctrlDown=true;
+			}
+			else if(g_ctrlDown === true && e.which == 68) {		//ctrl+d
+				event.preventDefault();
+				self.addPair();
+				return false;
+			}
+		});
 	}
 	
 	/** 
@@ -72,6 +87,101 @@ function AddCredentialForm() {
 	this.delPair = function(fromHere)
 	{
 		fromHere.parentNode.parentNode.removeChild(fromHere.parentNode);
+	}
+	
+	/**
+	Send Credentials Data for Domain
+	*/
+	this.setPassword = function(context) {
+		var domainName=$.trim($("#domainName").val()),
+			RowSalt = $MS.generateRowSalt(),
+			encryptedData = "",
+			CredentialsObj = {},
+			force = false;
+			
+		if(domainName === "")
+		{
+			$("#saveOutput").text("Error: No URL entered, no save has occurred");
+			return;
+		}
+		
+		//build JS Object to JSONify
+		$("#inputPassContainer").children("p").each(function(index,Element){
+			var name = "", password="";
+			
+			name		= $(this).children("input[name='inputPassName']").val(); 
+			password	= $(this).children("input[name='inputPassValue']").val();
+			
+			CredentialsObj[name]=password;
+		});
+		
+		//display throbber
+		$("#saveOutput").addClass("loading_throbber");
+		
+		$MS.getKeySlot({
+			success: function(returnedData){
+				var cryptoScheme = 2;
+				$MC.encodeAndEncrypt(CredentialsObj, RowSalt, returnedData.data.keySlot0, cryptoScheme, function(encryptedData,cryptoHash){
+					CredentialsObj = {};
+					
+					//check is overwrites are allowed (force)
+					force = $("#canForceWrite:checked").val();
+					$MS.setPassword(domainName,encryptedData,RowSalt,cryptoHash,force,cryptoScheme,{
+						error: function(jq,textStatus,errorThrown) {
+							$("#saveOutput").removeClass("loading_throbber");
+							switch(jq.status)
+							{
+								case 401:
+									$("#saveOutput").text("Save Failed: Incorrect Login, please try again");
+								break;
+								case 409:
+									$("#saveOutput").text("Save Failed: This URL Already exists");
+								break;
+								case 417:
+									$("#saveOutput").text("Save Failed: Inconsistent Crypto Password");
+									//update the saved crypto password if it is set to anything other than no
+									$MS.resetSavedCryptoPassword();
+								break;
+								default:
+								
+									$("#saveOutput").text("An undefined error has occurred, see the error console for more information");
+									console.error("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);		
+									console.error(jq);
+							}
+						},
+						success: function(requestdata,textStatus,jq) {
+							$("#saveOutput").removeClass("loading_throbber");
+							$("#saveOutput").text("Credentials Saved");
+							
+							//uncheck the overwrite box
+							$("#canForceWrite").attr("checked",false);
+							
+							//update the local cache
+							stubFunctions.genericPostMessage({
+								'action': 'updateLocalCache',
+								'src' : 'passwordMatrix',
+							});
+						},
+						zzz: function(){}
+					});
+				});
+			},
+			error: function(jq,textStatus,errorThrown) {
+			
+				switch(jq.status)
+				{
+					case 401:
+						$("#saveOutput").text("Save Failed: Incorrect Login, please try again");
+					break;
+					default:
+						alert("Catastrophic Error Retrieving keySlot0, see the error log for more information");
+						console.error("An Error Occured Retrieving keySlot0: "+textStatus);
+						console.error(jq);
+						console.error(errorThrown);
+						console.error("##########################################");
+				}
+			}
+		});
 	}
 }
 

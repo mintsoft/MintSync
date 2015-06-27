@@ -83,15 +83,9 @@ input[type='text'] {
 input[type='checkbox'] {
 	margin-left: 10ex;
 }
-input.inputLabel {
-	width: 10em !important;
-}
 
 table tbody input.retrievedPassword {
 	width: 10em !important;
-}
-input.inputPass {
-	width: 11.85em !important;
 }
 
 input {
@@ -114,12 +108,6 @@ input {
 
 #loadingDiv span {
 	display: block;
-}
-
-/** icons that do things **/
-img.jsAction {
-	cursor: pointer;
-	vertical-align: middle;
 }
 
 div#retrieveOutput {

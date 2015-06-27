@@ -31,17 +31,39 @@ jQuery.fn.single_double_click = function(single_click_callback, double_click_cal
 $(document).ready(function(){
 	$(document).autoBars(function() {
 		var saveFormMarkup = $.handlebarTemplates['saveForm']({});
-		$("#saveFormContainer").html(saveFormMarkup);
-		
+	
 		lightboxes.setupLightboxes();
-			
+
 		$("#addCredentialButton").click(function(e){
 			e.preventDefault();
-			lightboxes.modalThis($("#saveFormContainer"), function(event){
-				console.log("Modal Closed");
+
+			$MS.getEncryptionPasswordHash(function(passwordHash) {
+				$MS.verifyCryptoPass(passwordHash, {
+					success: function() {
+
+						$("#saveFormContainer").html(saveFormMarkup);
+						addCredentialForm.AddBindings("#addPairP");
+
+						lightboxes.modalThis($("#saveFormContainer"), {
+							abort: function(event) {
+								console.log("Modal Closed/Aborted");
+								$("#saveFormContainer").html("");
+								$("#PasswordList").empty();
+								UpdateMainURLList();
+							}
+						});
+						$("#saveButton").click(function(event){
+							event.preventDefault();
+							addCredentialForm.setPassword($("#SaveForm"));
+						});
+
+					},
+					error: function() {
+						alert("The entered crypto-password was incorrect; hit F5 and go again!")
+					}
+				});
 			});
 		});
-		addCredentialForm.AddBindings("#addPairP");
 		
 		//add variable width button
 		$("#variableWidth").click(function(){
@@ -56,32 +78,9 @@ $(document).ready(function(){
 			$("#variableWidth").text(tmp);
 			
 		});
-			
-		//load the list of urls
-		$MS.listURLS({
-			beforeSend: function() {
-				$("#matrixLoading").fadeIn(0);
-			},
-			complete: function() {
-				$("#matrixLoading").fadeOut(0);
-			},
-			error: function(jq,textStatus,errorThrown) {
-				switch(jq.status)
-				{
-					case 401:	//incorrect login
-						alert("List URLs failed due to incorrect Login, please try again");
-					break;
-					default:
-						alert("An error occurred whilst listing URLs, this is probably due to not having any saved credentials. See the error console for more information");
-						console.error("You have reached an undefined state ("+jq.status+" "+textStatus+"): " + errorThrown);
-				}
-			},
-			success: function(requestdata,textStatus,jq) {
-				//create list of domains
-				updatePasswordMatrix(requestdata.data);
-			},
-		});
-		
+
+		UpdateMainURLList();
+
 		//add search handler with a timeout
 		$("#searchValue").keypress(function(event){
 			if(event.which === 13 ) //enter key
@@ -107,8 +106,31 @@ $(document).ready(function(){
 	});
 });
 
-
-
+function UpdateMainURLList() {
+	//load the list of urls
+	$MS.listURLS({
+		beforeSend: function () {
+			$("#matrixLoading").fadeIn(0);
+		},
+		complete: function () {
+			$("#matrixLoading").fadeOut(0);
+		},
+		error: function (jq, textStatus, errorThrown) {
+			switch (jq.status) {
+				case 401:	//incorrect login
+					alert("List URLs failed due to incorrect Login, please try again");
+					break;
+				default:
+					alert("An error occurred whilst listing URLs, this is probably due to not having any saved credentials. See the error console for more information");
+					console.error("You have reached an undefined state (" + jq.status + " " + textStatus + "): " + errorThrown);
+			}
+		},
+		success: function (requestdata, textStatus, jq) {
+			//create list of domains
+			updatePasswordMatrix(requestdata.data);
+		}
+	});
+}
 
 /**
 	Updates the password matrix with the passed array
@@ -194,7 +216,7 @@ function updatePasswordMatrix(sourceArray)
 			},200);
 		
 		//add click handler to the bin icon to handle deletion/removal
-		$(tmpObj).find("p.binIcon img.bin").click(function(){
+		$(tmpObj).find("p.rowIcons img.bin").click(function(){
 			var id	= $(this).parent().siblings().find("input[name='ID']").val(),
 				url	= $(this).parent().siblings("h3").text(),
 				srcImg = this;
@@ -203,8 +225,7 @@ function updatePasswordMatrix(sourceArray)
 				return false;
 			
 			$MS.removePasswords(id,url,{
-				beforeSend: function() {
-				},
+				beforeSend: function() {},
 				success: function(requestdata,textStatus) {
 					//remove the entire li
 					$(srcImg).parent().parent().remove();
@@ -265,7 +286,16 @@ function togglePasswordsForURL(srcH3)
 						{
 							tableBody.append(
 								$("<tr>").append(
-									$("<td class='pm_label'>").text(index),
+									$("<td class='pm_label'>")
+										.text(index)
+										.dblclick(function(){
+											var name = $(this).text();
+											$(this).empty();
+											$(this).append(
+												$("<input type='text' name='key' />")
+													.val(name)
+											);
+									}),
 									$("<td class='pm_value'>").append(
 										$("<input type='password' readonly='readonly' >")
 											.val(credentialsObj[index])
@@ -283,6 +313,12 @@ function togglePasswordsForURL(srcH3)
 										$("<img src='img/expandDown.png' class='explodeIcon clickable' alt='Explode' title='Explode Password' />").click(function(event){
 											handleShowIndividualCharacters($(this).siblings("input"));
 										})
+									),
+									$("<td class='pm_controls'>").append(
+										$("<img src='img/del.png' alt='Delete Pair' class='removePair jsAction' />").click(function(e){
+											e.preventDefault();
+											$(this).parent().parent().remove();
+										})
 									)
 								)
 							);
@@ -290,6 +326,78 @@ function togglePasswordsForURL(srcH3)
 						
 						$(srcH3).parent().find(".dropDownContent").slideDown(0);
 						$(srcH3).addClass('expanded');
+						
+						$(srcH3).parent().find(".save").click(function(e){
+							e.preventDefault();
+
+							var credTable = $(this).parent().parent().parent().parent(),
+								domainName = $(this).parent().parent().parent().parent().parent().siblings("h3").text(),
+								force = true,
+								credentialsObject = {},
+								rowSalt = $MS.generateRowSalt();
+
+							$(credTable).find("tbody tr").each(function(index, element){
+								var key = $(this).find("td.pm_label input[name=key]").val();
+								if(!key)
+									key = $(this).children("td.pm_label").text();
+
+								var value = $(this).find("td.pm_value input[type=password]").val();
+								credentialsObject[key] = value;
+							});
+
+							$MS.getKeySlot({
+								success: function(returnedKeyslot){
+									var cryptoScheme = 2;
+									$MC.encodeAndEncrypt(credentialsObject, rowSalt, returnedKeyslot.data.keySlot0, cryptoScheme, function(encryptedData, cryptoHash) {
+										credentialsObject = {};
+										$MS.setPassword(domainName, encryptedData, rowSalt, cryptoHash, force, cryptoScheme,{
+											error: function(jq,textStatus,errorThrown) {
+												alert("An undefined error has occurred, see the error console for more information");
+												console.error("An Error Occurred:" + textStatus + "\n" + errorThrown+"\n"+jq.responseText);
+												console.error(jq);
+											},
+											success: function(requestdata,textStatus,jq) {
+												stubFunctions.genericPostMessage({
+													'action': 'updateLocalCache',
+													'src' : 'passwordMatrix'
+												});
+												alert("Credentials saved");
+											},
+											zzz: function(){}
+										});
+									});
+								}
+							});
+						});
+						$(srcH3).parent().find(".addCredentialPair").click(function(e){
+							e.preventDefault();
+							var clickEventSrc = this;
+							var source	= document.getElementById("template-li");
+							
+							var	newRow = $("<tr>").append(
+								$("<td class='pm_label'>").append(
+									$("<input type='text' name='key' />")
+								),
+								$("<td class='pm_value'>").append(
+									$("<input type='password' >")
+										.dblclick(function(event) {
+											event.preventDefault();
+										})
+										.focus(function(event) {
+											revealPassword(this);
+										})
+										.blur(function(event){
+											rehidePassword(this);
+										}),
+									$("<img src='img/expandDown.png' class='explodeIcon clickable' alt='Explode' title='Explode Password' />").click(function(event){
+										handleShowIndividualCharacters($(this).siblings("input"));
+									})
+								),
+								$("<td class='pm_controls'></td>")
+							);
+							
+							$(this).parents(".results").find("tbody").append(newRow);
+						});
 					},
 					error: function(){
 						alert("That decryption password is incorrect. Please try again");
