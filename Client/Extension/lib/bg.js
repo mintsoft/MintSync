@@ -217,7 +217,7 @@ function startPasswdResetTimer()
 
 
 /** Entry Point **/
-window.addEventListener("load", function(){
+//window.addEventListener("load", function(){
 	var newWindow,
 		ToolbarUIItemProperties = {
 			title: "MintSync",
@@ -335,4 +335,4 @@ window.addEventListener("load", function(){
 		updateLocalURLCache();
 	}
 	
-}, false);
+//}, false);
