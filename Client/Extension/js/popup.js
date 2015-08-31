@@ -8,7 +8,7 @@ var g_currentURL = "",
 //used to parse GET variables from the current URL when opened "fullscreen"
 function getParameterByName(name)
 {
-	name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+	name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\\]");
 	var regexS = "[\\?&]" + name + "=([^&#]*)";
 	var regex = new RegExp(regexS);
 	var results = regex.exec(window.location.href);
@@ -84,6 +84,10 @@ function sendMessageToInjectedJS(message)
 {
 	chrome.tabs.getSelected(null, function(tab){
 		chrome.tabs.sendMessage(tab.id, message, handleMessageFromInjectedJS);
+	}
+	else
+	{
+		console.error("MessageChannel not yet configured, message not sent", message);
 	});
 }
 
@@ -110,6 +114,21 @@ $(document).ready(function(){
 		$("input[name='inputPassName']").eq(0).val("Username");
 		$("input[name='inputPassName']").eq(1).val("Password");
 		
+		
+		//Add keyboard shortcut for add
+		$(document).keyup(function(e) {
+			if(e.which == 17)
+				g_ctrlDown = false;
+		}).keydown(function(e) {
+			if(e.which == 17)
+				g_ctrlDown=true;
+			else if(g_ctrlDown === true && e.which == 68) {		//ctrl+d
+				event.preventDefault();
+				addCredentialPair();
+				return false;
+			}
+		});
+		
 		//check if the notify icon is on and trigger a request
 		//for the login details
 		if($MS.getNotify() && !$MS.checkForSavedAuth())
@@ -126,60 +145,53 @@ $(document).ready(function(){
 						'src' : 'options',
 					});
 				}
+				runPopupInit();
 			});
+		} else {
+			runPopupInit();
 		}
-		
-		//Add keyboard shortcut for add
-		$(document).keyup(function(e) {
-			if(e.which == 17)
-				g_ctrlDown = false;
-		}).keydown(function(e) {
-			if(e.which == 17)
-				g_ctrlDown=true;
-			else if(g_ctrlDown === true && e.which == 68) {		//ctrl+d
-				event.preventDefault();
-				addCredentialPair();
-				return false;
-			}
-		});
-		
-		//if running as a standard popup
-		if(!g_isFullscreen)
-		{
-			stubFunctions.genericRetrieve_currentTab(function(currentTab){	
-				if(!currentTab)
-					return;
-				document.getElementById("domainInput").value = currentTab.url;
-				document.getElementById("domainName").value = currentTab.url;
-				g_currentURL = currentTab.url;
-				
-				//if the user has selected the autofetch option:
-				if($MS.getAutoFetch() == 1)
-				{
-					getPasswords(g_currentURL);
-				}
-			});
-		}
-		//if its a "fullscreen" window then the target URL is URIEncoded as a GET string
-		else
-		{
-			var URL = getParameterByName("URL");
+	});
+});
+
+
+function runPopupInit() {
+	//if running as a standard popup
+	if(!g_isFullscreen)
+	{
+		stubFunctions.genericRetrieve_currentTab(function(currentTab){	
+			if(!currentTab)
+				return;
+			document.getElementById("domainInput").value = currentTab.url;
+			document.getElementById("domainName").value = currentTab.url;
+			g_currentURL = currentTab.url;
 			
-			$("a.hidden_when_max, img.hidden_when_max").hide(0);
-			$("#fullscreen_url").text("Target: "+URL);
-			console.debug("Fullscreen URL:", URL);
-			document.getElementById("domainInput").value = URL;
-			document.getElementById("domainName").value = URL;
-			g_currentURL = URL;
-		
 			//if the user has selected the autofetch option:
 			if($MS.getAutoFetch() == 1)
 			{
 				getPasswords(g_currentURL);
 			}
+		});
+	}
+	//if its a "fullscreen" window then the target URL is URIEncoded as a GET string
+	else
+	{
+		var URL = getParameterByName("URL");
+		
+		$("a.hidden_when_max, img.hidden_when_max").hide(0);
+		$("#fullscreen_url").text("Target: "+URL);
+		console.debug("Fullscreen URL:", URL);
+		document.getElementById("domainInput").value = URL;
+		document.getElementById("domainName").value = URL;
+		g_currentURL = URL;
+	
+		//if the user has selected the autofetch option:
+		if($MS.getAutoFetch() == 1)
+		{
+			getPasswords(g_currentURL);
 		}
-	});
-});
+	}
+	
+}
 
 //Window onload handler
 // runs AFTER jQuery(document).ready();
@@ -242,7 +254,7 @@ function getPasswords(domainName) {
 				key = "",
 				base64decoded="",
 				innerHTML="";
-/*				
+/*
 				console.debug("salt",requestdata.data.Salt);
 */
 				$MC.decodeAndDecrypt(requestdata.data.Credentials, requestdata.data.Salt, requestdata.data.keySlot0, requestdata.data.cryptoScheme, {
