@@ -84,10 +84,6 @@ function sendMessageToInjectedJS(message)
 {
 	chrome.tabs.getSelected(null, function(tab){
 		chrome.tabs.sendMessage(tab.id, message, handleMessageFromInjectedJS);
-	}
-	else
-	{
-		console.error("MessageChannel not yet configured, message not sent", message);
 	});
 }
 
