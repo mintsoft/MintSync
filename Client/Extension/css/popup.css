@@ -126,6 +126,7 @@ div#fetchDiv {
 	margin-top: 0.5ex;
 	max-height: 230px;
 	overflow-y: auto;
+	padding-bottom: 3px;
 }
 
 /**
