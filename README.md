@@ -66,7 +66,7 @@ Please see the ServerUI Branch for instructions and the Server Component.
    SSL connectivity is not *strictly* required to keep the security of your credentials, however 
    it is highly recommended as an unencrypted connection can sniff your URL lists (giving a 
    potential attacker a hit-list to attack) and your login credentials (again the maximum damage 
-   that could be done with this is deleting your passwords or retrieval of your URL lists, not comprimise
+   that could be done with this is deleting your passwords or retrieval of your URL lists, not compromise
    your actual passwords).
 
 * Q: So how secure is this really?
