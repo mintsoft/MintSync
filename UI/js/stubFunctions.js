@@ -14,7 +14,8 @@ this.genericRetrieve_preferencesObj = function(){
 	return { 
 		'ServerURL' : g_serverURL,
 		'SavePassword' : '0.5',
-		'SaveAuthentication' : '0.5'
+		'SaveAuthentication' : '0.5',
+        'GeneratedPasswordLength' : '16'
 	};
 
 }
