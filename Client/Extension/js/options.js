@@ -7,49 +7,53 @@
 	Entry point
 */
 $(document).ready(function(){
+	$(document).autoBars(function() {
+		var optionsFormMarkup = $.handlebarTemplates["optionsForm"]({});
+		$("#optionsFormPlaceholder").replaceWith(optionsFormMarkup);
+		
+		addPreferencesEventHandlers();
+		
+		var preferences = stubFunctions.genericRetrieve_preferencesObj();
+		/* Load Preferences */
+		$("#ServerURL").val(preferences["ServerURL"]);
+		$('input[name="SaveAuth"][value="'+preferences["SaveAuthentication"]+'"]').prop('checked', true);
+		$('input[name="SavePass"][value="'+preferences["SavePassword"]+'"]').prop('checked', true);
+		$('input[name="Cipher"][value="'+preferences["Cipher"]+'"]').prop('checked', true);
+		$('input[name="KeyLength"][value="'+preferences["KeyLength"]+'"]').prop('checked', true);
+		$('input[name="AutoFetch"][value="'+preferences["AutoFetch"]+'"]').prop('checked', true);
+		$('input[name="Notify"][value="'+preferences["Notify"]+'"]').prop('checked', true);
+		$('input[name="NotifySource"][value="'+preferences["NotifySource"]+'"]').prop('checked', true);
+		$("#NotifySourceUpdatePeriod").val(preferences["NotifySourceUpdatePeriod"]);
+		$("#GeneratedPasswordLength").val(preferences["GeneratedPasswordLength"]);
+		$("#SavePassBDuration").val(preferences["SavePassBDuration"] ? preferences["SavePassBDuration"] : 0);
 
-	addPreferencesEventHandlers();
-
-	var preferences = stubFunctions.genericRetrieve_preferencesObj();
-	/* Load Preferences */
-	$("#ServerURL").val(preferences["ServerURL"]);
-	$('input[name="SaveAuth"][value="'+preferences["SaveAuthentication"]+'"]').prop('checked', true);
-	$('input[name="SavePass"][value="'+preferences["SavePassword"]+'"]').prop('checked', true);
-	$('input[name="Cipher"][value="'+preferences["Cipher"]+'"]').prop('checked', true);
-	$('input[name="KeyLength"][value="'+preferences["KeyLength"]+'"]').prop('checked', true);
-	$('input[name="AutoFetch"][value="'+preferences["AutoFetch"]+'"]').prop('checked', true);
-	$('input[name="Notify"][value="'+preferences["Notify"]+'"]').prop('checked', true);
-	$('input[name="NotifySource"][value="'+preferences["NotifySource"]+'"]').prop('checked', true);
-	$("#NotifySourceUpdatePeriod").val(preferences["NotifySourceUpdatePeriod"]);
-	$("#GeneratedPasswordLength").val(preferences["GeneratedPasswordLength"]);
-	$("#SavePassBDuration").val(preferences["SavePassBDuration"] ? preferences["SavePassBDuration"] : 0);
-
-	/* generation options */
-	$('#passwordStrengthNum').prop('checked', preferences["passwordStrengthNum"]=="true");
-	$('#passwordStrengthPunc1').prop('checked', preferences["passwordStrengthPunc1"]=="true");
-	$('#passwordStrengthPunc2').prop('checked', preferences["passwordStrengthPunc2"]=="true");
-	
-	/* Bind the local cache update */
-	$("#localCacheUpdateButton").click(function(){
-		cacheUpdateHandling();
-	});
-	/* console display the local cache */
-	$("#dumpLocalCacheButton").click(function(){
-		var localCache = stubFunctions.genericRetrieve_mintSyncGlobals().urlCache;
-		console.debug(localCache);
-		for(var URL in localCache)
-		{
-			console.debug(localCache[URL]);
-		}
-	});
-	
-	/* Bind force forget saved password*/
-	$("#forgetSavedCryptoPass").click(function(){
-		console.log("Forgetting Saved Crypto Password");
-		//For BG Process/Browser session
-		stubFunctions.genericRetrieve_mintSyncGlobals().passwd = undefined;
-		//For "yes"
-		preferences["SavedPassword"] = undefined;
+		/* generation options */
+		$('#passwordStrengthNum').prop('checked', preferences["passwordStrengthNum"]=="true");
+		$('#passwordStrengthPunc1').prop('checked', preferences["passwordStrengthPunc1"]=="true");
+		$('#passwordStrengthPunc2').prop('checked', preferences["passwordStrengthPunc2"]=="true");
+		
+		/* Bind the local cache update */
+		$("#localCacheUpdateButton").click(function(){
+			cacheUpdateHandling();
+		});
+		/* console display the local cache */
+		$("#dumpLocalCacheButton").click(function(){
+			var localCache = stubFunctions.genericRetrieve_mintSyncGlobals().urlCache;
+			console.debug(localCache);
+			for(var URL in localCache)
+			{
+				console.debug(localCache[URL]);
+			}
+		});
+		
+		/* Bind force forget saved password*/
+		$("#forgetSavedCryptoPass").click(function(){
+			console.log("Forgetting Saved Crypto Password");
+			//For BG Process/Browser session
+			stubFunctions.genericRetrieve_mintSyncGlobals().passwd = undefined;
+			//For "yes"
+			preferences["SavedPassword"] = undefined;
+		});
 	});
 });
 
