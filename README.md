@@ -317,12 +317,8 @@ Sizzle Selector Engine:
 	 *  More information: http://sizzlejs.com/
 	 */
 	 
-AES:	http://www.movable-type.co.uk/scripts/aes.html under creative commons, (http://creativecommons.org/licenses/by/3.0/)
-
-	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-	/*  AES implementation in JavaScript (c) Chris Veness 2005-2011                                   */
-	/*   - see http://csrc.nist.gov/publications/PubsFIPS.html#197                                    */
-	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+AES:
+SlowAES: http://code.google.com/p/slowaes/ Apache version 2.0
 
 json2.js:     http://www.JSON.org/json2.js
 
