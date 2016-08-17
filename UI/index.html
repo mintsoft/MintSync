@@ -5,8 +5,6 @@
   	<title>MintSync Server UI - User Mode</title>
 	<link rel="stylesheet" href="css/common.css" type="text/css" />
 	<link rel="stylesheet" href="css/passwordMatrix.css" type="text/css" />
-	<link rel="stylesheet" href="css/mobile.css" type="text/css" />
-	
 	<script type="text/javascript" src='js/jquery.js'></script>
 	<script type="text/javascript" src='js/jquery.simplemodal-1.4.4.js'></script>
 	<script type="text/javascript" src='js/handlebars.js'></script>
@@ -14,10 +12,10 @@
 
 	<script type="text/javascript" src="js/sha.js"></script>
 	<script type="text/javascript" src="js/AES.js"></script>
-
+	
 	<script type="text/javascript" src="js/slowAES.js"></script>
-	<script type="text/javascript" src="js/cryptoHelpers.js"></script>
-	<script type="text/javascript" src="js/jsHash.js"></script>
+	<script type="text/javascript" src="js/cryptoHelpers.js"></script>	
+	<script type="text/javascript" src="js/jsHash.js"></script>	
 	
 	<script type="text/javascript" src="js/php_js/utf8_decode.js"></script>
 	<script type="text/javascript" src="js/php_js/utf8_encode.js"></script>
@@ -36,7 +34,7 @@
 	
 	<!-- Handlebars partials -->
 	<script src='partials/saveForm.html' type="text/x-handlebars-template"></script>
-	
+	<script src='partials/optionsForm.html' type="text/x-handlebars-template"></script>
 	<!-- Mobile Tags -->
 	<meta name="HandheldFriendly" content="true" />
 	<meta name="viewport" content="width=device-width, user-scalable=no, target-densitydpi=device-dpi">
@@ -52,14 +50,12 @@
 			<p class='instructions'>
 				Below is a list of all the URLs with saved credentials, which can be filtered using the search box above. 
 			</p>
-			<!--
 			<p>
 				Clicking on a URL will download and decrypt the credentials for that domain, double clicking will rename the item, the bin icon will delete the credentials (you will be asked to confirm as this is irreversible).
 			</p>
 			<p>
 				In addition, <a href='http://www.sqlite.org/lang_expr.html#like'>SQL LIKE wildcards</a> (<code>%</code> and <code>_</code>) can be used within URLS for fuzzy matches (for example: https://example.com/% would return credentials for any URL on example.com). <code>%%</code> will represent a <code>%</code> literal. When URLS are inserted by the popup, wildcard characters will be automatically used as literals.
 			</p>
-			-->
 			<div id='retrieveOutput' >
 				<div id='matrixLoading' class='hidden'>
 					Fetching List...
@@ -100,7 +96,6 @@
 				</ul>
 			</div>
 		</form>
-		
 	</div>
 	<div id='variableWidth'>|<->|</div>
 	<div id='saveFormContainer' class='hidden'></div>
