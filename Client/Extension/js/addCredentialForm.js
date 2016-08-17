@@ -53,13 +53,12 @@ function AddCredentialForm() {
 			
 		target.appendChild(tmpObj);
 		
-		var passwordLength = $MS.getGeneratedPasswordLength();
-		
 		//add click handler
 		//using contextmenu instead of click so that it can be cancelled on the maximised version
 		$(tmpObj).find("input[name='inputPassValue']").bind("contextmenu", function(event){
 			if($(this).val() === "")
 			{
+				var passwordLength = $MS.getGeneratedPasswordLength();
 				$(this).val($MS.generatePassword(passwordLength));
 				event.preventDefault();
 				return false;
@@ -69,6 +68,7 @@ function AddCredentialForm() {
 				g_ctrlDown=true;
 			else if(g_ctrlDown === true && e.which == 71) {		//ctrl+g
 				event.preventDefault();
+				var passwordLength = $MS.getGeneratedPasswordLength();
 				$(this).val($MS.generatePassword(passwordLength));
 				return false;
 			}
