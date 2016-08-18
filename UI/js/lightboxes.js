@@ -8,7 +8,6 @@ function MS_Lightboxes() {
 			.modal({
 				overlayClose: true,
 				escClose: true,
-				autoResize: true,
 				onClose: function (dialog) {
 					if (callbacks && callbacks.abort)
 						callbacks.abort();
