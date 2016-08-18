@@ -39,9 +39,13 @@ ul.options {
 }
 
 ul.options li {
-	height: 5ex;
 	line-height: 5ex;
 	margin-bottom: 1ex;
+}
+
+ul.options li .mini-instructions {
+	line-height: 100%;
+	padding-top: 0.5ex;
 }
 
 .disabled {
