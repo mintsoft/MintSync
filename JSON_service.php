@@ -111,6 +111,13 @@ switch ($action)
 		if (!empty($_PUT['newKeySlot']) && !empty($_PUT['newKeySlot0PassHash']))
 			$mintsyncServer->setKeySlot(0, $_PUT['newKeySlot'], $_PUT['newKeySlot0PassHash']);
 	break;
+	case "getUserOptions":
+		$mintsyncServer->getUserOptions();
+	break;
+	case "setUserOptions":
+		if(!empty($_POST['options']))
+			$mintsyncServer->getUserOptions($_PUT['options']);
+	break;
 }
 
 $restTool = new restTools();
@@ -120,5 +127,5 @@ $restTool->sendResponse(array(
 	"data" => array(
 		"reason" => "Required data was missing"
 	)
-		), restTools::$HTTPCodes['BAD_REQUEST']); //Bad Request
+), restTools::$HTTPCodes['BAD_REQUEST']); //Bad Request
 ?>

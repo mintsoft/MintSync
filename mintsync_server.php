@@ -403,7 +403,58 @@ class mintsync_server
 				"status" => "fail",
 				"action" => "retrieveKeySlot0",
 				"data" => false
-			), restTools::$HTTPCodes['EXPECTATION_FAILED']); //Expectation Failed
+			), restTools::$HTTPCodes['EXPECTATION_FAILED']);
+		}
+	}
+
+	/**
+	 *	Retrieves the optionsBlob for the user 
+	 */
+	public function getUserOptions()
+	{
+		$stmt = $this->db->prepare("SELECT preferences FROM user WHERE ID=:userID");
+		$stmt->bindValue(":userID", $this->userID, PDO::PARAM_INT);
+		$stmt->execute();
+
+		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		if(isset($rows[0])) {
+			$this->restTool->sendResponse(array(
+				"status" => "ok",
+				"action" => "getUserOptions",
+				"data"	=> $rows[0]
+			));
+		} else {
+			$this->restTool->sendResponse(array(
+				"status" => "fail",
+				"action" => "getUserOptions",
+				"data" => false
+			), restTools::$HTTPCodes['EXPECTATION_FAILED']);
+		}
+	}
+
+	/**
+	 *	Sets the optionsBlob for the user 
+	 */
+	public function setUserOptions($options)
+	{
+		$stmt = $this->db->prepare("UPDATE user SET preferences=:preferences WHERE ID=:userID");
+		$stmt->bindValue(":userID", $this->userID, PDO::PARAM_INT);
+		$stmt->bindValue(":preferences", $options, PDO::PARAM_STR);
+		$stmt->execute();
+
+		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		if(isset($rows[0])) {
+			$this->restTool->sendResponse(array(
+				"status" => "ok",
+				"action" => "setUserOptions",
+				"data"	=> array()
+			));
+		} else {
+			$this->restTool->sendResponse(array(
+				"status" => "fail",
+				"action" => "setUserOptions",
+				"data" => false
+			), restTools::$HTTPCodes['EXPECTATION_FAILED']);
 		}
 	}
 
