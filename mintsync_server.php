@@ -408,9 +408,9 @@ class mintsync_server
 	}
 
 	/**
-	 *	Retrieves the optionsBlob for the user 
+	 *	Retrieves the preferences for the user 
 	 */
-	public function getUserOptions()
+	public function getUserPreferences()
 	{
 		$stmt = $this->db->prepare("SELECT preferences FROM user WHERE ID=:userID");
 		$stmt->bindValue(":userID", $this->userID, PDO::PARAM_INT);
@@ -420,39 +420,39 @@ class mintsync_server
 		if(isset($rows[0])) {
 			$this->restTool->sendResponse(array(
 				"status" => "ok",
-				"action" => "getUserOptions",
+				"action" => "getUserPreferences",
 				"data"	=> $rows[0]
 			));
 		} else {
 			$this->restTool->sendResponse(array(
 				"status" => "fail",
-				"action" => "getUserOptions",
+				"action" => "getUserPreferences",
 				"data" => false
 			), restTools::$HTTPCodes['EXPECTATION_FAILED']);
 		}
 	}
 
 	/**
-	 *	Sets the optionsBlob for the user 
+	 *	Sets the Preferences for the user 
 	 */
-	public function setUserOptions($options)
+	public function setUserPreferences($preferences)
 	{
 		$stmt = $this->db->prepare("UPDATE user SET preferences=:preferences WHERE ID=:userID");
 		$stmt->bindValue(":userID", $this->userID, PDO::PARAM_INT);
-		$stmt->bindValue(":preferences", $options, PDO::PARAM_STR);
+		$stmt->bindValue(":preferences", $preferences, PDO::PARAM_STR);
 		$stmt->execute();
 
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		if(isset($rows[0])) {
 			$this->restTool->sendResponse(array(
 				"status" => "ok",
-				"action" => "setUserOptions",
+				"action" => "setUserPreferences",
 				"data"	=> array()
 			));
 		} else {
 			$this->restTool->sendResponse(array(
 				"status" => "fail",
-				"action" => "setUserOptions",
+				"action" => "setUserPreferences",
 				"data" => false
 			), restTools::$HTTPCodes['EXPECTATION_FAILED']);
 		}

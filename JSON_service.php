@@ -111,12 +111,12 @@ switch ($action)
 		if (!empty($_PUT['newKeySlot']) && !empty($_PUT['newKeySlot0PassHash']))
 			$mintsyncServer->setKeySlot(0, $_PUT['newKeySlot'], $_PUT['newKeySlot0PassHash']);
 	break;
-	case "getUserOptions":
-		$mintsyncServer->getUserOptions();
+	case "getUserPreferences":
+		$mintsyncServer->getUserPreferences();
 	break;
-	case "setUserOptions":
-		if(!empty($_POST['options']))
-			$mintsyncServer->getUserOptions($_PUT['options']);
+	case "setUserPreferences":
+		if(!empty($_POST['preferences']))
+			$mintsyncServer-setUserPreferences($_PUT['preferences']);
 	break;
 }
 
