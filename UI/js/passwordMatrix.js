@@ -64,6 +64,11 @@ $(document).ready(function(){
 				});
 			});
 		});
+
+		$("#optionsButton").click(function(e) {
+			e.preventDefault();
+			lightboxes.modalThis($("#optionsFormContainer"));
+		});
 		
 		//add variable width button
 		$("#variableWidth").click(function(){
