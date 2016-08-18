@@ -65,7 +65,7 @@ $(document).ready(function(){
 			});
 		});
 
-		$("#optionsButton").click(function(e) {
+		$("#showOptionsButton").click(function(e) {
 			e.preventDefault();
 			lightboxes.modalThis($("#optionsFormContainer"));
 		});
