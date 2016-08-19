@@ -458,7 +458,95 @@ function MintSync() {
 			});
 		});
 		
-	};	
+	};
+
+	/*
+		Retrieves the options saved for the user server-side
+	*/
+	this.retrieveServerSavedPreferences = function(callbacks) {
+		$MS.getAuthenticationObject(function(authObj){
+					
+			$.ajax({
+				type: "GET",
+				url:$MS.getServerURL()+"?AJAX=true&action=getUserPreferences",
+				cache: false,
+				beforeSend: function(jq,settings) {
+					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					{
+						alert("Please configure the Server URL");
+						return false;
+					}
+					//add the headers for the auth:
+					$MS.configureAuth(jq,settings,authObj);
+					
+					if(callbacks.beforeSend !== undefined)
+						callbacks.beforeSend(jq,settings);
+				},
+				complete: function(jq,textStatus) {
+					if(callbacks.complete !== undefined)
+						callbacks.complete(jq,textStatus);
+				},
+				error: function(jq,textStatus,errorThrown) {
+					if(jq.status==401)	//incorrect credentials
+					{
+						$MS.resetSavedCredentials();
+					}
+					if(callbacks.error !== undefined)
+						callbacks.error(jq,textStatus,errorThrown);
+				},
+				success: function(data,textStatus,jq) {
+					if(callbacks.success !== undefined)
+						callbacks.success(data);
+				}
+			});
+		});
+	};
+
+	/*
+		Updates the options saved against the user server-side
+	*/
+	this.UpdateServerSavedPreferences = function(preferences, callbacks) {
+		$MS.getAuthenticationObject(function(authObj){
+					
+			$.ajax({
+				type: "GET",
+				url:$MS.getServerURL()+"?AJAX=true&action=setUserPreferences",
+				cache: false,
+				data: {
+					"preferences": preferences
+				},
+				beforeSend: function(jq,settings) {
+					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					{
+						alert("Please configure the Server URL");
+						return false;
+					}
+					//add the headers for the auth:
+					$MS.configureAuth(jq,settings,authObj);
+					
+					if(callbacks.beforeSend !== undefined)
+						callbacks.beforeSend(jq,settings);
+				},
+				complete: function(jq,textStatus) {
+					if(callbacks.complete !== undefined)
+						callbacks.complete(jq,textStatus);
+				},
+				error: function(jq,textStatus,errorThrown) {
+					if(jq.status==401)	//incorrect credentials
+					{
+						$MS.resetSavedCredentials();
+					}
+					if(callbacks.error !== undefined)
+						callbacks.error(jq,textStatus,errorThrown);
+				},
+				success: function(data,textStatus,jq) {
+					if(callbacks.success !== undefined)
+						callbacks.success(data);
+				}
+			});
+		});
+	};
+
 	/** 
 		Takes a jQuery AJAX object and does the voodoo to the headers for auth 
 		last argument is whether to prompt or not
@@ -577,10 +665,8 @@ function MintSync() {
 				{
 					return stubFunctions.genericRetrieve_mintSyncGlobals().authentication !== undefined;
 				}
-			break;
 			case "0.5":
 				return $MS.rememberedAuthentication !== undefined;
-//			case "0":
 			default:
 				return false;
 		}
@@ -703,7 +789,6 @@ function MintSync() {
 			case "0.5":
 				$MS.rememberedAuthentication = undefined;
 			break;
-//			case "0":
 			default:
 		}
 	};	
@@ -731,7 +816,6 @@ function MintSync() {
 			case "0.5":
 				$MS.rememberedPassword = undefined;
 			break;
-//			case "0":
 			default:
 		}
 	};
