@@ -116,7 +116,7 @@ switch ($action)
 	break;
 	case "setUserPreferences":
 		if(!empty($_POST['preferences']))
-			$mintsyncServer-setUserPreferences($_PUT['preferences']);
+			$mintsyncServer->setUserPreferences($_PUT['preferences']);
 	break;
 }
 
