@@ -8,26 +8,28 @@ var g_ctrlDown = false;
 /** 
 	MintSync Object
 */
-function MintSync() {
+function MintSync(userPreferenceServiceProvider) {
 	this.rememberedPassword = undefined;
+	this.userPreferences = userPreferenceServiceProvider;
+	var self = this;
 	/*
 		Retrieve passwords for the passed domain
 	*/
 	this.getPasswords = function(Domain, callbacks) {
-		$MS.getAuthenticationObject(function(authObj){
+		self.getAuthenticationObject(function(authObj){
 			$.ajax({
 				type: "GET",
 				data: {URL:Domain},
 				cache: false,
-				url:$MS.getServerURL()+"?AJAX=true&action=retrieve",
+				url:self.getServerURL() + "?AJAX=true&action=retrieve",
 				beforeSend: function(jq,settings) {
-					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					if(self.getServerURL()==="https://example.com/mypasswords/")
 					{
 						alert("Please configure the Server URL");
 						return false;
 					}
 					//add the headers for the auth:
-					$MS.configureAuth(jq,settings,authObj);
+					self.configureAuth(jq,settings,authObj);
 					
 					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
@@ -40,7 +42,7 @@ function MintSync() {
 					console.error(jq.status);
 					if(jq.status==401)	//incorrect credentials
 					{
-						$MS.resetSavedCredentials();
+						self.resetSavedCredentials();
 					}
 					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
@@ -57,20 +59,20 @@ function MintSync() {
 		Retrieve passwords for the passed ID
 	*/
 	this.getPasswordsByID = function(IDnum, callbacks) {
-		$MS.getAuthenticationObject(function(authObj){
+		self.getAuthenticationObject(function(authObj){
 			$.ajax({
 				type: "GET",
 				data: {ID:IDnum},
 				cache: false,
-				url:$MS.getServerURL()+"?AJAX=true&action=retrieve",
+				url:self.getServerURL()+"?AJAX=true&action=retrieve",
 				beforeSend: function(jq,settings) {
-					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					if(self.getServerURL()==="https://example.com/mypasswords/")
 					{
 						alert("Please configure the Server URL");
 						return false;
 					}
 					//add the headers for the auth:
-					$MS.configureAuth(jq,settings,authObj);
+					self.configureAuth(jq,settings,authObj);
 					
 					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
@@ -83,7 +85,7 @@ function MintSync() {
 					console.error(jq.status);
 					if(jq.status==401)	//incorrect credentials
 					{
-						$MS.resetSavedCredentials();
+						self.resetSavedCredentials();
 					}
 					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
@@ -100,20 +102,20 @@ function MintSync() {
 		Retrieve passwords for the passed domain
 	*/
 	this.checkIfPasswordsExist = function(Domain,callbacks) {
-		if(!$MS.checkForSavedAuth())
+		if(!self.checkForSavedAuth())
 		{
 			console.info("No Saved Authenticaiton, checkIfPasswordsExist cancelled");
 			return false;
 		}
 		
-		$MS.getAuthenticationObject(function(authObj){
+		self.getAuthenticationObject(function(authObj){
 			$.ajax({
 				type: "GET",
 				data: {URL:Domain},
 				cache: false,
-				url:$MS.getServerURL()+"?AJAX=true&action=check",
+				url:self.getServerURL()+"?AJAX=true&action=check",
 				beforeSend: function(jq,settings) {
-					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					if(self.getServerURL()==="https://example.com/mypasswords/")
 					{
 						alert("Please configure the Server URL");
 						return false;
@@ -121,7 +123,7 @@ function MintSync() {
 					//add the headers for the auth:
 					//returns false if there are no saved credentials
 					//so return false to cancel the request
-					if(!$MS.configureAuth(jq,settings,authObj))
+					if(!self.configureAuth(jq,settings,authObj))
 					{
 						//console.info("Check URL Request cancelled, no auth");
 						return false;
@@ -138,7 +140,7 @@ function MintSync() {
 				error: function(jq,textStatus,errorThrown) {
 					if(jq.status==401)	//incorrect credentials
 					{
-						$MS.resetSavedCredentials();
+						self.resetSavedCredentials();
 					}
 				//console.info("Check URL Request  errors");
 					if(callbacks.error !== undefined)
@@ -157,20 +159,20 @@ function MintSync() {
 		Retrieve passwords for the passed domain
 	*/
 	this.listURLS = function(callbacks) {
-		$MS.getAuthenticationObject(function(authObj){
+		self.getAuthenticationObject(function(authObj){
 					
 			$.ajax({
 				type: "GET",
-				url:$MS.getServerURL()+"?AJAX=true&action=list",
+				url:self.getServerURL()+"?AJAX=true&action=list",
 				cache: false,
 				beforeSend: function(jq,settings) {
-					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					if(self.getServerURL()==="https://example.com/mypasswords/")
 					{
 						alert("Please configure the Server URL");
 						return false;
 					}
 					//add the headers for the auth:
-					$MS.configureAuth(jq,settings,authObj);
+					self.configureAuth(jq,settings,authObj);
 					
 					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
@@ -182,7 +184,7 @@ function MintSync() {
 				error: function(jq,textStatus,errorThrown) {
 					if(jq.status==401)	//incorrect credentials
 					{
-						$MS.resetSavedCredentials();
+						self.resetSavedCredentials();
 					}
 					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
@@ -198,7 +200,7 @@ function MintSync() {
 		Performs the AJAX request saving the password
 	*/
 	this.setPassword = function(Domain,Credentials,rowSalt,cryptoHash,force,cryptoScheme,callbacks) {
-		$MS.getAuthenticationObject(function(authObj){
+		self.getAuthenticationObject(function(authObj){
 			$.ajax({
 				type: "POST",
 				data: {
@@ -210,15 +212,15 @@ function MintSync() {
 					"force":force
 				},
 				cache: false,
-				url:$MS.getServerURL()+"?AJAX=true&action=save",
+				url:self.getServerURL()+"?AJAX=true&action=save",
 				beforeSend: function(jq,settings) {
-					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					if(self.getServerURL()==="https://example.com/mypasswords/")
 					{
 						alert("Please configure the Server URL");
 						return false;
 					}
 					//add the headers for the auth:
-					$MS.configureAuth(jq,settings,authObj);
+					self.configureAuth(jq,settings,authObj);
 					
 					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
@@ -230,7 +232,7 @@ function MintSync() {
 				error: function(jq,textStatus,errorThrown) {
 					if(jq.status==401)	//incorrect credentials
 					{
-						$MS.resetSavedCredentials();
+						self.resetSavedCredentials();
 					}
 					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
@@ -246,19 +248,19 @@ function MintSync() {
 	/** removes the password with the request ID */
 	
 	this.removePasswords = function(ID,url,callbacks) {
-		$MS.getAuthenticationObject(function(authObj){
+		self.getAuthenticationObject(function(authObj){
 			$.ajax({
 				type: "DELETE",
-				url:$MS.getServerURL()+"?AJAX=true&action=remove&ID="+ID,
+				url:self.getServerURL()+"?AJAX=true&action=remove&ID="+ID,
 				cache: false,
 				beforeSend: function(jq,settings) {
-					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					if(self.getServerURL()==="https://example.com/mypasswords/")
 					{
 						alert("Please configure the Server URL");
 						return false;
 					}
 					//add the headers for the auth:
-					$MS.configureAuth(jq,settings,authObj);
+					self.configureAuth(jq,settings,authObj);
 					
 					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
@@ -270,7 +272,7 @@ function MintSync() {
 				error: function(jq,textStatus,errorThrown) {
 					if(jq.status==401)	//incorrect credentials
 					{
-						$MS.resetSavedCredentials();
+						self.resetSavedCredentials();
 					}
 					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
@@ -287,20 +289,20 @@ function MintSync() {
 		Performs the AJAX request renaming the URL with the ID passed
 	*/
 	this.renameURL = function(ID,newDomain,callbacks) {
-		$MS.getAuthenticationObject(function(authObj){
+		self.getAuthenticationObject(function(authObj){
 			$.ajax({
 				type: "PUT",
 				data: {"ID":ID,"newURL":newDomain},
-				url:$MS.getServerURL()+"?AJAX=true&action=rename",
+				url:self.getServerURL()+"?AJAX=true&action=rename",
 				cache: false,
 				beforeSend: function(jq,settings) {
-					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					if(self.getServerURL()==="https://example.com/mypasswords/")
 					{
 						alert("Please configure the Server URL");
 						return false;
 					}
 					//add the headers for the auth:
-					$MS.configureAuth(jq,settings,authObj);
+					self.configureAuth(jq,settings,authObj);
 					
 					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
@@ -312,7 +314,7 @@ function MintSync() {
 				error: function(jq,textStatus,errorThrown) {
 					if(jq.status==401)	//incorrect credentials
 					{
-						$MS.resetSavedCredentials();
+						self.resetSavedCredentials();
 					}
 					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
@@ -330,22 +332,22 @@ function MintSync() {
 	this.verifyCryptoPass = function(passwordHash,callbacks) {
 	
 		//do hash the password again (so it is double hashed)
-		passwordHash = $MS.hashPass(passwordHash);
+		passwordHash = self.hashPass(passwordHash);
 	
-		$MS.getAuthenticationObject(function(authObj){
+		self.getAuthenticationObject(function(authObj){
 			$.ajax({
 				type: "GET",
 				data: {"cryptoHash":passwordHash},
-				url: $MS.getServerURL()+"?AJAX=true&action=confirmCrypto",
+				url: self.getServerURL()+"?AJAX=true&action=confirmCrypto",
 				cache: false,
 				beforeSend: function(jq,settings) {
-					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					if(self.getServerURL()==="https://example.com/mypasswords/")
 					{
 						alert("Please configure the Server URL");
 						return false;
 					}
 					//add the headers for the auth:
-					$MS.configureAuth(jq,settings,authObj);
+					self.configureAuth(jq,settings,authObj);
 					
 					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
@@ -357,7 +359,7 @@ function MintSync() {
 				error: function(jq,textStatus,errorThrown) {
 					if(jq.status==401)	//incorrect credentials
 					{
-						$MS.resetSavedCredentials();
+						self.resetSavedCredentials();
 					}
 					else if(jq.status==417) //Hash doesn't match
 					{
@@ -378,19 +380,19 @@ function MintSync() {
 		Retrieves the keySlot password for the user 
 	*/
 	this.getKeySlot = function(callbacks) {
-		$MS.getAuthenticationObject(function(authObj){
+		self.getAuthenticationObject(function(authObj){
 			$.ajax({
 				type: "GET",
-				url:$MS.getServerURL()+"?AJAX=true&action=retrieveKeySlot0",
+				url:self.getServerURL()+"?AJAX=true&action=retrieveKeySlot0",
 				cache: false,
 				beforeSend: function(jq,settings) {
-					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					if(self.getServerURL()==="https://example.com/mypasswords/")
 					{
 						alert("Please configure the Server URL");
 						return false;
 					}
 					//add the headers for the auth:
-					$MS.configureAuth(jq,settings,authObj);
+					self.configureAuth(jq,settings,authObj);
 					
 					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
@@ -402,7 +404,7 @@ function MintSync() {
 				error: function(jq,textStatus,errorThrown) {
 					if(jq.status==401)	//incorrect credentials
 					{
-						$MS.resetSavedCredentials();
+						self.resetSavedCredentials();
 					}
 					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
@@ -418,7 +420,7 @@ function MintSync() {
 		Performs the AJAX request saving the password
 	*/
 	this.setKeySlot = function(newKeySlot, newKeySlot0PassHash, callbacks) {
-		$MS.getAuthenticationObject(function(authObj){
+		self.getAuthenticationObject(function(authObj){
 			$.ajax({
 				type: "PUT",
 				data: {
@@ -426,15 +428,15 @@ function MintSync() {
 					"newKeySlot0PassHash":newKeySlot0PassHash,
 				},
 				cache: false,
-				url:$MS.getServerURL()+"?AJAX=true&action=setKeySlot",
+				url:self.getServerURL()+"?AJAX=true&action=setKeySlot",
 				beforeSend: function(jq,settings) {
-					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					if(self.getServerURL()==="https://example.com/mypasswords/")
 					{
 						alert("Please configure the Server URL");
 						return false;
 					}
 					//add the headers for the auth:
-					$MS.configureAuth(jq,settings,authObj);
+					self.configureAuth(jq,settings,authObj);
 					
 					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
@@ -446,7 +448,7 @@ function MintSync() {
 				error: function(jq,textStatus,errorThrown) {
 					if(jq.status==401)	//incorrect credentials
 					{
-						$MS.resetSavedCredentials();
+						self.resetSavedCredentials();
 					}
 					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
@@ -464,20 +466,20 @@ function MintSync() {
 		Retrieves the options saved for the user server-side
 	*/
 	this.retrieveServerSavedPreferences = function(callbacks) {
-		$MS.getAuthenticationObject(function(authObj){
+		self.getAuthenticationObject(function(authObj){
 					
 			$.ajax({
 				type: "GET",
-				url:$MS.getServerURL()+"?AJAX=true&action=getUserPreferences",
+				url:self.getServerURL()+"?AJAX=true&action=getUserPreferences",
 				cache: false,
 				beforeSend: function(jq,settings) {
-					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					if(self.getServerURL()==="https://example.com/mypasswords/")
 					{
 						alert("Please configure the Server URL");
 						return false;
 					}
 					//add the headers for the auth:
-					$MS.configureAuth(jq,settings,authObj);
+					self.configureAuth(jq,settings,authObj);
 					
 					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
@@ -489,7 +491,7 @@ function MintSync() {
 				error: function(jq,textStatus,errorThrown) {
 					if(jq.status==401)	//incorrect credentials
 					{
-						$MS.resetSavedCredentials();
+						self.resetSavedCredentials();
 					}
 					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
@@ -506,23 +508,23 @@ function MintSync() {
 		Updates the options saved against the user server-side
 	*/
 	this.UpdateServerSavedPreferences = function(preferences, callbacks) {
-		$MS.getAuthenticationObject(function(authObj){
+		self.getAuthenticationObject(function(authObj){
 					
 			$.ajax({
 				type: "GET",
-				url:$MS.getServerURL()+"?AJAX=true&action=setUserPreferences",
+				url:self.getServerURL()+"?AJAX=true&action=setUserPreferences",
 				cache: false,
 				data: {
 					"preferences": preferences
 				},
 				beforeSend: function(jq,settings) {
-					if($MS.getServerURL()==="https://example.com/mypasswords/")
+					if(self.getServerURL()==="https://example.com/mypasswords/")
 					{
 						alert("Please configure the Server URL");
 						return false;
 					}
 					//add the headers for the auth:
-					$MS.configureAuth(jq,settings,authObj);
+					self.configureAuth(jq,settings,authObj);
 					
 					if(callbacks.beforeSend !== undefined)
 						callbacks.beforeSend(jq,settings);
@@ -534,7 +536,7 @@ function MintSync() {
 				error: function(jq,textStatus,errorThrown) {
 					if(jq.status==401)	//incorrect credentials
 					{
-						$MS.resetSavedCredentials();
+						self.resetSavedCredentials();
 					}
 					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
@@ -559,7 +561,7 @@ function MintSync() {
 		//AuthObject contains the username and SHA-512 of the password
 		var	shaObj,hash,
 			authStr = "",
-			nonce = $MS.generateRowSalt();
+			nonce = self.generateRowSalt();
 		
 		authStr = AuthObject.username+"|"+nonce+"|";
 		hash = AuthObject.password;
@@ -590,7 +592,7 @@ function MintSync() {
 		{
 			if(!preferences["SavedPassword"] || preferences["SavedPassword"]==="undefined")
 				lightboxes.askForPassword(strPrompt,function(password){
-					var hash  = $MS.hashPass(password);
+					var hash  = self.hashPass(password);
 					preferences["SavedPassword"] = hash;
 					successCallback(preferences["SavedPassword"]);
 				});
@@ -605,7 +607,7 @@ function MintSync() {
 			if(passwd === undefined)
 			{
 				lightboxes.askForPassword(strPrompt,function(password){
-					var hash  = $MS.hashPass(password);
+					var hash  = self.hashPass(password);
 					
 					//set the password in the background process
 					stubFunctions.genericRetrieve_mintSyncGlobals().passwd = hash;
@@ -631,18 +633,18 @@ function MintSync() {
 		else if (preferences["SavePassword"]==0.5)
 		{
 			//request password and store in global
-			if($MS.rememberedPassword === undefined)
+			if(self.rememberedPassword === undefined)
 				lightboxes.askForPassword(strPrompt,function(password){
-					$MS.rememberedPassword = $MS.hashPass(password);
-					successCallback($MS.rememberedPassword);
+					self.rememberedPassword = self.hashPass(password);
+					successCallback(self.rememberedPassword);
 				});
 			else
-				successCallback($MS.rememberedPassword);
+				successCallback(self.rememberedPassword);
 		}
 		else 
 		{
 			lightboxes.askForPassword(strPrompt,function(password){
-				successCallback($MS.hashPass(password));
+				successCallback(self.hashPass(password));
 			});
 		}
 	};
@@ -666,7 +668,7 @@ function MintSync() {
 					return stubFunctions.genericRetrieve_mintSyncGlobals().authentication !== undefined;
 				}
 			case "0.5":
-				return $MS.rememberedAuthentication !== undefined;
+				return self.rememberedAuthentication !== undefined;
 			default:
 				return false;
 		}
@@ -681,10 +683,10 @@ function MintSync() {
 		
 		if(preferences["SaveAuthentication"]==1)
 		{
-			if(!$MS.checkForSavedAuth())
+			if(!self.checkForSavedAuth())
 			{
 				lightboxes.askForUsernamePassword(promptStr,function(authObj){
-					authObj.password = $MS.hashPass(authObj.password);
+					authObj.password = self.hashPass(authObj.password);
 					preferences["SavedAuthentication"] = JSON.stringify(authObj);
 					authCallback($.parseJSON(preferences["SavedAuthentication"]));
 				});
@@ -697,13 +699,13 @@ function MintSync() {
 		else if (preferences["SaveAuthentication"]==0.8)
 		{
 				
-			if(!$MS.checkForSavedAuth())
+			if(!self.checkForSavedAuth())
 			{
 				if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess so don't prompt!
 					return;
 				
 				lightboxes.askForUsernamePassword(promptStr,function(authObj){
-					authObj.password = $MS.hashPass(authObj.password);
+					authObj.password = self.hashPass(authObj.password);
 					//set the password in the background process
 					
 					if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess
@@ -743,23 +745,23 @@ function MintSync() {
 		else if (preferences["SaveAuthentication"]==0.5)
 		{
 			//request password and store in global
-			if(!$MS.checkForSavedAuth())
+			if(!self.checkForSavedAuth())
 			{
 				lightboxes.askForUsernamePassword(promptStr,function(authObj){
-					authObj.password = $MS.hashPass(authObj.password);
-					$MS.rememberedAuthentication = authObj;
+					authObj.password = self.hashPass(authObj.password);
+					self.rememberedAuthentication = authObj;
 					authCallback(authObj);
 				});
 			}
 			else
 			{
-				authCallback($MS.rememberedAuthentication);
+				authCallback(self.rememberedAuthentication);
 			}
 		}
 		else
 		{
 			lightboxes.askForUsernamePassword(promptStr, function(authObj){
-				authObj.password = $MS.hashPass(authObj.password);
+				authObj.password = self.hashPass(authObj.password);
 				authCallback(authObj);
 			});
 		}
@@ -787,7 +789,7 @@ function MintSync() {
 				
 			break;
 			case "0.5":
-				$MS.rememberedAuthentication = undefined;
+				self.rememberedAuthentication = undefined;
 			break;
 			default:
 		}
@@ -814,7 +816,7 @@ function MintSync() {
 				
 			break;
 			case "0.5":
-				$MS.rememberedPassword = undefined;
+				self.rememberedPassword = undefined;
 			break;
 			default:
 		}
@@ -862,7 +864,7 @@ function MintSync() {
 		//	return "6";		//chosen by random dice roll, guaranteed to be random
 		//| is not in this sourceSet because its used as a delimiter for the auth
 		var sourceSet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`~!@#$%^&*()-_=+[{]}\\;:'\",<.>/?",
-			length = $MS.getGeneratedRowSaltLength(), 
+			length = self.getGeneratedRowSaltLength(), 
 			salt="";
 			
 		for(var x=0;x<length;++x)
