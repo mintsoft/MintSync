@@ -651,12 +651,11 @@ function MintSync(userPreferenceServiceProvider) {
 		Returns a boolean representing whether or not we have any credentials saved
 	**/
 	this.checkForSavedAuth = function() {
-		var preferences = stubFunctions.genericRetrieve_preferencesObj();
-		
-		switch(preferences["SaveAuthentication"])
+
+		switch(userPreferences.get("SaveAuthentication"))
 		{
 			case "1":
-				return !(preferences["SavedAuthentication"]=="undefined" && preferences["SavedAuthentication"]);
+				return !(userPreferences.get("SavedAuthentication") == "undefined" && userPreferences.get("SavedAuthentication"));
 			case "0.8":
 				if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess
 				{
