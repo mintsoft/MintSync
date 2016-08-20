@@ -17,18 +17,18 @@
 		<!-- memory options for crypto password -->
 		<li class='advancedOption indented'><span class='bigLabel'>Remember For</span> 
 			<input type='number' name='SavePassBDuration' id='SavePassBDuration' min='0' max='360' step='1'/> <label for='SavePassBDuration'>Minutes</label>
-			<span class='mini-instructions' >Applies to "Per Browser Session" Only, 0 means forever</span>
+			<div class='mini-instructions'>Applies to "Per Browser Session" Only, 0 means forever</div>
 		</li>
 		
 		<li class='advancedOption'><span class='bigLabel'>Auto-Retrieve?</span> 
 			<input type='radio' name='AutoFetch' id='AutoFetch1' value='1'   	/> <label for='AutoFetch1'>Yes</label>
 			<input type='radio' name='AutoFetch' id='AutoFetch0' value='0'   	/> <label for='AutoFetch0'>No!</label>
-			<span class='mini-instructions' >Saved Authentication Recommended</span>
+			<div class='mini-instructions'>Saved Authentication Recommended</div>
 		</li>
 		<li><span class='bigLabel'>Notify On Page?</span> 
 			<input type='radio' name='Notify' id='Notify1' value='1'   	/> <label for='Notify1'>Yes</label>
 			<input type='radio' name='Notify' id='Notify0' value='0'   	/> <label for='Notify0'>No!</label>
-			<span class='mini-instructions' >Requires Either Permanent or Browser Session Saved Authentication</span>
+			<div class='mini-instructions'>Requires Either Permanent or Browser Session Saved Authentication</div>
 		</li>
 		
 		<li class='advancedOption indented'><span class='bigLabel'>Notification Source</span> 
@@ -37,7 +37,7 @@
 		</li>
 		<li class='advancedOption indented'><span class='bigLabel'>Update Period</span> 
 			<input type='number' name='NotifySourceUpdatePeriod' id='NotifySourceUpdatePeriod' min='1' max='360' step='1'/> <label for='NotifySourceUpdatePeriod'>Minutes</label>
-			<span class='mini-instructions' >Applies to Local Cache Only</span>
+			<div class='mini-instructions'>Applies to Local Cache Only</div>
 		</li>
 		<li class='advancedOption hidden'><span class='bigLabel'>Cipher</span>
 			<input type='radio' name='Cipher' id='CipherAES' value='aes'  	/> <label for='CipherAES'>AES</label>
@@ -53,11 +53,11 @@
 			<input type='checkbox' name='passwordStrengthNum' id='passwordStrengthNum'  	/> <label for='passwordStrengthNum'>Digits</label>
 			<input type='checkbox' name='passwordStrengthPunc1' id='passwordStrengthPunc1' /> <label for='passwordStrengthPunc1'>Punctuation</label>
 			<input type='checkbox' name='passwordStrengthPunc2' id='passwordStrengthPunc2' /> <label for='passwordStrengthPunc2'>More Punctuation</label>
-			<span class='mini-instructions' >All Activated is Highly Recommended</span>
+			<div class='mini-instructions'>All Activated is Highly Recommended</div>
 		</li>
 		<li class='advancedOption indented'><span class='bigLabel'>Password length</span> 
 			<input type='number' name='GeneratedPasswordLength' id='GeneratedPasswordLength' min='6' step='1'/> <label for='GeneratedPasswordLength'>Characters</label>
-			<span class='mini-instructions' >&ge;16 Characters Highly Recommended</span>
+			<div class='mini-instructions'>&ge;16 Characters Highly Recommended</div>
 		</li>
 	</ul>
 	<div>
