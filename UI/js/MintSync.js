@@ -612,7 +612,7 @@ function MintSync(userPreferenceServiceProvider) {
 					stubFunctions.genericRetrieve_mintSyncGlobals().passwd = hash;
 					
 					//if required, start the background process timer
-					if(userPreferences.get("SavePassBDuration")
+					if(userPreferences.get("SavePassBDuration"))
 					{
 						stubFunctions.genericPostMessage({
 							'action': 'startPasswdResetTimer',
