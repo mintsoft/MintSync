@@ -10,7 +10,7 @@ var g_ctrlDown = false;
 */
 function MintSync(userPreferenceServiceProvider) {
 	this.rememberedPassword = undefined;
-	this.userPreferences = userPreferenceServiceProvider;
+	var userPreferences = userPreferenceServiceProvider;
 	var self = this;
 	/*
 		Retrieve passwords for the passed domain
@@ -585,21 +585,20 @@ function MintSync(userPreferenceServiceProvider) {
 	*/
 	this.getEncryptionPasswordHash = function(successCallback) {
 		//text to appear on the password prompt
-		var strPrompt = "Enter your crypto password",
-			preferences = stubFunctions.genericRetrieve_preferencesObj();	//generic preferences object
+		var strPrompt = "Enter your crypto password";
 		
-		if(preferences["SavePassword"]==1)
+		if(userPreferences.get("SavePassword") == 1)
 		{
-			if(!preferences["SavedPassword"] || preferences["SavedPassword"]==="undefined")
+			if(!userPreferences.get("SavedPassword") || userPreferences.get("SavedPassword") === "undefined")
 				lightboxes.askForPassword(strPrompt,function(password){
 					var hash  = self.hashPass(password);
-					preferences["SavedPassword"] = hash;
-					successCallback(preferences["SavedPassword"]);
+					userPreferences.set("SavedPassword", hash);
+					successCallback(userPreferences.get("SavedPassword"));
 				});
 			else
-				successCallback(preferences["SavedPassword"]);
+				successCallback(userPreferences.get("SavedPassword"));
 		}
-		else if (preferences["SavePassword"]==0.8)
+		else if (userPreferences.get("SavePassword") == 0.8)
 		{
 			var passwd;
 			//get the password from the background process
@@ -613,7 +612,7 @@ function MintSync(userPreferenceServiceProvider) {
 					stubFunctions.genericRetrieve_mintSyncGlobals().passwd = hash;
 					
 					//if required, start the background process timer
-					if(preferences["SavePassBDuration"])
+					if(userPreferences.get("SavePassBDuration")
 					{
 						stubFunctions.genericPostMessage({
 							'action': 'startPasswdResetTimer',
@@ -630,7 +629,7 @@ function MintSync(userPreferenceServiceProvider) {
 			}
 				
 		}
-		else if (preferences["SavePassword"]==0.5)
+		else if (userPreferences.get("SavePassword") == 0.5)
 		{
 			//request password and store in global
 			if(self.rememberedPassword === undefined)
@@ -904,4 +903,16 @@ function MintSync(userPreferenceServiceProvider) {
 		return password;
 	};
 }
-var $MS = new MintSync();
+
+function MintSyncPreferences(){
+	var preferences;
+	this.get = function(preferenceName) {
+		preferences = stubFunctions.genericRetrieve_preferencesObj();
+		return preferences[preferenceName];
+	};
+	this.set = function(name, value) {
+		preferences[name] = value;
+	};
+}
+
+var $MS = new MintSync(new MintSyncPreferences());
