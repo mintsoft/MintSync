@@ -906,5 +906,5 @@ function MintSyncPreferences(){
 		preferences[name] = value;
 	};
 }
-
-var $MS = new MintSync(new MintSyncPreferences());
+var $MP = new MintSyncPreferences();
+var $MS = new MintSync($MP);
