@@ -651,12 +651,11 @@ function MintSync(userPreferenceServiceProvider) {
 		Returns a boolean representing whether or not we have any credentials saved
 	**/
 	this.checkForSavedAuth = function() {
-		var preferences = stubFunctions.genericRetrieve_preferencesObj();
-		
-		switch(preferences["SaveAuthentication"])
+
+		switch(userPreferences.get("SaveAuthentication"))
 		{
 			case "1":
-				return !(preferences["SavedAuthentication"]=="undefined" && preferences["SavedAuthentication"]);
+				return !(userPreferences.get("SavedAuthentication") == "undefined" && userPreferences.get("SavedAuthentication"));
 			case "0.8":
 				if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess
 				{
@@ -678,24 +677,23 @@ function MintSync(userPreferenceServiceProvider) {
 	*/
 	this.getAuthenticationObject = function(authCallback) {
 		var promptStr = "Please enter your login details";
-		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		
-		if(preferences["SaveAuthentication"]==1)
+		if(userPreferences.get("SaveAuthentication") == 1)
 		{
 			if(!self.checkForSavedAuth())
 			{
 				lightboxes.askForUsernamePassword(promptStr,function(authObj){
 					authObj.password = self.hashPass(authObj.password);
-					preferences["SavedAuthentication"] = JSON.stringify(authObj);
-					authCallback($.parseJSON(preferences["SavedAuthentication"]));
+					userPreferences.set("SavedAuthentication", JSON.stringify(authObj));
+					authCallback($.parseJSON(userPreferences.get("SavedAuthentication")));
 				});
 			}
 			else
 			{
-				authCallback($.parseJSON(preferences["SavedAuthentication"]));
+				authCallback($.parseJSON(userPreferences.get("SavedAuthentication")));
 			}
 		}
-		else if (preferences["SaveAuthentication"]==0.8)
+		else if (userPreferences.get("SaveAuthentication") == 0.8)
 		{
 				
 			if(!self.checkForSavedAuth())
@@ -714,7 +712,7 @@ function MintSync(userPreferenceServiceProvider) {
 					
 					
 					//start the password reset timer if applicable
-					if(preferences["SavePassBDuration"] > 0)
+					if(userPreferences.get("SavePassBDuration") > 0)
 					{
 						//start the timer
 						stubFunctions.genericPostMessage({
@@ -741,7 +739,7 @@ function MintSync(userPreferenceServiceProvider) {
 				
 			
 		}
-		else if (preferences["SaveAuthentication"]==0.5)
+		else if (userPreferences.get("SaveAuthentication") == 0.5)
 		{
 			//request password and store in global
 			if(!self.checkForSavedAuth())
@@ -769,12 +767,10 @@ function MintSync(userPreferenceServiceProvider) {
 		Resets the credentials saved (however they are)
 	*/
 	this.resetSavedCredentials = function() {
-		var preferences = stubFunctions.genericRetrieve_preferencesObj();
-		
-		switch(preferences["SaveAuthentication"])
+		switch(userPreferences.get("SaveAuthentication"))
 		{
 			case "1":
-				preferences["SavedAuthentication"]="undefined";
+				userPreferences.set("SavedAuthentication", "undefined");
 			break;
 			case "0.8":
 				if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess
@@ -797,11 +793,10 @@ function MintSync(userPreferenceServiceProvider) {
 		Resets the crypto password saved (however they are)
 	*/
 	this.resetSavedCryptoPassword = function() {
-		var preferences = stubFunctions.genericRetrieve_preferencesObj();
-		switch(preferences["SavePassword"])
+		switch(userPreferences.get("SavePassword"))
 		{
 			case "1":
-				preferences["SavedPassword"]="undefined";
+				userPreferences.set("SavedPassword", "undefined");
 			break;
 			case "0.8":
 				if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess
@@ -825,30 +820,27 @@ function MintSync(userPreferenceServiceProvider) {
 		retrieved when the pop up is launched or not.
 	**/
 	this.getAutoFetch = function() {
-		var preferences = stubFunctions.genericRetrieve_preferencesObj();
-		return preferences["AutoFetch"];
+		return userPreferences.get("AutoFetch");
 	};
 	/** 
 		Returns whether or not the user wants to be notified when 
 		there is a password on the page or not
 	**/
 	this.getNotify = function() {
-		var preferences = stubFunctions.genericRetrieve_preferencesObj();
-		return preferences["Notify"]=="1";
+		return userPreferences.get("Notify") == "1";
 	};
 	/**
 		Get the Server's base URL
 	*/
 	this.getServerURL = function() {
-		var preferences = stubFunctions.genericRetrieve_preferencesObj();
-		return preferences["ServerURL"];
+		return userPreferences.get("ServerURL");
 	};
 	/**
 		Returns the password length configured
 	*/
 	this.getGeneratedPasswordLength = function() {
-		var preferences = stubFunctions.genericRetrieve_preferencesObj();
-		return (typeof(preferences)==="undefined")?16:preferences["GeneratedPasswordLength"];
+		var length = userPreferences.get("GeneratedPasswordLength");
+		return typeof(length) === undefined ? 16: length;
 	};
 	/**
 		Returns the length the row salt should be generated to
@@ -890,9 +882,9 @@ function MintSync(userPreferenceServiceProvider) {
 		//build	sourceString from preferences
 		sourceString = sourceSet.alpha;
 		
-		sourceString += preferences["passwordStrengthNum"] == "true"?sourceSet.num:"";
-		sourceString += preferences["passwordStrengthPunc1"] == "true"?sourceSet.punc1:"";
-		sourceString += preferences["passwordStrengthPunc2"] == "true"?sourceSet.punc2:"";
+		sourceString += userPreferences.get("passwordStrengthNum") == "true" ? sourceSet.num : "";
+		sourceString += userPreferences.get("passwordStrengthPunc1") == "true" ? sourceSet.punc1 : "";
+		sourceString += userPreferences.get("passwordStrengthPunc2") == "true" ? sourceSet.punc2 : "";
 		
 		for(var x=0;x<length;++x)
 		{
