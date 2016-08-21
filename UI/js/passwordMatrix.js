@@ -119,6 +119,7 @@ function UpdateMainURLList() {
 		},
 		complete: function () {
 			$("#matrixLoading").fadeOut(0);
+			$MP.fetch();
 		},
 		error: function (jq, textStatus, errorThrown) {
 			switch (jq.status) {
