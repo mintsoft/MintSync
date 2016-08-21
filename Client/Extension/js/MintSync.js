@@ -677,24 +677,23 @@ function MintSync(userPreferenceServiceProvider) {
 	*/
 	this.getAuthenticationObject = function(authCallback) {
 		var promptStr = "Please enter your login details";
-		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		
-		if(preferences["SaveAuthentication"]==1)
+		if(userPreferences.get("SaveAuthentication") == 1)
 		{
 			if(!self.checkForSavedAuth())
 			{
 				lightboxes.askForUsernamePassword(promptStr,function(authObj){
 					authObj.password = self.hashPass(authObj.password);
-					preferences["SavedAuthentication"] = JSON.stringify(authObj);
-					authCallback($.parseJSON(preferences["SavedAuthentication"]));
+					userPreferences.set("SavedAuthentication", JSON.stringify(authObj));
+					authCallback($.parseJSON(userPreferences.get("SavedAuthentication")));
 				});
 			}
 			else
 			{
-				authCallback($.parseJSON(preferences["SavedAuthentication"]));
+				authCallback($.parseJSON(userPreferences.get("SavedAuthentication")));
 			}
 		}
-		else if (preferences["SaveAuthentication"]==0.8)
+		else if (userPreferences.get("SaveAuthentication") == 0.8)
 		{
 				
 			if(!self.checkForSavedAuth())
@@ -713,7 +712,7 @@ function MintSync(userPreferenceServiceProvider) {
 					
 					
 					//start the password reset timer if applicable
-					if(preferences["SavePassBDuration"] > 0)
+					if(userPreferences.get("SavePassBDuration") > 0)
 					{
 						//start the timer
 						stubFunctions.genericPostMessage({
@@ -740,7 +739,7 @@ function MintSync(userPreferenceServiceProvider) {
 				
 			
 		}
-		else if (preferences["SaveAuthentication"]==0.5)
+		else if (userPreferences.get("SaveAuthentication") == 0.5)
 		{
 			//request password and store in global
 			if(!self.checkForSavedAuth())
