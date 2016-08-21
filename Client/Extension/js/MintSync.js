@@ -876,8 +876,7 @@ function MintSync(userPreferenceServiceProvider) {
 							"punc2"	: "`~@$%^&*()_+{}|:\"<>!?",
 						},
 			password="",
-			sourceString="",
-			preferences = stubFunctions.genericRetrieve_preferencesObj();
+			sourceString="";
 		
 		//build	sourceString from preferences
 		sourceString = sourceSet.alpha;
