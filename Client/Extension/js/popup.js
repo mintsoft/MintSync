@@ -136,9 +136,8 @@ $(document).ready(function(){
 			//ask for it then
 			console.info("Requesting Login Credentials");
 			$MS.getAuthenticationObject(function(){
-				var preferences = stubFunctions.genericRetrieve_preferencesObj();
 				//retrigger a cache update if enabled
-				if(preferences["Notify"]=="1"  && preferences["NotifySource"]=="cache")
+				if($MP.get("Notify") == "1"  && $MP.get("NotifySource") == "cache")
 				{
 					stubFunctions.genericPostMessage({
 						'action': 'startLocalCache',
