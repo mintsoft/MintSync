@@ -16,5 +16,11 @@ function MintSyncPreferences(){
 
 		$ms.UpdateServerSavedPreferences(preferences);
 	};
+
+	this.fetch = function() {
+		$MS.retrieveServerSavedPreferences({success: function(data) { 
+			preferences = $.extend({}, preferences, data.preferences);
+		}})
+	}
 }
 var $MP = new MintSyncPreferences();
