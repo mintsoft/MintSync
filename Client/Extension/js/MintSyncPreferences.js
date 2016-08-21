@@ -1,6 +1,6 @@
 
 function MintSyncPreferences(){
-	var preferences;
+	var preferences = {};
 	this.get = function(preferenceName) {
 		preferences = stubFunctions.genericRetrieve_preferencesObj();
 		return preferences[preferenceName];
@@ -12,8 +12,9 @@ function MintSyncPreferences(){
 	};
 
 	this.fetch = function() {
-		$MS.retrieveServerSavedPreferences({success: function(data) { 
-			preferences = $.extend({}, preferences, data.preferences);
+		$MS.retrieveServerSavedPreferences({success: function(response) {
+			var serverPreferences = JSON.parse(response.data.preferences); 
+			$.extend(preferences, serverPreferences);
 		}})
 	}
 }
