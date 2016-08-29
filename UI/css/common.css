@@ -263,8 +263,7 @@ ul.styled li>h3, ul.styled li>a, ul.styled li>span
 	text-overflow: ellipsis;
 	overflow-x: hidden;
 	white-space: nowrap;
-	margin-left: 1em;
-
+	margin-left: 0.5em;
 }
 
 ul.styled li .rowIcons 
@@ -495,4 +494,13 @@ input.inputPass {
 .loading_throbber {
 	background: url(img/ajax_load.gif);
 	content: "Saving...";
+}
+
+/** icons that do things **/
+.jsAction {
+	cursor: pointer;
+}
+img.jsAction {
+	cursor: pointer;
+	vertical-align: middle;
 }
