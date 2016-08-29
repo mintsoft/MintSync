@@ -1,4 +1,4 @@
-function PasswordMatrix(optionsController) {
+function PasswordMatrix(optionsPage) {
 	/** JS used on the password matrix page **/
 	/** Timer objects and variable for alternating the page width **/
 	var keyTimer, clickTimer, containerWidth = {0:"50em", 1:"90%"}, containerWidthKey = 0, varWidthButtonText = "|> <|";
@@ -128,6 +128,7 @@ function PasswordMatrix(optionsController) {
 			success: function (requestdata, textStatus, jq) {
 				//create list of domains
 				updatePasswordMatrix(requestdata.data);
+				optionsPage.updateForm();
 			}
 		});
 	}
