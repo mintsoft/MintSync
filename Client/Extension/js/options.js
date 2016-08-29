@@ -39,11 +39,13 @@ function optionsPage(placeholderSelector, preferencesInstance) {
 			self.updateForm();
 
 			/* Bind the local cache update */
-			$("#localCacheUpdateButton").click(function(){
+			$("#localCacheUpdateButton").click(function(event) {
+				event.preventDefault();
 				cacheUpdateHandling();
 			});
 			/* console display the local cache */
-			$("#dumpLocalCacheButton").click(function(){
+			$("#dumpLocalCacheButton").click(function(event) {
+				event.preventDefault();
 				var localCache = stubFunctions.genericRetrieve_mintSyncGlobals().urlCache;
 				console.debug(localCache);
 				for(var URL in localCache)
@@ -53,7 +55,8 @@ function optionsPage(placeholderSelector, preferencesInstance) {
 			});
 
 			/* Bind force forget saved password*/
-			$("#forgetSavedCryptoPass").click(function(){
+			$("#forgetSavedCryptoPass").click(function(event) {
+				event.preventDefault();
 				console.log("Forgetting Saved Crypto Password");
 				//For BG Process/Browser session
 				stubFunctions.genericRetrieve_mintSyncGlobals().passwd = undefined;
