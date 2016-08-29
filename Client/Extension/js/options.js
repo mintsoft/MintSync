@@ -6,7 +6,28 @@
 /**
 	Entry point
 */
-function optionsPage(placeholderSelector) {
+function optionsPage(placeholderSelector, preferencesInstance) {
+	var self = this;
+
+	this.updateForm = function() {
+		/* Load Preferences */
+		$("#ServerURL").val(preferencesInstance.get("ServerURL"));
+		$('input[name="SaveAuth"][value="'+preferencesInstance.get("SaveAuthentication")+'"]').prop('checked', true);
+		$('input[name="SavePass"][value="'+preferencesInstance.get("SavePassword")+'"]').prop('checked', true);
+		$('input[name="Cipher"][value="'+preferencesInstance.get("Cipher")+'"]').prop('checked', true);
+		$('input[name="KeyLength"][value="'+preferencesInstance.get("KeyLength")+'"]').prop('checked', true);
+		$('input[name="AutoFetch"][value="'+preferencesInstance.get("AutoFetch")+'"]').prop('checked', true);
+		$('input[name="Notify"][value="'+preferencesInstance.get("Notify")+'"]').prop('checked', true);
+		$('input[name="NotifySource"][value="'+preferencesInstance.get("NotifySource")+'"]').prop('checked', true);
+		$("#NotifySourceUpdatePeriod").val(preferencesInstance.get("NotifySourceUpdatePeriod"));
+		$("#GeneratedPasswordLength").val(preferencesInstance.get("GeneratedPasswordLength"));
+		$("#SavePassBDuration").val(preferencesInstance.get("SavePassBDuration") ? preferencesInstance.get("SavePassBDuration") : 0);
+
+		/* generation options */
+		$('#passwordStrengthNum').prop('checked', preferencesInstance.get("passwordStrengthNum")=="true");
+		$('#passwordStrengthPunc1').prop('checked', preferencesInstance.get("passwordStrengthPunc1")=="true");
+		$('#passwordStrengthPunc2').prop('checked', preferencesInstance.get("passwordStrengthPunc2")=="true");
+	}
 
 	$(document).ready(function(){
 		$(document).autoBars(function() {
@@ -15,24 +36,7 @@ function optionsPage(placeholderSelector) {
 
 			addPreferencesEventHandlers();
 
-			var preferences = stubFunctions.genericRetrieve_preferencesObj();
-			/* Load Preferences */
-			$("#ServerURL").val(preferences["ServerURL"]);
-			$('input[name="SaveAuth"][value="'+preferences["SaveAuthentication"]+'"]').prop('checked', true);
-			$('input[name="SavePass"][value="'+preferences["SavePassword"]+'"]').prop('checked', true);
-			$('input[name="Cipher"][value="'+preferences["Cipher"]+'"]').prop('checked', true);
-			$('input[name="KeyLength"][value="'+preferences["KeyLength"]+'"]').prop('checked', true);
-			$('input[name="AutoFetch"][value="'+preferences["AutoFetch"]+'"]').prop('checked', true);
-			$('input[name="Notify"][value="'+preferences["Notify"]+'"]').prop('checked', true);
-			$('input[name="NotifySource"][value="'+preferences["NotifySource"]+'"]').prop('checked', true);
-			$("#NotifySourceUpdatePeriod").val(preferences["NotifySourceUpdatePeriod"]);
-			$("#GeneratedPasswordLength").val(preferences["GeneratedPasswordLength"]);
-			$("#SavePassBDuration").val(preferences["SavePassBDuration"] ? preferences["SavePassBDuration"] : 0);
-
-			/* generation options */
-			$('#passwordStrengthNum').prop('checked', preferences["passwordStrengthNum"]=="true");
-			$('#passwordStrengthPunc1').prop('checked', preferences["passwordStrengthPunc1"]=="true");
-			$('#passwordStrengthPunc2').prop('checked', preferences["passwordStrengthPunc2"]=="true");
+			self.updateForm();
 
 			/* Bind the local cache update */
 			$("#localCacheUpdateButton").click(function(){
@@ -54,7 +58,7 @@ function optionsPage(placeholderSelector) {
 				//For BG Process/Browser session
 				stubFunctions.genericRetrieve_mintSyncGlobals().passwd = undefined;
 				//For "yes"
-				preferences["SavedPassword"] = undefined;
+				preferencesInstance.set("SavedPassword") = undefined;
 			});
 		});
 	});
@@ -67,30 +71,30 @@ function optionsPage(placeholderSelector) {
 		var serverUrl = $("#ServerURL").val();
 		if(serverUrl.charAt(serverUrl.length-1)!="/")
 			serverUrl+="/";
-			
-		preferences["ServerURL"] = serverUrl;
-		preferences["SavePassword"] = $("input[type=radio][name=SavePass]:checked").val();
-		preferences["SaveAuthentication"] = $("input[type=radio][name=SaveAuth]:checked").val();
-		preferences["Cipher"] = $("input[type=radio][name=Cipher]:checked").val();
-		preferences["KeyLength"] = $("input[type=radio][name=KeyLength]:checked").val();
-		preferences["AutoFetch"] = $("input[type=radio][name=AutoFetch]:checked").val();
-		preferences["Notify"] = $("input[type=radio][name=Notify]:checked").val();
-		preferences["NotifySource"] = $("input[type=radio][name=NotifySource]:checked").val();
-		preferences["NotifySourceUpdatePeriod"] = $("#NotifySourceUpdatePeriod").val() <= 0 ? 1 : $("#NotifySourceUpdatePeriod").val();
-		preferences["GeneratedPasswordLength"] = $("#GeneratedPasswordLength").val();
 		
-		preferences["SavePassBDuration"] = $("#SavePassBDuration").val() ? $("#SavePassBDuration").val() : 0;
+		preferencesInstance.set("ServerURL", serverUrl);
+		preferencesInstance.set("SavePassword", $("input[type=radio][name=SavePass]:checked").val());
+		preferencesInstance.set("SaveAuthentication", $("input[type=radio][name=SaveAuth]:checked").val());
+		preferencesInstance.set("Cipher", $("input[type=radio][name=Cipher]:checked").val());
+		preferencesInstance.set("KeyLength", $("input[type=radio][name=KeyLength]:checked").val());
+		preferencesInstance.set("AutoFetch", $("input[type=radio][name=AutoFetch]:checked").val());
+		preferencesInstance.set("Notify", $("input[type=radio][name=Notify]:checked").val());
+		preferencesInstance.set("NotifySource", $("input[type=radio][name=NotifySource]:checked").val());
+		preferencesInstance.set("NotifySourceUpdatePeriod", $("#NotifySourceUpdatePeriod").val() <= 0 ? 1 : $("#NotifySourceUpdatePeriod").val());
+		preferencesInstance.set("GeneratedPasswordLength", $("#GeneratedPasswordLength").val());
+		
+		preferencesInstance.set("SavePassBDuration", $("#SavePassBDuration").val() ? $("#SavePassBDuration").val() : 0);
 		
 		/* generation options */
-		preferences["passwordStrengthNum"] = $("#passwordStrengthNum").is(":checked");
-		preferences["passwordStrengthPunc1"] = $("#passwordStrengthPunc1").is(":checked");
-		preferences["passwordStrengthPunc2"] = $("#passwordStrengthPunc2").is(":checked");
+		preferencesInstance.set("passwordStrengthNum", $("#passwordStrengthNum").is(":checked"));
+		preferencesInstance.set("passwordStrengthPunc1", $("#passwordStrengthPunc1").is(":checked"));
+		preferencesInstance.set("passwordStrengthPunc2", $("#passwordStrengthPunc2").is(":checked"));
 		
 		
 		//clear saved data if applicable
 		if(preferences["SaveAuthentication"]!=1)
 		{
-			preferences["SavedAuthentication"] = undefined;
+			preferencesInstance.set("SavedAuthentication", undefined);
 		}
 		if(preferences["SaveAuthentication"]!=0.8)
 		{
@@ -100,7 +104,7 @@ function optionsPage(placeholderSelector) {
 		
 		if(preferences["SavePassword"]!=1)
 		{
-			preferences["SavedPassword"]	= undefined;
+			preferencesInstance.set("SavedPassword", undefined);
 		}
 		if(preferences["SavePassword"]!=0.8)
 		{
@@ -119,8 +123,8 @@ function optionsPage(placeholderSelector) {
 			This is so the effects of a change to the notification caching are immediate
 		*/
 		var preferences = stubFunctions.genericRetrieve_preferencesObj();
-		if(		preferences["Notify"]=="0" || 
-				preferences["Notify"]=="1"  && preferences["NotifySource"]!="cache"		)
+		if(		preferencesInstance.get("Notify") == "0" || 
+				preferencesInstance.get("Notify") == "1" && preferencesInstance("NotifySource") != "cache" )
 		{
 			//should not be keeping a local cache, send a message to the bg process and stop it
 			//this uses a message because it does not work if clearTimeout is used from here

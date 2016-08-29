@@ -263,8 +263,7 @@ ul.styled li>h3, ul.styled li>a, ul.styled li>span
 	text-overflow: ellipsis;
 	overflow-x: hidden;
 	white-space: nowrap;
-	margin-left: 1em;
-
+	margin-left: 0.5em;
 }
 
 ul.styled li .rowIcons 
