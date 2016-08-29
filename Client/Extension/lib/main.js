@@ -100,4 +100,5 @@ function genericRetrieve_preferencesObj(){
 	var ss = require("sdk/simple-storage");
 	return ss.storage;
 }*/
+var stubs = require(data.url("js/stubFunctions.js"));
 var bg = require("bg.js");
