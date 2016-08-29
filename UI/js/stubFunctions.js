@@ -26,3 +26,4 @@ this.genericRetrieve_currentTab = function(callback){
 }
 
 var stubFunctions = new MS_StubFunctions();
+var g_serverURL;

@@ -1,7 +1,7 @@
 function PasswordMatrix(optionsPage) {
 	/** JS used on the password matrix page **/
 	/** Timer objects and variable for alternating the page width **/
-	var keyTimer, clickTimer, containerWidth = {0:"50em", 1:"90%"}, containerWidthKey = 0, varWidthButtonText = "|> <|", g_serverURL;
+	var keyTimer, clickTimer, containerWidth = {0:"50em", 1:"90%"}, containerWidthKey = 0, varWidthButtonText = "|> <|";
 
 	/**
 		Single/Double Click jQuery Extension/Hack
