@@ -426,11 +426,16 @@ function togglePasswordsForURL(srcH3)
 */
 function doListFiltering(){
 	var stringValue = $("#searchValue").val().toLowerCase();
+
+    $("#PasswordList > li.lastVisibleli").removeClass("lastVisibleli");		
 	if(stringValue !== "")
 	{		
 		//filter based on stringValue
-		$("#PasswordList li").hide();
-		$("#PasswordList h3").filter(":contains('"+stringValue+"')").parent().show();
+        $("#PasswordList li").hide();
+		$("#PasswordList h3").filter(":contains('"+stringValue+"')")
+            .parent().show()
+            .filter(":last")
+            .addClass("lastVisibleli");   
 	}
 	else
 	{
