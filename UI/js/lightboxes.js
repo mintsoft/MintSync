@@ -6,6 +6,7 @@ function MS_Lightboxes() {
 		$(selector)
 			.addClass("modalDialog")
 			.modal({
+				position: ['5%'],
 				overlayClose: true,
 				escClose: true,
 				onClose: function (dialog) {
