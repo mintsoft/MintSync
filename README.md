@@ -20,4 +20,3 @@ You may add more users now, however once complete it is very important that you 
 
 Notice: It would absolutely be a good idea to backup your password database reguarly (I use Amazon S3 + s3cmd to backup every night).
 
-For more information see the README.md in master
