@@ -1,0 +1,1 @@
+var $PasswordMatrix = new PasswordMatrix(optionsController);

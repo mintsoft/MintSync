@@ -489,4 +489,3 @@ function PasswordMatrix(optionsPage) {
 		);
 	}
 }
-var $PasswordMatrix = new PasswordMatrix();
