@@ -27,7 +27,7 @@ function optionsPage(placeholderSelector, preferencesInstance) {
 		$('#passwordStrengthNum').prop('checked', preferencesInstance.get("passwordStrengthNum")=="true");
 		$('#passwordStrengthPunc1').prop('checked', preferencesInstance.get("passwordStrengthPunc1")=="true");
 		$('#passwordStrengthPunc2').prop('checked', preferencesInstance.get("passwordStrengthPunc2")=="true");
-	}
+	};
 
 	$(document).ready(function(){
 		$(document).autoBars(function() {
@@ -61,7 +61,7 @@ function optionsPage(placeholderSelector, preferencesInstance) {
 				//For BG Process/Browser session
 				stubFunctions.genericRetrieve_mintSyncGlobals().passwd = undefined;
 				//For "yes"
-				preferencesInstance.set("SavedPassword") = undefined;
+				preferencesInstance.set("SavedPassword", undefined);
 			});
 		});
 	});
