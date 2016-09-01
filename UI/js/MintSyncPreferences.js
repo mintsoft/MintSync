@@ -2,20 +2,23 @@
 function MintSyncPreferences(){
 	var preferences = {},
 		timeout,
-		timeoutActive = false;
+		timeoutActive = false,
+		self = this;
+
 	this.get = function(preferenceName) {
-		preferences = stubFunctions.genericRetrieve_preferencesObj();
+		if(preferences.length == 0)
+			preferences = stubFunctions.genericRetrieve_preferencesObj();
 		return preferences[preferenceName];
 	};
 	this.set = function(name, value) {
-		preferences[name] = value;
+		self.preferences[name] = value;
 		if(timeoutActive)
 		{
 			timeoutActive = false;
 			clearTimeout(timeout);
 		}
 		timeout = setTimeout(function(){
-			$MS.UpdateServerSavedPreferences(preferences,{});
+			$MS.UpdateServerSavedPreferences(self.preferences,{});
 			timeoutActive = false;
 		}, 200);
 		timeoutActive = true;
@@ -24,7 +27,7 @@ function MintSyncPreferences(){
 	this.fetch = function() {
 		$MS.retrieveServerSavedPreferences({success: function(response) {
 			var serverPreferences = response.data.preferences;
-			$.extend(preferences, serverPreferences);
+			$.extend(self.preferences, serverPreferences);
 		}})
 	}
 }
