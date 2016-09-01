@@ -439,23 +439,14 @@ class mintsync_server
 	{
 		$stmt = $this->db->prepare("UPDATE user SET preferences=:preferences WHERE ID=:userID");
 		$stmt->bindValue(":userID", $this->userID, PDO::PARAM_INT);
-		$stmt->bindValue(":preferences", $preferences, PDO::PARAM_STR);
+		$stmt->bindValue(":preferences", json_encode($preferences), PDO::PARAM_STR);
 		$stmt->execute();
 
-		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		if(isset($rows[0])) {
-			$this->restTool->sendResponse(array(
-				"status" => "ok",
-				"action" => "setUserPreferences",
-				"data"	=> array()
-			));
-		} else {
-			$this->restTool->sendResponse(array(
-				"status" => "fail",
-				"action" => "setUserPreferences",
-				"data" => false
-			), restTools::$HTTPCodes['EXPECTATION_FAILED']);
-		}
+		$this->restTool->sendResponse(array(
+			"status" => "ok",
+			"action" => "setUserPreferences",
+			"data"	=> array()
+		));
 	}
 
 	/**
