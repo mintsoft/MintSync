@@ -27,10 +27,12 @@ function MintSyncPreferences(){
 		timeoutActive = true;
 	};
 
-	this.fetch = function() {
+	this.fetch = function(completeCallback) {
 		$MS.retrieveServerSavedPreferences({success: function(response) {
 			var serverPreferences = response.data.preferences;
 			$.extend(preferences, serverPreferences);
+			if(completeCallback !== undefined)
+				completeCallback(preferences);
 		}})
 	}
 }
