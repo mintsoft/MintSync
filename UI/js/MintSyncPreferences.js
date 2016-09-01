@@ -1,14 +1,24 @@
 
 function MintSyncPreferences(){
-	var preferences = {};
+	var preferences = {},
+		timeout,
+		timeoutActive = false;
 	this.get = function(preferenceName) {
 		preferences = stubFunctions.genericRetrieve_preferencesObj();
 		return preferences[preferenceName];
 	};
 	this.set = function(name, value) {
 		preferences[name] = value;
-
-		$MS.UpdateServerSavedPreferences(preferences,{});
+		if(timeoutActive)
+		{
+			timeoutActive = false;
+			clearTimeout(timeout);
+		}
+		timeout = setTimeout(function(){
+			$MS.UpdateServerSavedPreferences(preferences,{});
+			timeoutActive = false;
+		}, 200);
+		timeoutActive = true;
 	};
 
 	this.fetch = function() {
