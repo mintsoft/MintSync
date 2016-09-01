@@ -6,7 +6,7 @@ function MintSyncPreferences(){
 		self = this;
 
 	this.get = function(preferenceName) {
-		var rawPreferences = stubFunctions.genericRetrieve_preferencesObj;
+		var rawPreferences = stubFunctions.genericRetrieve_preferencesObj();
 		if(preferenceName === 'ServerURL')
 			return rawPreferences.ServerURL;
 		return preferences[preferenceName];
