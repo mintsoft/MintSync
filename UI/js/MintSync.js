@@ -511,7 +511,7 @@ function MintSync(userPreferenceServiceProvider) {
 		self.getAuthenticationObject(function(authObj){
 					
 			$.ajax({
-				type: "GET",
+				type: "PUT",
 				url:self.getServerURL()+"?AJAX=true&action=setUserPreferences",
 				cache: false,
 				data: {
