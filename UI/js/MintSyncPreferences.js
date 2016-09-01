@@ -8,7 +8,7 @@ function MintSyncPreferences(){
 	this.set = function(name, value) {
 		preferences[name] = value;
 
-		$MS.UpdateServerSavedPreferences(preferences);
+		$MS.UpdateServerSavedPreferences(preferences,{});
 	};
 
 	this.fetch = function() {
