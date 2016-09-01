@@ -1,13 +1,11 @@
 
 function MintSyncPreferences(){
-	var preferences = {},
+	var preferences = stubFunctions.genericRetrieve_preferencesObj(),
 		timeout,
 		timeoutActive = false,
 		self = this;
 
 	this.get = function(preferenceName) {
-		if(preferences.length == 0)
-			preferences = stubFunctions.genericRetrieve_preferencesObj();
 		return preferences[preferenceName];
 	};
 	this.set = function(name, value) {
