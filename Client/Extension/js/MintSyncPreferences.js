@@ -13,7 +13,7 @@ function MintSyncPreferences(){
 
 	this.fetch = function() {
 		$MS.retrieveServerSavedPreferences({success: function(response) {
-			var serverPreferences = JSON.parse(response.data.preferences); 
+			var serverPreferences = response.data.preferences;
 			$.extend(preferences, serverPreferences);
 		}})
 	}
