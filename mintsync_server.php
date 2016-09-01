@@ -421,7 +421,7 @@ class mintsync_server
 			$this->restTool->sendResponse(array(
 				"status" => "ok",
 				"action" => "getUserPreferences",
-				"data"	=> $rows[0]
+				"data"	=> array("preferences" => json_decode($rows[0]['preferences']))
 			));
 		} else {
 			$this->restTool->sendResponse(array(
