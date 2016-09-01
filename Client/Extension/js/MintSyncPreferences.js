@@ -14,14 +14,14 @@ function MintSyncPreferences(){
 	this.set = function(name, value) {
 		if(name === 'ServerURL')
 			return;
-		self.preferences[name] = value;
+		preferences[name] = value;
 		if(timeoutActive)
 		{
 			timeoutActive = false;
 			clearTimeout(timeout);
 		}
 		timeout = setTimeout(function(){
-			$MS.UpdateServerSavedPreferences(self.preferences,{});
+			$MS.UpdateServerSavedPreferences(preferences,{});
 			timeoutActive = false;
 		}, 200);
 		timeoutActive = true;
@@ -30,7 +30,7 @@ function MintSyncPreferences(){
 	this.fetch = function() {
 		$MS.retrieveServerSavedPreferences({success: function(response) {
 			var serverPreferences = response.data.preferences;
-			$.extend(self.preferences, serverPreferences);
+			$.extend(preferences, serverPreferences);
 		}})
 	}
 }
