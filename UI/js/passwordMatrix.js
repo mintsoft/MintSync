@@ -119,7 +119,9 @@ function PasswordMatrix(optionsPage) {
 			},
 			complete: function () {
 				$("#matrixLoading").fadeOut(0);
-				$MP.fetch();
+				$MP.fetch(function(){
+					optionsPage.updateForm();
+				});
 			},
 			error: function (jq, textStatus, errorThrown) {
 				switch (jq.status) {
@@ -134,7 +136,6 @@ function PasswordMatrix(optionsPage) {
 			success: function (requestdata, textStatus, jq) {
 				//create list of domains
 				updatePasswordMatrix(requestdata.data);
-				optionsPage.updateForm();
 			}
 		});
 	}
