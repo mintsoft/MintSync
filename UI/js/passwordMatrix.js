@@ -69,6 +69,10 @@ function PasswordMatrix(optionsPage) {
 				e.preventDefault();
 				lightboxes.modalThis($("#optionsFormContainer"));
 			});
+
+			$("#optionsFormContainer #saveButtonInput").click(function() {
+				lightboxes.forceCloseLightbox($("#optionsFormContainer"));
+			});
 			
 			//add variable width button
 			$("#variableWidth").click(function(){
