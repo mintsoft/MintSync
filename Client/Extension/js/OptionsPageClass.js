@@ -127,7 +127,7 @@ function optionsPage(placeholderSelector, preferencesInstance) {
 		*/
 		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		if(		preferencesInstance.get("Notify") == "0" || 
-				preferencesInstance.get("Notify") == "1" && preferencesInstance("NotifySource") != "cache" )
+				preferencesInstance.get("Notify") == "1" && preferencesInstance.get("NotifySource") != "cache" )
 		{
 			//should not be keeping a local cache, send a message to the bg process and stop it
 			//this uses a message because it does not work if clearTimeout is used from here
