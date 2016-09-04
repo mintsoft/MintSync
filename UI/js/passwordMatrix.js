@@ -43,6 +43,7 @@ function PasswordMatrix(optionsPage) {
 
 							$("#saveFormContainer").html(saveFormMarkup);
 							addCredentialForm.AddBindings("#addPairP");
+							addCredentialForm.addPair();
 
 							lightboxes.modalThis($("#saveFormContainer"), {
 								abort: function(event) {
