@@ -1,5 +1,6 @@
 function AddCredentialForm() {
 	var self = this;
+	var g_altdown = false;
 	this.AddBindings = function(selector)
 	{
 		$(selector).click(function(event){
@@ -11,6 +12,8 @@ function AddCredentialForm() {
 		$(document).keyup(function(e) {
 			if(e.which == 17)
 				g_ctrlDown = false;
+			else if (e.which == 18)
+				g_altdown = false;
 		}).keydown(function(e) {
 			if(e.which == 17) {
 				g_ctrlDown=true;
@@ -64,9 +67,14 @@ function AddCredentialForm() {
 				return false;
 			}
 		}).keydown(function(e) {
+			
 			if(e.which == 17)
 				g_ctrlDown=true;
-			else if(g_ctrlDown === true && e.which == 71) {		//ctrl+g
+			else if(e.which == 18)
+				g_altdown=true;
+			else if((g_ctrlDown === true && e.which == 71) //ctrl+g 
+				 || (g_altdown === true && e.which == 71) // alt+g
+			) {
 				event.preventDefault();
 				var passwordLength = $MS.getGeneratedPasswordLength();
 				$(this).val($MS.generatePassword(passwordLength));
