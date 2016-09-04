@@ -75,13 +75,13 @@ function AddCredentialForm() {
 			else if((g_ctrlDown === true && e.which == 71) //ctrl+g 
 				 || (g_altdown === true && e.which == 71) // alt+g
 			) {
-				event.preventDefault();
+				e.preventDefault();
 				var passwordLength = $MS.getGeneratedPasswordLength();
 				$(this).val($MS.generatePassword(passwordLength));
 				return false;
 			}
 			else if(g_ctrlDown === true && e.which == 73) {		//ctrl+i
-				event.preventDefault();
+				e.preventDefault();
 				//"click" the inject button
 				$(this).parent().find("img.injectPW").click();
 				return false;
