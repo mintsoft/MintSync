@@ -231,21 +231,18 @@ window.addEventListener("load", function(){
 		};
 
 	var preferences = stubFunctions.genericRetrieve_preferencesObj();
-
+/*
 	//OnConnect for both injectJS and popups
-	opera.extension.onconnect = function(event) {
+	browser.tabs.onconnect = function(event) {
 		console.debug("Handling onconnect message",event);
 		try {
 			//if it's our Popup
 			if ( event.origin.indexOf("popup.html") > -1 && event.origin.indexOf("widget://") > -1)
 			{
-
-				var tab = opera.extension.tabs.getFocused();
-				if(tab)
-				{
+				browser.tabs.getCurrent(function(tab){
 					//send a message to the injectedJS with the messageChannel to the popup
 					tab.postMessage('popupConnect', [event.source]);
-				}
+				});
 			}
 			else
 			{
@@ -257,7 +254,7 @@ window.addEventListener("load", function(){
 			console.error("There was an error with the Opera Extension OnConnect callback:",error);
 		}
 	};
-
+*/
 	//add handler for tab notifications
 	browser.tabs.onActivated.addListener(function() {
 		try {
