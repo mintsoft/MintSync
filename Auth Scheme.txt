@@ -1,9 +1,0 @@
-Based on Amazon S3 authentication
-
-Authorisation: MintSync Username+"|"+Nonce+"|"+ Base64EncodedAuthString
-
-base64EncodedAuthString = SHA512.b64(
-		SHA512.hex(Password)+":"+Nonce
-	)
-
-The "nonce" currently isn't a nonce and isn't stored so this is vulnerable to replay attacks; however this can be remedied
