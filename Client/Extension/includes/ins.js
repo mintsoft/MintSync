@@ -89,7 +89,6 @@
 	 */
 	function MS_handlePopupMessage(e)
 	{
-		//opera.postError(e);
 		if (e.data.action == 'requestInputList')
 		{
 			MS_inputnotify(e);
@@ -165,16 +164,16 @@
 	/**
 	 * send the URL to the extension, this doesn't depend on the DOM being loaded, so do it asap
 	 */
-	opera.extension.postMessage({
-			'action'	: 'updateIconBadge',
-			'src' 		: 'injectedJS'
-		});
+	chrome.runtime.sendMessage({
+		'action'	: 'updateIconBadge',
+		'src' 		: 'injectedJS'
+	});
 
 	/**
 	 * Handler for messages from the BackgroundProcess
 	 */
-	opera.extension.onmessage = function(e) {
-	//	console.debug("InjectedJS Received", e);
+	chrome.runtime.onMessage.addListener(function(e){
+		//	console.debug("InjectedJS Received", e);
 		try 
 		{	
 			if(e.data == "popupConnect")
@@ -188,5 +187,5 @@
 		{
 			console.error("There was an error with the onmessage callback in the InjectedJS", error);
 		}
-	};
+	});
 })();
