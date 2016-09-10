@@ -196,12 +196,9 @@ function runPopupInit() {
 // runs AFTER jQuery(document).ready();
 //insert the currently selected tab into the box by default
 window.addEventListener('load', function() {
-
-	if(!opera.extension)
-		return;
 	
 	//if it has been clicked, then the message will contain the URL etc
-	opera.extension.onmessage = function(event) {
+	chrome.runtime.onMessage.addListener(function(event) {
 		if (event.data == "popupConnect")
 		{
 			if(event.ports.length > 0)
@@ -210,7 +207,7 @@ window.addEventListener('load', function() {
 				g_injectedPort.onmessage = handleMessageFromInjectedJS;
 			}
 		}
-	};
+	});
 },false);
 
 /** Global Function Handlers **/

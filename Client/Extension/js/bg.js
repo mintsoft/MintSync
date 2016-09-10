@@ -232,9 +232,6 @@ window.addEventListener("load", function(){
 
 	var preferences = stubFunctions.genericRetrieve_preferencesObj();
 
-	mintSyncGlobals.theButton = opera.contexts.toolbar.createItem(ToolbarUIItemProperties);
-	opera.contexts.toolbar.addItem(mintSyncGlobals.theButton);
-
 	//OnConnect for both injectJS and popups
 	opera.extension.onconnect = function(event) {
 		console.debug("Handling onconnect message",event);
@@ -262,7 +259,7 @@ window.addEventListener("load", function(){
 	};
 
 	//add handler for tab notifications
-	opera.extension.tabs.onfocus = function() {
+	browser.tabs.onActivated.addListener(function() {
 		try {
 			if(opera.extension.tabs.getFocused())	//on some operations this object is not quite set yet
 				mint_handleNotify(opera.extension.tabs.getFocused().url);
@@ -271,10 +268,10 @@ window.addEventListener("load", function(){
 			//ignore it for now
 			console.error("There was an error with the Opera Extension onfocus callback:",error);
 		}
-	};
-	
+	});
+
 	//add handler for messages, including injected JS
-	opera.extension.onmessage = function(event) {
+	browser.runtime.onMessage.addListener(function(event) {
 		console.debug("Received extension message:", event);
 		switch(event.data.src)
 		{
@@ -325,7 +322,7 @@ window.addEventListener("load", function(){
 					updateLocalURLCache();
 				}
 		}
-	};
+	});
 	
 	//Optional NotifySource system,
 	// if the notifysource is configured to local cache, then maintain a local cache every x mins
