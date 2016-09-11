@@ -27,7 +27,7 @@ function optionsPage(placeholderSelector, preferencesInstance) {
 		$('#passwordStrengthNum').prop('checked', preferencesInstance.get("passwordStrengthNum")=="true");
 		$('#passwordStrengthPunc1').prop('checked', preferencesInstance.get("passwordStrengthPunc1")=="true");
 		$('#passwordStrengthPunc2').prop('checked', preferencesInstance.get("passwordStrengthPunc2")=="true");
-	}
+	};
 
 	$(document).ready(function(){
 		$(document).autoBars(function() {
@@ -61,7 +61,7 @@ function optionsPage(placeholderSelector, preferencesInstance) {
 				//For BG Process/Browser session
 				stubFunctions.genericRetrieve_mintSyncGlobals().passwd = undefined;
 				//For "yes"
-				preferencesInstance.set("SavedPassword") = undefined;
+				preferencesInstance.set("SavedPassword", undefined);
 			});
 		});
 	});
@@ -127,7 +127,7 @@ function optionsPage(placeholderSelector, preferencesInstance) {
 		*/
 		var preferences = stubFunctions.genericRetrieve_preferencesObj();
 		if(		preferencesInstance.get("Notify") == "0" || 
-				preferencesInstance.get("Notify") == "1" && preferencesInstance("NotifySource") != "cache" )
+				preferencesInstance.get("Notify") == "1" && preferencesInstance.get("NotifySource") != "cache" )
 		{
 			//should not be keeping a local cache, send a message to the bg process and stop it
 			//this uses a message because it does not work if clearTimeout is used from here
