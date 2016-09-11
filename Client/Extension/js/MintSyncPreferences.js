@@ -7,30 +7,42 @@ function MintSyncPreferences(){
 
 	this.get = function(preferenceName) {
 		var rawPreferences = stubFunctions.genericRetrieve_preferencesObj();
-		if(preferenceName === 'ServerURL')
+		console.debug(rawPreferences);
+		if(preferenceName === 'ServerURL' && rawPreferences.hasOwnProperty("ServerURL") && rawPreferences.ServerURL !== "")
 			return rawPreferences.ServerURL;
+		console.debug("Returning: "+preferences[preferenceName]);
 		return preferences[preferenceName];
 	};
 	this.set = function(name, value) {
+		console.debug("Object preferences", preferences)
+		preferences[name] = value;
+		
 		if(name === 'ServerURL')
 			return;
-		preferences[name] = value;
+		
 		if(timeoutActive)
 		{
 			timeoutActive = false;
 			clearTimeout(timeout);
 		}
 		timeout = setTimeout(function(){
-			$MS.UpdateServerSavedPreferences(preferences,{});
+			var preferencesToSave =  $.extend({}, preferences);
+			delete preferencesToSave.ServerURL;
+			console.debug("Save timeout fired", preferencesToSave);
+			$MS.UpdateServerSavedPreferences(preferencesToSave, {});
 			timeoutActive = false;
 		}, 200);
 		timeoutActive = true;
 	};
 
 	this.fetch = function(completeCallback) {
+		console.debug("Fetching Preferences");
 		$MS.retrieveServerSavedPreferences({success: function(response) {
 			var serverPreferences = response.data.preferences;
+			console.debug("Object preferences", preferences)
+			console.debug("Server preferences", serverPreferences);
 			$.extend(preferences, serverPreferences);
+			console.debug("Result", preferences)
 			if(completeCallback !== undefined)
 				completeCallback(preferences);
 		}})
