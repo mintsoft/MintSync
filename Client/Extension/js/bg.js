@@ -258,8 +258,9 @@ window.addEventListener("load", function(){
 	//add handler for tab notifications
 	browser.tabs.onActivated.addListener(function() {
 		try {
-			if(opera.extension.tabs.getFocused())	//on some operations this object is not quite set yet
-				mint_handleNotify(opera.extension.tabs.getFocused().url);
+			browser.tabs.getCurrent(function(tab) {
+				mint_handleNotify(tab.url);
+			});
 		}
 		catch(error) {
 			//ignore it for now
