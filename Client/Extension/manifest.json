@@ -5,7 +5,8 @@
 
 	"description": "Secure, self-hosted client-side decrypted password storage",
 	"permissions": [
-		"activeTab"
+		"activeTab",
+		"storage"
 	],
 
 	"browser_action": {

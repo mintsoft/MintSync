@@ -10,7 +10,7 @@ this.genericRetrieve_mintSyncGlobals = function(){
 }
 
 this.genericRetrieve_preferencesObj = function(){
-
+	return {};
 }
 
 this.genericRetrieve_currentTab = function(callback){
