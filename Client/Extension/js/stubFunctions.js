@@ -4,9 +4,8 @@ function MS_StubFunctions(){
 		chrome.runtime.sendMessage(objToSend);
 	}
 	
-	//stub to access opera.extension.bgProcess.mintSyncGlobals
 	this.genericRetrieve_mintSyncGlobals = function(){
-	return chrome.extension.getBackgroundPage().mintSyncGlobals;
+		return chrome.extension.getBackgroundPage().mintSyncGlobals;
 	}
 	
 	this.genericRetrieve_preferencesObj = function(){
