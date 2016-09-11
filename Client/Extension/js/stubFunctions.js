@@ -14,7 +14,9 @@ this.genericRetrieve_preferencesObj = function(){
 }
 
 this.genericRetrieve_currentTab = function(callback){
-	callback(null);
+	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+		callback(tabs[0]);
+	});
 }
 }
 
