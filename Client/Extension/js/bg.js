@@ -259,7 +259,8 @@ window.addEventListener("load", function(){
 	browser.tabs.onActivated.addListener(function() {
 		try {
 			browser.tabs.getCurrent(function(tab) {
-				mint_handleNotify(tab.url);
+				if(tab)
+					mint_handleNotify(tab.url);
 			});
 		}
 		catch(error) {
@@ -271,11 +272,11 @@ window.addEventListener("load", function(){
 	//add handler for messages, including injected JS
 	browser.runtime.onMessage.addListener(function(event) {
 		console.debug("Received extension message:", event);
-		switch(event.data.src)
+		switch(event.src)
 		{
 			//message from the Inject JS
 			case "injectedJS":
-				if(event.data.action == 'updateIconBadge')	// got the URL from the injected script
+				if(event.action == 'updateIconBadge')	// got the URL from the injected script
 				{	//if one uses the URL from the injected script here, and the tab isn't the
 					//currently highlighted one, then it'll display the notification for the
 					//background navigation; therefore we must check again for the currently
@@ -284,38 +285,38 @@ window.addEventListener("load", function(){
 						mint_handleNotify(currentTab?currentTab.url:"");
 					});
 				}
-				else if(event.data.action == 'inputList')
+				else if(event.action == 'inputList')
 				{
-					console.log("background Process Received:",event.data.inputs);
+					console.log("background Process Received:",event.inputs);
 				}
 				
 			break;
 			case "options":
-				if(event.data.action == 'stopLocalCache')
+				if(event.action == 'stopLocalCache')
 				{
 					clearTimeout(mintSyncGlobals.cacheTimer);
 					mintSyncGlobals.urlCache = [];
 				}
-				else if(event.data.action == 'startLocalCache')
+				else if(event.action == 'startLocalCache')
 				{
 					updateLocalURLCache();
 				}
 			break;
 			case "popup":
-				if(event.data.action == "requestInputList")
+				if(event.action == "requestInputList")
 				{
 					//post message to the injectedJS --no longer used
 				}
 			break;
 			case "all":
-				if (event.data.action == 'startPasswdResetTimer')
+				if (event.action == 'startPasswdResetTimer')
 				{
 					startPasswdResetTimer();
 				}
 			break;
 			default:
 			//messages from any other source
-				if(event.data.action == 'updateLocalCache')
+				if(event.action == 'updateLocalCache')
 				{
 					updateLocalURLCache();
 				}
