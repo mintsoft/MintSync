@@ -8,9 +8,7 @@ Firefox - Web Extension (https://developer.mozilla.org/en-US/Add-ons/WebExtensio
 TODO In this branch
 ===================
 
-* Options Page
 * getCurrentTab to backend
-* getCurrentTab to popup
 * Injection from popup
 * Performance of popup loading is poor
 * Popup icon indication with AJAX
