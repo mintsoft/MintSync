@@ -10,7 +10,7 @@ function MintSyncPreferences(){
 		console.debug(rawPreferences);
 		if(preferenceName === 'ServerURL' && rawPreferences.hasOwnProperty("ServerURL") && rawPreferences.ServerURL !== "")
 			return rawPreferences.ServerURL;
-		console.debug("Returning: "+preferences[preferenceName]);
+		console.debug("Returning for '"+preferenceName+"': "+preferences[preferenceName]);
 		return preferences[preferenceName];
 	};
 	this.set = function(name, value) {

@@ -10,13 +10,16 @@ var mintSyncGlobals = {
 	'passwdResetTimer': undefined,	//URL Cache timer
 	'theButton': undefined			//the button on the toolbar
 };
+function getGlobals() {return mintSyncGlobals;}
 
 /**
  Helper function for badge management
 */
 function setBadgeStatus(textContent, bgColour, mouseoverText, textcolour)
 {
-	
+	browser.browserAction.setBadgeText({text: textContent});
+	browser.browserAction.setBadgeBackgroundColor({color: bgColour});
+	browser.browserAction.setTitle({title: mouseoverText});
 }
 
 /**
@@ -218,17 +221,7 @@ function startPasswdResetTimer()
 
 /** Entry Point **/
 window.addEventListener("load", function(){
-	var newWindow,
-		ToolbarUIItemProperties = {
-			title: "MintSync",
-			icon: "img/button_icon.png",
-			badge: {},
-			popup: {
-				href: "popup.html",
-				width: 330,
-				height: 260
-			}
-		};
+	var newWindow;
 
 	var preferences = stubFunctions.genericRetrieve_preferencesObj();
 /*

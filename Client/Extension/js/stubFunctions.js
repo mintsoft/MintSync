@@ -5,7 +5,9 @@ function MS_StubFunctions(){
 	}
 	
 	this.genericRetrieve_mintSyncGlobals = function(){
-		return chrome.extension.getBackgroundPage().mintSyncGlobals;
+		return chrome.extension.getBackgroundPage(function(x){
+			x.mintSyncGlobals
+		});
 	}
 	
 	this.genericRetrieve_preferencesObj = function(){

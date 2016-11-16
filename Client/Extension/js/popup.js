@@ -311,7 +311,6 @@ function getPasswords(domainName) {
 							addCredentialPair();
 							$("#inputPassContainer input[name='inputPassName']").eq(counter).val(index);
 							$("#inputPassContainer input[name='inputPassValue']").eq(counter++).val(credentialsObj[index]);
-							
 						}
 						$("#retrieveOutput").show(0);
 						
