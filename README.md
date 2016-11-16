@@ -11,5 +11,5 @@ TODO In this branch
 * getCurrentTab to backend
 * Injection from popup
 * Performance of popup loading is poor
-* Popup icon indication with AJAX
-* Popup icon indication with Cache
+* Popup icon indication with AJAX -- test actually works
+* Popup icon indication with Cache -- test actually works
