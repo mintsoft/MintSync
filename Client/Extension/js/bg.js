@@ -72,12 +72,9 @@ function mint_handleNotify(URL)
 	if($MS.getNotify())
 	{
 		var preferences = stubFunctions.genericRetrieve_preferencesObj();
-		if(!$MS.checkForSavedAuth())
-		{
+		$MS.checkForSavedAuth(function(){
 			setBadgeStatus(" ? ", "#FFFCCA", "You have not logged in", "#CCCCCC" );
-			return;
-		}
-		
+		});
 		switch(preferences["NotifySource"])
 		{
 			case "cache":
@@ -85,9 +82,7 @@ function mint_handleNotify(URL)
 				var URLExists = 0,
 					srcURL = URL.toLowerCase(),
 					regexEquivalent = "";
-				
-				//console.info("Source URL: "+srcURL);
-				
+
 				for(var urlIndex in mintSyncGlobals.urlCache)
 				{
 					regexEquivalent = mintSyncGlobals.urlCache[urlIndex];

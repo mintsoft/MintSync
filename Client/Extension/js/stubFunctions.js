@@ -4,9 +4,9 @@ function MS_StubFunctions(){
 		chrome.runtime.sendMessage(objToSend);
 	}
 	
-	this.genericRetrieve_mintSyncGlobals = function(){
+	this.genericRetrieve_mintSyncGlobals = function(callback){
 		return chrome.extension.getBackgroundPage(function(x){
-			x.mintSyncGlobals
+			callback(x.mintSyncGlobals);
 		});
 	}
 	
