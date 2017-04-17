@@ -273,6 +273,13 @@ function MS_Lightboxes() {
 		if(alreadyAutoSelected === 0)
 			$("#IC_ID").change();
 	}
+	this.qrModal = function(modalTarget)
+	{
+		$("body").append("<div id='QRModal'><div id='QRRenderTarget'></div></div>");
+		
+		initModal("#QRModal");
+	}
+	
 	this.modalThis = function(modalTarget, callbacks)
 	{
 		if (! modalTarget instanceof jQuery) {
