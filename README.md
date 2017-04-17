@@ -331,3 +331,5 @@ GET String parameter parsing in JS: Thanks to Nathan Campos; http://stackoverflo
 handlebars.js : MIT license : http://handlebarsjs.com/
 
 jquery-autobars: ? : https://github.com/cultofmetatron/jquery-autobars
+
+jquery-qrcode: MIT license : https://github.com/jeromeetienne/jquery-qrcode
