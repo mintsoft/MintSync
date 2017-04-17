@@ -46,12 +46,15 @@ function optionsPage(placeholderSelector, preferencesInstance) {
 			/* console display the local cache */
 			$("#dumpLocalCacheButton").click(function(event) {
 				event.preventDefault();
-				var localCache = stubFunctions.genericRetrieve_mintSyncGlobals().urlCache;
-				console.debug(localCache);
-				for(var URL in localCache)
-				{
-					console.debug(localCache[URL]);
-				}
+
+				stubFunctions.genericRetrieve_mintSyncGlobals(function(x){
+					var localCache = x.urlCache;
+					console.debug(localCache);
+					for(var URL in localCache)
+					{
+						console.debug(localCache[URL]);
+					}
+				});
 			});
 
 			/* Bind force forget saved password*/
@@ -59,7 +62,9 @@ function optionsPage(placeholderSelector, preferencesInstance) {
 				event.preventDefault();
 				console.log("Forgetting Saved Crypto Password");
 				//For BG Process/Browser session
-				stubFunctions.genericRetrieve_mintSyncGlobals().passwd = undefined;
+				stubFunctions.genericRetrieve_mintSyncGlobals(function(x){
+					x.passwd = undefined;
+				});
 				//For "yes"
 				preferencesInstance.set("SavedPassword", undefined);
 			});
@@ -102,7 +107,10 @@ function optionsPage(placeholderSelector, preferencesInstance) {
 		if(preferences["SaveAuthentication"]!=0.8)
 		{
 			console.info("Resetting saved authentication credentials");
-			stubFunctions.genericRetrieve_mintSyncGlobals().authentication = undefined;
+			stubFunctions.genericRetrieve_mintSyncGlobals(function(x){
+				x.authentication = undefined;
+			});
+
 		}
 		
 		if(preferences["SavePassword"]!=1)
@@ -112,7 +120,9 @@ function optionsPage(placeholderSelector, preferencesInstance) {
 		if(preferences["SavePassword"]!=0.8)
 		{
 			console.info("Resetting saved encryption key");
-			stubFunctions.genericRetrieve_mintSyncGlobals().passwd = undefined;
+			stubFunctions.genericRetrieve_mintSyncGlobals(function(x){
+				x.passwd = undefined;
+			})
 		}
 
 		cacheUpdateHandling();

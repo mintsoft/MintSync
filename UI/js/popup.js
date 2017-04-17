@@ -131,20 +131,23 @@ $(document).ready(function(){
 		
 		//check if the notify icon is on and trigger a request
 		//for the login details
-		if($MS.getNotify() && !$MS.checkForSavedAuth())
-		{
-			//ask for it then
-			console.info("Requesting Login Credentials");
-			$MS.getAuthenticationObject(function(){
-				//retrigger a cache update if enabled
-				if($MP.get("Notify") == "1"  && $MP.get("NotifySource") == "cache")
-				{
-					stubFunctions.genericPostMessage({
-						'action': 'startLocalCache',
-						'src' : 'options',
-					});
-				}
+		if($MS.getNotify()) {
+			$MS.checkForSavedAuth(function(){
 				runPopupInit();
+			}, function(){
+				//ask for it then
+				console.info("Requesting Login Credentials");
+				$MS.getAuthenticationObject(function(){
+					//retrigger a cache update if enabled
+					if($MP.get("Notify") == "1"  && $MP.get("NotifySource") == "cache")
+					{
+						stubFunctions.genericPostMessage({
+							'action': 'startLocalCache',
+							'src' : 'options',
+						});
+					}
+					runPopupInit();
+				});
 			});
 		} else {
 			runPopupInit();

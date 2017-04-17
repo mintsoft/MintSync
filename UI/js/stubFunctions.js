@@ -5,8 +5,8 @@ this.genericPostMessage = function(objToSend){
 }
 
 //stub to access opera.extension.bgProcess.mintSyncGlobals
-this.genericRetrieve_mintSyncGlobals = function(){
-	return {};
+this.genericRetrieve_mintSyncGlobals = function(callback){
+	callback({});
 }
 
 //temporary stub to hardcode sensible defaults for server-side interface
