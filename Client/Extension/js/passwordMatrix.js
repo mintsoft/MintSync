@@ -319,7 +319,12 @@ function PasswordMatrix(optionsPage) {
 										$("<td class='pm_controls'>").append(
 											$("<img src='img/qr.png' alt='Show as QR Code' class='qrValue jsAction' />").click(function(e){
 												e.preventDefault();
-												
+												lightboxes.qrModal();
+												var qrcode = new QRCode($("#QRRenderTarget"), {
+													width : 200,
+													height : 200
+												});
+												qrcode.makeCode($(this).parent().parent().find(".pm_value input").val());
 											}),
 											$("<img src='img/del.png' alt='Delete Pair' class='removePair jsAction' />").click(function(e){
 												e.preventDefault();
