@@ -6,6 +6,7 @@ function MS_Lightboxes() {
 		$(selector)
 			.addClass("modalDialog")
 			.modal({
+				position: ['5%'],
 				overlayClose: true,
 				escClose: true,
 				minWidth: 500,
@@ -24,7 +25,7 @@ function MS_Lightboxes() {
 	this.setupLightboxes = function()
 	{
 	}
-
+	
 	/**
 		Substitute for Prompt, used for passwords
 	*/
@@ -119,7 +120,8 @@ function MS_Lightboxes() {
 				</form>\
 			</div>");
 		
-		initModal("#InputChooserPrompt");
+		initModal("#InputChooserPrompt", {});
+
 		
 		//add onsubmit handlers to do nothing
 		$("#InputChooserPrompt form").submit(function(event){
@@ -127,6 +129,8 @@ function MS_Lightboxes() {
 			return false;
 		});
 		
+		$("#IC_LabelText").focus();
+				
 		$("#IC_closedDialogState").val("1");	//OK
 	
 		$("#InputChooserTableContainer").html("<table>\
@@ -261,6 +265,13 @@ function MS_Lightboxes() {
 		if(alreadyAutoSelected === 0)
 			$("#IC_ID").change();
 	}
+	this.qrModal = function(modalTarget)
+	{
+		$("body").append("<div id='QRModal'><div id='QRRenderTarget'></div></div>");
+		
+		initModal("#QRModal");
+	}
+	
 	this.modalThis = function(modalTarget, callbacks)
 	{
 		if (! modalTarget instanceof jQuery) {
