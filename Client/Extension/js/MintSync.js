@@ -673,6 +673,8 @@ function MintSync(userPreferenceServiceProvider) {
 			case "0.5":
 				if(self.rememberedAuthentication !== undefined)
 					savedCallback(true);
+				else
+					notSavedCallback(false);
 			break;
 			default:
 					notSavedCallback(false);
