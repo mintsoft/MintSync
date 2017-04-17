@@ -320,6 +320,10 @@ function PasswordMatrix(optionsPage) {
 											$("<img src='img/del.png' alt='Delete Pair' class='removePair jsAction' />").click(function(e){
 												e.preventDefault();
 												$(this).parent().parent().remove();
+											}),
+											$("<img src='img/qr.png' alt='Show as QR Code' class='qrValue jsAction' />").click(function(e){
+												e.preventDefault();
+												
 											})
 										)
 									)
