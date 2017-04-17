@@ -289,7 +289,7 @@ function MS_Lightboxes() {
 	}
 	this.qrModal = function()
 	{
-		$("body").append("<div id='QRModal'><div id='QRRenderTarget'></div></div>");
+		$("body").append("<div id='QRModal'><div id='QRRenderTarget' style='width: 200px;'></div></div>");
 		
 		initModal("#QRModal");
 	}
