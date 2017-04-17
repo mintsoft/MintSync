@@ -72,12 +72,9 @@ function mint_handleNotify(URL)
 	if($MS.getNotify())
 	{
 		var preferences = stubFunctions.genericRetrieve_preferencesObj();
-		if(!$MS.checkForSavedAuth())
-		{
+		$MS.checkForSavedAuth(function(){
 			setBadgeStatus("?", "#FFF230", "You have not logged in", "#CCCCCC" );
-			return;
-		}
-		
+		});
 		switch(preferences["NotifySource"])
 		{
 			case "cache":

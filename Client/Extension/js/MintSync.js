@@ -102,58 +102,56 @@ function MintSync(userPreferenceServiceProvider) {
 		Retrieve passwords for the passed domain
 	*/
 	this.checkIfPasswordsExist = function(Domain,callbacks) {
-		if(!self.checkForSavedAuth())
-		{
+		self.checkForSavedAuth(function(){
 			console.info("No Saved Authenticaiton, checkIfPasswordsExist cancelled");
 			return false;
-		}
-		
-		self.getAuthenticationObject(function(authObj){
-			$.ajax({
-				type: "GET",
-				data: {URL:Domain},
-				cache: false,
-				url:self.getServerURL()+"?AJAX=true&action=check",
-				beforeSend: function(jq,settings) {
-					if(self.getServerURL()==="https://example.com/mypasswords/")
-					{
-						alert("Please configure the Server URL");
-						return false;
+		}, function(){
+			self.getAuthenticationObject(function(authObj){
+				$.ajax({
+					type: "GET",
+					data: {URL:Domain},
+					cache: false,
+					url:self.getServerURL()+"?AJAX=true&action=check",
+					beforeSend: function(jq,settings) {
+						if(self.getServerURL()==="https://example.com/mypasswords/")
+						{
+							alert("Please configure the Server URL");
+							return false;
+						}
+						//add the headers for the auth:
+						//returns false if there are no saved credentials
+						//so return false to cancel the request
+						if(!self.configureAuth(jq,settings,authObj))
+						{
+							//console.info("Check URL Request cancelled, no auth");
+							return false;
+						}
+						//console.info("Check URL Request  sent, auth available");
+						if(callbacks.beforeSend !== undefined)
+							callbacks.beforeSend(jq,settings);
+					},
+					complete: function(jq,textStatus) {
+						//console.info("Check URL Request  complete");
+						if(callbacks.complete !== undefined)
+							callbacks.complete(jq,textStatus);
+					},
+					error: function(jq,textStatus,errorThrown) {
+						if(jq.status==401)	//incorrect credentials
+						{
+							self.resetSavedCredentials();
+						}
+						//console.info("Check URL Request  errors");
+						if(callbacks.error !== undefined)
+							callbacks.error(jq,textStatus,errorThrown);
+					},
+					success: function(data,textStatus,jq) {
+						//console.info("Check URL Request  success");
+						if(callbacks.success !== undefined)
+							callbacks.success(data);
 					}
-					//add the headers for the auth:
-					//returns false if there are no saved credentials
-					//so return false to cancel the request
-					if(!self.configureAuth(jq,settings,authObj))
-					{
-						//console.info("Check URL Request cancelled, no auth");
-						return false;
-					}
-					//console.info("Check URL Request  sent, auth available");
-					if(callbacks.beforeSend !== undefined)
-						callbacks.beforeSend(jq,settings);
-				},
-				complete: function(jq,textStatus) {
-				//console.info("Check URL Request  complete");
-					if(callbacks.complete !== undefined)
-						callbacks.complete(jq,textStatus);
-				},
-				error: function(jq,textStatus,errorThrown) {
-					if(jq.status==401)	//incorrect credentials
-					{
-						self.resetSavedCredentials();
-					}
-				//console.info("Check URL Request  errors");
-					if(callbacks.error !== undefined)
-						callbacks.error(jq,textStatus,errorThrown);
-				},
-				success: function(data,textStatus,jq) {
-				//console.info("Check URL Request  success");
-					if(callbacks.success !== undefined)
-						callbacks.success(data);
-				}
+				});
 			});
 		});
-		
 	};
 	/*
 		Retrieve passwords for the passed domain
@@ -600,34 +598,34 @@ function MintSync(userPreferenceServiceProvider) {
 		}
 		else if (userPreferences.get("SavePassword") == 0.8)
 		{
-			var passwd;
 			//get the password from the background process
-			passwd = stubFunctions.genericRetrieve_mintSyncGlobals().passwd;
-			if(passwd === undefined)
-			{
-				lightboxes.askForPassword(strPrompt,function(password){
-					var hash  = self.hashPass(password);
-					
-					//set the password in the background process
-					stubFunctions.genericRetrieve_mintSyncGlobals().passwd = hash;
-					
-					//if required, start the background process timer
-					if(userPreferences.get("SavePassBDuration"))
-					{
-						stubFunctions.genericPostMessage({
-							'action': 'startPasswdResetTimer',
-							'src' : 'all',
-						});
-					}
-					
-					successCallback(hash);
-				});
-			}
-			else
-			{
-				successCallback(passwd);
-			}
-				
+			stubFunctions.genericRetrieve_mintSyncGlobals(function(genericRetrieveMintSyncGlobals){
+				var passwd = genericRetrieveMintSyncGlobals.passwd;
+				if(passwd === undefined)
+				{
+					lightboxes.askForPassword(strPrompt,function(password){
+						var hash  = self.hashPass(password);
+
+						//set the password in the background process
+						genericRetrieveMintSyncGlobals.passwd = hash;
+
+						//if required, start the background process timer
+						if(userPreferences.get("SavePassBDuration"))
+						{
+							stubFunctions.genericPostMessage({
+								'action': 'startPasswdResetTimer',
+								'src' : 'all',
+							});
+						}
+
+						successCallback(hash);
+					});
+				}
+				else
+				{
+					successCallback(passwd);
+				}
+			});
 		}
 		else if (userPreferences.get("SavePassword") == 0.5)
 		{
@@ -650,25 +648,31 @@ function MintSync(userPreferenceServiceProvider) {
 	/**
 		Returns a boolean representing whether or not we have any credentials saved
 	**/
-	this.checkForSavedAuth = function() {
+	this.checkForSavedAuth = function(savedCallback, notSavedCallback) {
 
 		switch(userPreferences.get("SaveAuthentication"))
 		{
 			case "1":
-				return !(userPreferences.get("SavedAuthentication") == "undefined" && userPreferences.get("SavedAuthentication"));
+				if(!(userPreferences.get("SavedAuthentication") == "undefined" && userPreferences.get("SavedAuthentication")))
+					savedCallback(true);
 			case "0.8":
 				if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess
 				{
-					return mintSyncGlobals.authentication !== undefined;
+					if(mintSyncGlobals.authentication !== undefined)
+						savedCallback(true);
 				}
 				else
 				{
-					return stubFunctions.genericRetrieve_mintSyncGlobals().authentication !== undefined;
+					stubFunctions.genericRetrieve_mintSyncGlobals(function(x){
+						if(x.authentication !== undefined)
+							savedCallback(true);
+					});
 				}
 			case "0.5":
-				return self.rememberedAuthentication !== undefined;
+				if(self.rememberedAuthentication !== undefined)
+					savedCallback(true);
 			default:
-				return false;
+					notSavedCallback(false);
 		}
 	};
 	
@@ -680,37 +684,47 @@ function MintSync(userPreferenceServiceProvider) {
 		
 		if(userPreferences.get("SaveAuthentication") == 1)
 		{
-			if(!self.checkForSavedAuth())
-			{
+			self.checkForSavedAuth(function(){
+				authCallback($.parseJSON(userPreferences.get("SavedAuthentication")));
+			}, function(){
 				lightboxes.askForUsernamePassword(promptStr,function(authObj){
 					authObj.password = self.hashPass(authObj.password);
 					userPreferences.set("SavedAuthentication", JSON.stringify(authObj));
 					authCallback($.parseJSON(userPreferences.get("SavedAuthentication")));
 				});
-			}
-			else
-			{
-				authCallback($.parseJSON(userPreferences.get("SavedAuthentication")));
-			}
+			});
 		}
 		else if (userPreferences.get("SaveAuthentication") == 0.8)
 		{
-				
-			if(!self.checkForSavedAuth())
-			{
+			self.checkForSavedAuth(function(){
+				if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess
+				{
+					authCallback(mintSyncGlobals.authentication);
+				}
+				else
+				{
+					stubFunctions.genericRetrieve_mintSyncGlobals(function(x) {
+						authCallback(x.authentication);
+					});
+
+				}
+			}, function(){
 				if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess so don't prompt!
 					return;
-				
+
 				lightboxes.askForUsernamePassword(promptStr,function(authObj){
 					authObj.password = self.hashPass(authObj.password);
 					//set the password in the background process
-					
+
 					if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess
 						mintSyncGlobals.authentication = authObj;
 					else
-						stubFunctions.genericRetrieve_mintSyncGlobals().authentication = authObj;
-					
-					
+					{
+						stubFunctions.genericRetrieve_mintSyncGlobals(function(x) {
+							x.authentication = authObj;
+						})
+					}
+
 					//start the password reset timer if applicable
 					if(userPreferences.get("SavePassBDuration") > 0)
 					{
@@ -718,42 +732,25 @@ function MintSync(userPreferenceServiceProvider) {
 						stubFunctions.genericPostMessage({
 							'action': 'startPasswdResetTimer',
 							'src' : 'popup',
-						});	
+						});
 					}
-					
+
 					authCallback(authObj);
 				});
-			}
-			else
-			{
-				if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess
-				{	
-					authCallback(mintSyncGlobals.authentication);
-				}
-				else
-				{	
-					authCallback(stubFunctions.genericRetrieve_mintSyncGlobals().authentication);
-				}
-				
-			}
-				
-			
+			});
 		}
 		else if (userPreferences.get("SaveAuthentication") == 0.5)
 		{
 			//request password and store in global
-			if(!self.checkForSavedAuth())
-			{
+			self.checkForSavedAuth(function(){
+				authCallback(self.rememberedAuthentication);
+			}, function(){
 				lightboxes.askForUsernamePassword(promptStr,function(authObj){
 					authObj.password = self.hashPass(authObj.password);
 					self.rememberedAuthentication = authObj;
 					authCallback(authObj);
 				});
-			}
-			else
-			{
-				authCallback(self.rememberedAuthentication);
-			}
+			});
 		}
 		else
 		{
@@ -779,7 +776,9 @@ function MintSync(userPreferenceServiceProvider) {
 				}
 				else
 				{
-					stubFunctions.genericRetrieve_mintSyncGlobals().authentication = undefined;
+					stubFunctions.genericRetrieve_mintSyncGlobals(function(genericRetrieveMintSyncGlobals){
+						genericRetrieveMintSyncGlobals.authentication = undefined;
+					});
 				}
 				
 			break;
@@ -805,7 +804,9 @@ function MintSync(userPreferenceServiceProvider) {
 				}
 				else
 				{
-					stubFunctions.genericRetrieve_mintSyncGlobals().passwd = undefined;
+					stubFunctions.genericRetrieve_mintSyncGlobals(function(genericRetrieveMintSyncGlobals){
+						genericRetrieveMintSyncGlobals.passwd = undefined;
+					});
 				}
 				
 			break;
