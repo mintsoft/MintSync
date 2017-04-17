@@ -331,7 +331,7 @@ function PasswordMatrix(optionsPage) {
 											$("<img src='img/qr.png' alt='Show as QR Code' class='qrValue jsAction' />").click(function(e){
 												e.preventDefault();
 												lightboxes.qrModal();
-												var qrcode = new QRCode($("#QRRenderTarget"), {
+												var qrcode = new QRCode($("#QRRenderTarget")[0], {
 													width : 200,
 													height : 200
 												});
