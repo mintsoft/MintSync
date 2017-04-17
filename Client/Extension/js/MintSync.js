@@ -655,6 +655,7 @@ function MintSync(userPreferenceServiceProvider) {
 			case "1":
 				if(!(userPreferences.get("SavedAuthentication") == "undefined" && userPreferences.get("SavedAuthentication")))
 					savedCallback(true);
+			break;
 			case "0.8":
 				if(typeof(mintSyncGlobals) !== "undefined") // being called from the bgProcess
 				{
@@ -668,9 +669,11 @@ function MintSync(userPreferenceServiceProvider) {
 							savedCallback(true);
 					});
 				}
+			break;
 			case "0.5":
 				if(self.rememberedAuthentication !== undefined)
 					savedCallback(true);
+			break;
 			default:
 					notSavedCallback(false);
 		}
