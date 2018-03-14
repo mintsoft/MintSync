@@ -141,6 +141,7 @@ function PasswordMatrix(optionsPage) {
 			success: function (requestdata, textStatus, jq) {
 				//create list of domains
 				updatePasswordMatrix(requestdata.data);
+				$("#searchValue").focus();
 			}
 		});
 	}
