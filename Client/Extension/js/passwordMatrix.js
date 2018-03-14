@@ -130,6 +130,7 @@ function PasswordMatrix(optionsPage) {
 				//create list of domains
 				updatePasswordMatrix(requestdata.data);
 				optionsPage.updateForm();
+				$("#searchValue").focus();
 			}
 		});
 	}
