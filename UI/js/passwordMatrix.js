@@ -100,21 +100,55 @@ function PasswordMatrix(optionsPage) {
 				keyTimer = setTimeout(doListFiltering,200);	//TODO: get the duration from a preference
 			});
 			
-			//add ctrl+f shortcut
-			$(document).keyup(function(e) {
-				if(e.which == 17)
-					g_ctrlDown = false;
-			}).keydown(function(e) {
-				if(e.which == 17)
-					g_ctrlDown=true;
-				else if(g_ctrlDown === true && e.which == 70) {		//ctrl+f
-					event.preventDefault();
-					$("#searchValue").focus();
-					return false;
-				}
+			Mousetrap.bind(['alt+f','ctrl+f'], function(event) { 
+				event.preventDefault();
+				$("#searchValue").focus();
+				return false;
+			});
+			Mousetrap.bind('alt+1', function(event) {
+				event.preventDefault();
+				clickTheNthRow(1);
+			});
+			Mousetrap.bind('alt+2', function(event) {
+				event.preventDefault();
+				clickTheNthRow(2);
+			});
+			Mousetrap.bind('alt+3', function(event) {
+				event.preventDefault();
+				clickTheNthRow(4);
+			});
+			Mousetrap.bind('alt+4', function(event) {
+				event.preventDefault();
+				clickTheNthRow(4);
+			});
+			Mousetrap.bind('alt+5', function(event) {
+				event.preventDefault();
+				clickTheNthRow(5);
+			});
+			Mousetrap.bind('alt+6', function(event) {
+				event.preventDefault();
+				clickTheNthRow(6);
+			});
+			Mousetrap.bind('alt+7', function(event) {
+				event.preventDefault();
+				clickTheNthRow(7);
+			});
+			Mousetrap.bind('alt+8', function(event) {
+				event.preventDefault();
+				clickTheNthRow(8);
+			});
+			Mousetrap.bind('alt+9', function(event) {
+				event.preventDefault();
+				clickTheNthRow(9);
 			});
 		});
 	});
+
+	function clickTheNthRow(n) {
+		var items = $("#PasswordList").find("h3:visible");
+		if(n >= items.length) return;
+		items[n-1].click();
+	}
 
 	function UpdateMainURLList() {
 		//load the list of urls
