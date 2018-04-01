@@ -115,7 +115,7 @@ function PasswordMatrix(optionsPage) {
 			});
 			Mousetrap.bind('alt+3', function(event) {
 				event.preventDefault();
-				clickTheNthRow(4);
+				clickTheNthRow(3);
 			});
 			Mousetrap.bind('alt+4', function(event) {
 				event.preventDefault();
