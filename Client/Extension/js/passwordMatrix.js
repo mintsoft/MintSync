@@ -138,7 +138,7 @@ function PasswordMatrix(optionsPage) {
 	function clickTheNthRow(n) {
 		var items = $("#PasswordList").find("li:visible");
 		if(n >= items.length) return;
-		items[n-1].click();
+		$(items[n-1]).find("h3").click();
 	}
 
 	function UpdateMainURLList() {
