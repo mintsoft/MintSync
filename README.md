@@ -2,8 +2,7 @@ MintSync - Mintsoft (Rob Emery) 2011
 ====================================
 This is the PHP REST Server component including a rudementary Server UI to access the encrypted passwords (all crypto is performed in JS, client side) and should maintain some level of Opera Mini, Safari on iPhone and Android Browser compatibility (hopefully!).
 
-================================
- Standard Installation - Server
+Standard Installation - Server
 ================================
 1. Acquire a copy of the Server component and extract the server component into your webroot (i.e. download as zip from github or if you're living dangerously: <code>git clone --branch ServerUI https://github.com/mintsoft/MintSync.git /var/wwws/mypasswords/</code>)
 2. Pick a location (preferrably outside of your www-root) and use sqlite3 to create a new database (sqlite3 passwords.db) and load the schema (<code>.read /var/wwws/mypasswords/sqliteSchema.txt</code>)
