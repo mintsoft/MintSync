@@ -4,14 +4,13 @@ Eventually, this will be a multi-browser extension and server component secure p
 
 Currently, a working Server (with client UI) and a Chromium extension exist (see the relevent branches).
 
-================================
- Standard Installation - Server
+
+Standard Installation - Server
 ================================
 
 Please see the ServerUI Branch for instructions and the Server Component.
 
-==================================================
- Frequently Asked Questions/Questions I Would Ask
+Frequently Asked Questions/Questions I Would Ask
 ==================================================
 
 * Q: What the hell is this?
@@ -333,3 +332,5 @@ handlebars.js : MIT license : http://handlebarsjs.com/
 jquery-autobars: ? : https://github.com/cultofmetatron/jquery-autobars
 
 jquery-qrcode: MIT license : https://github.com/jeromeetienne/jquery-qrcode
+
+Mousetrap: Apache-2: https://github.com/ccampbell/mousetrap
