@@ -160,9 +160,6 @@ function PasswordMatrix(optionsPage) {
 			},
 			complete: function () {
 				$("#matrixLoading").fadeOut(0);
-				$MP.fetch(function(){
-					optionsPage.updateForm();
-				});
 			},
 			error: function (jq, textStatus, errorThrown) {
 				switch (jq.status) {
