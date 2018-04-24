@@ -167,8 +167,8 @@ function PasswordMatrix(optionsPage) {
 			error: function (jq, textStatus, errorThrown) {
 				switch (jq.status) {
 					case 401:	//incorrect login
-						alert("List URLs failed due to incorrect Login, please try again");
-						break;
+						UpdateMainURLList();
+					break;
 					default:
 						alert("An error occurred whilst listing URLs, this is probably due to not having any saved credentials. See the error console for more information");
 						console.error("You have reached an undefined state (" + jq.status + " " + textStatus + "): " + errorThrown);
@@ -178,6 +178,9 @@ function PasswordMatrix(optionsPage) {
 				//create list of domains
 				updatePasswordMatrix(requestdata.data);
 				$("#searchValue").focus();
+				$MP.fetch(function(){
+					optionsPage.updateForm();
+				});
 			}
 		});
 	}
