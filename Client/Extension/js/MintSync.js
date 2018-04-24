@@ -361,7 +361,7 @@ function MintSync(userPreferenceServiceProvider) {
 					}
 					else if(jq.status==417) //Hash doesn't match
 					{
-							
+						self.resetSavedCryptoPassword();
 					}
 					if(callbacks.error !== undefined)
 						callbacks.error(jq,textStatus,errorThrown);
