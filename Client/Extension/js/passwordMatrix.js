@@ -27,6 +27,16 @@ function PasswordMatrix(optionsPage) {
 		});
 	};
 
+	var newCredsButtonClicked = function(successCallback){
+		$MS.getEncryptionPasswordHash(function(passwordHash) {
+			$MS.verifyCryptoPass(passwordHash, {
+				success: successCallback,
+				error: function() {
+					newCredsButtonClicked(successCallback);
+				}
+			});
+		});
+	};
 	/** jQuery entry point */
 	$(document).ready(function(){
 		$(document).autoBars(function() {
@@ -36,33 +46,25 @@ function PasswordMatrix(optionsPage) {
 
 			$("#addCredentialButton").click(function(e){
 				e.preventDefault();
+				newCredsButtonClicked(function() {
 
-				$MS.getEncryptionPasswordHash(function(passwordHash) {
-					$MS.verifyCryptoPass(passwordHash, {
-						success: function() {
-
-							$("#saveFormContainer").html(saveFormMarkup);
-							addCredentialForm.AddBindings("#addPairP");
-							addCredentialForm.addPair();
-
-							lightboxes.modalThis($("#saveFormContainer"), {
-								abort: function(event) {
-									console.log("Modal Closed/Aborted");
-									$("#saveFormContainer").html("");
-									$("#PasswordList").empty();
-									UpdateMainURLList();
-								}
-							});
-							$("#saveButton").click(function(event){
-								event.preventDefault();
-								addCredentialForm.setPassword($("#SaveForm"));
-							});
-
-						},
-						error: function() {
-							alert("The entered crypto-password was incorrect; hit F5 and go again!")
+					$("#saveFormContainer").html(saveFormMarkup);
+					addCredentialForm.AddBindings("#addPairP");
+					addCredentialForm.addPair();
+					
+					lightboxes.modalThis($("#saveFormContainer"), {
+						abort: function(event) {
+							console.log("Modal Closed/Aborted");
+							$("#saveFormContainer").html("");
+							$("#PasswordList").empty();
+							UpdateMainURLList();
 						}
 					});
+					$("#saveButton").click(function(event){
+						event.preventDefault();
+						addCredentialForm.setPassword($("#SaveForm"));
+					});
+					
 				});
 			});
 			
