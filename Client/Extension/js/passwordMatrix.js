@@ -27,6 +27,16 @@ function PasswordMatrix(optionsPage) {
 		});
 	};
 
+	var verifyAndCacheCryptoPassword = function(successCallback){
+		$MS.getEncryptionPasswordHash(function(passwordHash) {
+			$MS.verifyCryptoPass(passwordHash, {
+				success: successCallback,
+				error: function() {
+					verifyAndCacheCryptoPassword(successCallback);
+				}
+			});
+		});
+	};
 	/** jQuery entry point */
 	$(document).ready(function(){
 		$(document).autoBars(function() {
@@ -36,33 +46,25 @@ function PasswordMatrix(optionsPage) {
 
 			$("#addCredentialButton").click(function(e){
 				e.preventDefault();
+				verifyAndCacheCryptoPassword(function() {
 
-				$MS.getEncryptionPasswordHash(function(passwordHash) {
-					$MS.verifyCryptoPass(passwordHash, {
-						success: function() {
-
-							$("#saveFormContainer").html(saveFormMarkup);
-							addCredentialForm.AddBindings("#addPairP");
-							addCredentialForm.addPair();
-
-							lightboxes.modalThis($("#saveFormContainer"), {
-								abort: function(event) {
-									console.log("Modal Closed/Aborted");
-									$("#saveFormContainer").html("");
-									$("#PasswordList").empty();
-									UpdateMainURLList();
-								}
-							});
-							$("#saveButton").click(function(event){
-								event.preventDefault();
-								addCredentialForm.setPassword($("#SaveForm"));
-							});
-
-						},
-						error: function() {
-							alert("The entered crypto-password was incorrect; hit F5 and go again!")
+					$("#saveFormContainer").html(saveFormMarkup);
+					addCredentialForm.AddBindings("#addPairP");
+					addCredentialForm.addPair();
+					
+					lightboxes.modalThis($("#saveFormContainer"), {
+						abort: function(event) {
+							console.log("Modal Closed/Aborted");
+							$("#saveFormContainer").html("");
+							$("#PasswordList").empty();
+							UpdateMainURLList();
 						}
 					});
+					$("#saveButton").click(function(event){
+						event.preventDefault();
+						addCredentialForm.setPassword($("#SaveForm"));
+					});
+					
 				});
 			});
 			
@@ -91,21 +93,55 @@ function PasswordMatrix(optionsPage) {
 				keyTimer = setTimeout(doListFiltering,200);	//TODO: get the duration from a preference
 			});
 			
-			//add ctrl+f shortcut
-			$(document).keyup(function(e) {
-				if(e.which == 17)
-					g_ctrlDown = false;
-			}).keydown(function(e) {
-				if(e.which == 17)
-					g_ctrlDown=true;
-				else if(g_ctrlDown === true && e.which == 70) {		//ctrl+f
-					event.preventDefault();
-					$("#searchValue").focus();
-					return false;
-				}
+			Mousetrap.bind(['alt+f','ctrl+f'], function(event) { 
+				event.preventDefault();
+				$("#searchValue").focus();
+				return false;
+			});
+			Mousetrap.bind('alt+1', function(event) {
+				event.preventDefault();
+				clickTheNthRow(1);
+			});
+			Mousetrap.bind('alt+2', function(event) {
+				event.preventDefault();
+				clickTheNthRow(2);
+			});
+			Mousetrap.bind('alt+3', function(event) {
+				event.preventDefault();
+				clickTheNthRow(3);
+			});
+			Mousetrap.bind('alt+4', function(event) {
+				event.preventDefault();
+				clickTheNthRow(4);
+			});
+			Mousetrap.bind('alt+5', function(event) {
+				event.preventDefault();
+				clickTheNthRow(5);
+			});
+			Mousetrap.bind('alt+6', function(event) {
+				event.preventDefault();
+				clickTheNthRow(6);
+			});
+			Mousetrap.bind('alt+7', function(event) {
+				event.preventDefault();
+				clickTheNthRow(7);
+			});
+			Mousetrap.bind('alt+8', function(event) {
+				event.preventDefault();
+				clickTheNthRow(8);
+			});
+			Mousetrap.bind('alt+9', function(event) {
+				event.preventDefault();
+				clickTheNthRow(9);
 			});
 		});
 	});
+
+	function clickTheNthRow(n) {
+		var items = $("#PasswordList").find("li:visible");
+		if(n > items.length) return;
+		$(items[n-1]).find("h3").click();
+	}
 
 	function UpdateMainURLList() {
 		//load the list of urls
