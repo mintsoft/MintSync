@@ -27,12 +27,12 @@ function PasswordMatrix(optionsPage) {
 		});
 	};
 
-	var newCredsButtonClicked = function(successCallback){
+	var verifyAndCacheCryptoPassword = function(successCallback){
 		$MS.getEncryptionPasswordHash(function(passwordHash) {
 			$MS.verifyCryptoPass(passwordHash, {
 				success: successCallback,
 				error: function() {
-					newCredsButtonClicked(successCallback);
+					verifyAndCacheCryptoPassword(successCallback);
 				}
 			});
 		});
@@ -46,7 +46,7 @@ function PasswordMatrix(optionsPage) {
 
 			$("#addCredentialButton").click(function(e){
 				e.preventDefault();
-				newCredsButtonClicked(function() {
+				verifyAndCacheCryptoPassword(function() {
 
 					$("#saveFormContainer").html(saveFormMarkup);
 					addCredentialForm.AddBindings("#addPairP");
