@@ -34,7 +34,8 @@ class user_login
 	{
 		$restTools = new restTools();
 		$headers = apache_request_headers();
-		if(empty($headers['X-MS-Authorisation']))
+		$authorisation_header = empty($headers['X-MS-Authorisation']) ? $_SERVER['HTTP_X_MS_AUTHORISATION'] : $headers['X-MS-Authorisation'];
+		if(empty($authorisation_header))
 		{
 			$restTools->sendResponse(array(
 						"status" => "fail",
@@ -43,7 +44,7 @@ class user_login
 						)
 							), 403);
 		}
-		list($method, $authHeader) = explode(" ", $headers['X-MS-Authorisation']);
+		list($method, $authHeader) = explode(" ", $authorisation_header);
 
 		switch ($method)
 		{
